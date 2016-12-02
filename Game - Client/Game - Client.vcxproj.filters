@@ -1,0 +1,664 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{754b01cc-a75e-42b9-9896-edf83ea35cec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{2fd14e55-32bc-4fa7-aab5-9fa74c19952d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket">
+      <UniqueIdentifier>{85f77b62-4e7e-4f47-bc31-947d54f18945}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{315e46a9-6662-4850-a171-ab80f55c2eec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Unit Data">
+      <UniqueIdentifier>{ad4d2648-a6dd-4e18-8525-d1cdb18e62e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{016f2efd-a16d-41c5-b6c3-8adf88668062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parser">
+      <UniqueIdentifier>{182d3439-885a-4a1b-a086-99233c7bc242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D Interface">
+      <UniqueIdentifier>{398c6e4e-ad37-40f3-b41c-ad9a53efbb35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\FBX Objects">
+      <UniqueIdentifier>{0c6090b5-3a08-49d1-b666-c77f0146b70a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D Interface\Item Tab">
+      <UniqueIdentifier>{87896955-8f82-4fb3-8b08-48c1d8bf0053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D Interface\Items">
+      <UniqueIdentifier>{a7af2e23-e1f8-466f-b786-85a57055591f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Maths">
+      <UniqueIdentifier>{7075b47e-67db-493c-b4da-9107f5eaedc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{ff7ae279-6a19-4252-8ad1-e4af15a37155}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Loading Screen">
+      <UniqueIdentifier>{160fa042-97ad-4f10-8847-ebc7d1bc82d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Loaded Models">
+      <UniqueIdentifier>{17c97a6c-7213-47b6-9183-1dfe74d187c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Base Classes">
+      <UniqueIdentifier>{f79e8356-8875-4e24-8568-a3159fb50fb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Champion">
+      <UniqueIdentifier>{7edda408-0777-4d94-8d82-1c9769b0f824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene">
+      <UniqueIdentifier>{2fdcd497-6e63-4b86-94ce-5c0add9246ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene\Ground">
+      <UniqueIdentifier>{e1fd9041-7f5c-44c4-8491-b7bfa679264b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene\PostProcessing">
+      <UniqueIdentifier>{72c6b743-7c10-4108-87ac-8c6bf4f31647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene\Shadow Mapping">
+      <UniqueIdentifier>{c56ccb8c-b469-4577-b059-5ef5708f1d83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene\SkyBox">
+      <UniqueIdentifier>{cd37b6a6-bf8a-4057-aaea-062358f938e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene\Entities">
+      <UniqueIdentifier>{40ff23bc-0d7e-48e2-804c-9549f1821b0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene\Entities\Grass">
+      <UniqueIdentifier>{5478b0ec-e02f-4bc1-bace-5884d1adc9e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Sea">
+      <UniqueIdentifier>{731cddf8-61cc-4548-8472-5a593a565d13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Sea\Scene shadesr">
+      <UniqueIdentifier>{05106540-ae06-45c0-8120-57e14a9d1134}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Login Screen">
+      <UniqueIdentifier>{9668449a-9e9e-4936-8f5a-92bab3c9ba98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Text">
+      <UniqueIdentifier>{4b4cebff-a399-42ad-84dc-12b3b111d671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene\PreEffect">
+      <UniqueIdentifier>{55dabdac-b60b-46e6-815c-81d73b8a5c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Scene\GaussicEffect">
+      <UniqueIdentifier>{83e55cc1-db8c-424f-9335-13f2ab80404b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MathGrass">
+      <UniqueIdentifier>{87c32451-b039-4d6d-840e-e0e2a34e3a78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FPS">
+      <UniqueIdentifier>{daf52be0-f19e-4dd3-b71c-9fc6e08d5d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{647cf9d4-6fdc-41d2-9f63-c7c483dae479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameHeirarchy">
+      <UniqueIdentifier>{1bda91ac-04b5-40d9-b3cb-68ea5c0bb2a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{526d312b-e5aa-4430-b02e-12562c5c8178}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{981dddc0-c4a8-46be-9ed2-352ba6561d9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D Interface\Base">
+      <UniqueIdentifier>{0cc16daa-8064-4ae4-87b8-60c2da6b65a5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SkyBox_Graphics.h">
+      <Filter>Graphics\Scene\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox_Data.h">
+      <Filter>Graphics\Scene\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="MainLoop.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Models_Header.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit_Data.h">
+      <Filter>Unit Data</Filter>
+    </ClInclude>
+    <ClInclude Include="_Champion_Model.h">
+      <Filter>Graphics\Champion</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TransferedData.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground_Graphics.h">
+      <Filter>Graphics\Scene\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground_Data.h">
+      <Filter>Graphics\Scene\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCast.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Client_Header.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Loading_Screen.h">
+      <Filter>Graphics\Loading Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Load_FBX_file.h">
+      <Filter>Graphics\FBX Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Shadow_Mapping.h">
+      <Filter>Graphics\Scene\Shadow Mapping</Filter>
+    </ClInclude>
+    <ClInclude Include="Sea.h">
+      <Filter>Graphics\Sea</Filter>
+    </ClInclude>
+    <ClInclude Include="Inventory.h">
+      <Filter>2D Interface\Item Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="Maths.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Grass.h">
+      <Filter>Graphics\Scene\Entities\Grass</Filter>
+    </ClInclude>
+    <ClInclude Include="GrassObjects.h">
+      <Filter>Graphics\Scene\Entities\Grass</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground_Collision.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Loaded_Models.h">
+      <Filter>Graphics\Loaded Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_Base_Class.h">
+      <Filter>2D Interface\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Login_Screen.h">
+      <Filter>Login Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Login_Screen_Graphics.h">
+      <Filter>Login Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Textbox.h">
+      <Filter>2D Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Graphics\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>2D Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="PreEffect.h">
+      <Filter>Graphics\Scene\PreEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_Header.h">
+      <Filter>Graphics\Champion</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussicEffect.h">
+      <Filter>Graphics\Scene\GaussicEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiSampleFBO.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="FBO.h">
+      <Filter>Graphics\Scene\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="MathGrass.h">
+      <Filter>MathGrass</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderBuilder.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="UserInterface.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="FPS.h">
+      <Filter>FPS</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameInteractions.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLBuilder.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalDataObject.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ExistingMesh.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Minimap.h">
+      <Filter>2D Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ChampionChat.h">
+      <Filter>2D Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>GameHeirarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>GameHeirarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogic.h">
+      <Filter>GameHeirarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>GameHeirarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Network.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="UdpClient.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameHeirarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>GameHeirarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="UIWindow.h">
+      <Filter>2D Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageLoader.h">
+      <Filter>2D Interface\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuPanel.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PRMalgorithm.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="StatsWindow.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MasteryWindow.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginState.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="UIElement.h">
+      <Filter>2D Interface\Base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SkyBox_Data.cpp">
+      <Filter>Graphics\Scene\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox_Graphics.cpp">
+      <Filter>Graphics\Scene\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="MainLoop.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit_Data.cpp">
+      <Filter>Unit Data</Filter>
+    </ClCompile>
+    <ClCompile Include="_Champion_Model.cpp">
+      <Filter>Graphics\Champion</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="TransferedData.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground_Data.cpp">
+      <Filter>Graphics\Scene\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground_Graphics.cpp">
+      <Filter>Graphics\Scene\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCast.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Loading_Screen.cpp">
+      <Filter>Graphics\Loading Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Load_FBX_file.cpp">
+      <Filter>Graphics\FBX Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Shadow_Mapping.cpp">
+      <Filter>Graphics\Scene\Shadow Mapping</Filter>
+    </ClCompile>
+    <ClCompile Include="Sea.cpp">
+      <Filter>Graphics\Sea</Filter>
+    </ClCompile>
+    <ClCompile Include="Inventory.cpp">
+      <Filter>2D Interface\Item Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="Maths.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="Grass.cpp">
+      <Filter>Graphics\Scene\Entities\Grass</Filter>
+    </ClCompile>
+    <ClCompile Include="GrassObjects.cpp">
+      <Filter>Graphics\Scene\Entities\Grass</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground_Collision.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Loaded_Models.cpp">
+      <Filter>Graphics\Loaded Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader.cpp">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Item_Base_Class.cpp">
+      <Filter>2D Interface\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Login_Screen.cpp">
+      <Filter>Login Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Login_Screen_Graphics.cpp">
+      <Filter>Login Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Textbox.cpp">
+      <Filter>2D Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Graphics\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>2D Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="PreEffect.cpp">
+      <Filter>Graphics\Scene\PreEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="GaussicEffect.cpp">
+      <Filter>Graphics\Scene\GaussicEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiSampleFBO.cpp" />
+    <ClCompile Include="FBO.cpp">
+      <Filter>Graphics\Scene\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="MathGrass.cpp">
+      <Filter>MathGrass</Filter>
+    </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="FPS.cpp">
+      <Filter>FPS</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderBuilder.cpp" />
+    <ClCompile Include="InGameInteractions.cpp" />
+    <ClCompile Include="ExistingMesh.cpp" />
+    <ClCompile Include="Game.cpp">
+      <Filter>GameHeirarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogic.cpp">
+      <Filter>GameHeirarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="GameData.cpp">
+      <Filter>GameHeirarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalDataObject.cpp">
+      <Filter>GameHeirarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>GameHeirarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>GameHeirarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameHeirarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Network.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="UdpClient.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TODO list.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minimap.cpp">
+      <Filter>2D Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="UIWindow.cpp">
+      <Filter>2D Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageLoader.cpp">
+      <Filter>2D Interface\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuPanel.cpp" />
+    <ClCompile Include="PRMalgorithm.cpp" />
+    <ClCompile Include="StatsWindow.cpp" />
+    <ClCompile Include="MasteryWindow.cpp" />
+    <ClCompile Include="LoginState.cpp" />
+    <ClCompile Include="ChampionChat.cpp">
+      <Filter>2D Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="UIElement.cpp">
+      <Filter>2D Interface\Base</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\3D Text Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Basic Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Basic Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Bright Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Champion FragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Champion Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Champion VertexShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Combine Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Fractal Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Gaussic Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Gaussic Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Gaussic Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Grass Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Grass Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Grass Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Ground FragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Ground VertexShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\HBlur Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\HBlur Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Interface Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Interface Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Loading_Screen Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Loading_Screen Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\MathGrass Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\MathGrass Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\MathGrass Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\PostProcessing Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\PostProcessing Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\PreEffect Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\PreEffect Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\RadialBlur Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\RadialBlur Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea-Ground reflection Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea-Ground reflection Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea-Ground refraction Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea-Ground refraction Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea-Unit Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Sea-Unit Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Shadow Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Shadow Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SkyBox Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SkyBox Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Text Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Text Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VBlur Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VBlur Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Gamma Correction Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\InterfaceCrop Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Animation Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Animation Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

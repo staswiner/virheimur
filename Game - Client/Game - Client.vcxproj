@@ -1,0 +1,311 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{580A8312-874D-4133-8BAF-ECD11EBB91F6}</ProjectGuid>
+    <RootNamespace>GameClient</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\Users\Сергей\Documents\GL Files\freetype-2.6.2\include;D:\assimp-3.1.1-win-binaries\include;D:\GL Files\freeglut\include;D:\GL Files\GL Files\include\GL;D:\GL Files\glew-1.11.0\include;D:\GL Files\glm\glm;D:\GL Files\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>D:\XML library\Debug;D:\GL Files\GL Files\lib;D:\GL Files\freeglut\lib;D:\GL Files\glew-1.11.0\lib;D:\assimp-3.1.1-win-binaries\lib32;D:\GL Files\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetyped.lib;opengl32.lib;glu32.lib;glaux.lib;freeglut.lib;glew32.lib;legacy_stdio_definitions.lib;assimpd.lib;SOIL.lib;tinyxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChampionChat.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="Client_Header.h" />
+    <ClInclude Include="ExistingMesh.h" />
+    <ClInclude Include="FPS.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameData.h" />
+    <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="GaussicEffect.h" />
+    <ClInclude Include="GlobalDataObject.h" />
+    <ClInclude Include="Graphics_Header.h" />
+    <ClInclude Include="Grass.h" />
+    <ClInclude Include="GrassObjects.h" />
+    <ClInclude Include="Ground_Collision.h" />
+    <ClInclude Include="Ground_Data.h" />
+    <ClInclude Include="Ground_Graphics.h" />
+    <ClInclude Include="ImageLoader.h" />
+    <ClInclude Include="InGameInteractions.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Item_Base_Class.h" />
+    <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Loaded_Models.h" />
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="Loading_Screen.h" />
+    <ClInclude Include="Load_FBX_file.h" />
+    <ClInclude Include="LoginState.h" />
+    <ClInclude Include="Login_Screen.h" />
+    <ClInclude Include="Login_Screen_Graphics.h" />
+    <ClInclude Include="MainLoop.h" />
+    <ClInclude Include="MasteryWindow.h" />
+    <ClInclude Include="MathGrass.h" />
+    <ClInclude Include="Maths.h" />
+    <ClInclude Include="MenuPanel.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Minimap.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="Models_Header.h" />
+    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="MultiSampleFBO.h" />
+    <ClInclude Include="FBO.h" />
+    <ClInclude Include="Network.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PreEffect.h" />
+    <ClInclude Include="PRMalgorithm.h" />
+    <ClInclude Include="RayCast.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Sea.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderBuilder.h" />
+    <ClInclude Include="Shadow_Mapping.h" />
+    <ClInclude Include="SkyBox_Data.h" />
+    <ClInclude Include="SkyBox_Graphics.h" />
+    <ClInclude Include="StatsWindow.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="Textbox.h" />
+    <ClInclude Include="TransferedData.h" />
+    <ClInclude Include="UdpClient.h" />
+    <ClInclude Include="UIElement.h" />
+    <ClInclude Include="UIWindow.h" />
+    <ClInclude Include="Unit_Data.h" />
+    <ClInclude Include="UserInterface.h" />
+    <ClInclude Include="XMLBuilder.h" />
+    <ClInclude Include="_Champion_Model.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ChampionChat.cpp" />
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ExistingMesh.cpp" />
+    <ClCompile Include="FPS.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameData.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
+    <ClCompile Include="GaussicEffect.cpp" />
+    <ClCompile Include="GlobalDataObject.cpp" />
+    <ClCompile Include="Grass.cpp" />
+    <ClCompile Include="GrassObjects.cpp" />
+    <ClCompile Include="Ground_Collision.cpp" />
+    <ClCompile Include="Ground_Data.cpp" />
+    <ClCompile Include="Ground_Graphics.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
+    <ClCompile Include="InGameInteractions.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="Item_Base_Class.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Loaded_Models.cpp" />
+    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="Loading_Screen.cpp" />
+    <ClCompile Include="Load_FBX_file.cpp" />
+    <ClCompile Include="LoginState.cpp" />
+    <ClCompile Include="Login_Screen.cpp" />
+    <ClCompile Include="Login_Screen_Graphics.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainLoop.cpp" />
+    <ClCompile Include="MasteryWindow.cpp" />
+    <ClCompile Include="MathGrass.cpp" />
+    <ClCompile Include="Maths.cpp" />
+    <ClCompile Include="MenuPanel.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Minimap.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="MultiSampleFBO.cpp" />
+    <ClCompile Include="FBO.cpp" />
+    <ClCompile Include="Network.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PreEffect.cpp" />
+    <ClCompile Include="PRMalgorithm.cpp" />
+    <ClCompile Include="RayCast.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Sea.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderBuilder.cpp" />
+    <ClCompile Include="Shadow_Mapping.cpp" />
+    <ClCompile Include="SkyBox_Data.cpp" />
+    <ClCompile Include="SkyBox_Graphics.cpp" />
+    <ClCompile Include="StatsWindow.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Textbox.cpp" />
+    <ClCompile Include="TODO list.cpp" />
+    <ClCompile Include="TransferedData.cpp" />
+    <ClCompile Include="UdpClient.cpp" />
+    <ClCompile Include="UIElement.cpp" />
+    <ClCompile Include="UIWindow.cpp" />
+    <ClCompile Include="Unit_Data.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
+    <ClCompile Include="XMLBuilder.cpp" />
+    <ClCompile Include="_Champion_Model.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\3D Text Vertex Shader.glsl" />
+    <None Include="Shaders\Animation Fragment Shader.glsl" />
+    <None Include="Shaders\Animation Vertex Shader.glsl" />
+    <None Include="Shaders\Basic Fragment Shader.glsl" />
+    <None Include="Shaders\Basic Vertex Shader.glsl" />
+    <None Include="Shaders\Bright Fragment Shader.glsl" />
+    <None Include="Shaders\Champion FragmentShader.glsl" />
+    <None Include="Shaders\Champion Geometry Shader.glsl" />
+    <None Include="Shaders\Champion VertexShader.glsl" />
+    <None Include="Shaders\Combine Fragment Shader.glsl" />
+    <None Include="Shaders\Fractal Vertex Shader.glsl" />
+    <None Include="Shaders\Gamma Correction Fragment Shader.glsl" />
+    <None Include="Shaders\Gaussic Fragment Shader.glsl" />
+    <None Include="Shaders\Gaussic Geometry Shader.glsl" />
+    <None Include="Shaders\Gaussic Vertex Shader.glsl" />
+    <None Include="Shaders\Grass Fragment Shader.glsl" />
+    <None Include="Shaders\Grass Geometry Shader.glsl" />
+    <None Include="Shaders\Grass Vertex Shader.glsl" />
+    <None Include="Shaders\Ground FragmentShader.glsl" />
+    <None Include="Shaders\Ground VertexShader.glsl" />
+    <None Include="Shaders\HBlur Fragment Shader.glsl" />
+    <None Include="Shaders\HBlur Vertex Shader.glsl" />
+    <None Include="Shaders\Interface Fragment Shader.glsl" />
+    <None Include="Shaders\Interface Vertex Shader.glsl" />
+    <None Include="Shaders\InterfaceCrop Vertex Shader.glsl" />
+    <None Include="Shaders\Loading_Screen Fragment Shader.glsl" />
+    <None Include="Shaders\Loading_Screen Vertex Shader.glsl" />
+    <None Include="Shaders\MathGrass Fragment Shader.glsl" />
+    <None Include="Shaders\MathGrass Geometry Shader.glsl" />
+    <None Include="Shaders\MathGrass Vertex Shader.glsl" />
+    <None Include="Shaders\PostProcessing Fragment Shader.glsl" />
+    <None Include="Shaders\PostProcessing Vertex Shader.glsl" />
+    <None Include="Shaders\PreEffect Fragment Shader.glsl" />
+    <None Include="Shaders\PreEffect Vertex Shader.glsl" />
+    <None Include="Shaders\RadialBlur Fragment Shader.glsl" />
+    <None Include="Shaders\RadialBlur Vertex Shader.glsl" />
+    <None Include="Shaders\Sea Fragment Shader.glsl" />
+    <None Include="Shaders\Sea Geometry Shader.glsl" />
+    <None Include="Shaders\Sea Vertex Shader.glsl" />
+    <None Include="Shaders\Sea-Ground reflection Fragment Shader.glsl" />
+    <None Include="Shaders\Sea-Ground reflection Vertex Shader.glsl" />
+    <None Include="Shaders\Sea-Ground refraction Fragment Shader.glsl" />
+    <None Include="Shaders\Sea-Ground refraction Vertex Shader.glsl" />
+    <None Include="Shaders\Sea-Unit Fragment Shader.glsl" />
+    <None Include="Shaders\Sea-Unit Vertex Shader.glsl" />
+    <None Include="Shaders\Shadow Fragment Shader.glsl" />
+    <None Include="Shaders\Shadow Vertex Shader.glsl" />
+    <None Include="Shaders\SkyBox Fragment Shader.glsl" />
+    <None Include="Shaders\SkyBox Vertex Shader.glsl" />
+    <None Include="Shaders\Text Fragment Shader.glsl" />
+    <None Include="Shaders\Text Vertex Shader.glsl" />
+    <None Include="Shaders\VBlur Fragment Shader.glsl" />
+    <None Include="Shaders\VBlur Vertex Shader.glsl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
