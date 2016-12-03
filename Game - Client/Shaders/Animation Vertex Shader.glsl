@@ -1,7 +1,7 @@
 #version 400 core
 
 layout(location = 0) in vec3 position;
-layout(location = 3) in uint bonesID;
+layout(location = 3) in ivec4 bonesID;
 layout(location = 4) in vec4 Weights;
 //layout(location = 0) in vec3 normal;
 //layout(location = 0) in vec3 uvs;
@@ -15,7 +15,12 @@ uniform mat4 Bones[100];
 
 void main()
 {
-	mat4 BoneTransform = Bones[BoneIDs] * Weights;
+	//vec4 w = Weights;
+	mat4 BoneTransform = Bones[bonesID[0]] * Weights[0];
+	BoneTransform += Bones[bonesID[1]] * Weights[1];
+	BoneTransform += Bones[bonesID[2]] * Weights[2];
+	BoneTransform += Bones[bonesID[3]] * Weights[3];
+	//vec4 bs = BoneTransform * w;
 	//BoneTransform += Bones[BoneIDs[1]] * Weights[1];
 	//BoneTransform += Bones[BoneIDs[2]] * Weights[2];
 	//BoneTransform += Bones[BoneIDs[3]] * Weights[3];

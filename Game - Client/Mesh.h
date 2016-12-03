@@ -47,8 +47,8 @@ public:
 		int Index;
 	};
 	struct VertexBoneData {
-		uint IDs[2];
-		float Weights[2];
+		uint IDs[4];
+		float Weights[4];
 		void AddBoneData(uint BoneID, float Weight);
 	};
 	enum VB_TYPES {

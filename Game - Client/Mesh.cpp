@@ -131,10 +131,11 @@ void Mesh::setupMesh()
 	// Bone Data
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[BONE_VB]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Bones[0]) * Bones.size(), &Bones[0], GL_STATIC_DRAW);
-	glEnableVertexAttribArray(BONE_ID_LOCATION);
 	glVertexAttribIPointer(BONE_ID_LOCATION, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+	glEnableVertexAttribArray(BONE_ID_LOCATION);
+	glVertexAttribPointer(BONE_WEIGHT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), 
+		(const GLvoid*)16);
 	glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
-	glVertexAttribPointer(BONE_WEIGHT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (const GLvoid*)16);
 
 	/*GLuint VBO_bones;
 	vector<VertexBoneData> Bones;
@@ -170,16 +171,16 @@ void Mesh::loadMesh()
 }
 void Mesh::VertexBoneData::AddBoneData(uint BoneID, float Weight)
 {
-	//for (uint i = 0; i < ARRAY_SIZE_IN_ELEMENTS(IDs); i++) {
-	//	if (Weights[i] == 0.0) {
-	//		IDs[i] = BoneID;
-	//		Weights[i] = Weight;
-	//		return;
-	//	}
-	//}
+	for (uint i = 0; i < 2; i++) {
+		//if (Weights[i] == 0.0) {
+			IDs[i] = BoneID;
+			Weights[i] = Weight;
+			return;
+		//}
+	}
 
-	//// should never get here - more bones than we have space for
-	//assert(0);
+	// should never get here - more bones than we have space for
+	assert(0);
 }
 void Mesh::Draw(Shader shader)
 {
@@ -227,7 +228,7 @@ void Mesh::Draw(Shader shader)
 void Mesh::DrawModel()
 {
 	vector<mat4> Transforms;
-	BoneTransform(GetTickCount() % 1, Transforms);
+	BoneTransform(GetTickCount() % 100, Transforms);
 	ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
 	for (int i = 0; i < Transforms.size(); i++)
 	{
