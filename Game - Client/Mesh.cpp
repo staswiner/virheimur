@@ -26,9 +26,6 @@ Mesh::Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> text
 }
 void Mesh::ProcessMesh()
 {
-	vector<Mesh::Vertex> vertices;
-	vector<GLuint> indices;
-	vector<Mesh::Texture> textures;
 
 	for (GLuint i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -64,11 +61,7 @@ void Mesh::ProcessMesh()
 
 
 	// Process Bones
-	vector<BoneInfo> m_BoneInfo;
-	vector<MeshEntry> m_Entries;
-	int MeshIndex = 0;
-	map<string, float> BoneMapping;
-	vector<Mesh::VertexBoneData> Bones;
+	
 	Bones.resize(mesh->mNumVertices);
 	for (uint i = 0; i < mesh->mNumBones; i++)
 	{
@@ -95,6 +88,11 @@ void Mesh::ProcessMesh()
 			Bones[VertexID].AddBoneData(BoneIndex, Weight);
 		}
 	}
+	for (int i = 0; i < scene->mNumAnimations; i++)
+	{
+		Animations.push_back(scene->mAnimations[i]);
+	}
+	this->setupMesh();
 }
 void Mesh::setupMesh()
 {
@@ -229,7 +227,7 @@ void Mesh::Draw(Shader shader)
 void Mesh::DrawModel()
 {
 	vector<mat4> Transforms;
-	BoneTransform(GetTickCount() % 1000, Transforms);
+	BoneTransform(GetTickCount() % 1, Transforms);
 	ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
 	for (int i = 0; i < Transforms.size(); i++)
 	{
@@ -239,51 +237,6 @@ void Mesh::DrawModel()
 	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
 	glBindVertexArray(0);
 }
-void Mesh::SignUniforms(vector<string> Name, vector<string> Type
-	, vector<void*> Variable, vector<uint> Textures, vector<string> TextureName, Shader & shader)
-{
-	for (GLuint i = 0; i < Textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, Textures[i]);
-	}
-	shader.Use();
-	for (GLuint i = 0; i < Textures.size(); i++)
-	{
-		glUniform1i(glGetUniformLocation(shader.ProgramID, TextureName[i].c_str()), i);
-	}
-	for (GLuint i = 0; i < Name.size(); i++)
-	{
-		if (!Variable[i]) continue;
-		if (Type[i] == "mat4")
-		{
-			glUniformMatrix4fv(glGetUniformLocation(shader.ProgramID, Name[i].c_str()),
-				1, GL_FALSE, value_ptr(*static_cast<mat4*>(Variable[i])));
-			continue;
-		}
-		if (Type[i] == "float")
-		{
-			glUniform1f(glGetUniformLocation(shader.ProgramID, Name[i].c_str()),
-				*static_cast<float*>(Variable[i]));
-			continue;
-		}
-		if (Type[i] == "int")
-		{
-			glUniform1i(glGetUniformLocation(shader.ProgramID, Name[i].c_str()),
-				*static_cast<int*>(Variable[i]));
-			continue;
-		}
-		if (Type[i] == "vec3")
-		{
-			glUniform3f(glGetUniformLocation(shader.ProgramID, Name[i].c_str()),
-				static_cast<vec3*>(Variable[i])->x,
-				static_cast<vec3*>(Variable[i])->y,
-				static_cast<vec3*>(Variable[i])->z);
-			continue;
-		}
-	}
-}
-
 void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const mat4& ParentTransform)
 {
 	string NodeName(pNode->mName.data);
@@ -386,7 +339,10 @@ void Mesh::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const 
 	assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
 	float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
 	float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
-	assert(Factor >= 0.0f && Factor <= 1.0f);
+	if (Factor >= 0.0f && Factor <= 1.0f)
+	{
+		Factor = 0.5f;
+	}
 	const aiVector3D& Start = pNodeAnim->mPositionKeys[PositionIndex].mValue;
 	const aiVector3D& End = pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
 	aiVector3D Delta = End - Start;
@@ -407,7 +363,10 @@ void Mesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, cons
 	assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
 	float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
 	float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
-	assert(Factor >= 0.0f && Factor <= 1.0f);
+	if (Factor >= 0.0f && Factor <= 1.0f)
+	{
+		Factor = 0.5f;
+	}
 	const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
 	const aiQuaternion& EndRotationQ = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;
 	aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, Factor);
@@ -427,7 +386,10 @@ void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const a
 	assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
 	float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
 	float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
-	assert(Factor >= 0.0f && Factor <= 1.0f);
+	if (Factor >= 0.0f && Factor <= 1.0f)
+	{
+		Factor = 0.5f;
+	}
 	const aiVector3D& Start = pNodeAnim->mScalingKeys[ScalingIndex].mValue;
 	const aiVector3D& End = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
 	aiVector3D Delta = End - Start;
@@ -436,7 +398,7 @@ void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const a
 void Mesh::BoneTransform(float TimeInSeconds, vector<mat4>& Transforms)
 {
 	mat4 Identity;
-	
+	m_NumBones = mesh->mNumBones;
 	float TicksPerSecond = (float)(scene->mAnimations[0]->mTicksPerSecond != 0 ? scene->mAnimations[0]->mTicksPerSecond : 25.0f);
 	float TimeInTicks = TimeInSeconds * TicksPerSecond;
 	float AnimationTime = fmod(TimeInTicks, (float)scene->mAnimations[0]->mDuration);

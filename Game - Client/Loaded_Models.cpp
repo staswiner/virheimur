@@ -21,7 +21,6 @@ void staticLoaded_Models::initialize_Models()
 	
 	//Models["Lara"] = new Model("Collada/CartoonTree.dae");
 	Models["Collada"] = new Model("Collada/astroBoy_walk_Maya.dae");
-	//Models2["Lara"] = new SkinnedMesh();
 	//Models2["Lara"]->LoadMesh("Collada/Lara_Croft.dae");
 
 
@@ -32,8 +31,6 @@ void staticLoaded_Models::initialize_Models()
 	//Models_Collection["Soldier"] = new Model("Collada/ArmyPilot.dae");
 
 	
-	//Models_Collection.push_back(new _2D_IMAGE("Map/CoordinationPoint.png"));
-//	Models_Collection.push_back(new Column);
 }
 /*
 ``Bind Models to Graphic Card`` (in main thread)
@@ -53,6 +50,8 @@ void staticLoaded_Models::Bind_Texture_To_Models()
 //}
 Model* staticLoaded_Models::operator[](string i)
 {
+	if (Models.find(i) == Models.end())
+		return nullptr;
 	return Models[i];
 }
 /**Static Class Cover for Loaded Models**/

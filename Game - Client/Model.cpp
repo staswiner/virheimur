@@ -146,8 +146,8 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 }
 void Model::loadModel(string Path)
 {
-	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(Path,
+	import;
+	scene = import.ReadFile(Path,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		//	aiProcess_JoinIdenticalVertices |
@@ -174,10 +174,4 @@ void Model::Draw()
 {
 	for (GLuint i = 0; i < this->meshes.size(); i++)
 		this->meshes[i].DrawModel();
-}
-void Model::SignUniforms(vector<string> Name, vector<string> Type
-	, vector<void*> Variable, vector<uint> Textures, vector<string> TextureName, Shader & shader)
-{
-	for (GLuint i = 0; i < this->meshes.size(); i++)
-		this->meshes[i].SignUniforms(Name,Type,Variable,Textures,TextureName,shader);
 }

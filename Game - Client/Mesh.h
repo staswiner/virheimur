@@ -91,8 +91,6 @@ public:
 	//void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Skeletal>& Bones);
 	void DrawModel();
 
-	void SignUniforms(vector<string> name, vector<string> type, vector<void*> var,
-		vector<uint> TextureID, vector<string> TextureName, Shader&);
 	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const mat4 & ParentTransform);
 	uint FindPosition(float AnimationTime, const aiNodeAnim * pNodeAnim);
 	uint FindRotation(float AnimationTime, const aiNodeAnim * pNodeAnim);
@@ -116,6 +114,11 @@ private:
 	uint m_NumBones;
 	vector<BoneInfo> m_BoneInfo;
 	mat4 m_GlobalInverseTransform;
+	vector<aiAnimation*> Animations;
+
+	vector<MeshEntry> m_Entries;
+	int MeshIndex = 0;
+	map<string, float> BoneMapping;
 
 	unsigned int Vertices_Amount;
 	unsigned int Indices_Amount;

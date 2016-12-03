@@ -18,8 +18,6 @@ public:
 	Model(GLchar* path);
 
 	void Draw(Shader shader);
-	void SignUniforms(vector<string> name, vector<string> type, vector<void*> var,
-		vector<uint> TextureID, vector<string> TextureName, Shader&);
 	void Draw();
 	vector<Mesh> meshes;
 private:
@@ -32,4 +30,6 @@ private:
 	void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Mesh::VertexBoneData> Bones);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
+	Assimp::Importer import;
+	const aiScene* scene;
 };
