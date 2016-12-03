@@ -20,8 +20,8 @@ Model::~Model()
 }
 void Model::Draw(Shader shader)
 {
-	for (GLuint i = 0; i < this->meshes.size(); i++)
-			this->meshes[i].Draw(shader);
+	//for (GLuint i = 0; i < this->meshes.size(); i++)
+			this->meshes[0].Draw(shader);
 }
 void Model::processNode(aiNode* node, const aiScene* scene)
 {

@@ -2,6 +2,9 @@
 #include <memory>
 #include "Shader.h"
 #include "Graphics_Header.h"
+#include "assimp\Importer.hpp"
+#include "assimp\scene.h"
+#include "assimp\postprocess.h"  
 using namespace glm;
 class ShaderBuilder
 {
@@ -15,6 +18,7 @@ public:
 	ShaderBuilder& Add_int(string, int&);
 	ShaderBuilder& Add_mat3(string,mat3&);
 	ShaderBuilder& Add_mat4(string,mat4&);
+	ShaderBuilder & Add_aimat4(string name, aiMatrix4x4 & rhs);
 	static std::unique_ptr<ShaderBuilder> LoadShader(Shader&);
 private:
 	GLuint textureCount;

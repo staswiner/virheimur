@@ -58,8 +58,8 @@ public:
 	};
 	struct BoneInfo
 	{
-		mat4 BoneOffset;
-		mat4 FinalTransformation;
+		aiMatrix4x4 BoneOffset;
+		aiMatrix4x4 FinalTransformation;
 	};
 	struct MeshEntry {
 		MeshEntry()
@@ -91,14 +91,14 @@ public:
 	//void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Skeletal>& Bones);
 	void DrawModel();
 
-	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const mat4 & ParentTransform);
+	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const aiMatrix4x4 & ParentTransform);
 	uint FindPosition(float AnimationTime, const aiNodeAnim * pNodeAnim);
 	uint FindRotation(float AnimationTime, const aiNodeAnim * pNodeAnim);
 	uint FindScaling(float AnimationTime, const aiNodeAnim * pNodeAnim);
 	void CalcInterpolatedPosition(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
 	void CalcInterpolatedRotation(aiQuaternion & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
 	void CalcInterpolatedScaling(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
-	void BoneTransform(float TimeInSeconds, vector<mat4>& Transforms);
+	void BoneTransform(float TimeInSeconds, vector<aiMatrix4x4>& Transforms);
 	const aiNodeAnim * FindNodeAnim(const aiAnimation * pAnimation, const string NodeName);
 	void Draw(Shader shader);
 	/*  Render data  */
@@ -110,15 +110,14 @@ private:
 	aiMesh* mesh;
 	const aiScene* scene;
 
-	map<string, uint> m_BoneMapping; // maps a bone name to its index
 	uint m_NumBones;
 	vector<BoneInfo> m_BoneInfo;
 	mat4 m_GlobalInverseTransform;
 	vector<aiAnimation*> Animations;
+	map<string, float> m_BoneMapping;
 
 	vector<MeshEntry> m_Entries;
 	int MeshIndex = 0;
-	map<string, float> BoneMapping;
 
 	unsigned int Vertices_Amount;
 	unsigned int Indices_Amount;

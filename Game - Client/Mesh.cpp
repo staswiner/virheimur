@@ -68,22 +68,24 @@ void Mesh::ProcessMesh()
 		uint BoneIndex = 0;
 		string BoneName(mesh->mBones[i]->mName.data);
 
-		if (BoneMapping.find(BoneName) == BoneMapping.end())
+		if (m_BoneMapping.find(BoneName) == m_BoneMapping.end())
 		{
 			// Allocate an index for a new bone
-			BoneIndex = BoneMapping.size();
+			BoneIndex = m_BoneMapping.size();
 			BoneInfo bi;
-			memcpy(&bi, &mesh->mBones[i]->mOffsetMatrix, 16 * 2);
+			bi.BoneOffset = mesh->mBones[i]->mOffsetMatrix;
 			m_BoneInfo.push_back(bi);
-			BoneMapping[BoneName] = BoneIndex;
+			//memcpy(&bi, &mesh->mBones[i]->mOffsetMatrix.Transpose(), 16 * sizeof(float));
+			//m_BoneInfo.push_back(bi);
+			m_BoneMapping[BoneName] = BoneIndex;
 		}
 		else
 		{
-			BoneIndex = BoneMapping[BoneName];
+			BoneIndex = m_BoneMapping[BoneName];
 		}
 
 		for (uint j = 0; j < mesh->mBones[i]->mNumWeights; j++) {
-			uint VertexID = /*m_Entries[MeshIndex].BaseVertex + incase there are several meshes*/ mesh->mBones[i]->mWeights[j].mVertexId;
+			uint VertexID =/* mesh->mNumVertices + */mesh->mBones[i]->mWeights[j].mVertexId;
 			float Weight = mesh->mBones[i]->mWeights[j].mWeight;
 			Bones[VertexID].AddBoneData(BoneIndex, Weight);
 		}
@@ -227,25 +229,29 @@ void Mesh::Draw(Shader shader)
 }
 void Mesh::DrawModel()
 {
-	vector<mat4> Transforms;
-	BoneTransform(GetTickCount() % 100, Transforms);
+	vector<aiMatrix4x4> Transforms;
+	BoneTransform(GetTickCount()/1000, Transforms);
 	ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
 	for (int i = 0; i < Transforms.size(); i++)
 	{
-		myshader.Add_mat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
+		myshader.Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
 	}
+	//mat4 test;
+	//test = glm::scale(test, vec3(2, 2, 2));
+	//myshader.Add_mat4(string("Bones[") + to_string(0) + string("]"), test);
+
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
 	glBindVertexArray(0);
 }
-void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const mat4& ParentTransform)
+void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
 {
 	string NodeName(pNode->mName.data);
 
 	const aiAnimation* pAnimation = scene->mAnimations[0];
 
-	mat4 NodeTransformation;
-	memcpy(&NodeTransformation, &pNode->mTransformation, 16 * 2);
+	aiMatrix4x4 NodeTransformation;
+	memcpy(&NodeTransformation, &pNode->mTransformation, 16 * sizeof(float));
 
 	const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
 
@@ -260,19 +266,24 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const mat
 		aiQuaternion RotationQ;
 		CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim);
 		mat4 RotationM;
-		memcpy(&RotationM, &RotationQ.GetMatrix(), 16 * 2);
+		RotationM = glm::rotate(RotationM, RotationQ.w , vec3(RotationQ.x,RotationQ.y, RotationQ.z));
+		//memcpy(&RotationM, &RotationQ.GetMatrix(), 16 * sizeof(float));
 
 		// Interpolate translation and generate translation transformation matrix
 		aiVector3D Translation;
 		CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
 		mat4 TranslationM;
+
 		TranslationM = glm::translate(TranslationM, vec3(Translation.x, Translation.y, Translation.z));
 
 		// Combine the above transformations
-		NodeTransformation = TranslationM * RotationM * ScalingM;
+		mat4 result = TranslationM * RotationM * ScalingM;
+		result = glm::transpose(result);
+		memcpy(&NodeTransformation, &result, 16 * sizeof(float));
+		//NodeTransformation = ScalingM * RotationM * TranslationM;
 	}
-
-	mat4 GlobalTransformation = ParentTransform * NodeTransformation;
+	aiMatrix4x4 parent;
+	aiMatrix4x4 GlobalTransformation = parent * NodeTransformation;
 
 	if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
 		uint BoneIndex = m_BoneMapping[NodeName];
@@ -396,9 +407,9 @@ void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const a
 	aiVector3D Delta = End - Start;
 	Out = Start + Factor * Delta;
 }
-void Mesh::BoneTransform(float TimeInSeconds, vector<mat4>& Transforms)
+void Mesh::BoneTransform(float TimeInSeconds, vector<aiMatrix4x4>& Transforms)
 {
-	mat4 Identity;
+	aiMatrix4x4 Identity;
 	m_NumBones = mesh->mNumBones;
 	float TicksPerSecond = (float)(scene->mAnimations[0]->mTicksPerSecond != 0 ? scene->mAnimations[0]->mTicksPerSecond : 25.0f);
 	float TimeInTicks = TimeInSeconds * TicksPerSecond;

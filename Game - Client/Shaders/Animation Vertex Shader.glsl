@@ -15,11 +15,16 @@ uniform mat4 Bones[100];
 
 void main()
 {
+	mat4 BoneTransform;
 	//vec4 w = Weights;
-	mat4 BoneTransform = Bones[bonesID[0]] * Weights[0];
-	BoneTransform += Bones[bonesID[1]] * Weights[1];
-	BoneTransform += Bones[bonesID[2]] * Weights[2];
-	BoneTransform += Bones[bonesID[3]] * Weights[3];
+
+	BoneTransform = Bones[bonesID[0]] * Weights[0];
+	//BoneTransform += Bones[bonesID[1]] * Weights[1];
+	//BoneTransform += Bones[bonesID[2]] * Weights[2];
+	//BoneTransform += Bones[bonesID[3]] * Weights[3];
+	//BoneTransform = Bones[0];
+
+
 	//vec4 bs = BoneTransform * w;
 	//BoneTransform += Bones[BoneIDs[1]] * Weights[1];
 	//BoneTransform += Bones[BoneIDs[2]] * Weights[2];

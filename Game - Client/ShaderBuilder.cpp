@@ -66,6 +66,13 @@ ShaderBuilder & ShaderBuilder::Add_mat4(string name, mat4 & rhs)
 	return *this;
 }
 
+ShaderBuilder & ShaderBuilder::Add_aimat4(string name, aiMatrix4x4 & rhs)
+{
+	// TODO: insert return statement here
+	glUniformMatrix4fv(glGetUniformLocation(shaderID, name.c_str()), 1, GL_TRUE, (const GLfloat*)&rhs);
+	return *this;
+}
+
 std::unique_ptr<ShaderBuilder> ShaderBuilder::LoadShader(Shader & shader)
 {
 	// TODO: insert return statement here
