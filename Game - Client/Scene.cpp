@@ -286,6 +286,20 @@ void Scene::DrawCollada()
 			Add_vec3("ucolor",vec3(r,g,b));
 		loaded_Models["Collada"]->Draw();
 	}
+// default unit, internet connection independent
+	vec3 position;
+
+#pragma region Mathematics
+	mat4 ModelMatrix;
+	ModelMatrix = glm::translate(ModelMatrix, position);
+#pragma endregion Mathematics
+	vec3 color;
+	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		Add_mat4("projection", ProjectionMatrix).
+		Add_mat4("view", ViewMatrix).
+		Add_mat4("model", ModelMatrix).
+		Add_vec3("ucolor", color);
+	loaded_Models["Collada"]->Draw();
 }
 
 void Scene::SetCameraView()

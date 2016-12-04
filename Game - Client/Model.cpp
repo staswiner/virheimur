@@ -151,7 +151,8 @@ void Model::loadModel(string Path)
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		//	aiProcess_JoinIdenticalVertices |
-		aiProcess_SortByPType
+		aiProcess_SortByPType |
+		aiProcess_ImproveCacheLocality
 		);
 
 	if (Path == "Collada/ArmyPilot.dae")
