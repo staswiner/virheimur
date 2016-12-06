@@ -139,10 +139,13 @@ namespace Stas
 		bool(*)(const vec3&, const vec3&)>& graph, vec3 source, vec3 target)
 	{
 		float fx, gx, hx;
-		vec3 CurrentNode = source;
+		vec3 CurrentNode = source;// = source;
 		map<vec3, vec3, bool(*)(const vec3&, const vec3&)> BackTracking(Stas::Maths::vec3Compare);
+		vector<vec3>* returnPath = new vector<vec3>();
+
 		// Find Cheapest sibling
-		map<vec3,int,bool(*)(const vec3&, const vec3&)> siblings = graph.at(CurrentNode);
+		map<vec3,int,bool(*)(const vec3&, const vec3&)> siblings = graph.at(source);
+		map<float, vec3> ActiveNodes;
 		while (CurrentNode != target)
 		{
 
@@ -151,17 +154,30 @@ namespace Stas
 
 			for (auto sibling : siblings)
 			{
-				sibling.second = /*gx*/ (glm::distance(CurrentNode, sibling.first) +/*Current Node Total Distance*/0)
+				float /*fx*/ totaldistance = /*gx*/ (glm::distance(CurrentNode, sibling.first) +/*Current Node Total Distance*/0)
 					+ /*hx*/ glm::distance(sibling.first, target);
+				ActiveNodes[totaldistance] = sibling.first;
 				if (MinDistance > sibling.second)
 				{
 					MinDistance = sibling.second;
 					MinSibling = sibling.first;
 				}
 			}
-			CurrentNode = MinSibling;
-		}
+			if (distance(BackTracking[ActiveNodes.begin()->second], CurrentNode) > 
+				distance(ActiveNodes.begin()->second, CurrentNode))
+			{
+				BackTracking[ActiveNodes.begin()->second] = CurrentNode;
+			}
 
-		return nullptr;
+			CurrentNode = ActiveNodes.begin()->second;
+		}
+		vec3 backtrackingNode = target;
+		while (backtrackingNode != source)
+		{
+			returnPath->push_back(backtrackingNode);
+			backtrackingNode = BackTracking[backtrackingNode];
+		}
+		returnPath->push_back(backtrackingNode);
+		return returnPath;
 	}
 }

@@ -19,6 +19,8 @@ public:
 
 	void Draw(Shader shader);
 	void Draw();
+	void DrawInstanced(int Num , vector<mat4>& ModelMatrix);
+	int LoadTexture(string Filename);
 	vector<Mesh> meshes;
 private:
 	/*  Model Data  */
@@ -27,9 +29,10 @@ private:
 	/*  Functions   */
 	void loadModel(string path);
 	void processNode(aiNode* node, const aiScene* scene);
-	void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Mesh::VertexBoneData> Bones);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 	Assimp::Importer import;
 	const aiScene* scene;
+	string picture = "Collada/boy_10.JPG";
+	vector<GLuint> Texture;
 };

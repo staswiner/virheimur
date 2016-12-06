@@ -83,7 +83,7 @@ private:
 	vector<GrassObjects*> m_GrassObjects;
 	vector<Player> Players[2];
 	Minimap minimap;
-	MenuPanel menuPanel;
+	vector<vec3> Obstacles;
 	//static GlobalDataObject Data;
 	// develop this please
 	//vector<Objects*> ObjectsToDraw

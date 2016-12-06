@@ -28,6 +28,7 @@
 #define TEX_COORD_LOCATION   2
 #define BONE_ID_LOCATION     3
 #define BONE_WEIGHT_LOCATION 4
+#define MODEL_MAT_LOCATION	 5
 
 using namespace glm;
 using namespace std;
@@ -54,6 +55,7 @@ public:
 	enum VB_TYPES {
 		VERTICES_BUFFER,
 		BONE_VB,
+		MODEL_VB,
 		NUM_VBs
 	};
 	struct BoneInfo
@@ -86,10 +88,10 @@ public:
 	Mesh();
 	~Mesh();
 	Mesh(aiMesh*, const aiScene*);
-	Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> textures, vector<VertexBoneData> Bones);
 	void ProcessMesh();
 	//void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Skeletal>& Bones);
 	void DrawModel();
+	void DrawInstanced(int,vector<mat4>& ModelMatrix);
 
 	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const aiMatrix4x4 & ParentTransform);
 	uint FindPosition(float AnimationTime, const aiNodeAnim * pNodeAnim);
@@ -100,6 +102,7 @@ public:
 	void CalcInterpolatedScaling(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
 	void BoneTransform(float TimeInSeconds, vector<aiMatrix4x4>& Transforms);
 	const aiNodeAnim * FindNodeAnim(const aiAnimation * pAnimation, const string NodeName);
+	int LoadTexture(string Filename);
 	void Draw(Shader shader);
 	/*  Render data  */
 	GLuint VAO, VBO[NUM_VBs], EBO;
@@ -121,6 +124,8 @@ private:
 
 	unsigned int Vertices_Amount;
 	unsigned int Indices_Amount;
+public:
+	vector<GLuint> m_Texture;
 	
 	
 };

@@ -660,5 +660,11 @@
     <None Include="Shaders\Animation Vertex Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Instanced Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Instanced Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

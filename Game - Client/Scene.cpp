@@ -22,7 +22,10 @@ void Scene::Initialize()
 	loaded_Models.Bind_Texture_To_Models();
 	mSea.Initialize();
 	text.Initialize();
+	int b = glGetError();
+
 	shadow = new Shadow_Mapping();
+
 	mFBO["Post Processing"].Initialize(1, 1, Shader::At("PostProcessing"));
 	mFBO["HBlur"].Initialize(2, 2, Shader::At("HBlur"));
 	mFBO["VBlur"].Initialize(2, 2, Shader::At("VBlur"));
@@ -33,12 +36,15 @@ void Scene::Initialize()
 	mFBO["Gaussic Effect"].Initialize(1, 1, Shader::At("Combine"));
 	mFBO["RadialBlur"].Initialize(1, 1, Shader("RadialBlur Vertex Shader.glsl", "RadialBlur Fragment Shader.glsl"));
 	mFBO["Basic"].Initialize(1, 1, Shader());
+	b = glGetError();
+
 	mAntiAliasing.InitializeMultiSample();
 	championChat = new ChampionChat(Shader::At("Champion Chat"));
 	skyBox = new SkyBox;
 	skyBox->InitTexture();
 	minimap.Initialize();
-	menuPanel.Initialize();
+	 b = glGetError();
+
 #pragma region 2D Interface
 	GenerateForm();
 
@@ -52,6 +58,10 @@ void Scene::Initialize()
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
 	championChat->CreateChatbox();
+	for (int i = 0; i < 100; i++)
+	{
+		Obstacles.push_back(vec3(rand() % 100 - 100,0, rand() % 100 - 100));
+	}
 }
 
 void Scene::Frame()
@@ -90,6 +100,7 @@ void Scene::GenerateForm()
 
 void Scene::Draw_Units()
 {
+
 	// Draw To Depth Buffer
 	DrawScene_Depth();
 	// Draw Water
@@ -298,8 +309,36 @@ void Scene::DrawCollada()
 		Add_mat4("projection", ProjectionMatrix).
 		Add_mat4("view", ViewMatrix).
 		Add_mat4("model", ModelMatrix).
-		Add_vec3("ucolor", color);
-	loaded_Models["Collada"]->Draw();
+		Add_bool("isAnimated", true).
+		Add_bool("isInstanced", false);
+	//loaded_Models["Collada"]->Draw();	
+	//ModelMatrix = mat4();
+	//position = vec3(50, 0, 0);
+	//ModelMatrix = glm::translate(ModelMatrix, position);
+	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	//	Add_mat4("model", ModelMatrix);
+	//loaded_Models["Collada"]->Draw();
+	vector<mat4> ModelMatrixs;
+	//for (auto o : Obstacles)
+	{
+	/*	mat4 ModelMatrix;
+		ModelMatrix = glm::translate(ModelMatrix, o);*/
+		ModelMatrixs.push_back(ModelMatrix);
+	/*	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+			Add_mat4("model", ModelMatrix).
+			Add_mat4("view", ViewMatrix).
+			Add_mat4("projection", ProjectionMatrix).
+			Add_vec3("ucolor", vec3(1, 1, 1)).
+			Add_bool("isAnimated", true).
+			Add_bool("isInstanced", false);*/
+	//	loaded_Models["Obstacle"]->Draw();
+	}
+
+	ShaderBuilder::LoadShader(Shader::At("Instanced"))->
+		Add_mat4("view", ViewMatrix).
+		Add_mat4("projection", ProjectionMatrix).
+		Add_bool("isAnimated", false);
+	//loaded_Models["Obstacle"]->DrawInstanced(50, ModelMatrixs);
 }
 
 void Scene::SetCameraView()
@@ -340,7 +379,6 @@ void Scene::DrawUI()
 	UI.root->Draw();
 	//minimap.Change();
 	minimap.DrawMinimap(Data);
-	menuPanel.DrawMenuPanel();
 	//minimap.Draw(vec2(100, 100), vec2(400, 400));
 	for(auto it = Data.GetPlayerInformation().begin(); it != Data.GetPlayerInformation().end(); it++)
 	{
@@ -426,32 +464,5 @@ void Scene::DrawAllUnits()
 		//Soldier.Draw();
 		//Soldier->Draw();
 	}
-}
-void Scene::Draw_Skeletal()
-{
-	//mat4 l_ProjectionMatrix = glm::perspective(radians(120.0f),
-	//	float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
-	//mat4 l_ViewMatrix = glm::lookAt(LightPosition, vec3(), vec3(1.0f, 1.0f, 1.0f));
-	//mat4 l_LightView = l_ProjectionMatrix * l_ViewMatrix;
-
-	////vec3 UnitPosition = Calculate_Ground_Collision(i);
-	//vec3 UnitPosition = vec3();
-	////UnitPosition = mGround_Collision.Calculate_Ground_Collision(UnitPosition);
-	//mat4 ModelMatrix;
-	//ModelMatrix = glm::translate(ModelMatrix, UnitPosition);
-	//ModelMatrix = glm::rotate(ModelMatrix, 0.0f, vec3(1, 0, 0));
-	////	ModelMatrix = glm::rotate(ModelMatrix, radians((float)Counter), vec3(0, 1, 0));
-	//ModelMatrix = glm::rotate(ModelMatrix, 0.0f, vec3(0, 0, 1));
-	//mat4 WorldSpace = ProjectionMatrix * ViewMatrix * ModelMatrix;
-
-	//float AmbientStrenth = 1.0f;
-	//float zeroVar = 0.0f;
-
-	//ShaderBuilder::LoadShader(Shader::At("Katarina"))->
-	//	Add_mat4("projection", ProjectionMatrix).Add_mat4("view", ViewMatrix).Add_mat4("model", ModelMatrix).
-	//	Add_mat4("worldSpace", WorldSpace).Add_mat4("lightSpaceMatrix", l_LightView).
-	//	Add_vec3("lightPos", vec3(0, 20, 0)).Add_vec3("cameraPos", camera.GetCameraPosition()).
-	//	Add_float("GravityHeight", zeroVar).Add_float("time", zeroVar).Add_float("AmbientStrength", AmbientStrenth).
-	//	Add_texture("ourTexture", u->texture).Add_texture("ourShadow", shadow->depthMap).Add_texture("ourShine", u->Shine);
-	//Soldier.Draw();
+	
 }

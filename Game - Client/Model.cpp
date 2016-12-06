@@ -37,122 +37,33 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 		this->processNode(node->mChildren[i], scene);
 	}
 }
-
-void Model::LoadBones(uint MeshIndex, const aiMesh * pMesh, vector<Mesh::VertexBoneData> Bones)
-{
-//	//
-//	/*Local Variables made for member variables*/
-//	map<string, GLuint> m_BoneMapping;
-//	//
-//	for (uint i = 0; i < pMesh->mNumBones; i++) {
-//		GLuint m_NumBones = pMesh->mNumBones;
-//		uint BoneIndex = 0;
-//		string BoneName(pMesh->mBones[i]->mName.data);
-//
-//		if (m_BoneMapping.find(BoneName) == m_BoneMapping.end()) {
-//			BoneIndex = m_NumBones;
-//			m_NumBones++;
-//			BoneInfo bi;
-//			m_BoneInfo.push_back(bi);
-//		}
-//		else {
-//			BoneIndex = m_BoneMapping[BoneName];
-//		}
-//
-//		m_BoneMapping[BoneName] = BoneIndex;
-//		m_BoneInfo[BoneIndex].BoneOffset = pMesh->mBones[i]->mOffsetMatrix;
-//
-//		for (uint j = 0; j < pMesh->mBones[i]->mNumWeights; j++) {
-//			uint VertexID = m_Entries[MeshIndex].BaseVertex + pMesh->mBones[i]->mWeights[j].mVertexId;
-//			float Weight = pMesh->mBones[i]->mWeights[j].mWeight;
-//			Bones[VertexID].AddBoneData(BoneIndex, Weight);
-//		}
-//	}
-}
-
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 {
 	vector<Mesh::Vertex> vertices;
 	vector<GLuint> indices;
 	vector<Mesh::Texture> textures;
 
-	for (GLuint i = 0; i < mesh->mNumVertices; i++)
-	{
-		Mesh::Vertex vertex;
-		vec3 Position(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-		vec3 Normals;
-		if (mesh->mNormals != NULL)
-			Normals = vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
-		vec2 UVs;
-		if (mesh->mTextureCoords[0])
-			UVs = vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
 
-		vertex.Position = Position;
-		if (&mesh->mNormals[i] != nullptr)
-		vertex.Normal = Normals;
-		vertex.TexCoords = UVs;
-		vertices.push_back(vertex);
-	}
-	// Process indices
-	for (GLuint i = 0; i < mesh->mNumFaces; i++)
-	{
-		indices.push_back(mesh->mFaces[i].mIndices[0]);
-		indices.push_back(mesh->mFaces[i].mIndices[1]);
-		indices.push_back(mesh->mFaces[i].mIndices[2]);
-	}
-	// Process material
-	if (mesh->mMaterialIndex >= 0)
-	{
-		
-	}
-	GLuint a = scene->mNumMaterials;
 	//for(GLuint i=0; i < mesh->te)
+	// temporary texture loading;
+	Texture.push_back(LoadTexture("Collada/Tex/body01.png"));
+	Texture.push_back(LoadTexture("Collada/Tex/head01.png"));
+	//for (auto &m : meshes)
+	//{
+	//	m.m_Texture = Texture;
+	//}
 
-
-	// Process Bones
-	vector<Mesh::BoneInfo> m_BoneInfo;
-	vector<Mesh::MeshEntry> m_Entries;
-	int MeshIndex = 0;
-	map<string, float> BoneMapping;
-	vector<Mesh::VertexBoneData> Bones;
-	Bones.resize(mesh->mNumVertices);
-	for (uint i = 0; i < mesh->mNumBones; i++) 
-	{
-		uint BoneIndex = 0;
-		string BoneName(mesh->mBones[i]->mName.data);
-
-		if (BoneMapping.find(BoneName) == BoneMapping.end()) 
-		{
-			// Allocate an index for a new bone
-			BoneIndex = BoneMapping.size();
-			Mesh::BoneInfo bi;
-			memcpy(&bi, &mesh->mBones[i]->mOffsetMatrix, 16 * 2);
-			m_BoneInfo.push_back(bi);
-			BoneMapping[BoneName] = BoneIndex;
-		}
-		else 
-		{
-			BoneIndex = BoneMapping[BoneName];
-		}
-
-		for (uint j = 0; j < mesh->mBones[i]->mNumWeights; j++) {
-			uint VertexID = /*m_Entries[MeshIndex].BaseVertex + incase there are several meshes*/ mesh->mBones[i]->mWeights[j].mVertexId;
-			float Weight = mesh->mBones[i]->mWeights[j].mWeight;
-			Bones[VertexID].AddBoneData(BoneIndex, Weight);
-		}
-	}
 	return Mesh(mesh,scene);
-	return Mesh(vertices, indices, textures, Bones);
 }
 void Model::loadModel(string Path)
 {
 	import;
 	scene = import.ReadFile(Path,
-		aiProcess_CalcTangentSpace |
+		//aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		//	aiProcess_JoinIdenticalVertices |
-		aiProcess_SortByPType |
-		aiProcess_ImproveCacheLocality
+		aiProcess_SortByPType 
+		//aiProcess_ImproveCacheLocality
 		);
 
 	if (Path == "Collada/ArmyPilot.dae")
@@ -175,4 +86,45 @@ void Model::Draw()
 {
 	for (GLuint i = 0; i < this->meshes.size(); i++)
 		this->meshes[i].DrawModel();
+}
+void Model::DrawInstanced(int Num,vector<mat4>& ModelMatrix)
+{
+	for (GLuint i = 0; i < this->meshes.size(); i++)
+		this->meshes[i].DrawInstanced(Num,ModelMatrix);
+}
+int Model::LoadTexture(string Filename)
+{
+	GLuint texture;
+	// texture
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glGenTextures(1, &texture);
+	//bind as 2d texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// Set our texture parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Set texture filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Load, create texture and generate mipmaps
+	int Width, Height;
+	unsigned char* image;
+	// "Loading Screen/UI.jpg"
+	image = SOIL_load_image(Filename.c_str(), &Width, &Height, 0, SOIL_LOAD_AUTO);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	//	SOIL_free_image_data(image);
+	//}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SOIL_free_image_data(image);
+	//glEnable(GL_TEXTURE_2D);
+	//unbind texture 2d
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return texture;
 }

@@ -273,6 +273,8 @@
     <None Include="Shaders\Ground VertexShader.glsl" />
     <None Include="Shaders\HBlur Fragment Shader.glsl" />
     <None Include="Shaders\HBlur Vertex Shader.glsl" />
+    <None Include="Shaders\Instanced Fragment Shader.glsl" />
+    <None Include="Shaders\Instanced Vertex Shader.glsl" />
     <None Include="Shaders\Interface Fragment Shader.glsl" />
     <None Include="Shaders\Interface Vertex Shader.glsl" />
     <None Include="Shaders\InterfaceCrop Vertex Shader.glsl" />

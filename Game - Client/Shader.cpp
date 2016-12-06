@@ -21,6 +21,7 @@ bool Shader::LoadShaders()
 	mapShader["Crop"]			= new Shader("InterfaceCrop Vertex Shader.glsl", "Interface Fragment Shader.glsl");
 	mapShader["Image"]			= new Shader("Interface Vertex Shader.glsl", "Interface Fragment Shader.glsl");
 	mapShader["Animation"]		= new Shader("Animation Vertex Shader.glsl", "Animation Fragment Shader.glsl");
+	mapShader["Instanced"]		= new Shader("Instanced Vertex Shader.glsl", "Instanced Fragment Shader.glsl");
 	return true;
 }
 Shader::~Shader()

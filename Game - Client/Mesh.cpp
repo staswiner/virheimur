@@ -1,4 +1,4 @@
-#include "Mesh.h"
+﻿#include "Mesh.h"
 
 
 Mesh::Mesh()
@@ -14,15 +14,6 @@ Mesh::Mesh(aiMesh * mesh, const aiScene* scene)
 	this->mesh = mesh;
 	this->scene = scene;
 	ProcessMesh();
-}
-Mesh::Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> textures, vector<VertexBoneData> Bones)
-{
-	this->vertices = vertices;
-	this->indices = indices;
-	this->textures = textures;
-	this->Bones = Bones;
-
-	this->setupMesh();
 }
 void Mesh::ProcessMesh()
 {
@@ -54,8 +45,12 @@ void Mesh::ProcessMesh()
 	// Process material
 	if (mesh->mMaterialIndex >= 0)
 	{
-
+		mesh;
 	}
+	// Textures
+	m_Texture.push_back(LoadTexture("Collada/Katarina Glowing.bmp"));
+	m_Texture.push_back(LoadTexture("Collada/Tex/head01.png"));
+
 	//GLuint a = scene->mNumMaterials;
 	//for(GLuint i=0; i < mesh->te)
 
@@ -114,11 +109,11 @@ void Mesh::setupMesh()
 	&this->indices[0], GL_STATIC_DRAW);*/
 
 	// Vertex Positions
+	glEnableVertexAttribArray(POSITION_LOCATION);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[VERTICES_BUFFER]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &this->vertices.front(), GL_STATIC_DRAW);
 	glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		(GLvoid*)0);
-	glEnableVertexAttribArray(POSITION_LOCATION);
 
 	// Vertex Normals
 	glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
@@ -139,31 +134,16 @@ void Mesh::setupMesh()
 		(const GLvoid*)16);
 	glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
 
-	/*GLuint VBO_bones;
-	vector<VertexBoneData> Bones;
-	Bones.resize(Vertices_Amount);
-	glGenBuffers(1, &VBO_bones);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_bones);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Bones[0]) * Bones.size(), &Bones[0], GL_STATIC_DRAW);
-	glEnableVertexAttribArray(3);
-	glVertexAttribIPointer(3, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
-	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (const GLvoid*)16);*/
-
-
-	//GLuint VBO_bones;
-	//vector<Skeletal> Bones;
-	//Bones.resize(this->Vertices_Amount);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO_bones);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(Bones[0]) * Bones.size(), &Bones[0], GL_STATIC_DRAW);
-	//glEnableVertexAttribArray(3);
-	//glVertexAttribIPointer(3, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
-	//glEnableVertexAttribArray(4);
-	//glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (const GLvoid*)16);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(mat4)*150, NULL, GL_DYNAMIC_DRAW);
+	for (GLuint i = 0; i < 4; i++) 
+	{
+		glEnableVertexAttribArray(MODEL_MAT_LOCATION + i);
+		glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
+		glVertexAttribDivisor(MODEL_MAT_LOCATION + i, 1);
+	}
 
 	glBindVertexArray(0);
-	
 	/*vertices.clear();
 	indices.clear();*/
 }
@@ -230,18 +210,45 @@ void Mesh::Draw(Shader shader)
 void Mesh::DrawModel()
 {
 	vector<aiMatrix4x4> Transforms;
-	BoneTransform(GetTickCount()/1000, Transforms);
+	if (scene->HasAnimations())
+	{
+		BoneTransform(float(GetTickCount()) / 1000.0f, Transforms);
+	}
 	ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
+	for (int i = 0; i < m_Texture.size(); i++)
+	{
+		myshader.Add_texture("myTexture"+i, m_Texture[i]);
+	}
+
 	for (int i = 0; i < Transforms.size(); i++)
 	{
 		myshader.Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
 	}
-	//mat4 test;
-	//test = glm::scale(test, vec3(2, 2, 2));
-	//myshader.Add_mat4(string("Bones[") + to_string(0) + string("]"), test);
+	mat4 test;
+	test = glm::scale(test, vec3(2, 2, 2));
+	myshader.Add_mat4(string("Bones[") + to_string(0) + string("]"), test);
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
+	glBindVertexArray(0);
+}
+void Mesh::DrawInstanced(int Num, vector<mat4>& ModelMatrix)
+{
+	Num = 100;
+	int a = sizeof(mat4);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(mat4) * Num, &(ModelMatrix[0]), GL_DYNAMIC_DRAW);
+
+
+	glBindVertexArray(VAO);
+	/*glDrawElementsInstancedBaseVertex(GL_TRIANGLES,
+		NumIndices,
+		GL_UNSIGNED_INT,
+		(void*)(sizeof(unsigned int) * m_Entries[i].BaseIndex),
+		Num,
+		m_Entries[i].BaseVertex);*/
+	glEnableVertexAttribArray(0);
+	glDrawArraysInstanced(GL_TRIANGLES , 0 , Num*Vertices_Amount,Num);
 	glBindVertexArray(0);
 }
 void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
@@ -250,9 +257,8 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiM
 
 	const aiAnimation* pAnimation = scene->mAnimations[0];
 
-	aiMatrix4x4 NodeTransformation;
-	memcpy(&NodeTransformation, &pNode->mTransformation, 16 * sizeof(float));
-
+	aiMatrix4x4 NodeTransformation(pNode->mTransformation);
+	//memcpy(&NodeTransformation, &pNode->mTransformation, 16 * sizeof(float));
 	const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
 
 	if (pNodeAnim) {
@@ -260,35 +266,45 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiM
 		aiVector3D Scaling;
 		CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
 		mat4 ScalingM;
+		aiMatrix4x4 ScalingAI;
 		ScalingM = glm::scale(ScalingM, vec3(Scaling.x, Scaling.y, Scaling.z));
+		ScalingAI.Scaling(Scaling, ScalingAI);
 
 		// Interpolate rotation and generate rotation transformation matrix
 		aiQuaternion RotationQ;
 		CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim);
 		mat4 RotationM;
-		RotationM = glm::rotate(RotationM, RotationQ.w , vec3(RotationQ.x,RotationQ.y, RotationQ.z));
+		aiMatrix4x4 RotationAI = aiMatrix4x4(RotationQ.GetMatrix());
+		RotationAI.Transpose();
+		memcpy(&RotationM ,&RotationAI,sizeof(float) * 16);
+		//RotationM = glm::rotate(RotationM, (asin(RotationQ.w) /** 180.0f */)/*/ 3.1415f*/, vec3(RotationQ.x,RotationQ.y, RotationQ.z));
 		//memcpy(&RotationM, &RotationQ.GetMatrix(), 16 * sizeof(float));
 
 		// Interpolate translation and generate translation transformation matrix
 		aiVector3D Translation;
+		aiMatrix4x4 TranslationAI;
 		CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
 		mat4 TranslationM;
 
 		TranslationM = glm::translate(TranslationM, vec3(Translation.x, Translation.y, Translation.z));
-
+		TranslationAI.Translation(Translation, TranslationAI);
 		// Combine the above transformations
 		mat4 result = TranslationM * RotationM * ScalingM;
-		result = glm::transpose(result);
+		//mat4 result = ScalingM * RotationM * TranslationM;
+		//result = glm::transpose(result);
 		memcpy(&NodeTransformation, &result, 16 * sizeof(float));
-		//NodeTransformation = ScalingM * RotationM * TranslationM;
+		NodeTransformation.Transpose();
+		/*NodeTransformation = TranslationAI * RotationAI * ScalingAI;
+		NodeTransformation = ScalingAI * RotationAI * TranslationAI;*/
 	}
-	aiMatrix4x4 parent;
-	aiMatrix4x4 GlobalTransformation = parent * NodeTransformation;
-
+	//aiMatrix4x4 parent;
+	aiMatrix4x4 GlobalTransformation = ParentTransform * NodeTransformation;
+	aiMatrix4x4 m_GlobalInverseTransform = scene->mRootNode->mTransformation;
+	m_GlobalInverseTransform.Inverse();
 	if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
 		uint BoneIndex = m_BoneMapping[NodeName];
-		m_BoneInfo[BoneIndex].FinalTransformation = /*m_GlobalInverseTransform * GlobalTransformation **/
-			NodeTransformation * m_BoneInfo[BoneIndex].BoneOffset;
+		m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation *
+			/*NodeTransformation*/ m_BoneInfo[BoneIndex].BoneOffset;
 	}
 
 	for (uint i = 0; i < pNode->mNumChildren; i++) {
@@ -351,7 +367,7 @@ void Mesh::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const 
 	assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
 	float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
 	float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
-	if (Factor >= 0.0f && Factor <= 1.0f)
+	if (Factor <= 0.0f && Factor >= 1.0f)
 	{
 		Factor = 0.5f;
 	}
@@ -375,7 +391,7 @@ void Mesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, cons
 	assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
 	float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
 	float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
-	if (Factor >= 0.0f && Factor <= 1.0f)
+	if (Factor <= 0.0f && Factor >= 1.0f)
 	{
 		Factor = 0.5f;
 	}
@@ -398,7 +414,7 @@ void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const a
 	assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
 	float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
 	float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
-	if (Factor >= 0.0f && Factor <= 1.0f)
+	if (Factor <= 0.0f && Factor >= 1.0f)
 	{
 		Factor = 0.5f;
 	}
@@ -434,4 +450,40 @@ const aiNodeAnim* Mesh::FindNodeAnim(const aiAnimation* pAnimation, const string
 	}
 
 	return NULL;
+}
+int Mesh::LoadTexture(string Filename)
+{
+	GLuint texture;
+	// texture
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glGenTextures(1, &texture);
+	//bind as 2d texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// Set our texture parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Set texture filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Load, create texture and generate mipmaps
+	int Width, Height;
+	unsigned char* image;
+	// "Loading Screen/UI.jpg"
+	image = SOIL_load_image(Filename.c_str(), &Width, &Height, 0, SOIL_LOAD_AUTO);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	//	SOIL_free_image_data(image);
+	//}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SOIL_free_image_data(image);
+	//glEnable(GL_TEXTURE_2D);
+	//unbind texture 2d
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return texture;
 }
