@@ -9,18 +9,18 @@ Mesh::Mesh()
 Mesh::~Mesh()
 {
 }
-Mesh::Mesh(aiMesh * mesh, const aiScene* scene)
+Mesh::Mesh(aiMesh * mesh, const aiScene* scene, string CollisionType)
 {
 	this->mesh = mesh;
 	this->scene = scene;
+	this->CollisionType = CollisionType;
 	ProcessMesh();
 }
 void Mesh::ProcessMesh()
 {
-
 	for (GLuint i = 0; i < mesh->mNumVertices; i++)
 	{
-		Mesh::Vertex vertex;
+		Stas::Vertex vertex;
 		vec3 Position(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
 		vec3 Normals;
 		if (mesh->mNormals != NULL)
@@ -35,6 +35,8 @@ void Mesh::ProcessMesh()
 		vertex.TexCoords = UVs;
 		vertices.push_back(vertex);
 	}
+	if (this->CollisionType == "Ground")
+		mCollision = new Ground_Collision();
 	// Process indices
 	for (GLuint i = 0; i < mesh->mNumFaces; i++)
 	{

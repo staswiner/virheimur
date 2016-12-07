@@ -15,7 +15,7 @@ public:
 	/*  Functions   */
 	Model();
 	~Model();
-	Model(GLchar* path);
+	Model(GLchar* path, string CollisionType);
 
 	void Draw(Shader shader);
 	void Draw();
@@ -35,4 +35,5 @@ private:
 	const aiScene* scene;
 	string picture = "Collada/boy_10.JPG";
 	vector<GLuint> Texture;
+	string CollisionType;
 };

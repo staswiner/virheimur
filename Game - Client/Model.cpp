@@ -5,8 +5,9 @@
 Model::Model()
 {
 }
-Model::Model(GLchar* Path)
+Model::Model(GLchar* Path, string CollisionType)
 {
+	this->CollisionType = CollisionType;
 	this->loadModel(Path);
 }
 Model::~Model()
@@ -39,7 +40,7 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 }
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 {
-	vector<Mesh::Vertex> vertices;
+	vector<Stas::Vertex> vertices;
 	vector<GLuint> indices;
 	vector<Mesh::Texture> textures;
 
@@ -53,7 +54,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	//	m.m_Texture = Texture;
 	//}
 
-	return Mesh(mesh,scene);
+	return Mesh(mesh,scene, CollisionType);
 }
 void Model::loadModel(string Path)
 {

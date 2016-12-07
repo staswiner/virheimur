@@ -1,23 +1,24 @@
 #pragma once
 #include "Maths.h"
-#include "Loader.h"
-#include <vector>
-#include "glm\glm\vec3.hpp"
+#include "Collision.h"
+
 using namespace std;
 using namespace glm;
-class Ground_Collision
+class Ground_Collision : public Collision
 {
 public:
-	void SetGround(map<pair<int, int>, float>&);
-	static Ground_Collision& Instance()
+	// singletone examlpe
+	using Collision::Collision;
+	Ground_Collision();
+	Ground_Collision(vector<Stas::Vertex> Vertices);
+	/*static Ground_Collision& Instance()
 	{
 		static Ground_Collision instance;
 		return instance;
-	}
+	}*/
 	~Ground_Collision();
-	vec3 Calculate_Ground_Collision(vec3);
+	vec3 OnCollision(vec3 Position);
 private:
-	Ground_Collision();
-	map<pair<int, int>, float> mGroundHeights;
+	map<pair<float, float>, float> AlteredVertices;
 };
 

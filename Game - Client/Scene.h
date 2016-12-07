@@ -48,6 +48,7 @@ private:
 	void Shadow_DrawGround(Shader&);
 	void Draw_All_Units(Shader& shader);
 	void DrawAllUnits();
+	void DrawSeaAnimated();
 	void Draw_Skeletal();
 	void DrawUI();
 
@@ -74,13 +75,12 @@ private:
 	vec3 LightPosition;
 
 	Loaded_Models loaded_Models;
-	SkyBox* skyBox;
+	//SkyBox* skyBox;
 	GLuint Channel;
 	FPS fps;
 	UserInterface& UI;
 	Text text;
 	ChampionChat* championChat;
-	vector<GrassObjects*> m_GrassObjects;
 	vector<Player> Players[2];
 	Minimap minimap;
 	vector<vec3> Obstacles;

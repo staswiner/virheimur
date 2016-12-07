@@ -14,9 +14,8 @@ out vec2 UVs;
 
 uniform bool isAnimated;
 uniform bool isInstanced;
-uniform mat4 projection;
-uniform mat4 view;
-uniform mat4 model;
+uniform mat4 WVM;
+
 uniform mat4 Bones[100];
 
 void main()
@@ -35,12 +34,9 @@ void main()
 	{
 		objectpos = vec4(position, 1.0);
 	}
-	vec4 Modelpos;
 
-	Modelpos = model*objectpos;
-
-	gl_Position = projection * view * Modelpos;
-//	UVs = vec2(0, 0);
-	UVs = uvs;
+	gl_Position = WVM * objectpos;
+	UVs = vec2(0, 0);
+//	UVs = uvs;
 
 }

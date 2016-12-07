@@ -121,6 +121,7 @@
     <ClInclude Include="ChampionChat.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Header.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="ExistingMesh.h" />
     <ClInclude Include="FPS.h" />
     <ClInclude Include="Game.h" />
@@ -132,8 +133,6 @@
     <ClInclude Include="Grass.h" />
     <ClInclude Include="GrassObjects.h" />
     <ClInclude Include="Ground_Collision.h" />
-    <ClInclude Include="Ground_Data.h" />
-    <ClInclude Include="Ground_Graphics.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InGameInteractions.h" />
     <ClInclude Include="Input.h" />
@@ -141,7 +140,6 @@
     <ClInclude Include="Item_Base_Class.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Loaded_Models.h" />
-    <ClInclude Include="Loader.h" />
     <ClInclude Include="Loading_Screen.h" />
     <ClInclude Include="Load_FBX_file.h" />
     <ClInclude Include="LoginState.h" />
@@ -172,6 +170,7 @@
     <ClInclude Include="SkyBox_Data.h" />
     <ClInclude Include="SkyBox_Graphics.h" />
     <ClInclude Include="StatsWindow.h" />
+    <ClInclude Include="Structures.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="TransferedData.h" />
@@ -181,13 +180,13 @@
     <ClInclude Include="Unit_Data.h" />
     <ClInclude Include="UserInterface.h" />
     <ClInclude Include="XMLBuilder.h" />
-    <ClInclude Include="_Champion_Model.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChampionChat.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ExistingMesh.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -198,8 +197,6 @@
     <ClCompile Include="Grass.cpp" />
     <ClCompile Include="GrassObjects.cpp" />
     <ClCompile Include="Ground_Collision.cpp" />
-    <ClCompile Include="Ground_Data.cpp" />
-    <ClCompile Include="Ground_Graphics.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="InGameInteractions.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -248,7 +245,6 @@
     <ClCompile Include="Unit_Data.cpp" />
     <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="XMLBuilder.cpp" />
-    <ClCompile Include="_Champion_Model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl" />

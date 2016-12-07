@@ -53,9 +53,6 @@
     <Filter Include="Graphics\Base Classes">
       <UniqueIdentifier>{f79e8356-8875-4e24-8568-a3159fb50fb0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Champion">
-      <UniqueIdentifier>{7edda408-0777-4d94-8d82-1c9769b0f824}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Scene">
       <UniqueIdentifier>{2fdcd497-6e63-4b86-94ce-5c0add9246ae}</UniqueIdentifier>
     </Filter>
@@ -146,20 +143,11 @@
     <ClInclude Include="Unit_Data.h">
       <Filter>Unit Data</Filter>
     </ClInclude>
-    <ClInclude Include="_Champion_Model.h">
-      <Filter>Graphics\Champion</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="TransferedData.h">
       <Filter>Parser</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground_Graphics.h">
-      <Filter>Graphics\Scene\Ground</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground_Data.h">
-      <Filter>Graphics\Scene\Ground</Filter>
     </ClInclude>
     <ClInclude Include="RayCast.h">
       <Filter>Input</Filter>
@@ -203,9 +191,6 @@
     <ClInclude Include="Model.h">
       <Filter>Graphics\Base Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Loader.h">
-      <Filter>Graphics\Base Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Graphics\Base Classes</Filter>
     </ClInclude>
@@ -229,9 +214,6 @@
     </ClInclude>
     <ClInclude Include="PreEffect.h">
       <Filter>Graphics\Scene\PreEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics_Header.h">
-      <Filter>Graphics\Champion</Filter>
     </ClInclude>
     <ClInclude Include="GaussicEffect.h">
       <Filter>Graphics\Scene\GaussicEffect</Filter>
@@ -320,6 +302,15 @@
     <ClInclude Include="UIElement.h">
       <Filter>2D Interface\Base</Filter>
     </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_Header.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -346,20 +337,11 @@
     <ClCompile Include="Unit_Data.cpp">
       <Filter>Unit Data</Filter>
     </ClCompile>
-    <ClCompile Include="_Champion_Model.cpp">
-      <Filter>Graphics\Champion</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="TransferedData.cpp">
       <Filter>Parser</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground_Data.cpp">
-      <Filter>Graphics\Scene\Ground</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground_Graphics.cpp">
-      <Filter>Graphics\Scene\Ground</Filter>
     </ClCompile>
     <ClCompile Include="RayCast.cpp">
       <Filter>Input</Filter>
@@ -498,6 +480,9 @@
     </ClCompile>
     <ClCompile Include="UIElement.cpp">
       <Filter>2D Interface\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

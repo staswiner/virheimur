@@ -19,8 +19,8 @@ void InGameInteractions::Proceed(mat4& ProjectionMatrix, mat4& ViewMatrix)
 	{
 		vec3 WorldRay = RayCast(ProjectionMatrix, ViewMatrix).GetWorldRay();
 		vec3 Destination = Collision(WorldRay);
-		Ground_Collision& groundCollision = Ground_Collision::Instance();
-		vec3 GroundDestination = groundCollision.Calculate_Ground_Collision(Destination);
+		//Ground_Collision& groundCollision = Ground_Collision::Instance();
+		//vec3 GroundDestination = groundCollision.OnCollision(Destination);
 		//m_Unit_Data[Channel][0].SetPosition(GroundDestination);
 	}
 }

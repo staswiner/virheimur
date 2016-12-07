@@ -1,6 +1,6 @@
 #pragma once
 #include "glm\glm\vec3.hpp"
-#include "Loader.h"
+#include "Model.h"
 #include "Loaded_Models.h"
 using namespace glm;
 class Unit_Data

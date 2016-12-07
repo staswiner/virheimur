@@ -40,8 +40,8 @@ void Scene::Initialize()
 
 	mAntiAliasing.InitializeMultiSample();
 	championChat = new ChampionChat(Shader::At("Champion Chat"));
-	skyBox = new SkyBox;
-	skyBox->InitTexture();
+	//skyBox = new SkyBox;
+	//skyBox->InitTexture();
 	minimap.Initialize();
 	 b = glGetError();
 
@@ -50,10 +50,7 @@ void Scene::Initialize()
 
 
 #pragma endregion 2D Interface
-	for (int i = 0; i < 1; i++)
-	{
-		m_GrassObjects.push_back(new GrassObjects);
-	}
+
 
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
@@ -168,7 +165,8 @@ void Scene::DrawScene_PostProcessing()
 	//DrawAllUnits();
 	DrawCollada();
 	//DrawEntities();
-	DrawSea();
+	//DrawSea();
+	DrawSeaAnimated();
 	DrawUI();
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
@@ -333,12 +331,21 @@ void Scene::DrawCollada()
 			Add_bool("isInstanced", false);*/
 	//	loaded_Models["Obstacle"]->Draw();
 	}
-
+	mat4 WVM = ProjectionMatrix * ViewMatrix;
+	float time = float( GetTickCount() ) / 1000.0f;
 	ShaderBuilder::LoadShader(Shader::At("Instanced"))->
-		Add_mat4("view", ViewMatrix).
-		Add_mat4("projection", ProjectionMatrix).
+		Add_mat4("WVM", WVM).
+		Add_float("time", time).
 		Add_bool("isAnimated", false);
 	loaded_Models["Obstacle"]->DrawInstanced(ModelMatrixs);
+
+	mat4 landmat;
+	WVM = ProjectionMatrix * ViewMatrix * landmat;
+	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		Add_mat4("WVM", WVM).
+		Add_float("time", time).
+		Add_bool("isAnimated", false);
+	loaded_Models["Land"]->Draw();
 }
 
 void Scene::SetCameraView()
@@ -416,7 +423,7 @@ void Scene::DrawSky()
 	mat4 ModelMatrix;
 	float Counter = 0;
 	ModelMatrix = glm::rotate(ModelMatrix, radians(float(Counter) / 10.0f), vec3(0, 1, 0));
-	skyBox->DrawModel(ProjectionMatrix, ViewMatrix, ModelMatrix, 0, mat4(), NULL, 0);
+	//skyBox->DrawModel(ProjectionMatrix, ViewMatrix, ModelMatrix, 0, mat4(), NULL, 0);
 	//loaded_Models["Sky"]->DrawModel(ProjectionMatrix, ViewMatrix, ModelMatrix, 0, mat4(), NULL, 0);
 }
 void Scene::DrawAllUnits()
@@ -465,4 +472,8 @@ void Scene::DrawAllUnits()
 		//Soldier->Draw();
 	}
 	
+}
+void Scene::DrawSeaAnimated()
+{
+
 }

@@ -17,7 +17,7 @@ void main()
 	//{
 	//	//color = vec4(1, 1, 1, 1);
 	//}
-	float vertexb2=mod(vertexb,4);
+	float vertexb2=mod(vertexb,8);
 		color = vec4(0, (100.0+vertexb2*4.0 + vertexc*5.0)/255.0, (10.0+vertexb2 + vertexc*5.0)/255.0, 1);
 
 }

@@ -22,6 +22,10 @@
 #include "assimp\scene.h"
 #include "assimp\postprocess.h"  
 
+#include "Collision.h"
+#include "Ground_Collision.h"
+#include "Structures.h"
+
 
 #define POSITION_LOCATION    0
 #define NORMAL_LOCATION      1
@@ -32,13 +36,10 @@
 
 using namespace glm;
 using namespace std;
+using namespace Stas;
 class Mesh {
 public:
-	struct Vertex {
-		glm::vec3 Position;
-		glm::vec3 Normal;
-		glm::vec2 TexCoords;
-	};
+	
 	struct Texture {
 		GLuint id;
 		string type;
@@ -87,7 +88,7 @@ public:
 	/*  Functions  */
 	Mesh();
 	~Mesh();
-	Mesh(aiMesh*, const aiScene*);
+	Mesh(aiMesh*, const aiScene*, string Collision);
 	void ProcessMesh();
 	//void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Skeletal>& Bones);
 	void DrawModel();
@@ -126,6 +127,6 @@ private:
 	unsigned int Indices_Amount;
 public:
 	vector<GLuint> m_Texture;
-	
-	
+	string CollisionType;
+	Collision* mCollision;
 };

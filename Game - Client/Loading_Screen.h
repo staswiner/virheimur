@@ -38,7 +38,6 @@ private:
 	vector<vec2> vertices;
 	unsigned int Vertices_Amount;
 	
-	Loader* L_Loading_Screen;
 	// Video
 	PAVISTREAM pavi;	// Handle To An Open Stream
 };
