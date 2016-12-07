@@ -138,6 +138,7 @@ namespace Stas
 	vector<vec3>* Maths::Astar(const map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>,
 		bool(*)(const vec3&, const vec3&)>& graph, vec3 source, vec3 target)
 	{
+		priority_queue<float> hi;
 		float fx, gx, hx;
 		vec3 CurrentNode = source;// = source;
 		map<vec3, vec3, bool(*)(const vec3&, const vec3&)> BackTracking(Stas::Maths::vec3Compare);
@@ -163,14 +164,20 @@ namespace Stas
 					MinSibling = sibling.first;
 				}
 			}
-			if (distance(BackTracking[ActiveNodes.begin()->second], CurrentNode) > 
+			siblings.erase(CurrentNode);
+			if (distance(BackTracking[ActiveNodes.begin()->second], CurrentNode) >
 				distance(ActiveNodes.begin()->second, CurrentNode))
 			{
 				BackTracking[ActiveNodes.begin()->second] = CurrentNode;
 			}
-
+			if (CurrentNode == ActiveNodes.begin()->second)
+			{
+				ActiveNodes.erase(ActiveNodes.begin());
+				CurrentNode = ActiveNodes.begin()->second;
+			}
 			CurrentNode = ActiveNodes.begin()->second;
 		}
+
 		vec3 backtrackingNode = target;
 		while (backtrackingNode != source)
 		{
