@@ -98,9 +98,9 @@ namespace Stas
 		minDistance[source] = 0;
 
 		map<vec3, int, bool(*)(const vec3&, const vec3&)> activeVertices(Stas::Maths::vec3Compare);
-		activeVertices[ source ] = 0;
+		activeVertices[source] = 0;
 #pragma endregion Initialization
-		while (!activeVertices.empty()) 
+		while (!activeVertices.empty())
 		{
 			vec3 Where = activeVertices.begin()->first;
 			if (Where == target)
@@ -122,12 +122,12 @@ namespace Stas
 			activeVertices.erase(activeVertices.begin());
 			for (auto ed : graph.at(Where))
 			{
-				if (minDistance[ed.first] > minDistance[Where] + ed.second) 
+				if (minDistance[ed.first] > minDistance[Where] + ed.second)
 				{
 					activeVertices.erase(ed.first);
 					minDistance[ed.first] = minDistance[Where] + ed.second;
-					activeVertices[ed.first]= minDistance[ed.first];
-					BackTracking[ed.first]=Where;
+					activeVertices[ed.first] = minDistance[ed.first];
+					BackTracking[ed.first] = Where;
 				}
 			}
 		}
@@ -145,14 +145,18 @@ namespace Stas
 		vector<vec3>* returnPath = new vector<vec3>();
 
 		// Find Cheapest sibling
-		map<vec3,int,bool(*)(const vec3&, const vec3&)> siblings = graph.at(source);
+		map<vec3, int, bool(*)(const vec3&, const vec3&)> siblings = graph.at(source);
 		map<float, vec3> ActiveNodes;
 		while (CurrentNode != target)
 		{
-
+			siblings = graph.at(CurrentNode);
 			vec3 MinSibling;
 			float MinDistance = INT_MAX;
-
+			if (siblings.size() == 0)
+			{
+				ActiveNodes.erase(ActiveNodes.begin());
+				CurrentNode = ActiveNodes.begin()->second;
+			}
 			for (auto sibling : siblings)
 			{
 				float /*fx*/ totaldistance = /*gx*/ (glm::distance(CurrentNode, sibling.first) +/*Current Node Total Distance*/0)
@@ -187,4 +191,20 @@ namespace Stas
 		returnPath->push_back(backtrackingNode);
 		return returnPath;
 	}
+}
+struct Node
+{
+	vec3 Location;
+	vec3 Parent;
+	float fx; // estimate distance
+	float gx; // true current distance
+};
+void function()
+{
+	priority_queue<float> hi;
+	map<vec3, vector<pair<vec3,float>>> graph; // each node has his siblings with the distance to them
+	vector<vec3> backTrack; // sorted from End to Start
+	map<float, vec3> ActiveNodes; // sorted by distance, all untouched nodes
+
+
 }

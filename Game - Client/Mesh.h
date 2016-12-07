@@ -91,7 +91,7 @@ public:
 	void ProcessMesh();
 	//void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Skeletal>& Bones);
 	void DrawModel();
-	void DrawInstanced(int,vector<mat4>& ModelMatrix);
+	void DrawInstanced(vector<vec4>& ModelMatrix);
 
 	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const aiMatrix4x4 & ParentTransform);
 	uint FindPosition(float AnimationTime, const aiNodeAnim * pNodeAnim);

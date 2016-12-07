@@ -5,13 +5,15 @@ layout(location = 1) in vec3 normals;
 layout(location = 2) in vec2 uvs;
 layout(location = 3) in ivec4 bonesID;
 layout(location = 4) in vec4 Weights;
-layout(location = 5) in mat4 modelInst;
+layout(location = 5) in vec4 modelInst;
 //layout(location = 0) in vec3 normal;
 //layout(location = 0) in vec3 uvs;
 //layout(location = 0) in vec3 position;
 
 //out vec2 UVs;
-//flat out int InstanceID;
+out float vertexb;
+out float vertexc;
+flat out int InstanceID;
 
 uniform bool isAnimated;
 uniform mat4 projection;
@@ -32,13 +34,15 @@ void main()
 	}
 	else
 	{
-		objectpos = vec4(position, 1.0) + vec4(5*gl_InstanceID, 0, 5*gl_InstanceID,0);
+		objectpos = vec4(position, 1.0) + modelInst;// + vec4(5*gl_InstanceID, 0, 5*gl_InstanceID,0);
 	}
-	vec4 Modelpos = modelInst*objectpos;
-	gl_Position = projection * view * Modelpos;
+//	vec4 Modelpos = modelInst*objectpos;
+	gl_Position = projection * view * objectpos;
 	
-	//UVs = vec2(0, 0);
-	//InstanceID = gl_InstanceID;
+	InstanceID = gl_InstanceID;
+	vertexb = gl_InstanceID;
+	vertexc = gl_VertexID;
+	//InstanceID2 = 1;
 	//UVs = uvs;
 
 }

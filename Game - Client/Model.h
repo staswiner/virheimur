@@ -19,7 +19,7 @@ public:
 
 	void Draw(Shader shader);
 	void Draw();
-	void DrawInstanced(int Num , vector<mat4>& ModelMatrix);
+	void DrawInstanced(vector<vec4>& ModelMatrix);
 	int LoadTexture(string Filename);
 	vector<Mesh> meshes;
 private:

@@ -38,7 +38,7 @@ map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 	for (int i = 0; i < MAX_POINTS; i++)
 	{
 		Points.push_back(vec3((rand() % 2000) - 1000, 
-			(rand() % 2000) - 1000, (rand() % 2000) - 1000));
+			0, (rand() % 2000) - 1000));
 	}
 	for (auto i = Points.begin(); i != Points.end(); i++)
 	{

@@ -58,9 +58,9 @@ void Scene::Initialize()
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
 	championChat->CreateChatbox();
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 5000; i++)
 	{
-		Obstacles.push_back(vec3(rand() % 100 - 100,0, rand() % 100 - 100));
+		Obstacles.push_back(vec3(float(rand() % 1000 - 1000) / 10.0f, 0, float(rand() % 1000 - 1000) / 10.0f));
 	}
 }
 
@@ -311,19 +311,19 @@ void Scene::DrawCollada()
 		Add_mat4("model", ModelMatrix).
 		Add_bool("isAnimated", true).
 		Add_bool("isInstanced", false);
-	//loaded_Models["Collada"]->Draw();	
+	//loaded_Models["Obstacle"]->Draw();	
 	//ModelMatrix = mat4();
 	//position = vec3(50, 0, 0);
 	//ModelMatrix = glm::translate(ModelMatrix, position);
 	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
 	//	Add_mat4("model", ModelMatrix);
 	//loaded_Models["Collada"]->Draw();
-	vector<mat4> ModelMatrixs;
-	//for (auto o : Obstacles)
+	vector<vec4> ModelMatrixs;
+	for (auto o : Obstacles)
 	{
 	/*	mat4 ModelMatrix;
 		ModelMatrix = glm::translate(ModelMatrix, o);*/
-		ModelMatrixs.push_back(ModelMatrix);
+		ModelMatrixs.push_back(vec4(o,0));
 	/*	ShaderBuilder::LoadShader(Shader::At("Animation"))->
 			Add_mat4("model", ModelMatrix).
 			Add_mat4("view", ViewMatrix).
@@ -338,7 +338,7 @@ void Scene::DrawCollada()
 		Add_mat4("view", ViewMatrix).
 		Add_mat4("projection", ProjectionMatrix).
 		Add_bool("isAnimated", false);
-	//loaded_Models["Obstacle"]->DrawInstanced(50, ModelMatrixs);
+	loaded_Models["Obstacle"]->DrawInstanced(ModelMatrixs);
 }
 
 void Scene::SetCameraView()

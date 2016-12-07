@@ -20,8 +20,8 @@ void staticLoaded_Models::initialize_Models()
 	//Models_Collection["Grass"] = new Grass(5);
 	
 	//Models["Lara"] = new Model("Collada/CartoonTree.dae");
-	Models["Collada"] = new Model("Collada/ArmyPilot.dae");
-	Models["Obstacle"] = new Model("Map/obstacle.obj");
+	Models["Collada"] = new Model("Collada/Katarina.dae");
+	Models["Obstacle"] = new Model("Map/Grass.dae");
 	//Models2["Lara"]->LoadMesh("Collada/Lara_Croft.dae");
 
 

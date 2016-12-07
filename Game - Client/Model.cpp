@@ -87,10 +87,10 @@ void Model::Draw()
 	for (GLuint i = 0; i < this->meshes.size(); i++)
 		this->meshes[i].DrawModel();
 }
-void Model::DrawInstanced(int Num,vector<mat4>& ModelMatrix)
+void Model::DrawInstanced(vector<vec4>& ModelMatrix)
 {
 	for (GLuint i = 0; i < this->meshes.size(); i++)
-		this->meshes[i].DrawInstanced(Num,ModelMatrix);
+		this->meshes[i].DrawInstanced(ModelMatrix);
 }
 int Model::LoadTexture(string Filename)
 {

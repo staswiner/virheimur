@@ -135,21 +135,21 @@ void Mesh::setupMesh()
 	glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
+	glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(vec4),
+		(const GLvoid*)0);
+	glEnableVertexAttribArray(MODEL_MAT_LOCATION);
+	glVertexAttribDivisor(MODEL_MAT_LOCATION, 1);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(mat4)*150, NULL, GL_DYNAMIC_DRAW);
-	for (GLuint i = 0; i < 4; i++) 
-	{
-		glEnableVertexAttribArray(MODEL_MAT_LOCATION + i);
-		glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
-		glVertexAttribDivisor(MODEL_MAT_LOCATION + i, 1);
-	}
+	//for (GLuint i = 0; i < 4; i++) 
+	//{
+	//	glEnableVertexAttribArray(MODEL_MAT_LOCATION + i);
+	//	glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
+	//	glVertexAttribDivisor(MODEL_MAT_LOCATION + i, 1);
+	//}
 
 	glBindVertexArray(0);
 	/*vertices.clear();
 	indices.clear();*/
-}
-void Mesh::loadMesh()
-{
-
 }
 void Mesh::VertexBoneData::AddBoneData(uint BoneID, float Weight)
 {
@@ -232,12 +232,10 @@ void Mesh::DrawModel()
 	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
 	glBindVertexArray(0);
 }
-void Mesh::DrawInstanced(int Num, vector<mat4>& ModelMatrix)
+void Mesh::DrawInstanced(vector<vec4>& ModelMatrix)
 {
-	Num = 100;
-	int a = sizeof(mat4);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(mat4) * Num, &(ModelMatrix[0]), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * ModelMatrix.size(), &ModelMatrix[0], GL_DYNAMIC_DRAW);
 
 
 	glBindVertexArray(VAO);
@@ -248,7 +246,7 @@ void Mesh::DrawInstanced(int Num, vector<mat4>& ModelMatrix)
 		Num,
 		m_Entries[i].BaseVertex);*/
 	glEnableVertexAttribArray(0);
-	glDrawArraysInstanced(GL_TRIANGLES , 0 , Num*Vertices_Amount,Num);
+	glDrawArraysInstanced(GL_TRIANGLES , 0 , Vertices_Amount, ModelMatrix.size());
 	glBindVertexArray(0);
 }
 void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
