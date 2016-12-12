@@ -15,12 +15,21 @@ ShaderBuilder::~ShaderBuilder()
 
 ShaderBuilder & ShaderBuilder::Add_texture(string str, GLuint texID)
 {
-	// TODO: insert return statement here
+	GLuint result = glGetUniformLocation(shaderID, str.c_str());
+	glUniform1i(result, textureCount);
 	glActiveTexture(GL_TEXTURE0 + textureCount);
 	glBindTexture(GL_TEXTURE_2D, texID);
-	GLuint result = glGetUniformLocation(shaderID, str.c_str());
-	glUniform1i(glGetUniformLocation(shaderID, str.c_str()), textureCount);
 	textureCount++;
+	return *this;
+}
+
+ShaderBuilder & ShaderBuilder::Add_textures(map<string, GLuint>& Textures)
+{
+	// TODO: insert return statement here
+	for (auto t : Textures)
+	{
+		this->Add_texture(t.first, t.second);
+	}
 	return *this;
 }
 
@@ -38,7 +47,7 @@ ShaderBuilder & ShaderBuilder::Add_vec3(string name, const vec3 & rhs)
 	return *this;
 }
 
-ShaderBuilder & ShaderBuilder::Add_float(string name, float & rhs)
+ShaderBuilder & ShaderBuilder::Add_float(string name, const float & rhs)
 {
 	// TODO: insert return statement here
 	glUniform1f(glGetUniformLocation(shaderID, name.c_str()), rhs);

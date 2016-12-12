@@ -26,7 +26,7 @@ private:
 	string GetMessageContent(string message);
 	//Client client;
 	UdpClient udpClient;
-	GlobalDataObject& GlobalData;
+	GlobalDataObject& ReceivedData;
 	GlobalDataObject NewData;
 	string ServerIP;
 	string MyIP;

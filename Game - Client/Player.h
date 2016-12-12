@@ -23,8 +23,8 @@ public:
 
 	};
 	Stats stats;
-private:
 	Unit_Data unit_Data;
+private:
 	string IpAddress;
 	int Type;
 };

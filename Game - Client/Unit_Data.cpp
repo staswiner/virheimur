@@ -32,6 +32,10 @@ void Unit_Data::SetPosition(const vec3 Position)
 {
 	this->Position = Position;
 }
+void Unit_Data::SetDestination(const vec3 & Destination)
+{
+	this->Destination = Destination;
+}
 Model* Unit_Data::GetModelData() const
 {
 	return this->Model_Data;

@@ -16,6 +16,19 @@ Mesh::Mesh(aiMesh * mesh, const aiScene* scene, string CollisionType)
 	this->CollisionType = CollisionType;
 	ProcessMesh();
 }
+void Mesh::LoadCustom(vector<Stas::Vertex>& Vertices)
+{
+	vertices = Vertices;
+	if (this->CollisionType == "Ground")
+		mCollision = new Ground_Collision(vertices);
+	Bones.resize(1);
+	//GLuint a = scene->mNumMaterials;
+	//for(GLuint i=0; i < mesh->te)
+
+
+	// Process Bones
+	this->setupMesh();
+}
 void Mesh::ProcessMesh()
 {
 	for (GLuint i = 0; i < mesh->mNumVertices; i++)
@@ -36,7 +49,7 @@ void Mesh::ProcessMesh()
 		vertices.push_back(vertex);
 	}
 	if (this->CollisionType == "Ground")
-		mCollision = new Ground_Collision();
+		mCollision = new Ground_Collision(vertices);
 	// Process indices
 	for (GLuint i = 0; i < mesh->mNumFaces; i++)
 	{
@@ -137,17 +150,18 @@ void Mesh::setupMesh()
 	glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
-	glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(vec4),
+	/*glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(vec4),
 		(const GLvoid*)0);
 	glEnableVertexAttribArray(MODEL_MAT_LOCATION);
 	glVertexAttribDivisor(MODEL_MAT_LOCATION, 1);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(mat4)*150, NULL, GL_DYNAMIC_DRAW);
-	//for (GLuint i = 0; i < 4; i++) 
-	//{
-	//	glEnableVertexAttribArray(MODEL_MAT_LOCATION + i);
-	//	glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (const GLvoid*)(sizeof(GLfloat) * i * 4));
-	//	glVertexAttribDivisor(MODEL_MAT_LOCATION + i, 1);
-	//}
+	*/
+	for (GLuint i = 0; i < 4; i++) 
+	{
+		glVertexAttribPointer(MODEL_MAT_LOCATION + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), 
+			(const GLvoid*)(sizeof(vec4) * i));
+		glEnableVertexAttribArray(MODEL_MAT_LOCATION + i);
+		glVertexAttribDivisor(MODEL_MAT_LOCATION + i, 1);
+	}
 
 	glBindVertexArray(0);
 	/*vertices.clear();
@@ -217,10 +231,6 @@ void Mesh::DrawModel()
 		BoneTransform(float(GetTickCount()) / 1000.0f, Transforms);
 	}
 	ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
-	for (int i = 0; i < m_Texture.size(); i++)
-	{
-		myshader.Add_texture("myTexture"+i, m_Texture[i]);
-	}
 
 	for (int i = 0; i < Transforms.size(); i++)
 	{
@@ -234,10 +244,11 @@ void Mesh::DrawModel()
 	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
 	glBindVertexArray(0);
 }
-void Mesh::DrawInstanced(vector<vec4>& ModelMatrix)
+void Mesh::DrawInstanced(vector<mat4>& ModelMatrix)
 {
+	size_t size = sizeof(ModelMatrix[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * ModelMatrix.size(), &ModelMatrix[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(mat4) * ModelMatrix.size(), &ModelMatrix[0], GL_DYNAMIC_DRAW);
 
 
 	glBindVertexArray(VAO);
@@ -247,8 +258,7 @@ void Mesh::DrawInstanced(vector<vec4>& ModelMatrix)
 		(void*)(sizeof(unsigned int) * m_Entries[i].BaseIndex),
 		Num,
 		m_Entries[i].BaseVertex);*/
-	glEnableVertexAttribArray(0);
-	glDrawArraysInstanced(GL_TRIANGLES , 0 , Vertices_Amount, ModelMatrix.size());
+	glDrawArraysInstanced(GL_POINTS , 0 , Vertices_Amount, ModelMatrix.size());
 	glBindVertexArray(0);
 }
 void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)

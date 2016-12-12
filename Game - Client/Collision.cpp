@@ -25,3 +25,8 @@ vec3 Collision::OnCollision(vec3 Position)
 {
 	return vec3();
 }
+
+vector<vec3> Collision::GetPlaneCoords(vec3)
+{
+	return vector<vec3>();
+}

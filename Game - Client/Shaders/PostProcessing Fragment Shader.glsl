@@ -41,8 +41,8 @@ void main()
 {    
 	vec4 Color = texture(ourTexture, TexCoords);
 	//Color = Color * Color * Color * 0.5;
-	color = vec4(Color.x,Color.y,Color.z,Color.w);
-
+	color = Color;
+//	color = vec4(gl_FragCoord.z);
 //	vec3 texelColor;
 //	vec2 texelSize = 1.0 / textureSize(ourTexture, 0);
 //	int Blur = 0;

@@ -18,12 +18,13 @@
 #include "MenuPanel.h"
 #include "LoginState.h"
 #include "UIElement.h"
+#include "SeaAnimated.h"
 using namespace glm;
 class Scene
 {
 public:
 	//Scene() {}
-	Scene(GlobalDataObject&,UserInterface&);
+	Scene(GlobalDataObject&,UserInterface&,FBO* Index);
 	~Scene();
 	GlobalDataObject& Data;
 
@@ -46,8 +47,6 @@ private:
 	void DrawEntities();
 	void SetCameraView();
 	void Shadow_DrawGround(Shader&);
-	void Draw_All_Units(Shader& shader);
-	void DrawAllUnits();
 	void DrawSeaAnimated();
 	void Draw_Skeletal();
 	void DrawUI();
@@ -55,11 +54,13 @@ private:
 	
 	void DrawSky();
 	void DrawGround(Shader&);
-	void Draw2DObjects();
 	void DrawSky(Shader&);
 	void DrawSea();
 	void DrawPreBuffer();
 	void DrawCollada();
+	void DrawIndexColor();
+
+	void DrawColladaDistance();
 	
 	Camera camera;
 	Mouse mouse;
@@ -67,6 +68,7 @@ private:
 	mat4 ViewMatrix;
 	HDC m_HDC;
 	map<string, FBO> mFBO;
+	FBO* IndexFBO;
 	MultiSampleFBO mAntiAliasing;
 
 	Model Soldier;
@@ -84,6 +86,8 @@ private:
 	vector<Player> Players[2];
 	Minimap minimap;
 	vector<vec3> Obstacles;
+	Grass grass;
+	SeaAnimated seaAnim;
 	//static GlobalDataObject Data;
 	// develop this please
 	//vector<Objects*> ObjectsToDraw

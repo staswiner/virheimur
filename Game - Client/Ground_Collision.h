@@ -1,7 +1,7 @@
 #pragma once
 #include "Maths.h"
 #include "Collision.h"
-
+#include <algorithm>
 using namespace std;
 using namespace glm;
 class Ground_Collision : public Collision
@@ -18,7 +18,9 @@ public:
 	}*/
 	~Ground_Collision();
 	vec3 OnCollision(vec3 Position);
+	vector<vec3> GetPlaneCoords(vec3 Index);
 private:
-	map<pair<float, float>, float> AlteredVertices;
+	map<vec2, float, bool(*)(const vec2&, const vec2&)>* AlteredVertices;
+	vector<Stas::Vertex> Vertices;
 };
 

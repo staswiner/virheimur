@@ -1,6 +1,6 @@
 #version 400 core
-layout(triangles) in;
-layout(triangle_strip, max_vertices = 3) out;
+layout(points) in;
+layout(triangle_strip, max_vertices = 7) out;
 
 in VS_OUT{
 	vec2 texCoords;
@@ -50,19 +50,43 @@ void TransferData(int i)
 }
 void main() {
 	vec3 normal = GetNormal();
+	//1
+	gl_Position = gl_in[0].gl_Position + vec4(0, 0, 0, 0);
+//	TransferData(0);
+	EmitVertex();
+	//2
+	gl_Position = gl_in[0].gl_Position + vec4(1, 0, 0, 0);
+//	TransferData(1);
+	EmitVertex();
+	//3
+	gl_Position = gl_in[0].gl_Position + vec4(0, 0, 5, 0);
 
-	gl_Position = explode(gl_in[0].gl_Position, normal);
-	TransferData(0);
+//	TransferData(2);
 	EmitVertex();
-	gl_Position = explode(gl_in[1].gl_Position, normal);
-	TexCoords = gs_in[1].texCoords;
-	Normal = gs_in[1].Normal;
-	FragPos = gs_in[1].FragPos;
-	EmitVertex();
-	gl_Position = explode(gl_in[2].gl_Position, normal);
-	TexCoords = gs_in[2].texCoords;
+	//4
+	gl_Position = gl_in[0].gl_Position + vec4(1, 0, 5, 0);
+	/*TexCoords = gs_in[2].texCoords;
 	Normal = gs_in[2].Normal;
-	FragPos = gs_in[2].FragPos;
+	FragPos = gs_in[2].FragPos;*/
 	EmitVertex();
+	//5
+	gl_Position = gl_in[0].gl_Position + vec4(0, 0, 10, 0);
+	//TexCoords = gs_in[2].texCoords;
+	//Normal = gs_in[2].Normal;
+	//FragPos = gs_in[2].FragPos;
+	EmitVertex();
+	//6
+	gl_Position = gl_in[0].gl_Position + vec4(1, 0, 10, 0);
+	//TexCoords = gs_in[2].texCoords;
+	//Normal = gs_in[2].Normal;
+	//FragPos = gs_in[2].FragPos;
+	EmitVertex();
+	//7
+	gl_Position = gl_in[0].gl_Position + vec4(0, 0, 15, 0);
+	//TexCoords = gs_in[2].texCoords;
+	//Normal = gs_in[2].Normal;
+	//FragPos = gs_in[2].FragPos;
+	EmitVertex();
+
 	EndPrimitive();
 }

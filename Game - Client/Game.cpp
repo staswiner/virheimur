@@ -1,7 +1,11 @@
 #include "Game.h"
 
 
+GlobalDataObject Game::NewData;
+GlobalDataObject Game::ReceivedData;
 GlobalDataObject Game::Data;
+FBO Game::Index;
+
 UserInterface Game::UI;
 
 Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
@@ -48,12 +52,18 @@ void Game::Loop()
 	}
 	else
 	{
+		// Accepts input
 		UserInput();
-		ApplyGameLogic();
-
+		// Sends 'NewData' object to the server
 		UpdateNetwork();
+		// Updates Variables
 		UpdateVariables(ProjectionMatrix, ViewMatrix);
+		// Creates 'Data' object as a combination of NewData and ReceivedData
+		CombineData();
+		// proceeds logic of the final 'Data' object
+		ApplyGameLogic();
 		GetGameOnlineGameState();
+		// Draws 'Data' object
 		DrawScene();
 	}
 }
@@ -82,7 +92,8 @@ void Game::UpdateVariables(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 
 void Game::UserInput()
 {
-	NewData = input.TranslateInput();
+	NewData = input.TranslateInput(Data);
+	// Camera
 	Camera& camera = input.GetCamera();
 	ViewMatrix = camera.GetCameraMatrix();
 	ProjectionMatrix = camera.GetProjectionMatrix();
@@ -90,7 +101,8 @@ void Game::UserInput()
 
 void Game::ApplyGameLogic()
 {
-	logic.Proceed(NewData,ProjectionMatrix,ViewMatrix);
+	// Alters Data object 
+	logic.Proceed(Data,ProjectionMatrix,ViewMatrix);
 }
 
 void Game::GetGameOnlineGameState()
@@ -109,6 +121,26 @@ void Game::UpdateNetwork()
 {
 	//network.SetNewData( this->NewData );
 	network.SendNewData(this->NewData);
+}
+
+void Game::CombineData()
+{
+	// NewData
+	//	MyChampion : Destination
+	// ReceivedData
+	//	AllChampions : Destination, StartTime`
+	// =
+	// Data
+	// Received Data
+	for (auto p : ReceivedData.GetPlayerInformation())
+	{
+		Data.GetPlayerInformation()[p.first] = p.second;
+	}
+	// New Data
+	for(auto p : NewData.GetPlayerInformation())
+	{
+		Data.GetPlayerInformation()[p.first] = p.second;
+	}
 }
 
 void Game::ReadAuthentication()

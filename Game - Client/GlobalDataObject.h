@@ -24,6 +24,7 @@ public:
 	vector<vec3>* Path;
 	bool RouteChanged = false;
 
+
 private:
 	json Data;
 	map<string,Player> Players;

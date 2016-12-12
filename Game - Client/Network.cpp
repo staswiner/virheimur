@@ -3,7 +3,7 @@
 
 
 Network::Network(GlobalDataObject& Data)
-	:GlobalData(Data)
+	:ReceivedData(Data)
 {
 }
 
@@ -62,7 +62,7 @@ void Network::BeginReceive()
 			break;
 		if (GetMessageType(ReturnData) == "Data")
 		{
-			GlobalData.ReceiveDataString(GetMessageContent(ReturnData));
+			ReceivedData.ReceiveDataString(GetMessageContent(ReturnData));
 		}
 		if (GetMessageType(ReturnData) == "Authentication")
 		{

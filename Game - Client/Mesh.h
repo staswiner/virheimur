@@ -89,10 +89,11 @@ public:
 	Mesh();
 	~Mesh();
 	Mesh(aiMesh*, const aiScene*, string Collision);
+	void LoadCustom(vector<Stas::Vertex>& Vertices);
 	void ProcessMesh();
 	//void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Skeletal>& Bones);
 	void DrawModel();
-	void DrawInstanced(vector<vec4>& ModelMatrix);
+	void DrawInstanced(vector<mat4>& ModelMatrix);
 
 	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const aiMatrix4x4 & ParentTransform);
 	uint FindPosition(float AnimationTime, const aiNodeAnim * pNodeAnim);

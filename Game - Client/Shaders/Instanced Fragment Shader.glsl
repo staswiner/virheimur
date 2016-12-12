@@ -1,25 +1,47 @@
 #version 400 core
 
-in float vertexb;
-in float vertexc;
-flat in int InstanceID;
+
+in GS_OUT{
+	float instanceID;
+	float vertexID;
+	float Height;
+	float index;
+	vec3 Normals;
+	vec3 FragPos;
+	vec4 UV;
+} gs_out;
 //in vec2 UVs;
 
 //uniform sampler2D myTexture0;
-//uniform sampler2D myTexture1;
+uniform sampler2D Fractal;
+uniform sampler2D CoverPicture;
 out vec4 color;
 
 
 void main()
-{   
-	//color = texture(myTexture0, UVs);
-	//if (isInstanced==true)
-	//{
-	//	//color = vec4(1, 1, 1, 1);
-	//}
-	float vertexb2=mod(vertexb,8);
-		color = vec4(0, (100.0+vertexb2*4.0 + vertexc*5.0)/255.0, (10.0+vertexb2 + vertexc*5.0)/255.0, 1);
+{
+//{   // all syntax correct
+	vec3 lightPos = vec3(30, 30, 0);
+	vec3 norm = normalize(gs_out.Normals);
+	vec3 lightDir = normalize(lightPos - gs_out.FragPos);
+	float diff = max(dot(norm, lightDir), 0.0);
+	vec3 diffuse = diff * vec3(0.6) + vec3(0.4);
+//	//color = texture(myTexture0, UVs);
+//	//if (isInstanced==true)
+//	//{
+//	//	//color = vec4(1, 1, 1, 1);
+//	//}
+//	/*if (Height < -10)
+//		discard;*/
+	vec3 result = diffuse * vec3(0.5, 0.6, 0);
+	float vertexb2=mod(gs_out.instanceID,8);
+	//color = vec4(0, (100.0 + vertexb2*4.0 + gs_out.vertexID*5.0) / 255.0, (10.0 + vertexb2 + gs_out.vertexID*5.0) / 255.0, 1);
+	vec4 Image = texture(CoverPicture, gs_out.UV.xz/200.0f);
 
+	color = vec4(vec3(0.25, 0.25 + (mod(gs_out.instanceID, 8)) / 255, 0) * diffuse, 1.0)*vec4(0.5+(gs_out.index/3.0));
+	//color = texture(Fractal, gs_out.UV.xz/200.0f) * vec4(diffuse,1);
+	color = Image * vec4(diffuse, 1);
+//	color = vec4(1);
 }
 
   

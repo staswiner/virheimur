@@ -66,6 +66,57 @@ bool FBO::Initialize(int Height, int Width, Shader& shader)
 	return false;
 
 }
+bool FBO::InitializeBig(int Height, int Width, Shader& shader)
+{
+	Mouse mouse; // todo: make the buffer size maximum or dynamic
+	this->Width = mouse.GetWindowSize().x / Width;
+	this->Height = mouse.GetWindowSize().y / Height;
+	glGenFramebuffers(1, &PostProcessingFBO);
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, this->Width,
+		this->Height, 0, GL_RGB, GL_FLOAT, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
+
+	GLuint test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+	// render buffer object
+
+	glGenRenderbuffers(1, &RBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
+		this->Width,
+		this->Height);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
+
+	Load_Interface(shader);
+
+	//	Mouse mouse;
+	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
+	test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	glViewport(0, 0, this->Width,
+		this->Height);
+
+	glClearColor(0, 0, 0, 0);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		return true;
+	}
+	else
+		return false;
+
+}
 void FBO::BindFrameBuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);

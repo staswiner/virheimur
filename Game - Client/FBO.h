@@ -13,6 +13,7 @@ class FBO
 public:
 	FBO();
 	bool Initialize(int Height,int Width, Shader&);
+	bool InitializeBig(int Height, int Width, Shader & shader);
 	void BindFrameBuffer();
 	static void UnbindFrameBuffer();
 	void DrawFrameBuffer();

@@ -10,6 +10,11 @@ Model::Model(GLchar* Path, string CollisionType)
 	this->CollisionType = CollisionType;
 	this->loadModel(Path);
 }
+Model::Model(Mesh& mesh)
+{
+	this->loadModel(mesh);
+}
+
 Model::~Model()
 {
 	for each (Mesh mesh in meshes)
@@ -43,18 +48,11 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	vector<Stas::Vertex> vertices;
 	vector<GLuint> indices;
 	vector<Mesh::Texture> textures;
-
-
-	//for(GLuint i=0; i < mesh->te)
-	// temporary texture loading;
-	Texture.push_back(LoadTexture("Collada/Tex/body01.png"));
-	Texture.push_back(LoadTexture("Collada/Tex/head01.png"));
-	//for (auto &m : meshes)
-	//{
-	//	m.m_Texture = Texture;
-	//}
-
 	return Mesh(mesh,scene, CollisionType);
+}
+void Model::loadModel(Mesh& mesh)
+{
+	this->meshes.push_back(mesh);
 }
 void Model::loadModel(string Path)
 {
@@ -88,7 +86,7 @@ void Model::Draw()
 	for (GLuint i = 0; i < this->meshes.size(); i++)
 		this->meshes[i].DrawModel();
 }
-void Model::DrawInstanced(vector<vec4>& ModelMatrix)
+void Model::DrawInstanced(vector<mat4>& ModelMatrix)
 {
 	for (GLuint i = 0; i < this->meshes.size(); i++)
 		this->meshes[i].DrawInstanced(ModelMatrix);
@@ -128,4 +126,59 @@ int Model::LoadTexture(string Filename)
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return texture;
+}
+
+void Model::AddTexture(string TextureName,string Filename)
+{
+	this->Textures[TextureName]=this->LoadTexture(Filename);
+}
+
+vector<vector<int>> Model::LoadBufferFromImage(string Filename)
+{
+	GLuint texture;
+	vector<vector<int>> Data;
+	// texture
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glGenTextures(1, &texture);
+	//bind as 2d texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// Set our texture parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Set texture filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Load, create texture and generate mipmaps
+	int Width, Height;
+	unsigned char* image;
+	// "Loading Screen/UI.jpg"
+	image = SOIL_load_image(Filename.c_str(), &Width, &Height, 0, SOIL_LOAD_AUTO);
+	Data.resize(Height);
+	for (auto& d : Data)
+	{
+		d.resize(Width);
+	}
+	for (int i = 0; i < Height; i++)
+	{
+		for (int j = 0; j < Width; j++)
+		{
+			Data[i][j] = image[i*Width + j];
+		}
+	}
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	//	SOIL_free_image_data(image);
+	//}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SOIL_free_image_data(image);
+	//glEnable(GL_TEXTURE_2D);
+	//unbind texture 2d
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return Data;
 }

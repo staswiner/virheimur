@@ -14,6 +14,7 @@ public:
 
 	virtual bool InCollision(vec3 Position);
 	virtual vec3 OnCollision(vec3 Position);
+	virtual vector<vec3> GetPlaneCoords(vec3);
 
 protected:
 	vector<Stas::Vertex> Vertices;

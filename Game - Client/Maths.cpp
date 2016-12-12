@@ -191,6 +191,15 @@ namespace Stas
 		returnPath->push_back(backtrackingNode);
 		return returnPath;
 	}
+	unsigned long long Maths::llrand() {
+		unsigned long long r = 0;
+
+		for (int i = 0; i < 5; ++i) {
+			r = (r << 15) | (rand() & 0x7FFF);
+		}
+
+		return r & 0xFFFFFFFFFFFFFFFFULL;
+	}
 }
 struct Node
 {

@@ -20,8 +20,10 @@ void staticLoaded_Models::initialize_Models()
 	//Models_Collection["Grass"] = new Grass(5);
 	
 	//Models["Lara"] = new Model("Collada/CartoonTree.dae");
-	Models["Land"] = new Model("Map/Land.dae","Ground");
-	Models["Collada"] = new Model("Collada/Katarina.dae","");
+	Models["Land"] = new Model("Map/Land2.dae","Ground");
+	Models["Land"]->AddTexture("Texture0", "Map/Grass2.jpg");
+	Models["Collada"] = new Model("Collada/Katarina.dae", "");
+	Models["Collada"]->AddTexture("Texture0","Katarina/Katarina ShineFull.bmp");
 	Models["Obstacle"] = new Model("Map/Grass.dae","");
 	//Models2["Lara"]->LoadMesh("Collada/Lara_Croft.dae");
 
@@ -33,18 +35,6 @@ void staticLoaded_Models::initialize_Models()
 	//Models_Collection["Soldier"] = new Model("Collada/ArmyPilot.dae");
 
 	
-}
-/*
-``Bind Models to Graphic Card`` (in main thread)
-*/
-void staticLoaded_Models::Bind_Texture_To_Models()
-{
-	// not working
-	//for each (pair<string,Model*> model in Models)
-	//{
-	//	model.second->InitTexture();
-	////	Loader::LoadShaders(model->vShader.c_str(), model->fShader.c_str());
-	//}
 }
 //Loader* staticLoaded_Models::getModelData(const string Model_Code)
 //{
@@ -69,10 +59,6 @@ Loaded_Models::~Loaded_Models()
 void Loaded_Models::initialize_Models()
 {
 	sLoaded_Models.initialize_Models();
-}
-void Loaded_Models::Bind_Texture_To_Models()
-{
-	sLoaded_Models.Bind_Texture_To_Models();
 }
 Model* Loaded_Models::operator[](string i)
 {

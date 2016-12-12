@@ -17,11 +17,16 @@ public:
 	~Model();
 	Model(GLchar* path, string CollisionType);
 
+	Model(Mesh& mesh);
+
 	void Draw(Shader shader);
 	void Draw();
-	void DrawInstanced(vector<vec4>& ModelMatrix);
+	void DrawInstanced(vector<mat4>& ModelMatrix);
 	int LoadTexture(string Filename);
+	void AddTexture(string TextureName,string Filename);
+	static vector<vector<int>> LoadBufferFromImage(string Filename);
 	vector<Mesh> meshes;
+	map<string,GLuint> Textures;
 private:
 	/*  Model Data  */
 	//vector<Mesh> meshes;
@@ -30,6 +35,7 @@ private:
 	void loadModel(string path);
 	void processNode(aiNode* node, const aiScene* scene);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+	void loadModel(Mesh& mesh);
 	vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 	Assimp::Importer import;
 	const aiScene* scene;

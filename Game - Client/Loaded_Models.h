@@ -10,7 +10,6 @@ public:
 	staticLoaded_Models();
 	~staticLoaded_Models();
 	void initialize_Models();
-	void Bind_Texture_To_Models();
 	Model* operator[](string i);
 	//Loader* getModelData(const string Model_Code);
 	//Model* GetModelData(const string Model_Code);
@@ -29,7 +28,6 @@ public:
 	Loaded_Models();
 	~Loaded_Models();
 	void initialize_Models();
-	void Bind_Texture_To_Models();
 	Model* operator[](string i);
 	//Loader* getModelData(const string Model_Code);
 	enum Models_Names { e_KatarinaModel, e_MinionModel, e_MapModel, e_SkyBox, e_2D_IMAGE };

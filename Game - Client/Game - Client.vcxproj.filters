@@ -311,6 +311,9 @@
     <ClInclude Include="Graphics_Header.h">
       <Filter>Graphics\Base Classes</Filter>
     </ClInclude>
+    <ClInclude Include="SeaAnimated.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -484,6 +487,7 @@
     <ClCompile Include="Collision.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
+    <ClCompile Include="SeaAnimated.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">
@@ -651,5 +655,30 @@
     <None Include="Shaders\Instanced Fragment Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Instanced Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SeaAnimated Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SeaAnimated Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SeaAnimated Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Distance Fragment Shader.glsl" />
+    <None Include="Shaders\Index Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Index Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Index Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Index1 Vertex Shader.glsl" />
+    <None Include="Shaders\Index1 Geometry Shader.glsl" />
+    <None Include="Shaders\Index1 Fragment Shader.glsl" />
   </ItemGroup>
 </Project>

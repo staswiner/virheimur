@@ -21,7 +21,13 @@ bool Shader::LoadShaders()
 	mapShader["Crop"]			= new Shader("InterfaceCrop Vertex Shader.glsl", "Interface Fragment Shader.glsl");
 	mapShader["Image"]			= new Shader("Interface Vertex Shader.glsl", "Interface Fragment Shader.glsl");
 	mapShader["Animation"]		= new Shader("Animation Vertex Shader.glsl", "Animation Fragment Shader.glsl");
-	mapShader["Instanced"]		= new Shader("Instanced Vertex Shader.glsl", "Instanced Fragment Shader.glsl");
+	mapShader["Instanced"]		= new Shader("Instanced Vertex Shader.glsl", "Instanced Geometry Shader.glsl", "Instanced Fragment Shader.glsl");
+	mapShader["AnimationDistance"]		= new Shader("Animation Vertex Shader.glsl", "Distance Fragment Shader.glsl");
+	mapShader["InstancedDistance"]		= new Shader("Instanced Vertex Shader.glsl", "Instanced Geometry Shader.glsl", "Distance Fragment Shader.glsl");
+	mapShader["SeaAnimated"]	= new Shader("SeaAnimated Vertex Shader.glsl","SeaAnimated Geometry Shader.glsl","SeaAnimated Fragment Shader.glsl");
+	mapShader["Index"]			= new Shader("Index1 Vertex Shader.glsl","Index1 Geometry Shader.glsl", "Index1 Fragment Shader.glsl");
+
+	//	new Shader("Index Vertex Shader.glsl", "Index Geometry Shader.glsl", "Index Fragment Shader.glsl");
 	return true;
 }
 Shader::~Shader()

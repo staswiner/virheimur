@@ -7,9 +7,11 @@ in vec3 FragPos;
 out vec4 color;
 
 uniform sampler2D ourTexture;
+uniform sampler2D CoverPicture;
 uniform float AmbientStrength;
 uniform vec3 lightPos;
 uniform vec3 cameraPos;
+
 
 
 void main()
@@ -29,5 +31,7 @@ void main()
 	vec3 specular = specularStrength * spec * vec3(1,1,1);  
 
 	vec3 result = (ambient + diffuse + specular) * vec3(texColor.x, texColor.y, texColor.z);
+	
+	
 	color = vec4(result, 1.0f);
 }

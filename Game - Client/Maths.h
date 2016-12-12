@@ -30,6 +30,7 @@ namespace Stas
 			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
 		static vector<vec3>* Astar(const map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
+		static unsigned long long llrand();
 		static bool vec3Compare(const vec3&, const vec3&);
 		static bool IsIn(vec2 TopLeft, vec2 BotRight, vec2 TestSample);
 	};

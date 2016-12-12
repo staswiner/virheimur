@@ -2,9 +2,10 @@
 
 
 
-Scene::Scene(GlobalDataObject& Data,UserInterface& UI)
+Scene::Scene(GlobalDataObject& Data,UserInterface& UI,FBO* Index)
 	:Data(Data), UI(UI)
 {
+	IndexFBO = Index;
 	int i = 0;
 }
 
@@ -18,11 +19,9 @@ void Scene::Initialize()
 	GLuint Err = glewInit();
 	glLoadIdentity();
 	Shader::LoadShaders();
-	loaded_Models.initialize_Models();
-	loaded_Models.Bind_Texture_To_Models();
+	
 	mSea.Initialize();
 	text.Initialize();
-	int b = glGetError();
 
 	shadow = new Shadow_Mapping();
 
@@ -36,14 +35,14 @@ void Scene::Initialize()
 	mFBO["Gaussic Effect"].Initialize(1, 1, Shader::At("Combine"));
 	mFBO["RadialBlur"].Initialize(1, 1, Shader("RadialBlur Vertex Shader.glsl", "RadialBlur Fragment Shader.glsl"));
 	mFBO["Basic"].Initialize(1, 1, Shader());
-	b = glGetError();
-
+	//mFBO["Index"].Initialize(1, 1, Shader::At("PostProcessing"));
+	IndexFBO->InitializeBig(1, 1, Shader::At("PostProcessing"));
 	mAntiAliasing.InitializeMultiSample();
 	championChat = new ChampionChat(Shader::At("Champion Chat"));
+	championChat->CreateChatbox();
 	//skyBox = new SkyBox;
 	//skyBox->InitTexture();
 	minimap.Initialize();
-	 b = glGetError();
 
 #pragma region 2D Interface
 	GenerateForm();
@@ -52,19 +51,44 @@ void Scene::Initialize()
 #pragma endregion 2D Interface
 
 
+	loaded_Models.initialize_Models();
+	grass.Initialize();
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
-	championChat->CreateChatbox();
-	for (int i = 0; i < 5000; i++)
+	//seaAnim.Initialize();
+	for (int i = 0; i < 160000; i++)
 	{
-		Obstacles.push_back(vec3(float(rand() % 1000 - 1000) / 10.0f, 0, float(rand() % 1000 - 1000) / 10.0f));
+		vec3 ObstaclePos = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(
+			vec3(float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f, 0,
+			float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f));
+		vec3 ObstacleRotation(float(rand() % 200 - 100) / 100.0f,float(rand()%200 - 100)/100.0f, float(rand() % 200 - 100) / 100.0f);
+		//Obstacles.push_back(ObstaclePos);
+		//rotate
+		//translate
+		mat4 ModelMat = glm::translate(mat4(), ObstaclePos);
+		ModelMat = glm::rotate(ModelMat, glm::radians(60.0f) ,ObstacleRotation);
+		grass.ObstaclesMat.push_back(ModelMat);
+
 	}
+	//for (int i = -100; i < 100; i++)
+	//{
+	//	for (int j = -100; j < 100; j++)
+	//	{
+	//		vec3 ObstaclePos = vec3(i,0,j);
+	//		//Obstacles.push_back(ObstaclePos);
+	//		//rotate
+	//		//translate
+	//		mat4 ModelMat = glm::translate(mat4(), ObstaclePos);
+	//		seaAnim.ObstaclesMat.push_back(ModelMat);
+	//	}
+	//}
 }
 
 void Scene::Frame()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClearColor(255, 255, 255, 255);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
@@ -72,6 +96,8 @@ void Scene::Frame()
 
 	ViewMatrix = camera.GetCameraMatrix();
 	SetProjectionMatrix(camera.GetProjectionMatrix());
+
+	DrawIndexColor();
 	//Draw_Scene();
 	Draw_Units();
 
@@ -114,8 +140,7 @@ void Scene::DrawScene_Depth()
 {
 	shadow->BindFrameBuffer();
 	//Shadow_DrawGround(shadow->shader);
-	Draw_All_Units(shadow->shader);
-
+	//DrawColladaDistance();
 	// back to default framebuffer
 	mFBO["Post Processing"].BindFrameBuffer();
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -156,13 +181,11 @@ void Scene::DrawScene_Reflection()
 void Scene::DrawScene_PostProcessing()
 {
 	mAntiAliasing.BindFrameBuffer();
-	//mFBO["Post Processing"].BindFrameBuffer();
 
 	SetCameraView();
 
 	DrawSky();
 	//DrawGround(Shader::At("Ground"));
-	//DrawAllUnits();
 	DrawCollada();
 	//DrawEntities();
 	//DrawSea();
@@ -170,6 +193,12 @@ void Scene::DrawScene_PostProcessing()
 	DrawUI();
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
+	//mFBO["HBlurS"].BindFrameBuffer();
+	//mFBO["Post Processing"].DrawFrameBuffer();
+	//mFBO["VBlurS"].BindFrameBuffer();
+	//mFBO["HBlurS"].DrawFrameBuffer();
+	//mFBO["Basic"].BindFrameBuffer();
+	//mFBO["VBlurS"].DrawFrameBuffer();
 
 	//mBright.BindFrameBuffer();
 	//mPostProcessing.DrawFrameBuffer();
@@ -181,11 +210,15 @@ void Scene::DrawScene_PostProcessing()
 	// uniform textures
 	FBO::UnbindFrameBuffer();
 
-	vector<GLuint> Textures = { mFBO["Basic"].texture,mFBO["Post Processing"].texture };
-	vector<string> ShaderNames = { "ourShine","ourTexture" };
-	//mCombine.DrawDirectly(Textures,ShaderNames);
-	//shadow->Draw();
+	//vector<GLuint> Textures = { mFBO["Basic"].texture,mFBO["Post Processing"].texture,shadow->depthMap };
+	//vector<string> ShaderNames = { "ourShine","ourTexture","DepthMap" };
+	//mFBO["Combine"].DrawDirectly(Textures,ShaderNames);
+	////shadow->Draw();
+	////mFBO["Basic"].DrawDirectly(Textures,ShaderNames);
+	//mFBO["Combine"].DrawFrameBuffer();
 	mFBO["Post Processing"].DrawFrameBuffer();
+	//IndexFBO->DrawFrameBuffer();
+	//shadow->Draw();
 }
 void Scene::Shadow_DrawGround(Shader& shader)
 {
@@ -229,38 +262,11 @@ void Scene::DrawEntities()
 		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
 	mat4 l_ViewMatrix = glm::lookAt(LightPosition, vec3(0.0f), vec3(1.0f, 1.0f, 1.0f));
 	mat4 l_LightView = l_ProjectionMatrix * l_ViewMatrix;
-	//for each (GrassObjects* grass in m_GrassObjects)
-	//{
-	//	mat4 ModelMatrix;
-	//	Ground_Collision groundCollision = Ground_Collision::Instance();
-	//	vec3 newPosition = groundCollision.Calculate_Ground_Collision(grass->m_Position); //todo: add return value
-	//	ModelMatrix = translate(ModelMatrix, newPosition);
-	//	ModelMatrix = scale(ModelMatrix, vec3(1));
-
-	//	float time = float(grass->m_StartTime++) / 20.0f;
-	//	float zeroval = 0;
-	//	mat4 WorldSpace = ProjectionMatrix * ViewMatrix * ModelMatrix;
-	//	ShaderBuilder::LoadShader(Shader::At("Grass"))->
-	//		Add_texture("ourTexture", loaded_Models["Grass"]->texture).
-	//		Add_texture("shadowMap", shadow->depthMap).
-	//		Add_mat4("projection", ProjectionMatrix).
-	//		Add_mat4("view", ViewMatrix).
-	//		Add_mat4("worldSpace", WorldSpace).
-	//		Add_mat4("model", ModelMatrix).
-	//		Add_mat4("lightSpaceMatrix", l_LightView).
-	//		Add_float("time", time).Add_float("AmbientStrength", zeroval).
-	//		Add_vec3("lightPos", vec3(0.0f, 100.0f, 0.0f)).
-	//		Add_vec3("cameraPos", camera.GetCameraPosition()).
-	//		Add_float("GravityHeight", zeroval);
-	//	loaded_Models["Grass"]->DrawModel();
-
-	//}
-
 }
 void Scene::DrawSea()
 {
 	mat4 ModelMat;
-	ModelMat = scale(ModelMat, vec3(1000, 1000, 1000));
+	ModelMat = scale(ModelMat, vec3(100, 100, 100));
 	mSea.Draw(ProjectionMatrix, ViewMatrix, ModelMat);
 }
 char ToLower(char a)
@@ -269,33 +275,28 @@ char ToLower(char a)
 		return (a - 'A' + 'a');
 	else return a;
 }
-void Scene::DrawCollada()
+
+void Scene::DrawIndexColor()
 {
-	//for each (Player P in Data.GetPlayerInformation())
-	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-	{
-		Unit_Data ud = i->second.GetUnitData();
-		vec3 position = ud.GetPosition();
+	// Draws All Entities with Color
+	IndexFBO->BindFrameBuffer();
 
-#pragma region Mathematics
-		mat4 ModelMatrix;
-		ModelMatrix = glm::translate(ModelMatrix, position);
-#pragma endregion Mathematics
-		string ip = i->second.GetIP();
-		string UserColor = i->second.GetUsername().substr(0,3);
+	mat4 WVM = ProjectionMatrix*ViewMatrix;
+	/*ShaderBuilder::LoadShader(Shader::At("Index"))->
+		Add_mat4("WVM",WVM);
+	loaded_Models["Land"]->Draw();
+*/
+	WVM = ProjectionMatrix * ViewMatrix;
+	ShaderBuilder::LoadShader(Shader::At("Index"))->
+		Add_mat4("WVM", WVM);
+	loaded_Models["Land"]->Draw();
 
-		float r = ((ToLower(UserColor[0]) - 'a')*10.0f) / 255.f;
-		float g = ((ToLower(UserColor[1]) - 'a')*10.0f) / 255.f;
-		float b = ((ToLower(UserColor[2]) - 'a')*10.0f) / 255.f;
-		float value = ((char(UserColor[0])- char(UserColor[1])) * 20.0f) / 255.0f;
-		ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("projection", ProjectionMatrix).
-			Add_mat4("view", ViewMatrix).
-			Add_mat4("model", ModelMatrix).
-			Add_vec3("ucolor",vec3(r,g,b));
-		loaded_Models["Collada"]->Draw();
-	}
-// default unit, internet connection independent
+	
+	FBO::UnbindFrameBuffer();
+}
+void Scene::DrawColladaDistance()
+{
+	mat4 WVM;
 	vec3 position;
 
 #pragma region Mathematics
@@ -303,49 +304,57 @@ void Scene::DrawCollada()
 	ModelMatrix = glm::translate(ModelMatrix, position);
 #pragma endregion Mathematics
 	vec3 color;
-	ShaderBuilder::LoadShader(Shader::At("Animation"))->
-		Add_mat4("projection", ProjectionMatrix).
-		Add_mat4("view", ViewMatrix).
-		Add_mat4("model", ModelMatrix).
-		Add_bool("isAnimated", true).
-		Add_bool("isInstanced", false);
-	//loaded_Models["Obstacle"]->Draw();	
-	//ModelMatrix = mat4();
+	mat4 CharMat;
+	WVM = ProjectionMatrix * ViewMatrix * CharMat;
+	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	//	Add_mat4("WVM", WVM).
+	//	Add_bool("isAnimated", true).
+	//	Add_textures(loaded_Models["Collada"]->Textures);
+	//loaded_Models["Collada"]->Draw();
 	//position = vec3(50, 0, 0);
 	//ModelMatrix = glm::translate(ModelMatrix, position);
 	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
 	//	Add_mat4("model", ModelMatrix);
-	//loaded_Models["Collada"]->Draw();
-	vector<vec4> ModelMatrixs;
-	for (auto o : Obstacles)
-	{
-	/*	mat4 ModelMatrix;
-		ModelMatrix = glm::translate(ModelMatrix, o);*/
-		ModelMatrixs.push_back(vec4(o,0));
-	/*	ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("model", ModelMatrix).
-			Add_mat4("view", ViewMatrix).
-			Add_mat4("projection", ProjectionMatrix).
-			Add_vec3("ucolor", vec3(1, 1, 1)).
-			Add_bool("isAnimated", true).
-			Add_bool("isInstanced", false);*/
-	//	loaded_Models["Obstacle"]->Draw();
-	}
-	mat4 WVM = ProjectionMatrix * ViewMatrix;
-	float time = float( GetTickCount() ) / 1000.0f;
-	ShaderBuilder::LoadShader(Shader::At("Instanced"))->
-		Add_mat4("WVM", WVM).
-		Add_float("time", time).
-		Add_bool("isAnimated", false);
-	loaded_Models["Obstacle"]->DrawInstanced(ModelMatrixs);
-
+	float time = float(GetTickCount());
+	float SlowTime = time / 40.0f;
 	mat4 landmat;
 	WVM = ProjectionMatrix * ViewMatrix * landmat;
-	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	ShaderBuilder::LoadShader(Shader::At("AnimationDistance"))->
 		Add_mat4("WVM", WVM).
-		Add_float("time", time).
 		Add_bool("isAnimated", false);
 	loaded_Models["Land"]->Draw();
+	//loaded_Models["Collada"]->Draw();
+
+#pragma region Grass
+	{
+		vector<vec4> ModelMatrixs;
+		mat4 Animation;
+		ShaderBuilder shader = *ShaderBuilder::LoadShader(Shader::At("InstancedDistance"));
+		for (int i = 0; i < 25; i++)
+		{
+			Animation = glm::rotate(mat4(),
+				radians(
+					cos(
+						radians(
+							fmod(SlowTime, 360.0f) + i * 10.0f
+						)
+					)
+					*80.0f)
+				, vec3(1, 0, 1));
+			shader.Add_mat4("Animation[" + to_string(i) + "]", Animation);
+		}
+
+		mat4 WVM = ProjectionMatrix * ViewMatrix;
+
+		ShaderBuilder::LoadShader(Shader::At("InstancedDistance"))->
+			Add_mat4("WVM", WVM).
+			Add_float("time", time).
+			Add_vec3("cameraPos", camera.GetCameraPosition()).
+			Add_bool("isAnimated", false);
+		grass.Draw(grass.ObstaclesMat);
+	}
+#pragma endregion Grass
+
 }
 
 void Scene::SetCameraView()
@@ -353,27 +362,6 @@ void Scene::SetCameraView()
 	/*if (m_Unit_Data[Channel].size() <= ClientID)
 	return;*/
 	ViewMatrix = camera.GetCameraMatrix();
-}
-void Scene::Draw_All_Units(Shader& shader)
-{
-	mat4 l_ProjectionMatrix = glm::perspective(radians(120.0f),
-		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
-	mat4 l_ViewMatrix = glm::lookAt(LightPosition, vec3(), vec3(1.0f, 1.0f, 1.0f));
-	mat4 l_LightView = l_ProjectionMatrix * l_ViewMatrix;
-	//for each (Unit_Data i in m_Unit_Data[Channel])
-	//{
-	//	if (i.GetClientID() == 0)
-	//		continue;
-	//	//vec3 UnitPosition = Calculate_Ground_Collision(i);
-	//	vec3 UnitPosition = i.GetPosition();
-	//	mat4 ModelMatrix;
-	//	ModelMatrix = glm::translate(ModelMatrix, UnitPosition);
-	//	ModelMatrix = glm::rotate(ModelMatrix, 0.0f, vec3(1, 0, 0));
-	//	//	ModelMatrix = glm::rotate(ModelMatrix, radians((float)Counter), vec3(0, 1, 0));
-	//	ModelMatrix = glm::rotate(ModelMatrix, 0.0f, vec3(0, 0, 1));
-	//	i.GetModelData()->DrawModel(l_ProjectionMatrix, l_ViewMatrix, ModelMatrix, shader);
-
-	//}
 }
 void Scene::DrawUI()
 {
@@ -426,54 +414,141 @@ void Scene::DrawSky()
 	//skyBox->DrawModel(ProjectionMatrix, ViewMatrix, ModelMatrix, 0, mat4(), NULL, 0);
 	//loaded_Models["Sky"]->DrawModel(ProjectionMatrix, ViewMatrix, ModelMatrix, 0, mat4(), NULL, 0);
 }
-void Scene::DrawAllUnits()
-{
-	mat4 l_ProjectionMatrix = glm::perspective(radians(120.0f),
-		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
-	mat4 l_ViewMatrix = glm::lookAt(LightPosition, vec3(0.0f), vec3(1.0f, 1.0f, 1.0f));
-	mat4 l_LightView = l_ProjectionMatrix * l_ViewMatrix;
-
-
-
-	for each (Player p in Players[Channel])
-	{
-		if (p.GetType() == 0)
-			continue;
-		//vec3 UnitPosition = Calculate_Ground_Collision(i);
-		vec3 UnitPosition = p.GetUnitData().GetPosition();
-		//UnitPosition = mGround_Collision.Calculate_Ground_Collision(UnitPosition);
-		mat4 ModelMatrix;
-		ModelMatrix = glm::translate(ModelMatrix, UnitPosition);
-		ModelMatrix = glm::rotate(ModelMatrix, 0.0f, vec3(1, 0, 0));
-		//	ModelMatrix = glm::rotate(ModelMatrix, radians((float)Counter), vec3(0, 1, 0));
-		ModelMatrix = glm::rotate(ModelMatrix, 0.0f, vec3(0, 0, 1));
-		mat4 WorldSpace = ProjectionMatrix * ViewMatrix * ModelMatrix;
-		//i.GetModelData()->DrawModel(ProjectionMatrix, ViewMatrix, ModelMatrix
-		//	, shadow->depthMap, l_LightView, NULL, 0);
-
-		Model* u = p.GetUnitData().GetModelData();
-		float AmbientStrenth = 1.0f;
-		float zeroVar = 0.0f;
-
-		ShaderBuilder::LoadShader(Shader::At("Katarina"))->
-			Add_mat4("projection", ProjectionMatrix).Add_mat4("view", ViewMatrix).
-			Add_mat4("model", ModelMatrix).
-			Add_mat4("worldSpace", WorldSpace).Add_mat4("lightSpaceMatrix", l_LightView).
-			Add_vec3("lightPos", vec3(0, 20, 0)).
-			Add_vec3("cameraPos", camera.GetCameraPosition()).
-			Add_float("GravityHeight", zeroVar).Add_float("time", zeroVar).
-			Add_float("AmbientStrength", AmbientStrenth).
-			/*Add_texture("ourTexture", u->texture).*/
-			Add_texture("ourShadow", shadow->depthMap)
-			/*.Add_texture("ourShine", u->Shine)*/;
-		u->Draw();
-		//i.GetModelData()->DrawModel();
-		//Soldier.Draw();
-		//Soldier->Draw();
-	}
-	
-}
 void Scene::DrawSeaAnimated()
 {
+
+}
+
+void Scene::DrawCollada()
+{
+	mat4 WVM;
+	//for each (Player P in Data.GetPlayerInformation())
+	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	{
+		Unit_Data ud = i->second.GetUnitData();
+		vec3 position = ud.GetPosition();
+
+#pragma region Mathematics
+		mat4 ModelMatrix;
+		ModelMatrix = glm::translate(ModelMatrix, position);
+		WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+#pragma endregion Mathematics
+		string ip = i->second.GetIP();
+		/*	string UserColor = i->second.GetUsername().substr(0,3);
+
+		float r = ((ToLower(UserColor[0]) - 'a')*10.0f) / 255.f;
+		float g = ((ToLower(UserColor[1]) - 'a')*10.0f) / 255.f;
+		float b = ((ToLower(UserColor[2]) - 'a')*10.0f) / 255.f;*/
+		//float value = ((char(UserColor[0])- char(UserColor[1])) * 20.0f) / 255.0f;
+		//ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		//	Add_mat4("projection", ProjectionMatrix).
+		//	Add_mat4("view", ViewMatrix).
+		//	Add_mat4("model", ModelMatrix).
+		//	Add_vec3("ucolor",vec3(r,g,b));
+		//loaded_Models["Collada"]->Draw();
+		ShaderBuilder::LoadShader(Shader::At("Animation"))->
+			Add_mat4("WVM", WVM).
+			Add_bool("isAnimated", true).
+			Add_textures(loaded_Models["Collada"]->Textures);
+		loaded_Models["Collada"]->Draw();
+
+	}
+	// default unit, internet connection independent
+	vec3 position;
+
+#pragma region Mathematics
+	mat4 ModelMatrix;
+	ModelMatrix = glm::translate(ModelMatrix, position);
+#pragma endregion Mathematics
+	vec3 color;
+	mat4 CharMat;
+	WVM = ProjectionMatrix * ViewMatrix * CharMat;
+	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	//	Add_mat4("WVM", WVM).
+	//	Add_bool("isAnimated", true).
+	//	Add_textures(loaded_Models["Collada"]->Textures);
+	//loaded_Models["Collada"]->Draw();
+	//position = vec3(50, 0, 0);
+	//ModelMatrix = glm::translate(ModelMatrix, position);
+	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	//	Add_mat4("model", ModelMatrix);
+	float time = float(GetTickCount());
+	float SlowTime = time / 40.0f;
+	mat4 landmat;
+	WVM = ProjectionMatrix * ViewMatrix * landmat;
+	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		Add_mat4("WVM", WVM).
+		Add_float("Texelation",100.0f).
+		Add_textures(loaded_Models["Land"]->Textures).
+		Add_bool("isAnimated", false);
+	loaded_Models["Land"]->Draw();
+
+	//loaded_Models["Collada"]->Draw();
+
+#pragma region Grass
+	{
+		vector<vec4> ModelMatrixs;
+		mat4 Animation;
+		ShaderBuilder shader = *ShaderBuilder::LoadShader(Shader::At("Instanced"));
+		for (int i = 0; i < 25; i++)
+		{
+			Animation = glm::rotate(mat4(),
+				radians(
+					cos(
+						radians(
+							fmod(SlowTime, 360.0f) + i * 10.0f
+						)
+					)
+					*80.0f)
+				, vec3(1, 0, 1));
+			shader.Add_mat4("Animation[" + to_string(i) + "]", Animation);
+		}
+
+		mat4 WVM = ProjectionMatrix * ViewMatrix;
+
+		ShaderBuilder::LoadShader(Shader::At("Instanced"))->
+			Add_mat4("WVM", WVM).
+			Add_float("time", time).
+			Add_vec3("cameraPos", camera.GetCameraPosition()).
+			Add_textures(grass.model.Textures).
+			Add_bool("isAnimated", false);
+		grass.Draw(grass.ObstaclesMat);
+	}
+#pragma endregion Grass
+	//#pragma region Sea
+	//	{
+	//		vector<vec4> ModelMatrixs;
+	//
+	//		float time = float(GetTickCount());
+	//		float SlowTime = time / 40.0f;
+	//		mat4 Animation;
+	//		ShaderBuilder shader = *ShaderBuilder::LoadShader(Shader::At("SeaAnimated"));
+	//
+	//		for (int i = 0; i < 8; i++)
+	//		{
+	//			Animation = glm::rotate(mat4(),
+	//				radians(
+	//					sin(
+	//						radians(
+	//							fmod(SlowTime, 360.0f)/* + i * 20.0f*/
+	//						)
+	//					)
+	//					*40.0f)
+	//				, vec3(1, 0, 1));// = glm::scale(mat4(), vec3(0, fmod(time, 1.0f) + 1.0f, 0));
+	//			shader.Add_mat4("Animation[" + to_string(i) + "]", Animation);
+	//		}
+	//		//Animation = glm::scale(Animation, vec3(1, fmod(time, 1.0f) + 1.0f, 1));
+	//
+	//		mat4 WVM = ProjectionMatrix * ViewMatrix;
+	//
+	//		ShaderBuilder::LoadShader(Shader::At("SeaAnimated"))->
+	//			Add_mat4("WVM", WVM).
+	//			Add_float("time", time).
+	//			Add_float("SlowTime", SlowTime).
+	//			Add_vec3("cameraPos", camera.GetCameraPosition()).
+	//			Add_bool("isAnimated", false);
+	//		seaAnim.Draw(seaAnim.ObstaclesMat);
+	//	}
+	//#pragma endregion Sea
 
 }

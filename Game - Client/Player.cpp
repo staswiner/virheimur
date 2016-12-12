@@ -23,7 +23,7 @@ Unit_Data& Player::GetUnitData()
 
 void Player::UpdateUnitData(Unit_Data uData)
 {
-	this->unit_Data.SetPosition(uData.GetPosition());
+	this->unit_Data.SetDestination(uData.GetPosition());
 }
 
 json Player::GetJson()
@@ -35,6 +35,7 @@ json Player::GetJson()
 	JPlayer["Destx"] = this->unit_Data.Destination.x;
 	JPlayer["Desty"] = this->unit_Data.Destination.y;
 	JPlayer["Destz"] = this->unit_Data.Destination.z;
+	JPlayer["StartTime"] = this->unit_Data.Destination.z;
 	JPlayer["IpAddress"] = this->IpAddress;
 	JPlayer["Username"] = this->Username;
 	return JPlayer;

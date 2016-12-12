@@ -12,30 +12,46 @@ GameLogic::~GameLogic()
 {
 }
 
-void GameLogic::Proceed(GDO& NewData,mat4& ProjectionMatrix, mat4& ViewMatrix)
+void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 {
-	//if (mouse.RightIsPressed())
-	//{
-	//	inGameInteractions.Proceed(ProjectionMatrix, ViewMatrix);
-	//}
 	// Calculate moving position
-	if (Data.GetPlayerInformation().find(Data.MyUsername) == Data.GetPlayerInformation().end())
+	for (auto &p : FinalData.GetPlayerInformation())
 	{
-
-	}
-	else
-	{
-
-		Unit_Data& MyPlayerPositionNew = NewData.GetPlayerInformation()[Data.MyUsername].GetUnitData();
-		Unit_Data& MyPlayerPosition = Data.GetPlayerInformation()[Data.MyUsername].GetUnitData();
-		if (glm::length(MyPlayerPositionNew.Destination) - glm::length(MyPlayerPosition.Position) > 10)
+		using namespace chrono;
+		Unit_Data& unit = p.second.GetUnitData();
+		milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		float Delta = float(currTime.count() - unit.StartPointTime.count())/1000.0f;
+		
+		p.second.unit_Data.Position = 
+			glm::normalize(unit.Destination - unit.Position) *
+			unit.MovementSpeed * 
+			Delta;
+		// Test if destination reached or passed
+		// Once reached, send server that current position is destination
+		if (dot(unit.Destination - unit.Position, unit.Destination - unit.StartPoint) < 0)
 		{
-			vec3 Direction = normalize(MyPlayerPositionNew.Destination - MyPlayerPosition.Position);
-			MyPlayerPositionNew.Position = (Direction) *
-				((float)NewData.GetPlayerInformation()[Data.MyUsername].stats.MovementSpeed / 10.0f)
-				+ MyPlayerPosition.Position;
+			unit.Position = unit.Destination;
 		}
 	}
+
+	//// Calculate moving position
+	//if (Data.GetPlayerInformation().find(Data.MyUsername) == Data.GetPlayerInformation().end())
+	//{
+
+	//}
+	//else
+	//{
+
+	//	Unit_Data& MyPlayerPositionNew = NewData.GetPlayerInformation()[Data.MyUsername].GetUnitData();
+	//	Unit_Data& MyPlayerPosition = Data.GetPlayerInformation()[Data.MyUsername].GetUnitData();
+	//	if (glm::length(MyPlayerPositionNew.Destination) - glm::length(MyPlayerPosition.Position) > 10)
+	//	{
+	//		vec3 Direction = normalize(MyPlayerPositionNew.Destination - MyPlayerPosition.Position);
+	//		MyPlayerPositionNew.Position = (Direction) *
+	//			((float)NewData.GetPlayerInformation()[Data.MyUsername].stats.MovementSpeed / 10.0f)
+	//			+ MyPlayerPosition.Position;
+	//	}
+	//}
 }
 
 void GameLogic::ChainCommands()

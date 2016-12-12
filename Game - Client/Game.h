@@ -9,8 +9,8 @@
 class Game
 {
 public:
-	Game(Scene& scene = *(new Scene(Data, UI)), Network& network = *(new Network(Data)),
-		Input& input = *(new Input(Data,UI)), GameLogic& logic = *(new GameLogic(Data)));
+	Game(Scene& scene = *(new Scene(Data, UI, &Index)), Network& network = *(new Network(ReceivedData)),
+		Input& input = *(new Input(Data,UI, &Index)), GameLogic& logic = *(new GameLogic(Data)));
 	~Game();
 	void Initialize();
 	void Loop();
@@ -30,15 +30,18 @@ private:
 	void GetGameOnlineGameState();
 	void DrawScene();
 	void UpdateNetwork();
+	void CombineData();
 #pragma endregion GameState
 	Scene& scene;
 	Network& network;
 	Input& input;
+	static FBO Index;
 	GameLogic& logic;
 	LoginState loginState;
-	static GlobalDataObject Data;
 	static UserInterface UI;
-	GlobalDataObject NewData;
+	static GlobalDataObject NewData;
+	static GlobalDataObject ReceivedData;
+	static GlobalDataObject Data;
 	mat4 ProjectionMatrix;
 	mat4 ViewMatrix;
 	std::thread Receiver;
