@@ -12,6 +12,7 @@ out GS_OUT{
 
 void main()
 {
+	//
 	vec3 vertexOUT;
 	vertexOUT = vec3(gs_in[0].VertexID, gs_in[1].VertexID, gs_in[2].VertexID);
 	
