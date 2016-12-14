@@ -229,17 +229,17 @@ void Mesh::DrawModel()
 	if (scene->HasAnimations())
 	{
 		BoneTransform(float(GetTickCount()) / 1000.0f, Transforms);
-	}
-	ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
 
-	for (int i = 0; i < Transforms.size(); i++)
-	{
-		myshader.Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
-	}
-	mat4 test;
-	test = glm::scale(test, vec3(2, 2, 2));
-	myshader.Add_mat4(string("Bones[") + to_string(0) + string("]"), test);
+		ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
 
+		for (int i = 0; i < Transforms.size(); i++)
+		{
+			myshader.Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
+		}
+		mat4 test;
+		test = glm::scale(test, vec3(2, 2, 2));
+		myshader.Add_mat4(string("Bones[") + to_string(0) + string("]"), test);
+	}
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
 	glBindVertexArray(0);

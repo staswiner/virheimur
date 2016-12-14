@@ -68,3 +68,22 @@ Model* Loaded_Models::operator[](string i)
 //{
 //	return sLoaded_Models.getModelData(Model_Code);
 //}
+
+Loaded_ModelsST& Loaded_ModelsST::GetInstance()
+{
+		static Loaded_ModelsST Instance;
+		return Instance;
+}
+
+Loaded_ModelsST::~Loaded_ModelsST()
+{
+}
+
+void Loaded_ModelsST::initialize_Models()
+{
+}
+
+Model * Loaded_ModelsST::operator[](string i)
+{
+	return nullptr;
+}

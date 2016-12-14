@@ -33,8 +33,8 @@ map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 	Points.push_back(Source);
 	Points.push_back(Destination);
 
-	const int MAX_DISTANCE = 50;
-	const int MAX_POINTS = 400;
+	const int MAX_DISTANCE = 400;
+	const int MAX_POINTS = 200;
 	for (int i = 0; i < MAX_POINTS; i++)
 	{
 		Points.push_back(vec3((rand() % 2000) - 1000, 
@@ -45,7 +45,7 @@ map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 		(*Map)[*i] = map<vec3, int, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
 	}
 	/*******************/
-	std::sort(Points.begin(), Points.end(), SortByX);
+	/*std::sort(Points.begin(), Points.end(), SortByX);
 	for (auto i = Points.begin(); i != Points.end(); i++)
 	{
 		map<vec3, int, bool(*)(const vec3&, const vec3&)> Paths(Stas::Maths::vec3Compare);
@@ -80,38 +80,38 @@ map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 				break;
 			}
 		}
-	}
+	}*/
 	
 	/***********/
-	//vector<map<vec3, int, bool(*)(const vec3&, const vec3&)>*> Paths(Points.size());
-	//
-	//
-	//
-	//
-	//for (auto i = Points.begin(); i != Points.end(); i++)
-	//{
-	//	//map<vec3, int, bool(*)(const vec3&, const vec3&)> Paths(Stas::Maths::vec3Compare);
-	//	for (auto j = i+1; j != Points.end();)
-	//	{
-	//		if (glm::distance(*i, *j) < MAX_DISTANCE)
-	//		{
-	//			(*Map)[*i][*j] = glm::distance(*i, *j);
-	//			(*Map)[*j][*i] = glm::distance(*i, *j);
-	//		//	j = Points.erase(j);
-	//			j++;
-	//		}
-	//		else
-	//		{
-	//			j++;
-	//		}
-	//	}
-	//}
+	vector<map<vec3, int, bool(*)(const vec3&, const vec3&)>*> Paths(Points.size());
+	
+	
+	
+	
+	for (auto i = Points.begin(); i != Points.end(); i++)
+	{
+		//map<vec3, int, bool(*)(const vec3&, const vec3&)> Paths(Stas::Maths::vec3Compare);
+		for (auto j = i+1; j != Points.end();)
+		{
+			if (glm::distance(*i, *j) < MAX_DISTANCE)
+			{
+				(*Map)[*i][*j] = glm::distance(*i, *j);
+				(*Map)[*j][*i] = glm::distance(*i, *j);
+			//	j = Points.erase(j);
+				j++;
+			}
+			else
+			{
+				j++;
+			}
+		}
+	}
 	return Map;
 }
 
 vector<vec3>* PRMalgorithm::FoundPath(map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)>* Map, vec3& Source, vec3& Destination)
 {
-	vector<vec3>* Backtrack = Stas::Maths::Astar(*Map, Source, Destination);
+	vector<vec3>* Backtrack = Stas::Maths::Dijkstra(*Map, Source, Destination);
 	return Backtrack;
 }

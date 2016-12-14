@@ -56,7 +56,7 @@ void Scene::Initialize()
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
 	//seaAnim.Initialize();
-	for (int i = 0; i < 160000; i++)
+	for (int i = 0; i < 1600; i++)
 	{
 		vec3 ObstaclePos = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(
 			vec3(float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f, 0,

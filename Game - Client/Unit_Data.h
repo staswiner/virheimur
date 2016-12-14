@@ -20,10 +20,11 @@ public:
 	// When destination is chosen, StartPointTime is updated with the action time. 
 	// Later Calculates the route based on this factor and walking speed
 public:
-	vec3 StartPoint;
-	vec3 Position;
-	vec3 Destination;
-	milliseconds StartPointTime;
+	vec3 StartPoint; // NewData
+	vec3 Position; // Data
+	vec3 Destination; // NewData
+	list<vec3> Path; // NewData
+	milliseconds StartPointTime; // NewData
 	float MovementSpeed = 10;
 	Model* Model_Data;
 	unsigned int action;
