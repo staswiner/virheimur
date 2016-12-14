@@ -88,6 +88,14 @@ ShaderBuilder & ShaderBuilder::Add_aimat4(string name, const aiMatrix4x4 & rhs)
 	return *this;
 }
 
+std::unique_ptr<ShaderBuilder> ShaderBuilder::GetCurrentProgram()
+{
+	GLint id;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &id);
+	ShaderBuilder shaderBuilder(id);
+	return std::make_unique<ShaderBuilder>(shaderBuilder);
+}
+
 std::unique_ptr<ShaderBuilder> ShaderBuilder::LoadShader(Shader & shader)
 {
 	// TODO: insert return statement here

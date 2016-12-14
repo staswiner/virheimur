@@ -21,6 +21,7 @@ public:
 	ShaderBuilder& Add_mat3(string, const mat3&);
 	ShaderBuilder& Add_mat4(string, const mat4&);
 	ShaderBuilder& Add_aimat4(string name, const aiMatrix4x4 & rhs);
+	static std::unique_ptr<ShaderBuilder> GetCurrentProgram();
 	static std::unique_ptr<ShaderBuilder> LoadShader(Shader&);
 private:
 	GLuint textureCount;
