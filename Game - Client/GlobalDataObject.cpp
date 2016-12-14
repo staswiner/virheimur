@@ -65,14 +65,14 @@ void GlobalDataObject::UpdateMyPlayer(Player PlayerData, string Username)
 	PlayerParsed["z"] = PlayerData.GetUnitData().GetPosition().z;
 	Data = PlayerParsed;*/
 	vec3 Position = PlayerData.GetUnitData().Position;
-	vec3 Destination = PlayerData.GetUnitData().Destination;
+	vec3 Destination = PlayerData.GetUnitData().LocalDestination;
 	
 	//Players[Username] = Player(Unit_Data(Position, Destination,
 	//	"Lara"),Username);
 	Players[Username] = PlayerData;
 }
 
-map<string,Player> & GlobalDataObject::GetPlayerInformation()
+map<string,Player> & GlobalDataObject::GetPlayerInformation() 
 {
 	return this->Players;
 }

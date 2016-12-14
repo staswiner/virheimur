@@ -25,6 +25,7 @@ private:
 #pragma endregion LoginState
 #pragma region GameState
 	void UpdateVariables(mat4& ProjectionMatrix,mat4& ViewMatrix);
+	void AddToNewData();
 	void UserInput();
 	void ApplyGameLogic();
 	void GetGameOnlineGameState();

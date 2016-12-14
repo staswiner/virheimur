@@ -54,6 +54,8 @@ void Game::Loop()
 	{
 		// Accepts input
 		UserInput();
+		// Sets last frame updates to transfer
+		AddToNewData();
 		// Sends 'NewData' object to the server
 		UpdateNetwork();
 		// Updates Variables
@@ -88,6 +90,20 @@ void Game::UpdateVariables(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 {
 	this->ProjectionMatrix = ProjectionMatrix;
 	this->ViewMatrix = ViewMatrix;
+}
+void Game::AddToNewData()
+{
+	for (auto &p : Data.GetPlayerInformation())
+	{
+		Unit_Data& uData = p.second.unit_Data;
+		if (uData.PathChanged)
+		{
+			NewData.GetPlayerInformation()[p.first].unit_Data.StartPointTime = uData.StartPointTime;
+			NewData.GetPlayerInformation()[p.first].unit_Data.StartPoint = uData.StartPoint;
+			NewData.GetPlayerInformation()[p.first].unit_Data.LocalDestination = uData.LocalDestination;
+			uData.PathChanged = false;
+		}
+	}
 }
 
 void Game::UserInput()

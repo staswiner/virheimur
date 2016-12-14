@@ -22,7 +22,9 @@ public:
 public:
 	vec3 StartPoint;
 	vec3 Position;
-	vec3 Destination;
+	list<vec3> Destination;
+	vec3 LocalDestination;
+	bool PathChanged = false;
 	milliseconds StartPointTime;
 	float MovementSpeed = 10;
 	Model* Model_Data;

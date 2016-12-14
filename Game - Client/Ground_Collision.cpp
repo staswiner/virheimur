@@ -66,7 +66,6 @@ vec3 Ground_Collision::OnCollision(vec3 CurrentPosition)
 		? AlteredVertices->at(vec2(TriangleCoord1.x, TriangleCoord1.z)) : 0;
 	TriangleCoord2.y = AlteredVertices->find(vec2(TriangleCoord2.x, TriangleCoord2.z)) != AlteredVertices->end()
 		? AlteredVertices->at(vec2(TriangleCoord2.x, TriangleCoord2.z)) : 0;
-
 	//if (InTriangle.x > 1.0 - InTriangle.z)
 	//	TriangleCoord1.x += Delta;
 	//else
@@ -102,15 +101,15 @@ vec3 Ground_Collision::OnCollision(vec3 CurrentPosition)
 vector<vec3> Ground_Collision::GetPlaneCoords(vec3 Index)
 {
 	vector<vec3> ReturnPlane;
+	// 1st vector of the plane
+	// second vector of the plane
+	// point on the plane
 	//if (Vertices.size() > Index.x && Index.x > 0)
 	{
-		//ReturnPlane.push_back(Vertices[Index.x].Position- Vertices[Index.y].Position);
-		//ReturnPlane.push_back(Vertices[Index.z].Position- Vertices[Index.y].Position);
-		//ReturnPlane.push_back(Vertices[Index.x].Position- Vertices[Index.z].Position);
-		
+		ReturnPlane.push_back(Vertices[Index.x].Position- Vertices[Index.y].Position);
+		ReturnPlane.push_back(Vertices[Index.z].Position- Vertices[Index.y].Position);
 		ReturnPlane.push_back(Vertices[Index.x].Position);
-		ReturnPlane.push_back(Vertices[Index.y].Position);
-		ReturnPlane.push_back(Vertices[Index.z].Position);
+	
 	}
 	/*else
 	{

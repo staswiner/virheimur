@@ -56,7 +56,7 @@ void Scene::Initialize()
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
 	//seaAnim.Initialize();
-	for (int i = 0; i < 160000; i++)
+	for (int i = 0; i < 1600; i++)
 	{
 		vec3 ObstaclePos = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(
 			vec3(float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f, 0,
@@ -286,7 +286,6 @@ void Scene::DrawIndexColor()
 		Add_mat4("WVM",WVM);
 	loaded_Models["Land"]->Draw();
 */
-	WVM = ProjectionMatrix * ViewMatrix;
 	ShaderBuilder::LoadShader(Shader::At("Index"))->
 		Add_mat4("WVM", WVM);
 	loaded_Models["Land"]->Draw();
@@ -449,6 +448,7 @@ void Scene::DrawCollada()
 		ShaderBuilder::LoadShader(Shader::At("Animation"))->
 			Add_mat4("WVM", WVM).
 			Add_bool("isAnimated", true).
+			Add_float("Texelation", 1.0f).
 			Add_textures(loaded_Models["Collada"]->Textures);
 		loaded_Models["Collada"]->Draw();
 
@@ -482,6 +482,9 @@ void Scene::DrawCollada()
 		Add_textures(loaded_Models["Land"]->Textures).
 		Add_bool("isAnimated", false);
 	loaded_Models["Land"]->Draw();
+	//ShaderBuilder::LoadShader(Shader::At("Index"))->
+	//	Add_mat4("WVM", WVM);
+	//loaded_Models["Land"]->Draw();
 
 	//loaded_Models["Collada"]->Draw();
 

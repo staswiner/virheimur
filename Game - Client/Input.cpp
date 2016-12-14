@@ -57,13 +57,12 @@ void Input::GetMouseInput()
 		vec4 pixel;
 		int x = mouse.GetMouseX();
 		glReadPixels(mouse.GetMouseX(), mouse.GetWindowSize().y-mouse.GetMouseY(), 1, 1, GL_RGBA, GL_FLOAT, &pixel);
-		pixel *= 59999.0f;
 		FBO::UnbindFrameBuffer();
 #pragma endregion FBO Read Pixel
 		vector<vec3> PlaneCoord;
-		PlaneCoord.push_back(vec3(1, 0, 0));
-		PlaneCoord.push_back(vec3(0, 0, 1));
-		PlaneCoord.push_back(vec3(0, 0, 0));
+		PlaneCoord.push_back(vec3(1, 0, 0)); // 1st vector of the plane
+		PlaneCoord.push_back(vec3(0, 0, 1)); // second vector of the plane
+		PlaneCoord.push_back(vec3(0, 50, 0)); // point on the plane
 		// unused, just for reference
 		vec3 CurrentPosition = Data->GetPlayerInformation()[ReceivedData.MyUsername].GetUnitData().GetPosition();
 		// Get Fragment Plane
@@ -74,10 +73,12 @@ void Input::GetMouseInput()
 		vec3 Destination = ray.PlaneIntersection(PlaneCoord[0], PlaneCoord[1], PlaneCoord[2],
 			ray.GetWorldRay(),camera.GetCameraPosition());
 		// Set Destination to player
-		Player myPlayer;
-		myPlayer.GetUnitData().Destination = Destination;
+		Player& myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername]; // also creates the character
+		myPlayer.unit_Data.Destination.push_back(Destination);
+		myPlayer.unit_Data.LocalDestination = myPlayer.GetUnitData().Destination.front();
+		myPlayer.unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername].unit_Data.StartPoint;
 		myPlayer.unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-		NewData.UpdateMyPlayer(myPlayer, ReceivedData.MyUsername);
+	//	myPlayer.GetUnitData().Position = Destination;
 		
 		//{
 

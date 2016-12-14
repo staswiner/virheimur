@@ -23,7 +23,7 @@ void staticLoaded_Models::initialize_Models()
 	Models["Land"] = new Model("Map/Land2.dae","Ground");
 	Models["Land"]->AddTexture("Texture0", "Map/Grass2.jpg");
 	Models["Collada"] = new Model("Collada/Katarina.dae", "");
-	Models["Collada"]->AddTexture("Texture0","Katarina/Katarina ShineFull.bmp");
+	Models["Collada"]->AddTexture("Texture0","Katarina/Katarina Glowing.bmp");
 	Models["Obstacle"] = new Model("Map/Grass.dae","");
 	//Models2["Lara"]->LoadMesh("Collada/Lara_Croft.dae");
 
