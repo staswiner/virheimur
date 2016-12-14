@@ -66,7 +66,7 @@ void Input::GetMouseInput()
 		// unused, just for reference
 		vec3 CurrentPosition = Data->GetPlayerInformation()[ReceivedData.MyUsername].GetUnitData().GetPosition();
 		// Get Fragment Plane
-		PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.g,pixel.b,pixel.a));
+		PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r,pixel.g,pixel.b));
 		// Get Ray Cast
 		RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
 		// Intersect Raycast with the plane
