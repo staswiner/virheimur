@@ -11,7 +11,6 @@ class GlobalDataObject
 public:
 	GlobalDataObject();
 	~GlobalDataObject();
-	void Clear();
 	void TestInit();
 	void ReceiveDataString(string);
 	void UpdateMyPlayer(Player, string Username);

@@ -38,23 +38,3 @@ public:
 };
 
 
-
-class Loaded_ModelsST
-{
-public:
-	static Loaded_ModelsST& GetInstance();
-	Loaded_ModelsST(Loaded_ModelsST const&) = delete;
-	void operator=(Loaded_ModelsST const&) = delete;
-	Loaded_ModelsST(){}
-
-	~Loaded_ModelsST();
-	void initialize_Models();
-	Model* operator[](string i);
-private:
-	//Loaded_ModelsST(Loaded_ModelsST const&);
-	//void operator=(Loaded_ModelsST const&);
-	static Loaded_ModelsST& Instance;
-
-
-};
-

@@ -20,8 +20,6 @@ void Input::SetInitialCharacterData(GDO NewData)
 
 GlobalDataObject& Input::TranslateInput(GlobalDataObject& Data)
 {
-	// Clear Data
-	this->NewData.Clear();
 	this->Data = &Data;
 	Camera::CalculateTimeDelta();
 	this->GetMouseInput();
@@ -69,23 +67,17 @@ void Input::GetMouseInput()
 		// unused, just for reference
 		vec3 CurrentPosition = Data->GetPlayerInformation()[ReceivedData.MyUsername].GetUnitData().GetPosition();
 		// Get Fragment Plane
-		//PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.g,pixel.b,pixel.a));
+		PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.g,pixel.b,pixel.a));
 		// Get Ray Cast
 		RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
 		// Intersect Raycast with the plane
 		vec3 Destination = ray.PlaneIntersection(PlaneCoord[0], PlaneCoord[1], PlaneCoord[2],
 			ray.GetWorldRay(),camera.GetCameraPosition());
 		// Set Destination to player
-		Player& myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername];
-		myPlayer.unit_Data.Path.clear();
-		myPlayer.unit_Data.Path.push_back(Destination);
-		myPlayer.unit_Data.Destination = myPlayer.unit_Data.Path.front();
-		myPlayer.unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername].unit_Data.Position;
+		Player myPlayer;
+		myPlayer.GetUnitData().Destination = Destination;
 		myPlayer.unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-	
-		
-		
-		//NewData.UpdateMyPlayer(myPlayer, ReceivedData.MyUsername);
+		NewData.UpdateMyPlayer(myPlayer, ReceivedData.MyUsername);
 		
 		//{
 

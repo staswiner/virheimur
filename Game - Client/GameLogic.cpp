@@ -21,26 +21,16 @@ void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 		Unit_Data& unit = p.second.GetUnitData();
 		milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		float Delta = float(currTime.count() - unit.StartPointTime.count())/1000.0f;
-		if (unit.Destination != unit.StartPoint)
-		{
-			p.second.unit_Data.Position =
-				glm::normalize(unit.Destination - unit.StartPoint) *
-				unit.MovementSpeed *
-				Delta + unit.StartPoint;
-			//p.second.unit_Data.Position = loaded
-		}
-
+		
+		p.second.unit_Data.Position = 
+			glm::normalize(unit.Destination - unit.Position) *
+			unit.MovementSpeed * 
+			Delta;
 		// Test if destination reached or passed
 		// Once reached, send server that current position is destination
 		if (dot(unit.Destination - unit.Position, unit.Destination - unit.StartPoint) < 0)
 		{
-			unit.Path.pop_front();
-			if (unit.Path.size() > 0)
-			{
-				unit.Destination = unit.Path.front();
-			}
-			unit.StartPoint = unit.Destination;
-			int i = 0;
+			unit.Position = unit.Destination;
 		}
 	}
 

@@ -13,16 +13,6 @@ GlobalDataObject::~GlobalDataObject()
 {
 }
 
-void GlobalDataObject::Clear()
-{
-	//string MyUsername;
-	//Path = nullptr;
-	//bool RouteChanged = false;
-
-	Players.clear();
-	//string MyIP;
-}
-
 void GlobalDataObject::TestInit()
 {
 	/*Players["123.12.123.12"] = Player(Unit_Data(vec3(), "Katarina", 0, 0, 0));
