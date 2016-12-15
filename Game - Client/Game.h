@@ -14,6 +14,7 @@ public:
 	~Game();
 	void Initialize();
 	void Loop();
+	void ThreadedLoop();
 	void SetHDC(HDC& hdc) { this->scene.SetWindowHDC(hdc); }
 private:
 	// Major States

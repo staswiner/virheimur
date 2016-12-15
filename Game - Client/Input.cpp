@@ -20,6 +20,8 @@ void Input::SetInitialCharacterData(GDO NewData)
 
 GlobalDataObject& Input::TranslateInput(GlobalDataObject& Data)
 {
+	NewData.Clear();
+	NewData.MyUsername = ReceivedData.MyUsername;
 	this->Data = &Data;
 	Camera::CalculateTimeDelta();
 	this->GetMouseInput();
@@ -74,9 +76,11 @@ void Input::GetMouseInput()
 			ray.GetWorldRay(),camera.GetCameraPosition());
 		// Set Destination to player
 		Player& myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername]; // also creates the character
-		myPlayer.unit_Data.Destination.push_back(Destination);
-		myPlayer.unit_Data.LocalDestination = myPlayer.GetUnitData().Destination.front();
-		myPlayer.unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername].unit_Data.StartPoint;
+		myPlayer.Username = ReceivedData.MyUsername;
+		myPlayer.unit_Data.Path.clear();
+		myPlayer.unit_Data.Path.push_back(Destination);
+		myPlayer.unit_Data.Destination = myPlayer.GetUnitData().Path.front();
+		myPlayer.unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername].unit_Data.Position;
 		myPlayer.unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	//	myPlayer.GetUnitData().Position = Destination;
 		
@@ -95,6 +99,8 @@ void Input::GetMouseInput()
 		//	}
 		//	ReceivedData.Path = prm.FoundPath(ReceivedData.Map, myPlayer.GetUnitData().Position, Destination);
 		//}
+
+		Data->Effects.push_back(Effect("Collada", milliseconds(500), Destination));
 	}
 	/*Left Click would change focus of User Interface Windows*/
 	if (mouse.LeftIsPressed())

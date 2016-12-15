@@ -10,6 +10,7 @@ public:
 	staticMouse();
 	int GetMouseX() const;
 	int GetMouseY() const;
+	glm::vec2 GetMouseCoords() const;
 	int GetWheelDelta() const;
 	bool LeftIsPressed() const;
 	bool RightIsPressed() const;
@@ -56,6 +57,7 @@ public:
 
 	int GetMouseX() const;
 	int GetMouseY() const;
+	glm::vec2 GetMouseCoords() const;
 	int GetWheelDelta() const;
 	bool LeftIsPressed() const;
 	bool RightIsPressed() const;

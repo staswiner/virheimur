@@ -22,8 +22,9 @@ public:
 public:
 	vec3 StartPoint;
 	vec3 Position;
-	list<vec3> Destination;
-	vec3 LocalDestination;
+	vec3 Rotation;
+	list<vec3> Path;
+	vec3 Destination;
 	bool PathChanged = false;
 	milliseconds StartPointTime;
 	float MovementSpeed = 10;

@@ -22,11 +22,14 @@ void Grass::Initialize()
 	mesh.LoadCustom(Vertices);
 	this->model = Model(mesh);
 	model.AddTexture("Fractal", "Map/CircleArea.jpg");
-	model.AddTexture("CoverPicture","Map/Grass2.jpg");
+	model.AddTexture("CoverPicture", "Map/Grass2.jpg");
+	//model.AddTexture("CoverPicture","Map/RussiaFlag.jpg");
 	//MapData = Model::LoadBufferFromImage("Map/Fractal.jpg");
 }
 
 void Grass::Draw(vector<mat4>& ModelMatrices)
 {
+	glEnable(GL_BLEND);
 	this->model.DrawInstanced(ModelMatrices);
+	glDisable(GL_BLEND);
 }

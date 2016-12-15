@@ -117,15 +117,13 @@ void Network::SetNewData(string NewData)
 
 void Network::SendNewData(GlobalDataObject & NewData)
 {
-	NewData.GetPlayerInformation();
-//	json JNewData(NewData.GetPlayerInformation().);
 	vector<json> JPlayers;
 	for (auto i = NewData.GetPlayerInformation().begin(); i != NewData.GetPlayerInformation().end(); i++)
 	{
 		JPlayers.push_back(i->second.GetJson());
 	}
 	json JNewData(JPlayers);
-	string Jstring = "NewData " + JNewData.dump();
+	string Jstring = "NewData " + NewData.MyUsername + " " + JNewData.dump();
 	Send(Jstring);
 	int i = 0;
 //	JNewData = {NewData.GetPlayerInformation()[""]};

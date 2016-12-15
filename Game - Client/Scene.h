@@ -18,6 +18,7 @@
 #include "MenuPanel.h"
 #include "LoginState.h"
 #include "UIElement.h"
+#include "Cursor.h"
 #include "SeaAnimated.h"
 using namespace glm;
 class Scene
@@ -29,6 +30,7 @@ public:
 	GlobalDataObject& Data;
 
 	void Frame();
+	void DrawThreaded();
 	void Initialize();
 	void SetProjectionMatrix(mat4&);
 	void SetWindowHDC(HDC&);
@@ -50,7 +52,6 @@ private:
 	void DrawSeaAnimated();
 	void Draw_Skeletal();
 	void DrawUI();
-
 	
 	void DrawSky();
 	void DrawGround(Shader&);
@@ -81,6 +82,7 @@ private:
 	GLuint Channel;
 	FPS fps;
 	UserInterface& UI;
+	Cursor cursor;
 	Text text;
 	ChampionChat* championChat;
 	vector<Player> Players[2];
@@ -88,6 +90,7 @@ private:
 	vector<vec3> Obstacles;
 	Grass grass;
 	SeaAnimated seaAnim;
+
 	//static GlobalDataObject Data;
 	// develop this please
 	//vector<Objects*> ObjectsToDraw

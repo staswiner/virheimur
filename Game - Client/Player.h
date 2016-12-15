@@ -23,6 +23,7 @@ public:
 
 	};
 	Stats stats;
+	milliseconds TimeDelta;
 	Unit_Data unit_Data;
 private:
 	string IpAddress;

@@ -314,6 +314,15 @@
     <ClInclude Include="SeaAnimated.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Cursor.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -488,6 +497,8 @@
       <Filter>Collision</Filter>
     </ClCompile>
     <ClCompile Include="SeaAnimated.cpp" />
+    <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="Effect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">
@@ -680,5 +691,14 @@
     <None Include="Shaders\Index1 Vertex Shader.glsl" />
     <None Include="Shaders\Index1 Geometry Shader.glsl" />
     <None Include="Shaders\Index1 Fragment Shader.glsl" />
+    <None Include="Shaders\Ground Fragment Shader.glsl" />
+    <None Include="cursor1.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game - Client.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

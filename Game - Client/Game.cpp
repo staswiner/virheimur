@@ -70,6 +70,12 @@ void Game::Loop()
 	}
 }
 
+void Game::ThreadedLoop()
+{
+	while(1)
+	scene.DrawThreaded();
+}
+
 void Game::LoginScreen()
 {
 	LoginUserInput();
@@ -96,13 +102,13 @@ void Game::AddToNewData()
 	for (auto &p : Data.GetPlayerInformation())
 	{
 		Unit_Data& uData = p.second.unit_Data;
-		if (uData.PathChanged)
+		/*if (uData.PathChanged)
 		{
 			NewData.GetPlayerInformation()[p.first].unit_Data.StartPointTime = uData.StartPointTime;
 			NewData.GetPlayerInformation()[p.first].unit_Data.StartPoint = uData.StartPoint;
-			NewData.GetPlayerInformation()[p.first].unit_Data.LocalDestination = uData.LocalDestination;
+			NewData.GetPlayerInformation()[p.first].unit_Data.Destination = uData.Destination;
 			uData.PathChanged = false;
-		}
+		}*/
 	}
 }
 

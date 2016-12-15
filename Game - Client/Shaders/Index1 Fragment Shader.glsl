@@ -8,7 +8,7 @@ in GS_OUT{
 
 void main()
 {
-	//color = vec4(fs_in.VertexID.x / 80000.0, fs_in.VertexID.y / 80000.0, fs_in.VertexID.z / 80000.0, 1);
+	//color = vec4(fs_in.VertexID.x / 80000.0, fs_in.VertexID.y / 80000.0, fs_in.VertexID.z / 80000.0, 1);ss
 	color = vec4(fs_in.VertexID.x, fs_in.VertexID.y, fs_in.VertexID.z,1);
 }
 

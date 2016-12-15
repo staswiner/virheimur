@@ -29,12 +29,12 @@ void Player::UpdateUnitData(Unit_Data uData)
 json Player::GetJson()
 {
 	json JPlayer;
-	JPlayer["x"] = this->unit_Data.Position.x;
-	JPlayer["y"] = this->unit_Data.Position.y;
-	JPlayer["z"] = this->unit_Data.Position.z;
-	JPlayer["Destx"] = this->unit_Data.LocalDestination.x;
-	JPlayer["Desty"] = this->unit_Data.LocalDestination.y;
-	JPlayer["Destz"] = this->unit_Data.LocalDestination.z;
+	JPlayer["x"] = this->unit_Data.StartPoint.x;
+	JPlayer["y"] = this->unit_Data.StartPoint.y;
+	JPlayer["z"] = this->unit_Data.StartPoint.z;
+	JPlayer["Destx"] = this->unit_Data.Destination.x;
+	JPlayer["Desty"] = this->unit_Data.Destination.y;
+	JPlayer["Destz"] = this->unit_Data.Destination.z;
 	JPlayer["StartTime"] = this->unit_Data.StartPointTime.count();
 	JPlayer["IpAddress"] = this->IpAddress;
 	JPlayer["Username"] = this->Username;

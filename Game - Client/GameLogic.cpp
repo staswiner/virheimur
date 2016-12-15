@@ -20,49 +20,67 @@ void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 		using namespace chrono;
 		Unit_Data& unit = p.second.GetUnitData();
 		milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-		float Delta = float(currTime.count() - unit.StartPointTime.count())/1000.0f;
+		float Delta = float(currTime.count() - unit.StartPointTime.count())/1000.0f; // movement delta
+		float ServerDelta = float(p.second.TimeDelta.count())/1000.0f; // sync delta
 		// Set Position Based on destination,time vector
-		unit.Position =
-			glm::normalize(unit.LocalDestination - unit.Position) *
-			unit.MovementSpeed * 
-			Delta;
-		unit.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
+		if (unit.Destination == unit.StartPoint)
+		{
+			unit.Position = unit.StartPoint;
+			unit.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
+		}
+		else
+		{
+			unit.Position =
+				glm::normalize(unit.Destination - unit.StartPoint) *
+				unit.MovementSpeed *
+				(Delta + ServerDelta) +
+				unit.StartPoint;
+			unit.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
+
+			// inefficient, but either to manage, can be placed on start conditions later on
+			vec3 test = glm::normalize(unit.Destination - unit.StartPoint);
+			float test1 = dot(test, vec3(1,0,0));
+			unit.Rotation.y = -acos(dot(glm::normalize(unit.Destination - unit.StartPoint), vec3(1, 0, 0)));
+			(unit.Destination.z - unit.StartPoint.z<0)?
+				unit.Rotation.y = radians(360.0f) - unit.Rotation.y
+				: unit.Rotation.y
+				;
+		}
 		
 		//unit.Position = unit.Destination;
 		// Test if destination reached or passed
 		// Once reached, send server that current position is destination
-		if (dot(unit.LocalDestination - unit.Position, unit.LocalDestination - unit.StartPoint) < 0)
+		if (unit.Destination == unit.StartPoint)
 		{
-			unit.Position = unit.LocalDestination;
+
+		}
+		else if (dot(unit.Destination - unit.Position, unit.Destination - unit.StartPoint) < 0)
+		{
+			unit.StartPoint = unit.Destination;
+			unit.Position = unit.Destination;
+			unit.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
 			//unit.LocalDestination++;
-			unit.Destination.pop_front();
-			if (unit.Destination.size() > 0)
+			// to be implement
+		/*	unit.Path.pop_front();
+			if (unit.Path.size() > 0)
 			{
-				unit.LocalDestination++;
-			}
-			unit.PathChanged = !(unit.LocalDestination == *unit.Destination.end());
-			unit.StartPointTime = currTime;
+				unit.Destination=unit.Path.front();
+			}*/
+			//unit.PathChanged = !(unit.Destination == *unit.Path.end());
 		}
 	}
-
-	//// Calculate moving position
-	//if (Data.GetPlayerInformation().find(Data.MyUsername) == Data.GetPlayerInformation().end())
-	//{
-
-	//}
-	//else
-	//{
-
-	//	Unit_Data& MyPlayerPositionNew = NewData.GetPlayerInformation()[Data.MyUsername].GetUnitData();
-	//	Unit_Data& MyPlayerPosition = Data.GetPlayerInformation()[Data.MyUsername].GetUnitData();
-	//	if (glm::length(MyPlayerPositionNew.Destination) - glm::length(MyPlayerPosition.Position) > 10)
-	//	{
-	//		vec3 Direction = normalize(MyPlayerPositionNew.Destination - MyPlayerPosition.Position);
-	//		MyPlayerPositionNew.Position = (Direction) *
-	//			((float)NewData.GetPlayerInformation()[Data.MyUsername].stats.MovementSpeed / 10.0f)
-	//			+ MyPlayerPosition.Position;
-	//	}
-	//}
+	// Effect lifetimes
+	for (auto e = FinalData.Effects.begin(); e != FinalData.Effects.end();)
+	{
+		if (e->CheckStatus())
+		{
+			e = FinalData.Effects.erase(e);
+		}
+		else
+		{
+			e++;
+		}
+	}
 }
 
 void GameLogic::ChainCommands()

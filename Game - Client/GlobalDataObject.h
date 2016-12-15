@@ -1,6 +1,7 @@
 #pragma once
 #include "json.hpp"
 #include "Player.h"
+#include "Effect.h"
 #include <string>
 #include <vector>
 using namespace std;
@@ -11,6 +12,7 @@ class GlobalDataObject
 public:
 	GlobalDataObject();
 	~GlobalDataObject();
+	void Clear();
 	void TestInit();
 	void ReceiveDataString(string);
 	void UpdateMyPlayer(Player, string Username);
@@ -24,7 +26,7 @@ public:
 	vector<vec3>* Path;
 	bool RouteChanged = false;
 
-
+	vector<Effect> Effects;
 private:
 	json Data;
 	map<string,Player> Players;

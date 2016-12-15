@@ -122,6 +122,8 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Header.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="Cursor.h" />
+    <ClInclude Include="Effect.h" />
     <ClInclude Include="ExistingMesh.h" />
     <ClInclude Include="FPS.h" />
     <ClInclude Include="Game.h" />
@@ -162,6 +164,7 @@
     <ClInclude Include="PreEffect.h" />
     <ClInclude Include="PRMalgorithm.h" />
     <ClInclude Include="RayCast.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sea.h" />
     <ClInclude Include="SeaAnimated.h" />
@@ -188,6 +191,8 @@
     <ClCompile Include="ChampionChat.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="Effect.cpp" />
     <ClCompile Include="ExistingMesh.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -249,6 +254,7 @@
     <ClCompile Include="XMLBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cursor1.cur" />
     <None Include="Shaders\3D Text Vertex Shader.glsl" />
     <None Include="Shaders\Animation Fragment Shader.glsl" />
     <None Include="Shaders\Animation Vertex Shader.glsl" />
@@ -268,6 +274,7 @@
     <None Include="Shaders\Grass Fragment Shader.glsl" />
     <None Include="Shaders\Grass Geometry Shader.glsl" />
     <None Include="Shaders\Grass Vertex Shader.glsl" />
+    <None Include="Shaders\Ground Fragment Shader.glsl" />
     <None Include="Shaders\Ground FragmentShader.glsl" />
     <None Include="Shaders\Ground VertexShader.glsl" />
     <None Include="Shaders\HBlur Fragment Shader.glsl" />
@@ -315,6 +322,9 @@
     <None Include="Shaders\Text Vertex Shader.glsl" />
     <None Include="Shaders\VBlur Fragment Shader.glsl" />
     <None Include="Shaders\VBlur Vertex Shader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Game - Client.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

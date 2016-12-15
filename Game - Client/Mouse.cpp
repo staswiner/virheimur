@@ -60,6 +60,10 @@ int staticMouse::GetMouseY() const
 {
 	return y;
 }
+glm::vec2 staticMouse::GetMouseCoords() const
+{
+	return glm::vec2(x,y);
+}
 int staticMouse::GetWheelDelta() const
 {
 	return delta;
@@ -135,6 +139,10 @@ int Mouse::GetMouseX() const
 int Mouse::GetMouseY() const
 {
 	return sMouse.GetMouseY();
+}
+glm::vec2 Mouse::GetMouseCoords() const
+{
+	return sMouse.GetMouseCoords();
 }
 int Mouse::GetWheelDelta() const
 {

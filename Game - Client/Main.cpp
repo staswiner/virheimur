@@ -51,7 +51,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	windowClass.cbWndExtra = 0;
 	windowClass.hInstance = hInstance;
 	windowClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	windowClass.hCursor = LoadCursorFromFile("cursor1.cur");// (NULL, IDC_ICON);
 	windowClass.hbrBackground = NULL;
 	windowClass.lpszMenuName = NULL;
 	windowClass.lpszClassName = "MyClass";
@@ -129,8 +129,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	//Loop.LoadModels = std::async(&MainLoop::LoadGame, &Loop);
 	// Initialize Loop
 	Loop.Initialize();
-
-
 	done = false;   //initialize loop condition variable
 
 	//future<void> LoadModels = std::async(&MainLoop::LoadGame, &Loop);

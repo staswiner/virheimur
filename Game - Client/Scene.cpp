@@ -22,6 +22,8 @@ void Scene::Initialize()
 	
 	mSea.Initialize();
 	text.Initialize();
+	//ShowCursor(false);
+	cursor.Initialize();
 
 	shadow = new Shadow_Mapping();
 
@@ -56,7 +58,7 @@ void Scene::Initialize()
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
 	//seaAnim.Initialize();
-	for (int i = 0; i < 1600; i++)
+	for (int i = 0; i < 8000; i++)
 	{
 		vec3 ObstaclePos = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(
 			vec3(float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f, 0,
@@ -344,11 +346,11 @@ void Scene::DrawColladaDistance()
 		}
 
 		mat4 WVM = ProjectionMatrix * ViewMatrix;
-
 		ShaderBuilder::LoadShader(Shader::At("InstancedDistance"))->
 			Add_mat4("WVM", WVM).
 			Add_float("time", time).
 			Add_vec3("cameraPos", camera.GetCameraPosition()).
+
 			Add_bool("isAnimated", false);
 		grass.Draw(grass.ObstaclesMat);
 	}
@@ -403,6 +405,13 @@ void Scene::DrawUI()
 		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
 	ShaderBuilder::LoadShader(Shader::At("2D Text"))->Add_vec3("textColor", color);
 	fps.CountFrame(Shader::At("2D Text"));
+	cursor.Draw();
+}
+
+void Scene::DrawThreaded()
+{
+	cursor.Draw();
+
 }
 
 void Scene::DrawSky()
@@ -430,6 +439,7 @@ void Scene::DrawCollada()
 #pragma region Mathematics
 		mat4 ModelMatrix;
 		ModelMatrix = glm::translate(ModelMatrix, position);
+		ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0,1,0));
 		WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
 #pragma endregion Mathematics
 		string ip = i->second.GetIP();
@@ -476,12 +486,23 @@ void Scene::DrawCollada()
 	float SlowTime = time / 40.0f;
 	mat4 landmat;
 	WVM = ProjectionMatrix * ViewMatrix * landmat;
-	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	ShaderBuilder::LoadShader(Shader::At("Ground"))->
 		Add_mat4("WVM", WVM).
 		Add_float("Texelation",100.0f).
 		Add_textures(loaded_Models["Land"]->Textures).
 		Add_bool("isAnimated", false);
 	loaded_Models["Land"]->Draw();
+
+	for (auto e : Data.Effects)
+	{
+		WVM = ProjectionMatrix * ViewMatrix * e.ModelMatrix;
+		ShaderBuilder::LoadShader(Shader::At("Animation"))->
+			Add_mat4("WVM", WVM).
+			Add_bool("isAnimated", true).
+			Add_float("Texelation", 1.0f).
+			Add_textures(e.EffectModel->Textures);
+		e.Draw();
+	}
 	//ShaderBuilder::LoadShader(Shader::At("Index"))->
 	//	Add_mat4("WVM", WVM);
 	//loaded_Models["Land"]->Draw();
@@ -513,6 +534,7 @@ void Scene::DrawCollada()
 			Add_mat4("WVM", WVM).
 			Add_float("time", time).
 			Add_vec3("cameraPos", camera.GetCameraPosition()).
+			Add_vec2("mousePos", mouse.GetMouseCoords()).
 			Add_textures(grass.model.Textures).
 			Add_bool("isAnimated", false);
 		grass.Draw(grass.ObstaclesMat);
