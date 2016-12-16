@@ -22,19 +22,19 @@ void UserInterface::GenerateForm()
 	GreyCover->innerText = "PAUSE";
 	root->AppendChild(GreyCover);*/
 
-	//UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
-	//Position = vec2(10, 80);
-	//UsernameElement->TopLeft = Position;
-	//UsernameElement->SetByTrueSize(Position);
-	//UsernameElement->AddHoverEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); }); 
-	//UsernameElement->AddHoverDoneEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	//UsernameElement->AddReturnDefaultEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	//UsernameElement->AddClickEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
-	//root->AppendChild(UsernameElement);
+	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
+	Position = vec2(10, 80);
+	UsernameElement->TopLeft = Position;
+	UsernameElement->SetByTrueSize(Position);
+	UsernameElement->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); }); 
+	UsernameElement->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	UsernameElement->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	UsernameElement->AddClickEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+	root->AppendChild(UsernameElement);
 
 	//UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
 	//Position = vec2(10, 160);
@@ -72,7 +72,9 @@ void UserInterface::GenerateForm()
 	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldSelected.png"); });
 	//	StatsWindow->AppendChild(StatsField);
 	//}
-
+	// load up for later use
+	UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
+	UIElement* FullHPBar = new UIElement("FullHPBar", "Interface/FullHPBar.png");
 
 }
 
@@ -85,6 +87,7 @@ void UserInterface::AcceptInput()
 	{
 		if (Pressed == nullptr)
 		{
+			InWorldCommands.push_back(Letters.front().first);
 			Letters.pop_front();
 		}
 		else

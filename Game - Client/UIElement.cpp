@@ -10,7 +10,7 @@ bool SortElement(const UIElement::Element& lhs, const UIElement::Element& rhs)
 	return lhs.z_index < rhs.z_index;
 }
 
-map <string, ImageLoader*> UIElement::Repository;
+map<string, ImageLoader*> UIElement::Repository;
 
 UIElement::UIElement(string Name,string Filename,int z_index)
 {
@@ -22,7 +22,6 @@ UIElement::UIElement(string Name,string Filename,int z_index)
 	{
 		this->IsRoot = false;
 		this->LoadPicture(Filename);
-		text.Initialize();
 		this->TrueSize = UIImage->GetTrueSize();
 	}
 
@@ -121,6 +120,25 @@ void UIElement::OnClick()
 	}
 }
 
+void UIElement::Hide()
+{
+	this->visible = false;
+}
+
+void UIElement::Show()
+{
+	this->visible = true;
+}
+
+void UIElement::Destroy()
+{
+	for (auto uie = this->Children.begin(); uie!= this->Children.end();uie++)
+	{
+		uie->second->Destroy();
+	}
+	Children.clear();
+}
+
 void UIElement::AppendChild(UIElement * child)
 {
 	Children[child->Name] = child;
@@ -161,6 +179,8 @@ void UIElement::RemoveChild(string Name)
 
 void UIElement::Draw()
 {
+	if (visible == false)
+		return;
 	for(auto uie : Children)
 	{
 		uie.second->Draw();
@@ -174,13 +194,19 @@ void UIElement::Draw()
 
 
 		Text::LoadTextShader(vec3(0, 0, 0));
-		this->text.RenderText(this->innerText, this->TextPosition.x, this->TextPosition.y, this->TrueSize.x - margin.x*2, FontSize);
+		Text& text = Text::getInstance();
+		text.RenderText(this->innerText, this->TextPosition.x, this->TextPosition.y, this->TrueSize.x - margin.x*2, FontSize);
 	}
 }
 
 void UIElement::SetByTrueSize(vec2 TopLeft)
 {
 	this->BotRight = TopLeft + TrueSize;
+}
+
+void UIElement::SetByTrueSize()
+{
+	this->BotRight = this->TopLeft + TrueSize;
 }
 
 UIElement* UIElement::GetUIElement(string Name)

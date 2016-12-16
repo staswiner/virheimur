@@ -21,7 +21,6 @@ void Scene::Initialize()
 	Shader::LoadShaders();
 	
 	mSea.Initialize();
-	text.Initialize();
 	//ShowCursor(false);
 	cursor.Initialize();
 
@@ -192,7 +191,7 @@ void Scene::DrawScene_PostProcessing()
 	//DrawEntities();
 	//DrawSea();
 	DrawSeaAnimated();
-	DrawUI();
+	//DrawUI();
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
 	//mFBO["HBlurS"].BindFrameBuffer();
@@ -376,14 +375,16 @@ void Scene::DrawUI()
 	//minimap.Change();
 	minimap.DrawMinimap(Data);
 	//minimap.Draw(vec2(100, 100), vec2(400, 400));
-	for(auto it = Data.GetPlayerInformation().begin(); it != Data.GetPlayerInformation().end(); it++)
+
+	for (auto p : Data.GetPlayerInformation())
 	{
-		vec3 pos = it->second.GetUnitData().GetPosition();
+		p.second->DrawUI(ProjectionMatrix, ViewMatrix);
+		vec3 pos = p.second->GetUnitData().GetPosition();
 		mat4 ModelMatrix;
 		ModelMatrix = translate(ModelMatrix, pos);
-		championChat->Draw(text, "OpenGL", ProjectionMatrix, ViewMatrix, mat4());
-		championChat->Draw2D(text, it->second.GetUsername(), ProjectionMatrix, ViewMatrix, ModelMatrix);
+		championChat->Draw2D(p.second->GetUsername(), ProjectionMatrix, ViewMatrix, ModelMatrix);
 	}
+	championChat->Draw("OpenGL", ProjectionMatrix, ViewMatrix, mat4());
 	/*else
 	{
 
@@ -397,6 +398,7 @@ void Scene::DrawUI()
 	ShaderBuilder::LoadShader(Shader::At("2D Text"))->Add_mat4("projection", projection).
 		Add_mat4("view", view).Add_mat4("model", model).
 		Add_vec3("textColor", color).Add_texture("text", 0);
+	Text& text = Text::getInstance();
 	text.RenderText(UI.Chat, 100.0f, 200.0f, 200.0f, 40.0f);
 
 	color = vec3(1, 0, 0);
@@ -433,43 +435,12 @@ void Scene::DrawCollada()
 	//for each (Player P in Data.GetPlayerInformation())
 	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
 	{
-		Unit_Data ud = i->second.GetUnitData();
-		vec3 position = ud.GetPosition();
-
-#pragma region Mathematics
-		mat4 ModelMatrix;
-		ModelMatrix = glm::translate(ModelMatrix, position);
-		ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0,1,0));
-		WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
-#pragma endregion Mathematics
-		string ip = i->second.GetIP();
-		/*	string UserColor = i->second.GetUsername().substr(0,3);
-
-		float r = ((ToLower(UserColor[0]) - 'a')*10.0f) / 255.f;
-		float g = ((ToLower(UserColor[1]) - 'a')*10.0f) / 255.f;
-		float b = ((ToLower(UserColor[2]) - 'a')*10.0f) / 255.f;*/
-		//float value = ((char(UserColor[0])- char(UserColor[1])) * 20.0f) / 255.0f;
-		//ShaderBuilder::LoadShader(Shader::At("Animation"))->
-		//	Add_mat4("projection", ProjectionMatrix).
-		//	Add_mat4("view", ViewMatrix).
-		//	Add_mat4("model", ModelMatrix).
-		//	Add_vec3("ucolor",vec3(r,g,b));
-		//loaded_Models["Collada"]->Draw();
-		ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("WVM", WVM).
-			Add_bool("isAnimated", true).
-			Add_float("Texelation", 1.0f).
-			Add_textures(loaded_Models["Collada"]->Textures);
-		loaded_Models["Collada"]->Draw();
-
+		i->second->Draw(ProjectionMatrix, ViewMatrix);
 	}
 	// default unit, internet connection independent
 	vec3 position;
-
-#pragma region Mathematics
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
-#pragma endregion Mathematics
 	vec3 color;
 	mat4 CharMat;
 	WVM = ProjectionMatrix * ViewMatrix * CharMat;
@@ -540,6 +511,7 @@ void Scene::DrawCollada()
 		grass.Draw(grass.ObstaclesMat);
 	}
 #pragma endregion Grass
+
 	//#pragma region Sea
 	//	{
 	//		vector<vec4> ModelMatrixs;

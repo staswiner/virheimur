@@ -16,9 +16,6 @@ public:
 	string Receive();
 	void BeginReceive();
 	void FormConnection();
-	GDO GetNewData();
-	void SetNewData(GDO NewData);
-	void SetNewData(string NewData);
 	void SendNewData(GlobalDataObject&);
 	void InitializeDataAuthentication(string NewData);
 private:
@@ -27,7 +24,7 @@ private:
 	//Client client;
 	UdpClient udpClient;
 	GlobalDataObject& ReceivedData;
-	GlobalDataObject NewData;
+	//GlobalDataObject NewData;
 	string ServerIP;
 	string MyIP;
 

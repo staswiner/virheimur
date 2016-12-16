@@ -90,40 +90,18 @@ void Network::FormConnection()
 	} while (Ack != "ACK");
 }
 
-GDO Network::GetNewData()
-{
-	return this->NewData;
-}
-
-void Network::SetNewData(GDO NewData)
-{
-	this->NewData = NewData;
-}
-void Network::SetNewData(string NewData)
-{
-	json ParsedData = json::parse(NewData.c_str());
-	//this->NewData.SetMyIP(ParsedData["IpAddress"]);
-	vec3 Position(ParsedData["x"], ParsedData["y"], ParsedData["z"]);
-	vec3 Destination(ParsedData["Destx"], ParsedData["Desty"], ParsedData["Destz"]);
-
-	string ip = ParsedData["IpAddress"];
-	string Username = ParsedData["Username"];
-
-	this->NewData.UpdateMyPlayer(Player(Unit_Data(
-		Position,
-		Destination,
-		"Lara"), Username), ParsedData["Username"]);
-}
 
 void Network::SendNewData(GlobalDataObject & NewData)
 {
 	vector<json> JPlayers;
+	milliseconds TimeSinceEpoch = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	for (auto i = NewData.GetPlayerInformation().begin(); i != NewData.GetPlayerInformation().end(); i++)
 	{
-		JPlayers.push_back(i->second.GetJson());
+		JPlayers.push_back(i->second->GetJson());
 	}
 	json JNewData(JPlayers);
-	string Jstring = "NewData " + NewData.MyUsername + " " + JNewData.dump();
+	string Jstring = "NewData " + NewData.MyUsername + " " +
+		to_string(TimeSinceEpoch.count()) + " " + JNewData.dump();
 	Send(Jstring);
 	int i = 0;
 //	JNewData = {NewData.GetPlayerInformation()[""]};
@@ -136,10 +114,6 @@ void Network::InitializeDataAuthentication(string NewData)
 	vec3 Position(ParsedData["x"], ParsedData["y"], ParsedData["z"]);
 	vec3 Destination(ParsedData["Destx"], ParsedData["Desty"], ParsedData["Destz"]);
 
-	this->NewData.UpdateMyPlayer(Player(Unit_Data(
-		Position,
-		Destination,
-		"Lara"), ParsedData["Username"]), ParsedData["Username"]);
 	string ip = ParsedData["IpAddress"];
 	this->MyIP = ip;
 }

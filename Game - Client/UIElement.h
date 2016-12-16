@@ -35,12 +35,16 @@ public:
 	void OnHoverDone();
 	void OnReturnDefault();
 	void OnClick();
+	void Hide();
+	void Show();
+	void Destroy();
 
 	void AppendChild(UIElement*);
 	void RemoveChild(UIElement*);
 	void RemoveChild(string Name);
 	void Draw();
 	void SetByTrueSize(vec2 TopLeft);
+	void SetByTrueSize();
 	UIElement* GetUIElement(string Name);
 	void ChangePicture(string Filename);
 	vec2 TopLeft;
@@ -60,8 +64,8 @@ private:
 	int Width, Height;
 	ImageLoader* UIImage;
 	map<Element,UIElement*> Children;
-	Text text;
 	UIElement* Parent;
+	bool visible = true;
 	bool IsRoot;
 	static map <string, ImageLoader*> Repository;
 };

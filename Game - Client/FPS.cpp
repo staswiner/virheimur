@@ -24,5 +24,6 @@ void FPS::CountFrame(Shader& shader)
 		fps = counter;
 		counter = 0;
 	}
+	Text& text = Text::getInstance();
 	text.RenderText("[fps : " + to_string(fps) + "]", 20, 50,0.0f, 20.0f);
 }

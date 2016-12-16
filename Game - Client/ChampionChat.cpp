@@ -18,7 +18,7 @@ void ChampionChat::CreateChatbox()
 	ChatFrames.back()->Initialize("Interface/Chat.png");*/
 }
 
-void ChampionChat::Draw(Text& text,string a_Text, mat4& projection, mat4& view, mat4& model)
+void ChampionChat::Draw(string a_Text, mat4& projection, mat4& view, mat4& model)
 {
 	mat4 WorldPos;
 	Mouse mouse;
@@ -32,10 +32,11 @@ void ChampionChat::Draw(Text& text,string a_Text, mat4& projection, mat4& view, 
 
 	ShaderBuilder::LoadShader(shader)->Add_mat4("projection", projection).Add_mat4("view", view).
 		Add_mat4("model", model).Add_vec3("textColor", color).Add_texture("text", 0);
+	Text& text = Text::getInstance();
 	text.RenderTextReverse(a_Text, 0.0f, 0.0f, 200.0f, 10.0f);
 }
 
-void ChampionChat::Draw2D(Text &, string a_Text, mat4 & projection, mat4 & view, mat4 & model)
+void ChampionChat::Draw2D(string a_Text, mat4 & projection, mat4 & view, mat4 & model)
 {
 
 	mat4 WorldPos;
@@ -67,5 +68,6 @@ void ChampionChat::Draw2D(Text &, string a_Text, mat4 & projection, mat4 & view,
 	/*Text*/
 	ShaderBuilder::LoadShader(shader)->Add_mat4("projection", projectionOrtho).Add_mat4("view", mat4()).
 		Add_mat4("model", mat4()).Add_vec3("textColor", color).Add_texture("text", 0);
+	Text& text = Text::getInstance();
 	text.RenderText(a_Text, TextCoords.x, TextCoords.y, 200.0f, 40.0f);
 }

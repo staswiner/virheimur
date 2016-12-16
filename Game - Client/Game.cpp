@@ -1,9 +1,11 @@
 #include "Game.h"
 
-
+PlayerRepository Game::Players;
+PlayerRepository Game::NewPlayers;
+PlayerRepository Game::ReceivedPlayers;
 GlobalDataObject Game::NewData;
-GlobalDataObject Game::ReceivedData;
-GlobalDataObject Game::Data;
+GlobalDataObject Game::ReceivedData(ReceivedPlayers);
+GlobalDataObject Game::Data(Players);
 FBO Game::Index;
 
 UserInterface Game::UI;
@@ -39,7 +41,6 @@ void Game::Initialize()
 	scene.Initialize();
 	loginState.Initialize();
 	// Sets NewData (spawn) 
-	input.SetInitialCharacterData(network.GetNewData()); // unsafe
 
 
 }
@@ -99,9 +100,9 @@ void Game::UpdateVariables(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 }
 void Game::AddToNewData()
 {
-	for (auto &p : Data.GetPlayerInformation())
+	for (auto p : Data.GetPlayerInformation())
 	{
-		Unit_Data& uData = p.second.unit_Data;
+		Unit_Data& uData = p.second->unit_Data;
 		/*if (uData.PathChanged)
 		{
 			NewData.GetPlayerInformation()[p.first].unit_Data.StartPointTime = uData.StartPointTime;
@@ -154,14 +155,21 @@ void Game::CombineData()
 	// =
 	// Data
 	// Received Data
+//	Data.GetPlayerInformation() = ReceivedData.GetPlayerInformation();
 	for (auto p : ReceivedData.GetPlayerInformation())
 	{
 		Data.GetPlayerInformation()[p.first] = p.second;
 	}
 	// New Data
+//	Data.GetPlayerInformation() = NewData.GetPlayerInformation();
 	for(auto p : NewData.GetPlayerInformation())
 	{
 		Data.GetPlayerInformation()[p.first] = p.second;
+	}
+	// Received Data
+	for (auto p : ReceivedData.GetPlayerInformation())
+	{
+		Data.GetPlayerInformation()[p.first]->TimeDelta = p.second->TimeDelta;
 	}
 }
 

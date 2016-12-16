@@ -17,7 +17,6 @@ static Keyboard keyboard;
 static Mouse mouse;
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static MainLoop Loop;
-static Login_Screen loginScreen;
 bool    done;                   //flag for completion of app
 bool fullScreen = false;
 void SetupPixelFormat(HDC hDC);
@@ -139,6 +138,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		mouse.OnWheelMove(0);
 		while (TRUE == PeekMessage(&msg, hwnd, NULL, NULL, PM_REMOVE))
 		{
+			//TrackMouseEvent()
+			//TrackMouseEvent(this);
 			if (msg.message == WM_QUIT)     //did we receive a quit message?
 			{
 				done = true;
@@ -191,7 +192,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE: //window being created
 
 		hDC = GetDC(hwnd);  //get current windows device context
-		Login_Screen::m_HDC = hDC;
+		//Login_Screen::m_HDC = hDC;
 		Loop.game.SetHDC(hDC);
 		SetupPixelFormat(hDC); //call our pixel format setup function
 							   /*      Create rendering context and make it current
@@ -254,6 +255,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_COMMAND:
 		cout << "hello";
+	case WM_NCMOUSELEAVE:
+		mouse.OnMouseMove(400, 300); break;
 	case WM_LBUTTONDOWN:
 		mouse.OnLeftPressed(); break;
 	case WM_LBUTTONUP:

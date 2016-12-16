@@ -23,6 +23,7 @@ public:
 
 private:
 	void GetMouseInput();
+	void GetKeyboardInput();
 	Camera camera;
 	Keyboard keyboard;
 	Mouse mouse;
@@ -35,5 +36,7 @@ private:
 	UserInterface& UI;
 	FBO* Index;
 	Loaded_Models loaded_Models;
+
+	void ResetCharacterPosition();
 };
 

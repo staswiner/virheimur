@@ -44,6 +44,9 @@ private:
 	static GlobalDataObject NewData;
 	static GlobalDataObject ReceivedData;
 	static GlobalDataObject Data;
+	static PlayerRepository Players;
+	static PlayerRepository NewPlayers;
+	static PlayerRepository ReceivedPlayers;
 	mat4 ProjectionMatrix;
 	mat4 ViewMatrix;
 	std::thread Receiver;

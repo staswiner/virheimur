@@ -18,10 +18,14 @@ void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 	for (auto &p : FinalData.GetPlayerInformation())
 	{
 		using namespace chrono;
-		Unit_Data& unit = p.second.GetUnitData();
+		Unit_Data& unit = p.second->GetUnitData();
 		milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		float Delta = float(currTime.count() - unit.StartPointTime.count())/1000.0f; // movement delta
-		float ServerDelta = float(p.second.TimeDelta.count())/1000.0f; // sync delta
+		float ServerDelta = float(p.second->TimeDelta.count())/1000.0f; // sync delta
+		if (abs(ServerDelta) > 1000000 || Delta > 1000000)
+		{
+			int i = 0;
+		}
 		// Set Position Based on destination,time vector
 		if (unit.Destination == unit.StartPoint)
 		{
@@ -36,7 +40,10 @@ void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 				(Delta + ServerDelta) +
 				unit.StartPoint;
 			unit.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
-
+			if (abs(unit.Position.x) > 1000000)
+			{
+				int i = 0;
+			}
 			// inefficient, but either to manage, can be placed on start conditions later on
 			vec3 test = glm::normalize(unit.Destination - unit.StartPoint);
 			float test1 = dot(test, vec3(1,0,0));
@@ -98,23 +105,4 @@ void GameLogic::ChainCommands()
 	}
 }
 
-void GameLogic::BuildData() // xml not working
-{
-	/*tinyxml2::XMLDocument xml;
-	tinyxml2::XMLElement * element;
-	tinyxml2::XMLElement * elementNext;
-	vec3 Position;
-	xml.NewText("<scene><map>1</map><units></units></scene");
-	element = xml.FirstChildElement("units");
-	element->SetAttribute("type", "katarina");
-	elementNext = xml.NewElement("x");
-	elementNext->SetValue(to_string(Position.x).c_str());
-	element->InsertEndChild(elementNext);
-	elementNext = xml.NewElement("y");
-	elementNext->SetValue(to_string(Position.y).c_str());
-	element->InsertEndChild(elementNext);
-	elementNext = xml.NewElement("z");
-	elementNext->SetValue(to_string(Position.z).c_str());
-	element->InsertEndChild(elementNext);*/
 
-}

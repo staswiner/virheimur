@@ -12,6 +12,5 @@ private:
 	int counter;
 	time_t m_time;
 	int fps;
-	Text text;
 };
 

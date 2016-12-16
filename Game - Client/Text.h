@@ -11,11 +11,16 @@
 #include "freetype\freetype.h"
 using namespace std;
 using namespace glm;
-class Text 
+class Text // singleton
 {
 public:
-	Text(string font);
-	Text();
+	static Text& getInstance()
+	{
+		static Text Instance;
+		return Instance;
+	}
+	Text(Text const&) = delete;
+	void operator=(Text const&) = delete;
 	~Text();
 	void Initialize();
 	//void Draw(char charCode);
@@ -24,12 +29,16 @@ public:
 	void RenderTextReverse(std::string text,
 		GLfloat x, GLfloat y, GLfloat xMax, GLfloat scale);
 	static void LoadTextShader(vec3 color);
+	Text();
 private:
+	Text(string font);
+	static Text Instance;
+
 	void LoadCharacters();
 	void ReserveVBO();
 	//void Text::Draw_Interface(int top, int bot, int left, int right, vec2 offset);
-	static GLuint Texture, VAO, VBO;
-	static Shader shader;
+	GLuint Texture, VAO, VBO;
+	Shader shader;
 	ImageLoader* m_Font;
 	string m_OurFont;
 	struct Vertices {

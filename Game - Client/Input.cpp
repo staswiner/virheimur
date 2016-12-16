@@ -27,6 +27,7 @@ GlobalDataObject& Input::TranslateInput(GlobalDataObject& Data)
 	this->GetMouseInput();
 
 	UI.AcceptInput();
+	this->GetKeyboardInput();
 
 	return NewData;
 }
@@ -66,7 +67,7 @@ void Input::GetMouseInput()
 		PlaneCoord.push_back(vec3(0, 0, 1)); // second vector of the plane
 		PlaneCoord.push_back(vec3(0, 50, 0)); // point on the plane
 		// unused, just for reference
-		vec3 CurrentPosition = Data->GetPlayerInformation()[ReceivedData.MyUsername].GetUnitData().GetPosition();
+		vec3 CurrentPosition = Data->GetPlayerInformation()[ReceivedData.MyUsername]->GetUnitData().GetPosition();
 		// Get Fragment Plane
 		PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r,pixel.g,pixel.b));
 		// Get Ray Cast
@@ -75,13 +76,13 @@ void Input::GetMouseInput()
 		vec3 Destination = ray.PlaneIntersection(PlaneCoord[0], PlaneCoord[1], PlaneCoord[2],
 			ray.GetWorldRay(),camera.GetCameraPosition());
 		// Set Destination to player
-		Player& myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername]; // also creates the character
-		myPlayer.Username = ReceivedData.MyUsername;
-		myPlayer.unit_Data.Path.clear();
-		myPlayer.unit_Data.Path.push_back(Destination);
-		myPlayer.unit_Data.Destination = myPlayer.GetUnitData().Path.front();
-		myPlayer.unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername].unit_Data.Position;
-		myPlayer.unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		Player* myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername];
+		myPlayer->Username = ReceivedData.MyUsername;
+		myPlayer->unit_Data.Path.clear();
+		myPlayer->unit_Data.Path.push_back(Destination);
+		myPlayer->unit_Data.Destination = myPlayer->GetUnitData().Path.front();
+		myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername]->unit_Data.Position;
+		myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	//	myPlayer.GetUnitData().Position = Destination;
 		
 		//{
@@ -116,3 +117,30 @@ void Input::GetMouseInput()
 	
 }
 
+void Input::GetKeyboardInput()
+{
+
+	if (UI.InWorldCommands.size() > 0)
+	{
+		/* body of processed commands */
+		GLchar input = UI.InWorldCommands.front();
+		switch (input)
+		{
+		case ' ': ResetCharacterPosition(); break;
+		}
+		// end
+		UI.InWorldCommands.pop_front();
+	}
+}
+
+void Input::ResetCharacterPosition()
+{
+	vec3 Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
+	Player* myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername]; // also creates the character
+	myPlayer->Username = ReceivedData.MyUsername;
+	myPlayer->unit_Data.Path.clear();
+	myPlayer->unit_Data.Path.push_back(Position);
+	myPlayer->unit_Data.Destination = myPlayer->GetUnitData().Path.front();
+	myPlayer->unit_Data.StartPoint = Position;
+	myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+}

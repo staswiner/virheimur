@@ -32,6 +32,7 @@ public:
 	string Chat;	
 	UIElement* Focused;
 	UIElement* Pressed;
+	list<GLchar> InWorldCommands;
 private:
 	Keyboard keyboard;
 	Mouse mouse;

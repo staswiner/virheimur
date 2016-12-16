@@ -83,7 +83,6 @@ private:
 	FPS fps;
 	UserInterface& UI;
 	Cursor cursor;
-	Text text;
 	ChampionChat* championChat;
 	vector<Player> Players[2];
 	Minimap minimap;

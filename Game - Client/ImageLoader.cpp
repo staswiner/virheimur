@@ -58,7 +58,7 @@ Loads Texture to the GPU memory, returns TextureID handle
 */
 int ImageLoader::LoadTexture(string Filename)
 {
-	GLuint Texture;
+	GLuint Texture = 0;
 	// texture
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -92,7 +92,9 @@ int ImageLoader::LoadTexture(string Filename)
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	MyTexture = Texture;
+	GLuint result = glGetError();
 	return Texture;
+
 }
 /*
 Loads Texture Data to the GPU memory, returns TextureID handle

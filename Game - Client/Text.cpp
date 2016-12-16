@@ -1,7 +1,6 @@
 #include "Text.h"
 #define RESOLUTION 64.0f
-GLuint Text::Texture, Text::VAO, Text::VBO;
-Shader Text::shader;
+
 std::map<GLchar, Text::Character> Text::Characters;
 vector<Text::Vertices> Text::vertices;
 unsigned int Text::Vertices_Amount;
@@ -15,7 +14,7 @@ Text::Text(string font)
 }
 Text::Text()
 {
-
+	this->Initialize();
 }
 
 Text::~Text()

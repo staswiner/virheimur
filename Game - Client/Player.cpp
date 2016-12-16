@@ -1,24 +1,100 @@
 #include "Player.h"
 
 
-
-Player::Player(Unit_Data unit_Data,string Username,string IpAddress, int Type)
+Player::Player()
 {
-	this->Type = Type;
+//	LoadInterface(); 
+}
+
+Player::Player(Unit_Data unit_Data,string Username)
+{
 	this->unit_Data = unit_Data;
-	this->IpAddress = IpAddress;
 	this->Username = Username;
 	this->stats.MovementSpeed = 100;
+	LoadInterface();
 }
 
 
 Player::~Player()
 {
+	UIroot->Destroy();
+	delete UIroot;
 }
 
 Unit_Data& Player::GetUnitData()
 {
 	return this->unit_Data;
+}
+
+void Player::Draw(mat4& ProjectionMatrix, mat4& ViewMatrix)
+{
+	Mouse mouse;
+	// Model
+	Unit_Data ud = this->unit_Data;
+	vec3 position = ud.GetPosition();
+	Loaded_Models loaded_Models;
+#pragma region Mathematics
+	mat4 ModelMatrix;
+	ModelMatrix = glm::translate(ModelMatrix, position);
+	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
+	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+#pragma endregion Mathematics
+	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		Add_mat4("WVM", WVM).
+		Add_bool("isAnimated", true).
+		Add_float("Texelation", 1.0f).
+		Add_textures(loaded_Models["Collada"]->Textures);
+	loaded_Models["Collada"]->Draw();
+
+}
+
+void Player::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
+{
+//#pragma region Declarations
+//	Mouse mouse;
+//	mat4 ModelMatrix;
+//	Unit_Data ud = this->unit_Data;
+//	vec3 position = ud.GetPosition();
+//#pragma endregion Declarations
+//	ModelMatrix = glm::translate(ModelMatrix, position);
+//	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
+//	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+//	// HP bar
+//	float x = mouse.GetWindowSize().x / 2.0f;
+//	float y = mouse.GetWindowSize().y / 2.0f;
+//	vec4 TextPosition = WVM * vec4(0, 0, 0, 1);
+//	TextPosition /= TextPosition.w;
+//	vec2 TextCoords = vec2(TextPosition.x * x + x, -TextPosition.y * y + y);
+//	UIElement* EmptyHPBar = UIroot->GetUIElement("EmptyHPBar");
+//	UIElement* FullHPBar = UIroot->GetUIElement("FullHPBar");
+//	EmptyHPBar->TopLeft = TextCoords + vec2(-30, -30);
+//	EmptyHPBar->SetByTrueSize();
+//
+//	FullHPBar->TopLeft = TextCoords + vec2(-29, -29);
+//	FullHPBar->SetByTrueSize();
+//
+//	UIroot->Draw();
+
+}
+
+void Player::LoadInterface()
+{
+	//vec2 Position;
+	//UIroot = new UIElement("Root", "");
+
+	//UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
+	//Position = vec2(10, 80);
+	//EmptyHPBar->TopLeft = Position;
+	//EmptyHPBar->SetByTrueSize(Position);
+	//UIroot->AppendChild(EmptyHPBar);
+
+	//UIElement* FullHPBar = new UIElement("FullHPBar", "Interface/FullHPBar.png");
+	//Position = vec2(10, 80);
+	//FullHPBar->TopLeft = Position;
+	//FullHPBar->SetByTrueSize(Position);
+	//UIroot->AppendChild(FullHPBar);
+
+
 }
 
 void Player::UpdateUnitData(Unit_Data uData)
@@ -44,4 +120,54 @@ json Player::GetJson()
 int Player::GetType()
 {
 	return this->Type;
+}
+
+Player *& PlayerRepository::operator[](string Key)
+{
+	if (this->Players.find(Key) == this->Players.end())
+	{
+		this->Players[Key] = new Player();
+		return this->Players[Key];
+	}
+	else
+	{
+		return this->Players[Key];
+	}
+}
+
+Player * PlayerRepository::operator[](string Key) const
+{
+	if (this->Players.find(Key) == this->Players.end())
+	{
+		this->Players[Key] = new Player();
+		return this->Players[Key];
+	}
+	else
+	{
+		return this->Players[Key];
+	}
+}
+
+void PlayerRepository::Erase(string Key)
+{
+	this->Players.erase(Key);
+}
+
+map<string, Player*>::iterator PlayerRepository::begin()
+{
+	return this->Players.begin();
+}
+
+map<string, Player*>::iterator PlayerRepository::end()
+{
+	return this->Players.end();
+}
+
+void PlayerRepository::clear()
+{
+	for (auto p : Players)
+	{
+//		delete p.second;
+	}
+	Players.clear();
 }

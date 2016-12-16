@@ -1,16 +1,30 @@
 #include "GlobalDataObject.h"
 
 
-
-GlobalDataObject::GlobalDataObject()
+GlobalDataObject::GlobalDataObject(const GlobalDataObject & newData)
+	:Players(newData.Players)
 {
-	/*Players["123.12.123.12"] = Player(Unit_Data(vec3(), "Katarina", 0, 0, 0));
-	Players["123.12.123.13"] = Player(Unit_Data(vec3(), "Katarina", 0, 0, 0));*/
+}
+
+GlobalDataObject::GlobalDataObject(PlayerRepository & Players)
+	:Players(Players)
+{
 }
 
 
 GlobalDataObject::~GlobalDataObject()
 {
+}
+
+GlobalDataObject & GlobalDataObject::operator=(const GlobalDataObject & rhs)
+{
+	if (this != &rhs)
+	{
+		this->~GlobalDataObject();
+		new (this) GlobalDataObject(rhs);
+	}
+
+	return *this;
 }
 
 void GlobalDataObject::Clear()
@@ -47,14 +61,19 @@ void GlobalDataObject::ReceiveDataString(string Message)
 			json PlayerParsed = Data[i];
 			vec3 StartPoint(PlayerParsed["x"], PlayerParsed["y"], PlayerParsed["z"]);
 			vec3 Destination(PlayerParsed["Destx"], PlayerParsed["Desty"], PlayerParsed["Destz"]);
-
+			
+			if (auto test = abs(milliseconds(PlayerParsed["TimeDelta"]).count()) > 10000)
+			{//exception
+				int i = 0;
+			}
+			
 			string s = PlayerParsed["IpAddress"];
 			string Jusername = PlayerParsed["Username"];
-			Players[PlayerParsed["Username"]].unit_Data.StartPoint = StartPoint;
-			Players[PlayerParsed["Username"]].unit_Data.Destination = Destination;
-			Players[PlayerParsed["Username"]].Username = Jusername;
-			Players[PlayerParsed["Username"]].unit_Data.StartPointTime = milliseconds(PlayerParsed["StartTime"]);
-			Players[PlayerParsed["Username"]].TimeDelta = milliseconds(PlayerParsed["TimeDelta"]); 
+			Players[PlayerParsed["Username"]]->unit_Data.StartPoint = StartPoint;
+			Players[PlayerParsed["Username"]]->unit_Data.Destination = Destination;
+			Players[PlayerParsed["Username"]]->Username = Jusername;
+			Players[PlayerParsed["Username"]]->unit_Data.StartPointTime = milliseconds(PlayerParsed["StartTime"]);
+			Players[PlayerParsed["Username"]]->TimeDelta = milliseconds(PlayerParsed["TimeDelta"]); 
 		}
 	}
 	catch (exception ex)
@@ -64,23 +83,7 @@ void GlobalDataObject::ReceiveDataString(string Message)
 	}
 }
 
-void GlobalDataObject::UpdateMyPlayer(Player PlayerData, string Username)
-{
-	/*json PlayerParsed;
-	PlayerParsed["Username"] = Username;
-	PlayerParsed["x"] = PlayerData.GetUnitData().GetPosition().x;
-	PlayerParsed["y"] = PlayerData.GetUnitData().GetPosition().y;
-	PlayerParsed["z"] = PlayerData.GetUnitData().GetPosition().z;
-	Data = PlayerParsed;*/
-	vec3 Position = PlayerData.GetUnitData().Position;
-	vec3 Destination = PlayerData.GetUnitData().Destination;
-	
-	//Players[Username] = Player(Unit_Data(Position, Destination,
-	//	"Lara"),Username);
-	Players[Username] = PlayerData;
-}
-
-map<string,Player> & GlobalDataObject::GetPlayerInformation() 
+PlayerRepository & GlobalDataObject::GetPlayerInformation() 
 {
 	return this->Players;
 }

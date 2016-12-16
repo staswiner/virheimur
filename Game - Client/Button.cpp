@@ -7,7 +7,7 @@ Button::Button(vec2 StartP, vec2 EndP, int index, string a_Text)
 	index(index),
 	s_Text(a_Text)
 {
-	m_Text = new Text("Fonts/Font.jpg");
+//	m_Text = new Text("Fonts/Font.jpg");
 }
 
 
