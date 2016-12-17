@@ -58,6 +58,10 @@ void Network::BeginReceive()
 	while (1)
 	{
 		ReturnData = udpClient.Receive();
+		if (ReturnData != "")
+		{
+			int i = 0;
+		}
 		if (ReturnData == "FIN")
 			break;
 		if (GetMessageType(ReturnData) == "Data")
@@ -101,7 +105,7 @@ void Network::SendNewData(GlobalDataObject & NewData)
 	}
 	json JNewData(JPlayers);
 	string Jstring = "NewData " + NewData.MyUsername + " " +
-		to_string(TimeSinceEpoch.count()) + " " + JNewData.dump();
+		to_string(TimeSinceEpoch.count()-3000) + " " + JNewData.dump();
 	Send(Jstring);
 	int i = 0;
 //	JNewData = {NewData.GetPlayerInformation()[""]};

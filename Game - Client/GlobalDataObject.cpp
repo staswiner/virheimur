@@ -71,8 +71,8 @@ void GlobalDataObject::ReceiveDataString(string Message)
 			string Jusername = PlayerParsed["Username"];
 			Players[PlayerParsed["Username"]]->unit_Data.StartPoint = StartPoint;
 			Players[PlayerParsed["Username"]]->unit_Data.Destination = Destination;
-			Players[PlayerParsed["Username"]]->Username = Jusername;
 			Players[PlayerParsed["Username"]]->unit_Data.StartPointTime = milliseconds(PlayerParsed["StartTime"]);
+			Players[PlayerParsed["Username"]]->Username = Jusername;
 			Players[PlayerParsed["Username"]]->TimeDelta = milliseconds(PlayerParsed["TimeDelta"]); 
 		}
 	}

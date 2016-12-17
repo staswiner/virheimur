@@ -191,7 +191,7 @@ void Scene::DrawScene_PostProcessing()
 	//DrawEntities();
 	//DrawSea();
 	DrawSeaAnimated();
-	//DrawUI();
+	DrawUI();
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
 	//mFBO["HBlurS"].BindFrameBuffer();
@@ -503,7 +503,7 @@ void Scene::DrawCollada()
 
 		ShaderBuilder::LoadShader(Shader::At("Instanced"))->
 			Add_mat4("WVM", WVM).
-			Add_float("time", time).
+			Add_float("time", 0).
 			Add_vec3("cameraPos", camera.GetCameraPosition()).
 			Add_vec2("mousePos", mouse.GetMouseCoords()).
 			Add_textures(grass.model.Textures).

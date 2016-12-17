@@ -85,6 +85,8 @@ UIElement* UIElement::GetClick(vec2 MouseCoords)
 		return this;
 	}
 	return nullptr;
+	std::bind(&UIElement::Destroy, this);
+
 }
 
 void UIElement::OnHover()

@@ -162,10 +162,10 @@ void Game::CombineData()
 	}
 	// New Data
 //	Data.GetPlayerInformation() = NewData.GetPlayerInformation();
-	for(auto p : NewData.GetPlayerInformation())
-	{
-		Data.GetPlayerInformation()[p.first] = p.second;
-	}
+	//for(auto p : NewData.GetPlayerInformation())
+	//{
+	//	Data.GetPlayerInformation()[p.first] = p.second;
+	//}
 	// Received Data
 	for (auto p : ReceivedData.GetPlayerInformation())
 	{
