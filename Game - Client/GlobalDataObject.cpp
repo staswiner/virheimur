@@ -74,6 +74,8 @@ void GlobalDataObject::ReceiveDataString(string Message)
 			Players[PlayerParsed["Username"]]->unit_Data.StartPointTime = milliseconds(PlayerParsed["StartTime"]);
 			Players[PlayerParsed["Username"]]->Username = Jusername;
 			Players[PlayerParsed["Username"]]->TimeDelta = milliseconds(PlayerParsed["TimeDelta"]); 
+			//Players[PlayerParsed["Username"]]->stats.Hp = PlayerParsed["Hp"];
+			//Players[PlayerParsed["Username"]]->stats.MaxHp = PlayerParsed["MaxHp"];
 		}
 	}
 	catch (exception ex)

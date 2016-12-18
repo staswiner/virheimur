@@ -138,7 +138,7 @@ void UIElement::Destroy()
 	{
 		uie->second->Destroy();
 	}
-	Children.clear();
+	delete this;
 }
 
 void UIElement::AppendChild(UIElement * child)

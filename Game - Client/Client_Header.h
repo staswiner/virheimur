@@ -26,7 +26,7 @@ using namespace std;
 #pragma comment (lib, "AdvApi32.lib")
 
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "27046"
 #define SERVER_PORT "27045"
 #define CLIENT_PORT "27046"

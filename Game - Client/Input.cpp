@@ -83,6 +83,7 @@ void Input::GetMouseInput()
 		myPlayer->unit_Data.Destination = myPlayer->GetUnitData().Path.front();
 		myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername]->unit_Data.Position;
 		myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		//myPlayer->stats.Hp = Data->GetPlayerInformation()[ReceivedData.MyUsername]->stats.Hp - 5;
 	//	myPlayer.GetUnitData().Position = Destination;
 		
 		//{
