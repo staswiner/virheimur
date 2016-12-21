@@ -22,7 +22,7 @@ out vec4 color;
 
 void main()
 {
-//{   // all syntax correct
+	// all syntax correct
 	vec3 lightPos = vec3(30, 30, 0);
 	vec3 norm = normalize(gs_out.Normals);
 	vec3 lightDir = normalize(lightPos - gs_out.FragPos);
@@ -44,7 +44,7 @@ void main()
 	//color = texture(Fractal, gs_out.UV.xz/200.0f) * vec4(diffuse,1);
 	float alpha = 1.0;
 	if (distance(gl_FragCoord.xy, mousePos+vec2(8,8)) < 80)
-		alpha = 0.5;
+		alpha = 1.0;
 	color = Image * vec4(diffuse, alpha);
 //	color = vec4(1);
 }

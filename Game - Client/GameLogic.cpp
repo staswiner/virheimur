@@ -20,8 +20,8 @@ void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 		using namespace chrono;
 		Unit_Data& unit = p.second->GetUnitData();
 		milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-		float Delta = float(currTime.count() - unit.StartPointTime.count()-3000)/1000.0f; // movement delta
-		float ServerDelta = float(p.second->TimeDelta.count() - (currTime.count() - 3000))/1000.0f; // sync delta
+		float Delta = float(currTime.count() - unit.StartPointTime.count())/1000.0f; // movement delta
+		float ServerDelta = float(p.second->TimeDelta.count() - (currTime.count()))/1000.0f; // sync delta
 		if (abs(ServerDelta) > 1000000 || Delta > 1000000)
 		{
 			int i = 0;

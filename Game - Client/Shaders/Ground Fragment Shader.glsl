@@ -22,9 +22,6 @@ void main()
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * vec3(1);
 
-	////color = texture(myTexture0, UVs);
-	////else
-	////{
 	//if (textureSize(Texture0).x > 0)
 	{
 		float near = 0.1f;
@@ -35,7 +32,8 @@ void main()
 		vec4 color1 = texture2D(Texture1, UVs * Texelation);
 		vec4 color2 = texture2D(Texture2, UVs);
 		vec4 color3 = texture2D(Texture3, UVs * Texelation);
-		if (color2.r < 0.5)
+		//if (color2.r < 0.5)
+		if (abs(dot(norm, vec3(0, 1, 0))) > 0.8)
 		{
 			color = color3;
 		}
@@ -43,8 +41,7 @@ void main()
 		{
 			color = (color0 * dot(norm, vec3(0, 1, 0))) + (color1 * (1 - dot(norm, vec3(0, 1, 0)))) * vec4(diffuse, 1.0f);
 		}
-		//color = vec4(diffuse, 1) * vec4(1,0,1,1);
-		//color = vec4(0,0.5,0.1,1.0) * vec4(diffuse, 1);
+
 
 	}
 	//else

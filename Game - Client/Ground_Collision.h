@@ -10,7 +10,7 @@ public:
 	// singletone examlpe
 	using Collision::Collision;
 	Ground_Collision();
-	Ground_Collision(vector<Stas::Vertex> Vertices);
+	Ground_Collision(vector<vec3> Vertices,vector<vec3> Normals);
 	/*static Ground_Collision& Instance()
 	{
 		static Ground_Collision instance;
@@ -21,6 +21,6 @@ public:
 	vector<vec3> GetPlaneCoords(vec3 Index);
 private:
 	map<vec2, float, bool(*)(const vec2&, const vec2&)>* AlteredVertices;
-	vector<Stas::Vertex> Vertices;
+	vector<vec3> Normals;
 };
 

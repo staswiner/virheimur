@@ -55,6 +55,8 @@ public:
 	};
 	enum VB_TYPES {
 		VERTICES_BUFFER,
+		NORMALS_BUFFER,
+		UVS_BUFFER,
 		BONE_VB,
 		MODEL_VB,
 		NUM_VBs
@@ -111,6 +113,7 @@ public:
 private:
 	/*  Functions    */
 	void setupMesh();
+	void setupMeshCustom();
 	void loadMesh();
 	aiMesh* mesh;
 	const aiScene* scene;

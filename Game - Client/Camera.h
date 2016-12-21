@@ -45,6 +45,7 @@ public:
 	Camera();
 	~Camera();
 	mat4 GetUpdatedCamera();
+	mat4 GetLockedCamera(vec3 PlayerPos, vec3 PlayerAngle);
 	vec3 GetCameraPosition();
 	vec3 GetCameraRotation();
 	mat4 GetProjectionMatrix();

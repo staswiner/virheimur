@@ -105,7 +105,7 @@ void Network::SendNewData(GlobalDataObject & NewData)
 	}
 	json JNewData(JPlayers);
 	string Jstring = "NewData " + NewData.MyUsername + " " +
-		to_string(TimeSinceEpoch.count()-3000) + " " + JNewData.dump();
+		to_string(TimeSinceEpoch.count()) + " " + JNewData.dump();
 	Send(Jstring);
 	int i = 0;
 //	JNewData = {NewData.GetPlayerInformation()[""]};

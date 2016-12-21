@@ -19,45 +19,61 @@ Mesh::Mesh(aiMesh * mesh, const aiScene* scene, string CollisionType)
 void Mesh::LoadCustom(vector<Stas::Vertex>& Vertices)
 {
 	vertices = Vertices;
+	vector<vec3> Vertexes;
+	for (auto v : Vertices)
+	{
+		Vertexes.push_back(v.Position);
+	}
 	if (this->CollisionType == "Ground")
-		mCollision = new Ground_Collision(vertices);
+		mCollision = new Ground_Collision(Vertexes);
 	Bones.resize(1);
 	//GLuint a = scene->mNumMaterials;
 	//for(GLuint i=0; i < mesh->te)
 
 
 	// Process Bones
-	this->setupMesh();
+	this->setupMeshCustom();
 }
 void Mesh::ProcessMesh()
 {
-	for (GLuint i = 0; i < mesh->mNumVertices; i++)
-	{
-		Stas::Vertex vertex;
-		vec3 Position(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-		vec3 Normals;
-		if (mesh->mNormals != NULL)
-			Normals = vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
-		vec2 UVs;
-		if (mesh->mTextureCoords[0])
-			UVs = vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+	//for (GLuint i = 0; i < mesh->mNumVertices; i++)
+	//{
+	//	Stas::Vertex vertex;
+	//	vec3 Position(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+	//	vec3 Normals;
+	//	if (mesh->mNormals != NULL)
+	//		Normals = vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+	//	vec2 UVs;
+	//	if (mesh->mTextureCoords[0])
+	//		UVs = vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
 
-		vertex.Position = Position;
-		if (&mesh->mNormals[i] != nullptr)
-			vertex.Normal = Normals;
-		vertex.TexCoords = UVs;
-		vertices.push_back(vertex);
-	}
+	//	vertex.Position = Position;
+	//	if (&mesh->mNormals[i] != nullptr)
+	//		vertex.Normal = Normals;
+	//	vertex.TexCoords = UVs;
+	//	vertices.push_back(vertex);
+	//}
 	if (this->CollisionType == "Ground")
-		mCollision = new Ground_Collision(vertices);
-
-	// Process indices
-	for (GLuint i = 0; i < mesh->mNumFaces; i++)
 	{
-		indices.push_back(mesh->mFaces[i].mIndices[0]);
-		indices.push_back(mesh->mFaces[i].mIndices[1]);
-		indices.push_back(mesh->mFaces[i].mIndices[2]);
+		vector<vec3> Vertices;
+		vector<vec3> Normals;
+		for (GLuint i = 0; i < mesh->mNumVertices; i++)
+		{
+			vec3 Position(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+			Vertices.push_back(Position);
+			Normals.push_back(vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+		}
+
+		mCollision = new Ground_Collision(Vertices, Normals);
 	}
+
+	//// Process indices
+	//for (GLuint i = 0; i < mesh->mNumFaces; i++)
+	//{
+	//	indices.push_back(mesh->mFaces[i].mIndices[0]);
+	//	indices.push_back(mesh->mFaces[i].mIndices[1]);
+	//	indices.push_back(mesh->mFaces[i].mIndices[2]);
+	//}
 	// Process material
 	if (mesh->mMaterialIndex >= 0)
 	{
@@ -105,10 +121,13 @@ void Mesh::ProcessMesh()
 		Animations.push_back(scene->mAnimations[i]);
 	}
 	this->setupMesh();
+	vertices.clear();
+	indices.clear();
+	Animations.clear();
 }
 void Mesh::setupMesh()
 {
-	Vertices_Amount = vertices.size();
+	Vertices_Amount = mesh->mNumVertices;
 	Indices_Amount = indices.size();
 	glGenVertexArrays(1, &this->VAO);
 	glGenBuffers(sizeof(VBO)/sizeof(VBO[0]), this->VBO);
@@ -123,7 +142,115 @@ void Mesh::setupMesh()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint),
 	&this->indices[0], GL_STATIC_DRAW);*/
 
+	// Vertices
+	glEnableVertexAttribArray(POSITION_LOCATION);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[VERTICES_BUFFER]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(mesh->mVertices[0]) * mesh->mNumVertices, mesh->mVertices, GL_STATIC_DRAW);
+	glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, sizeof(aiVector3D),
+		(GLvoid*)0);
+
+	// Normals
+	glEnableVertexAttribArray(NORMAL_LOCATION);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[NORMALS_BUFFER]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(mesh->mNormals[0]) * mesh->mNumVertices, mesh->mNormals, GL_STATIC_DRAW);
+	glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, sizeof(aiVector3D),
+		(GLvoid*)0);
+
+	// Texture Coords
+	glEnableVertexAttribArray(TEX_COORD_LOCATION);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[UVS_BUFFER]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(mesh->mTextureCoords[0][0]) * mesh->mNumVertices, mesh->mTextureCoords[0], GL_STATIC_DRAW);
+	glVertexAttribPointer(TEX_COORD_LOCATION, 2, GL_FLOAT, GL_FALSE, sizeof(aiVector3D),
+		(GLvoid*)0);
+
+	// Bone Data
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[BONE_VB]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Bones[0]) * Bones.size(), &Bones[0], GL_STATIC_DRAW);
+	glVertexAttribIPointer(BONE_ID_LOCATION, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+	glEnableVertexAttribArray(BONE_ID_LOCATION);
+	glVertexAttribPointer(BONE_WEIGHT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), 
+		(const GLvoid*)16);
+	glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
+	/*glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(vec4),
+		(const GLvoid*)0);
+	glEnableVertexAttribArray(MODEL_MAT_LOCATION);
+	glVertexAttribDivisor(MODEL_MAT_LOCATION, 1);
+	*/
+	for (GLuint i = 0; i < 4; i++) 
+	{
+		glVertexAttribPointer(MODEL_MAT_LOCATION + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), 
+			(const GLvoid*)(sizeof(vec4) * i));
+		glEnableVertexAttribArray(MODEL_MAT_LOCATION + i);
+		glVertexAttribDivisor(MODEL_MAT_LOCATION + i, 1);
+	}
+
+	glBindVertexArray(0);
+#pragma region inefficient
 	// Vertex Positions
+	//glEnableVertexAttribArray(POSITION_LOCATION);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO[VERTICES_BUFFER]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &this->vertices.front(), GL_STATIC_DRAW);
+	//glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+	//	(GLvoid*)0);
+	
+	//// Vertex Normals
+	//glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+	//	(GLvoid*)offsetof(Vertex, Normal));
+	//glEnableVertexAttribArray(NORMAL_LOCATION);
+
+	//// Vertex Texture Coords
+	//glVertexAttribPointer(TEX_COORD_LOCATION, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+	//	(GLvoid*)offsetof(Vertex, TexCoords));
+	//glEnableVertexAttribArray(TEX_COORD_LOCATION);
+
+	//// Bone Data
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO[BONE_VB]);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(Bones[0]) * Bones.size(), &Bones[0], GL_STATIC_DRAW);
+	//glVertexAttribIPointer(BONE_ID_LOCATION, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+	//glEnableVertexAttribArray(BONE_ID_LOCATION);
+	//glVertexAttribPointer(BONE_WEIGHT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), 
+	//	(const GLvoid*)16);
+	//glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
+	///*glVertexAttribPointer(MODEL_MAT_LOCATION, 4, GL_FLOAT, GL_FALSE, sizeof(vec4),
+	//	(const GLvoid*)0);
+	//glEnableVertexAttribArray(MODEL_MAT_LOCATION);
+	//glVertexAttribDivisor(MODEL_MAT_LOCATION, 1);
+	//*/
+	//for (GLuint i = 0; i < 4; i++) 
+	//{
+	//	glVertexAttribPointer(MODEL_MAT_LOCATION + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), 
+	//		(const GLvoid*)(sizeof(vec4) * i));
+	//	glEnableVertexAttribArray(MODEL_MAT_LOCATION + i);
+	//	glVertexAttribDivisor(MODEL_MAT_LOCATION + i, 1);
+	//}
+#pragma endregion inefficient
+
+	//glBindVertexArray(0);
+	/*vertices.clear();
+	indices.clear();*/
+}
+void Mesh::setupMeshCustom()
+{
+	Vertices_Amount = vertices.size();
+	Indices_Amount = indices.size();
+	glGenVertexArrays(1, &this->VAO);
+	glGenBuffers(sizeof(VBO) / sizeof(VBO[0]), this->VBO);
+	glGenBuffers(1, &this->EBO);
+
+	glBindVertexArray(this->VAO);
+	/*glBindBuffer(GL_ARRAY_BUFFER, this->VBO[);
+
+	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(Vertex),
+	&this->vertices.front(), GL_STATIC_DRAW);*/
+	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint),
+	&this->indices[0], GL_STATIC_DRAW);*/
+
+	
 	glEnableVertexAttribArray(POSITION_LOCATION);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[VERTICES_BUFFER]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &this->vertices.front(), GL_STATIC_DRAW);
@@ -162,11 +289,10 @@ void Mesh::setupMesh()
 		glEnableVertexAttribArray(MODEL_MAT_LOCATION + i);
 		glVertexAttribDivisor(MODEL_MAT_LOCATION + i, 1);
 	}
-
 	glBindVertexArray(0);
-	/*vertices.clear();
-	indices.clear();*/
+
 }
+
 void Mesh::VertexBoneData::AddBoneData(uint BoneID, float Weight)
 {
 	for (uint i = 0; i < 2; i++) {

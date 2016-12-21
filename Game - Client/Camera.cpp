@@ -30,6 +30,16 @@ mat4 Camera::GetUpdatedCamera()
 	CalculateCameraValues();
 	return GetCameraMatrix();
 }
+mat4 Camera::GetLockedCamera(vec3 Player, vec3 PlayerAngle)
+{
+	const float PI = 3.1415926535897f;
+	CameraDestination = -Player + vec3(0,-50,0);
+	//MouseCameraAngle = PlayerAngle + vec3(PI/2.0,0,0);
+	//MouseCameraAngle *= 180 / PI;
+	MouseDrag();
+	CalculateCameraValues();
+	return GetCameraMatrix();
+}
 vec3 Camera::GetCameraPosition()
 {
 	return this->CameraPosition;

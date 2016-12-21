@@ -7,7 +7,7 @@ Collision::Collision()
 }
 
 
-Collision::Collision(vector<Stas::Vertex> Vertices)
+Collision::Collision(vector<vec3> Vertices)
 {
 	this->Vertices = Vertices;
 }

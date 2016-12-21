@@ -113,7 +113,24 @@ void Input::GetMouseInput()
 	if (UI.Pressed == nullptr)
 	{
 		// Allow camera, and game interactions
-		camera.GetUpdatedCamera();
+		//camera.GetUpdatedCamera();
+		// Locked camera
+		Player* myPlayer = Data->GetPlayerInformation()[ReceivedData.MyUsername];
+		Unit_Data& unit = myPlayer->unit_Data;
+		float Rotation;
+		if (unit.Destination == unit.StartPoint)
+		{
+			Rotation = -acos(dot(vec3(0,0,0), vec3(1, 0, 0)));
+		}
+		else
+		{
+			Rotation = -acos(dot(glm::normalize(unit.Destination - unit.StartPoint), vec3(1, 0, 0)));
+		}
+			(unit.Destination.z - unit.StartPoint.z < 0) ?
+				unit.Rotation.y = radians(360.0f) - unit.Rotation.y
+				: unit.Rotation.y
+				;
+		camera.GetLockedCamera(myPlayer->unit_Data.Position, vec3(0, Rotation, 0));
 	}
 	
 }

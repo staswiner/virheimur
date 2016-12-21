@@ -156,10 +156,6 @@ void Game::CombineData()
 	// Data
 	// Received Data
 //	Data.GetPlayerInformation() = ReceivedData.GetPlayerInformation();
-	for (auto p : ReceivedData.GetPlayerInformation())
-	{
-		Data.GetPlayerInformation()[p.first] = p.second;
-	}
 	// New Data
 //	Data.GetPlayerInformation() = NewData.GetPlayerInformation();
 	//for(auto p : NewData.GetPlayerInformation())
@@ -169,8 +165,9 @@ void Game::CombineData()
 	// Received Data
 	for (auto p : ReceivedData.GetPlayerInformation())
 	{
-		Data.GetPlayerInformation()[p.first]->TimeDelta = p.second->TimeDelta;
+		Data.GetPlayerInformation()[p.first] = p.second;
 	}
+
 }
 
 void Game::ReadAuthentication()

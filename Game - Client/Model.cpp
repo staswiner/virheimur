@@ -17,11 +17,6 @@ Model::Model(Mesh& mesh)
 
 Model::~Model()
 {
-	for each (Mesh mesh in meshes)
-	{
-		mesh.vertices.clear();
-		mesh.indices.clear();
-	}
 	meshes.clear();
 }
 void Model::Draw(Shader shader)
@@ -79,6 +74,7 @@ void Model::loadModel(string Path)
 	this->directory = Path.substr(0, Path.find_last_of('/'));
 
 	this->processNode(scene->mRootNode, scene);
+// 	delete scene;
 }
 
 void Model::Draw()
