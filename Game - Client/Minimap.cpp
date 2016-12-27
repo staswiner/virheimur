@@ -27,12 +27,28 @@ void Minimap::Initialize()
 		i = vec2(rand() % 270, rand() % 270);
 	}
 }
+void Minimap::UpdateMap()
+{
+	Loaded_Models loaded_Models;
+	if (MinimapFrameData)
+	{
+		SOIL_free_image_data(reinterpret_cast<GLubyte*>(MinimapFrameData));
+	}
+	MinimapFrameData = this->GetImageData("Minimap/Minimap.png", Width, Height);
+	for (auto vertex : dynamic_cast<Ground_Collision*>(loaded_Models["Land"]->meshes[0].mCollision)->GetVertices())
+	{
+		if (dot(vertex.Normal, vec3(0, 1, 0)) < 0.8f)
+		{
+			this->DrawDotStatic(vertex.Position, vec3(115, 77, 38));
+		}
+	}
+	memcpy(NewImageData, MinimapFrameData, Width*Height * sizeof(u8vec4));
 
+}
 void Minimap::DrawMinimap(GDO & Data)
 {
 	Mouse mouse;
 	Position = vec2(mouse.GetWindowSize().x - 300, 0);
-	MinimapFrame.Draw(Position,Position+vec2(300,300));
 	/*for (auto &i : CharactersPositions)
 	{
 		Character.Draw(Position + i, Position+vec2(i.x + 20, i.y + 20));
@@ -42,7 +58,7 @@ void Minimap::DrawMinimap(GDO & Data)
 	{
 		memcpy(NewImageData, MinimapFrameData, Width*Height * sizeof(u8vec4));
 		Data.RouteChanged = false;
-		for (auto i : *Data.Map)
+		for (auto i : *Data.Graph)
 		{
 			for (auto j : i.second)
 			{
@@ -58,26 +74,49 @@ void Minimap::DrawMinimap(GDO & Data)
 		}
 	}
 	MinimapFrame.ReloadTexture(NewImageData, Width, Height);
+	MinimapFrame.Draw(Position, Position + vec2(300, 300));
+
+}
+
+u8vec4 * Minimap::GetMinimapData(int& Width, int& Height)
+{
+	Width = this->Width;
+	Height = this->Height;
+	return MinimapFrameData;
 }
 
 void Minimap::DrawLine(vec3 Start, vec3 End, u8vec3 Color)
 {
-	Start += 1000;
-	Start /= 2000;
+	Start += 100;
+	Start /= 200;
 	Start *= Width;
-	End += 1000;
-	End /= 2000;
+	End += 100;
+	End /= 200;
 	End *= Width;
 	if (End.x < Start.x)
 	{
 		vec3 c = End; End = Start; Start = c;
 	}
 	float M;
+
 	if (End.x - Start.x == 0)
 	{
-		for (int z = Start.z; z < End.z; z++)
+		if (End.x == Start.x)
 		{
-			NewImageData[int(z)*Width + int(End.x)] = u8vec4(Color, 255);
+			if (Start.z < End.z)
+			{
+				for (int z = Start.z; z < End.z; z++)
+				{
+					NewImageData[int(z)*Width + int(End.x) - 1] = u8vec4(Color, 255);
+				}
+			}
+			else
+			{
+				for (int z = End.z; z < Start.z; z++)
+				{
+					NewImageData[int(z)*Width + int(End.x) - 1] = u8vec4(Color, 255);
+				}
+			}
 		}
 	}
 	else if (((M = (End.z - Start.z) / (End.x - Start.x)) < 1 ) && M >= -1)
@@ -90,7 +129,7 @@ void Minimap::DrawLine(vec3 Start, vec3 End, u8vec3 Color)
 			{
 				return;
 			}
-			NewImageData[Finalz*Width + Finalx] = u8vec4(Color, 255);
+			NewImageData[Finalz*Width + Finalx - 1] = u8vec4(Color, 255);
 		}
 	}
 	else
@@ -108,8 +147,46 @@ void Minimap::DrawLine(vec3 Start, vec3 End, u8vec3 Color)
 			{
 				return;
 			}
-			NewImageData[Finalz*Width + Finalx] = u8vec4(Color, 255);
+			NewImageData[Finalz*Width + Finalx - 1] = u8vec4(Color, 255);
 		}
 	}
 	
+}
+void Minimap::DrawDot(vec3 Point, u8vec3 Color)
+{
+	Point += 100;
+	Point /= 200;
+	Point *= Width;
+
+	NewImageData[int(Point.z)*Width + int(Point.x) - 1] = u8vec4(Color, 255);
+
+	/*if (Point.x < Width - 3 and Point.z < Height - 3)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				NewImageData[(int(Point.z + i)*Width + (Point.x + j))] = u8vec4(Color, 255);
+			}
+		}
+	}*/
+}
+void Minimap::DrawDotStatic(vec3 Point, u8vec3 Color)
+{
+	Point += 100;
+	Point /= 200;
+	Point *= Width;
+
+	MinimapFrameData[int(Point.z)*Width + int(Point.x) - 1] = u8vec4(Color, 255);
+
+	if (Point.x < Width - 3 and Point.z < Height - 3)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				MinimapFrameData[(int)((Point.z + i)*Width + (Point.x + j)) - 1] = u8vec4(Color, 255);
+			}
+		}
+	}
 }

@@ -21,10 +21,13 @@ void staticLoaded_Models::initialize_Models()
 	
 	//Models["Lara"] = new Model("Collada/CartoonTree.dae");
 	Models["Land"] = new Model("Map/Land2.dae","Ground");
-	Models["Land"]->AddTexture("Texture0", "Map/Grass2.jpg");
+	Models["Land"]->AddTexture("Texture0", "Map/Grass Tile.jpg");
 	Models["Land"]->AddTexture("Texture1", "Map/Mountain Tile.jpg");
 	Models["Land"]->AddTexture("Texture2", "Map/MapPath.jpg");
-	Models["Land"]->AddTexture("Texture3", "Map/GreyRoadTexture.jpg");
+	Models["Land"]->AddTexture("Texture3", "Map/brickwork-texture_converted.jpg");
+	Models["Land"]->AddTexture("Texture4", "Map/brickwork_normal-map_converted.jpg");
+	Models["Land"]->AddTexture("Texture5", "Map/brickwork-bump-map_converted.jpg");
+
 	Models["Collada"] = new Model("Collada/Robot.dae", "");
 	Models["Collada"]->AddTexture("Texture0","Katarina/Katarina Glowing.bmp");
 	Models["Obstacle"] = new Model("Map/Grass.dae", "");

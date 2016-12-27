@@ -25,7 +25,7 @@ vec3 KernelEffect()
 	}
 	vec3 col = vec3(0.0f);
 	for(int i = 0; i < FullBlur; i++)
-		col += sampleTex[i] * Kernel[i];
+		col += sampleTex[i] * NoKernel;
 	return col;
 }
 void main()

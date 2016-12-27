@@ -23,6 +23,11 @@ void Unit_Data::Update_Unit_Data(const vec3 Position, const vec3 Destination)// 
 
 Unit_Data::~Unit_Data()
 {
+	Path.clear();
+	if (Model_Data)
+	{
+		delete Model_Data;
+	}
 }
 vec3 Unit_Data::GetPosition() const
 {

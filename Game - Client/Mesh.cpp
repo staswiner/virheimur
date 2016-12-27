@@ -19,13 +19,14 @@ Mesh::Mesh(aiMesh * mesh, const aiScene* scene, string CollisionType)
 void Mesh::LoadCustom(vector<Stas::Vertex>& Vertices)
 {
 	vertices = Vertices;
-	vector<vec3> Vertexes;
+	/*vector<Stas::Vertex> Vertexes;
 	for (auto v : Vertices)
 	{
+		
 		Vertexes.push_back(v.Position);
-	}
+	}*/
 	if (this->CollisionType == "Ground")
-		mCollision = new Ground_Collision(Vertexes);
+		mCollision = new Ground_Collision(Vertices);
 	Bones.resize(1);
 	//GLuint a = scene->mNumMaterials;
 	//for(GLuint i=0; i < mesh->te)
@@ -55,16 +56,17 @@ void Mesh::ProcessMesh()
 	//}
 	if (this->CollisionType == "Ground")
 	{
-		vector<vec3> Vertices;
-		vector<vec3> Normals;
+		vector<Stas::Vertex> Vertices;
 		for (GLuint i = 0; i < mesh->mNumVertices; i++)
 		{
-			vec3 Position(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-			Vertices.push_back(Position);
-			Normals.push_back(vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z));
+			Stas::Vertex vertex;
+			vertex.Position = vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+			vertex.Normal = vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+
+			Vertices.push_back(vertex);
 		}
 
-		mCollision = new Ground_Collision(Vertices, Normals);
+		mCollision = new Ground_Collision(Vertices);
 	}
 
 	//// Process indices
@@ -233,7 +235,7 @@ void Mesh::setupMesh()
 	/*vertices.clear();
 	indices.clear();*/
 }
-void Mesh::setupMeshCustom()
+void Mesh::setupMeshCustom()	
 {
 	Vertices_Amount = vertices.size();
 	Indices_Amount = indices.size();
@@ -369,6 +371,8 @@ void Mesh::DrawModel()
 }
 void Mesh::DrawInstanced(vector<mat4>& ModelMatrix)
 {
+	if (ModelMatrix.size() == 0)
+		return;
 	size_t size = sizeof(ModelMatrix[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[MODEL_VB]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(mat4) * ModelMatrix.size(), &ModelMatrix[0], GL_DYNAMIC_DRAW);

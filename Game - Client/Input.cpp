@@ -78,29 +78,42 @@ void Input::GetMouseInput()
 		// Set Destination to player
 		Player* myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername];
 		myPlayer->Username = ReceivedData.MyUsername;
-		myPlayer->unit_Data.Path.clear();
-		myPlayer->unit_Data.Path.push_back(Destination);
-		myPlayer->unit_Data.Destination = myPlayer->GetUnitData().Path.front();
+		// Other variables
 		myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername]->unit_Data.Position;
 		myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		// Set Path
+		myPlayer->unit_Data.Path.clear();
+		/*myPlayer->unit_Data.Path.push_back(myPlayer->unit_Data.StartPoint);
+		myPlayer->unit_Data.Path.push_back(Destination);*/
 		//myPlayer->stats.Hp = Data->GetPlayerInformation()[ReceivedData.MyUsername]->stats.Hp - 5;
 	//	myPlayer.GetUnitData().Position = Destination;
 		
 		//{
 
-		//	PRMalgorithm prm;
-		//	if (ReceivedData.Map)
-		//	{
-		//		delete ReceivedData.Map;
-		//	}
-		//	ReceivedData.Map = prm.GeneratePoints(myPlayer.GetUnitData().Position, Destination);
-		//	ReceivedData.RouteChanged = true;
-		//	if (ReceivedData.Path)
-		//	{
-		//		delete ReceivedData.Path;
-		//	}
-		//	ReceivedData.Path = prm.FoundPath(ReceivedData.Map, myPlayer.GetUnitData().Position, Destination);
-		//}
+		PRMalgorithm prm;
+		if (ReceivedData.Graph)
+		{
+			delete ReceivedData.Graph;
+		}
+		try
+		{
+			ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+			ReceivedData.RouteChanged = true;
+		}
+		catch (exception ex)
+		{
+			int i = 0;
+		}
+		vector<vec3> BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer->unit_Data.StartPoint, Destination);
+		for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+		{
+			myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
+		}
+		if (myPlayer->unit_Data.Path.size() == 0)
+		{
+			int i = 0;
+		}
+	//	ReceivedData.Path = prm.FoundPath(ReceivedData.Graph, myPlayer->GetUnitData().Position, Destination);
 
 		Data->Effects.push_back(Effect("Collada", milliseconds(500), Destination));
 	}
@@ -113,9 +126,9 @@ void Input::GetMouseInput()
 	if (UI.Pressed == nullptr)
 	{
 		// Allow camera, and game interactions
-		//camera.GetUpdatedCamera();
+		camera.GetUpdatedCamera();
 		// Locked camera
-		Player* myPlayer = Data->GetPlayerInformation()[ReceivedData.MyUsername];
+	/*	Player* myPlayer = Data->GetPlayerInformation()[ReceivedData.MyUsername];
 		Unit_Data& unit = myPlayer->unit_Data;
 		float Rotation;
 		if (unit.Destination == unit.StartPoint)
@@ -130,7 +143,7 @@ void Input::GetMouseInput()
 				unit.Rotation.y = radians(360.0f) - unit.Rotation.y
 				: unit.Rotation.y
 				;
-		camera.GetLockedCamera(myPlayer->unit_Data.Position, vec3(0, Rotation, 0));
+		camera.GetLockedCamera(myPlayer->unit_Data.Position, vec3(0, Rotation, 0));*/
 	}
 	
 }

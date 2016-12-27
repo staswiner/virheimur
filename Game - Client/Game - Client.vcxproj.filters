@@ -695,6 +695,7 @@
     <None Include="cursor1.cur">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Shaders\Ground Geometry Shader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc">

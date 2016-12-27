@@ -53,24 +53,27 @@ void Scene::Initialize()
 
 
 	loaded_Models.initialize_Models();
+	minimap.UpdateMap();
+//	Data.Map = &minimap;
+	Data.Map.Map = minimap.GetMinimapData(Data.Map.Width, Data.Map.Height);
 	grass.Initialize();
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
 	//seaAnim.Initialize();
-	for (int i = 0; i < 8000; i++)
-	{
-		vec3 ObstaclePos = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(
-			vec3(float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f, 0,
-			float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f));
-		vec3 ObstacleRotation(float(rand() % 200 - 100) / 100.0f,float(rand()%200 - 100)/100.0f, float(rand() % 200 - 100) / 100.0f);
-		//Obstacles.push_back(ObstaclePos);
-		//rotate
-		//translate
-		mat4 ModelMat = glm::translate(mat4(), ObstaclePos);
-		ModelMat = glm::rotate(ModelMat, glm::radians(60.0f) ,ObstacleRotation);
-		grass.ObstaclesMat.push_back(ModelMat);
+	//for (int i = 0; i < 8000; i++)
+	//{
+	//	vec3 ObstaclePos = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(
+	//		vec3(float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f, 0,
+	//		float(float(Stas::Maths::llrand() % 200000) - 100000) / 1000.0f));
+	//	vec3 ObstacleRotation(float(rand() % 200 - 100) / 100.0f,float(rand()%200 - 100)/100.0f, float(rand() % 200 - 100) / 100.0f);
+	//	//Obstacles.push_back(ObstaclePos);
+	//	//rotate
+	//	//translate
+	//	mat4 ModelMat = glm::translate(mat4(), ObstaclePos);
+	//	ModelMat = glm::rotate(ModelMat, glm::radians(60.0f) ,ObstacleRotation);
+	//	grass.ObstaclesMat.push_back(ModelMat);
 
-	}
+	//}
 	//for (int i = -100; i < 100; i++)
 	//{
 	//	for (int j = -100; j < 100; j++)
@@ -179,12 +182,11 @@ void Scene::DrawScene_Reflection()
 		SetCameraView();
 	}
 }
-void Scene::DrawScene_PostProcessing()
+void Scene::DrawScene_NoEffect()
 {
 	mAntiAliasing.BindFrameBuffer();
-
+#pragma region 3D Elements
 	SetCameraView();
-
 	DrawSky();
 	//DrawGround(Shader::At("Ground"));
 	DrawCollada();
@@ -192,14 +194,43 @@ void Scene::DrawScene_PostProcessing()
 	//DrawSea();
 	DrawSeaAnimated();
 	DrawUI();
+#pragma endregion 3D Elements
+	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
+	FBO::UnbindFrameBuffer();
+	mFBO["Post Processing"].DrawFrameBuffer();
+
+}
+void Scene::DrawScene_PostProcessing()
+{
+	mAntiAliasing.BindFrameBuffer();
+#pragma region 3D Elements
+
+	SetCameraView();
+	DrawSky();
+	//DrawGround(Shader::At("Ground"));
+	DrawCollada();
+	//DrawEntities();
+	//DrawSea();
+	DrawSeaAnimated();
+	DrawUI();
+#pragma endregion 3D Elements
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
-	//mFBO["HBlurS"].BindFrameBuffer();
-	//mFBO["Post Processing"].DrawFrameBuffer();
-	//mFBO["VBlurS"].BindFrameBuffer();
-	//mFBO["HBlurS"].DrawFrameBuffer();
-	//mFBO["Basic"].BindFrameBuffer();
-	//mFBO["VBlurS"].DrawFrameBuffer();
+	mFBO["HBlurS"].BindFrameBuffer();//1
+	mFBO["Post Processing"].DrawFrameBuffer();//0
+	mFBO["VBlurS"].BindFrameBuffer();//2 b
+	mFBO["HBlurS"].DrawFrameBuffer();//1 d 
+	mFBO["HBlur"].BindFrameBuffer();//3 b
+	mFBO["VBlurS"].DrawFrameBuffer();//2 d
+	mFBO["VBlur"].BindFrameBuffer();//4 b 
+	mFBO["HBlur"].DrawFrameBuffer();//3 d
+	mFBO["HBlurS"].BindFrameBuffer();//1 b
+	mFBO["VBlur"].DrawFrameBuffer();//4 d
+	mFBO["VBlurS"].BindFrameBuffer();//2 b
+	mFBO["HBlurS"].DrawFrameBuffer();//1 d
+	mFBO["Basic"].BindFrameBuffer();//5 b
+	mFBO["VBlurS"].DrawFrameBuffer();//2 d
+
 
 	//mBright.BindFrameBuffer();
 	//mPostProcessing.DrawFrameBuffer();
@@ -211,13 +242,13 @@ void Scene::DrawScene_PostProcessing()
 	// uniform textures
 	FBO::UnbindFrameBuffer();
 
-	//vector<GLuint> Textures = { mFBO["Basic"].texture,mFBO["Post Processing"].texture,shadow->depthMap };
-	//vector<string> ShaderNames = { "ourShine","ourTexture","DepthMap" };
-	//mFBO["Combine"].DrawDirectly(Textures,ShaderNames);
+	vector<GLuint> Textures = { mFBO["Basic"].texture,mFBO["Post Processing"].texture};
+	vector<string> ShaderNames = { "ourShine","ourTexture" };
+	mFBO["Combine"].DrawDirectly(Textures,ShaderNames);
 	////shadow->Draw();
 	////mFBO["Basic"].DrawDirectly(Textures,ShaderNames);
-	//mFBO["Combine"].DrawFrameBuffer();
-	mFBO["Post Processing"].DrawFrameBuffer();
+	mFBO["Combine"].DrawFrameBuffer();
+	//mFBO["Post Processing"].DrawFrameBuffer();
 	//IndexFBO->DrawFrameBuffer();
 	//shadow->Draw();
 }
@@ -457,9 +488,12 @@ void Scene::DrawCollada()
 	float SlowTime = time / 40.0f;
 	mat4 landmat;
 	WVM = ProjectionMatrix * ViewMatrix * landmat;
+	LightPosition = vec3(rand()%50-25, rand() % 50 - 25, rand() % 50 - 25);
+	LightPosition = -camera.GetCameraPosition();
 	ShaderBuilder::LoadShader(Shader::At("Ground"))->
 		Add_mat4("WVM", WVM).
-		Add_float("Texelation",100.0f).
+		Add_float("Texelation", 10.0f).
+		Add_vec3("lightPos",LightPosition).
 		Add_textures(loaded_Models["Land"]->Textures).
 		Add_bool("isAnimated", false);
 	loaded_Models["Land"]->Draw();

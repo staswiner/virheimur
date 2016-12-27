@@ -79,14 +79,14 @@ namespace Stas
 			return false;
 		return true;
 	}
-	vector<vec3>* Maths::Dijkstra(const map<vec3,map<vec3,int, bool(*)(const vec3&, const vec3&)>
+	vector<vec3> Maths::Dijkstra(const map<vec3,map<vec3,int, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target)
 	{
 #pragma region Initialization
 		map<vec3, int, bool(*)(const vec3&,const vec3&)> minDistance(vec3Compare);
 		map<vec3, vec3, bool(*)(const vec3&, const vec3&)> BackTracking(Stas::Maths::vec3Compare);
 
-		vector<vec3>* returnPath = new vector<vec3>();
+		vector<vec3> returnPath;
 		for (auto i : graph)
 		{
 			for each (auto j in i.second)
@@ -108,14 +108,14 @@ namespace Stas
 				vec3 backtrackingNode = target;
 				while (backtrackingNode != source)
 				{
-					returnPath->push_back(backtrackingNode);
+					returnPath.push_back(backtrackingNode);
 					backtrackingNode = BackTracking[backtrackingNode];
 				}
-				if (returnPath->size() > 1)
+				if (returnPath.size() > 1)
 				{
-					int i = 0;;
+					int i = 0;
 				}
-				returnPath->push_back(backtrackingNode);
+				returnPath.push_back(backtrackingNode);
 				return returnPath;
 				//return minDistance[where];
 			}
@@ -131,7 +131,7 @@ namespace Stas
 				}
 			}
 		}
-		return nullptr;
+		return vector<vec3>();
 
 		//return INT_MAX;
 	}

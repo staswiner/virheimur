@@ -43,6 +43,7 @@ private:
 	void DrawScene_Depth();
 	void DrawScene_Refraction();
 	void DrawScene_Reflection();
+	void DrawScene_NoEffect();
 	void DrawScene_PostProcessing();
 
 	/*small functions*/

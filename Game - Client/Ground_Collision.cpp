@@ -14,11 +14,10 @@ Ground_Collision::Ground_Collision()
 
 }
 
-Ground_Collision::Ground_Collision(vector<vec3> Vertices,vector<vec3> Normals)
+Ground_Collision::Ground_Collision(vector<Stas::Vertex> Vertices)
 {
 	AlteredVertices = new map<vec2, float, bool(*)(const vec2&, const vec2&)>(vec2compare);
 	this->Vertices = Vertices;
-	this->Normals = Normals;
 	/*	[](const vec2& lhs, const vec2& rhs)->bool {
 	if (lhs.x == rhs.x)
 	{
@@ -29,9 +28,9 @@ Ground_Collision::Ground_Collision(vector<vec3> Vertices,vector<vec3> Normals)
 	// ran, 0508250510
 	for (auto v : Vertices)
 	{
-		vec2 NewEntry = vec2(int(v.x / 2) * 2, int(v.z / 2) * 2);
+		vec2 NewEntry = vec2(int(v.Position.x / 2) * 2, int(v.Position.z / 2) * 2);
 	//		NewEntry.x = int(NewEntry.x)/1;
-		(*AlteredVertices)[NewEntry] = v.y;
+		(*AlteredVertices)[NewEntry] = v.Position.y;
 		// Test if value has unnecesary offset
 	}
 }
@@ -102,11 +101,12 @@ vector<vec3> Ground_Collision::GetPlaneCoords(vec3 Index)
 	// point on the plane
 	//if (Vertices.size() > Index.x && Index.x > 0)
 	{
-		ReturnPlane.push_back(Vertices[Index.x]- Vertices[Index.y]);
-		ReturnPlane.push_back(Vertices[Index.z]- Vertices[Index.y]);
-		ReturnPlane.push_back(Vertices[Index.x]);
+		ReturnPlane.push_back(Vertices[Index.x].Position- Vertices[Index.y].Position);
+		ReturnPlane.push_back(Vertices[Index.z].Position- Vertices[Index.y].Position);
+		ReturnPlane.push_back(Vertices[Index.x].Position);
 	
 	}
+
 	/*else
 	{
 		ReturnPlane.push_back(vec3(1, 0, 0));

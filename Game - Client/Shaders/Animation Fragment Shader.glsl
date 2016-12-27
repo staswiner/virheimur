@@ -1,8 +1,10 @@
 #version 400 core
 
-in vec2 UVs;
-in vec3 Normals;
-in vec3 FragPos;
+in VS_OUT{
+vec2 UVs;
+vec3 Normals;
+vec3 FragPos;
+}fs_in;
 //flat in int InstanceID;
 uniform sampler2D Texture0;
 uniform sampler2D Texture1;
@@ -15,8 +17,8 @@ out vec4 color;
 void main()
 {   
 	vec3 lightPos = vec3(30,30,0);
-	vec3 norm = normalize(Normals);
-	vec3 lightDir = normalize(lightPos - FragPos);
+	vec3 norm = normalize(fs_in.Normals);
+	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * vec3(1);
 

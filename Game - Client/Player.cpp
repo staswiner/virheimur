@@ -34,7 +34,7 @@ void Player::Draw(mat4& ProjectionMatrix, mat4& ViewMatrix)
 {
 	Mouse mouse;
 	// Model
-	Unit_Data ud = this->unit_Data;
+	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.GetPosition();
 	Loaded_Models loaded_Models;
 #pragma region Mathematics
@@ -57,7 +57,7 @@ void Player::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 #pragma region Declarations
 	Mouse mouse;
 	mat4 ModelMatrix;
-	Unit_Data ud = this->unit_Data;
+	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.GetPosition();
 #pragma endregion Declarations
 	ModelMatrix = glm::translate(ModelMatrix, position);
@@ -116,6 +116,13 @@ json Player::GetJson()
 	JPlayer["Destx"] = this->unit_Data.Destination.x;
 	JPlayer["Desty"] = this->unit_Data.Destination.y;
 	JPlayer["Destz"] = this->unit_Data.Destination.z;
+	for (int i = 0; i < this->unit_Data.Path.size(); i++)
+	{
+		JPlayer["Path"][i]["x"] = this->unit_Data.Path[i].x;
+		JPlayer["Path"][i]["y"] = this->unit_Data.Path[i].y;
+		JPlayer["Path"][i]["z"] = this->unit_Data.Path[i].z;
+	}
+	//JPlayer["Path"] = this->unit_Data.Path;
 	//JPlayer["Hp"] = this->stats.Hp;
 	//JPlayer["MaxHp"] = this->stats.MaxHp;
 	JPlayer["StartTime"] = this->unit_Data.StartPointTime.count();

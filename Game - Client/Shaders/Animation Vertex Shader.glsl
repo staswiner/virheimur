@@ -9,9 +9,11 @@ layout(location = 4) in vec4 Weights;
 //layout(location = 0) in vec3 uvs;
 //layout(location = 0) in vec3 position;
 
-out vec2 UVs;
-out vec3 Normals;
-out vec3 FragPos;
+out VS_OUT{
+vec2 UVs;
+vec3 Normals;
+vec3 FragPos;
+}vs_out;
 //varying vec3 varColor;
 //flat out int InstanceID;
 
@@ -38,9 +40,9 @@ void main()
 	}
 
 	gl_Position = WVM * objectpos;
-	UVs = uvs;
-	Normals = normals;
-	FragPos = position;
+	vs_out.UVs = uvs;
+	vs_out.Normals = normals;
+	vs_out.FragPos = position;
 
 	//vec3 lightDirection = vec3(30, 30, 0);
 	//vec4 modelViewPos = vec4(position, 1.0);

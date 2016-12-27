@@ -4,6 +4,7 @@
 GlobalDataObject::GlobalDataObject(const GlobalDataObject & newData)
 	:Players(newData.Players)
 {
+	this->MyUsername = newData.MyUsername;
 }
 
 GlobalDataObject::GlobalDataObject(PlayerRepository & Players)
@@ -66,7 +67,13 @@ void GlobalDataObject::ReceiveDataString(string Message)
 			{//exception
 				int i = 0;
 			}
-			
+			Players[PlayerParsed["Username"]]->unit_Data.Path.clear();
+			for (int i = 0; i < PlayerParsed["Path"].size(); i++)
+			{
+				Players[PlayerParsed["Username"]]->unit_Data.Path.push_back(
+					vec3(PlayerParsed["Path"][i]["x"], PlayerParsed["Path"][i]["y"], PlayerParsed["Path"][i]["z"]));
+			}
+			//vector<vec3> Path = PlayerParsed["Path"];
 			string s = PlayerParsed["IpAddress"];
 			string Jusername = PlayerParsed["Username"];
 			Players[PlayerParsed["Username"]]->unit_Data.StartPoint = StartPoint;

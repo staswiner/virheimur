@@ -7,10 +7,10 @@ Collision::Collision()
 }
 
 
-Collision::Collision(vector<vec3> Vertices)
-{
-	this->Vertices = Vertices;
-}
+//Collision::Collision(vector<Stas::Vertex> Vertices)
+//{
+//	this->Vertices = Vertices;
+//}
 
 Collision::~Collision()
 {
@@ -29,4 +29,9 @@ vec3 Collision::OnCollision(vec3 Position)
 vector<vec3> Collision::GetPlaneCoords(vec3)
 {
 	return vector<vec3>();
+}
+
+vector<Stas::Vertex>& Collision::GetVertices()
+{
+	return this->Vertices;
 }

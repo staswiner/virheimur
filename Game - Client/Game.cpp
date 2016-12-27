@@ -22,20 +22,19 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 
 Game::~Game()
 {
-	Receiver.detach();
+	//Receiver.detach();
 	//network.Send("FIN","127.0.0.1","27045");
 }
 
 void Game::Initialize()
 {
 #pragma region Network
-	network.InitializeConnection();
+	//network.InitializeConnection();
 	// Authentication
-	//network.Send("Authentication Came2fame Ilovemyreann<3");
-	ReadAuthentication();
+	//ReadAuthentication();
 	Data.MyUsername = Username;
-	Receiver = std::thread(&Network::BeginReceive, &network);
-	network.Send("Authentication " + Username + " " + Password);
+	//Receiver = std::thread(&Network::BeginReceive, &network);
+	//network.Send("Authentication " + Username + " " + Password);
 #pragma endregion Network
 	// Initialize 3D Graphics
 	scene.Initialize();
@@ -54,20 +53,68 @@ void Game::Loop()
 	else
 	{
 		// Accepts input
-		UserInput();
+		try {
+
+			UserInput();
+		}
+		catch (exception ex)
+		{
+			int i = 0;
+		}
 		// Sets last frame updates to transfer
-		AddToNewData();
+		/*try {
+
+			AddToNewData();
+		}
+		catch (exception ex)
+		{
+			int i = 0;
+		}*/
 		// Sends 'NewData' object to the server
-		UpdateNetwork();
+		try {
+
+			UpdateNetwork();
+		}
+		catch (exception ex)
+		{
+			int i = 0;
+		}
 		// Updates Variables
-		UpdateVariables(ProjectionMatrix, ViewMatrix);
+		try {
+
+			UpdateVariables(ProjectionMatrix, ViewMatrix);
+		}
+		catch (exception ex)
+		{
+			int i = 0;
+		}
 		// Creates 'Data' object as a combination of NewData and ReceivedData
-		CombineData();
+		try {
+
+			CombineData();
+		}
+		catch (exception ex)
+		{
+			int i = 0;
+		}
 		// proceeds logic of the final 'Data' object
-		ApplyGameLogic();
-		GetGameOnlineGameState();
+		try {
+
+			ApplyGameLogic();
+		}
+		catch (exception ex)
+		{
+			int i = 0;
+		}
+
 		// Draws 'Data' object
-		DrawScene();
+		try {
+			DrawScene();
+		}
+		catch (exception ex)
+		{
+			int i = 0;
+		}
 	}
 }
 

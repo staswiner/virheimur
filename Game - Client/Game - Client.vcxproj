@@ -276,6 +276,7 @@
     <None Include="Shaders\Grass Vertex Shader.glsl" />
     <None Include="Shaders\Ground Fragment Shader.glsl" />
     <None Include="Shaders\Ground FragmentShader.glsl" />
+    <None Include="Shaders\Ground Geometry Shader.glsl" />
     <None Include="Shaders\Ground VertexShader.glsl" />
     <None Include="Shaders\HBlur Fragment Shader.glsl" />
     <None Include="Shaders\HBlur Vertex Shader.glsl" />

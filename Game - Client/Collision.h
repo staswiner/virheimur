@@ -9,15 +9,17 @@ class Collision
 {
 public:
 	Collision();
-	explicit Collision(vector<vec3> Vertices);
+	explicit Collision(vector<Stas::Vertex> Vertices) = delete;
 	~Collision();
 
 	virtual bool InCollision(vec3 Position);
 	virtual vec3 OnCollision(vec3 Position);
 	virtual vector<vec3> GetPlaneCoords(vec3);
 
+	vector<Stas::Vertex>& GetVertices();
+
 protected:
-	vector<vec3> Vertices;
+	vector<Stas::Vertex> Vertices;
 
 };
 

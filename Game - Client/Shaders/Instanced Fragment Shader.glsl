@@ -16,6 +16,7 @@ in GS_OUT{
 //uniform sampler2D myTexture0;
 uniform sampler2D Fractal;
 uniform sampler2D CoverPicture;
+uniform sampler2D MapPath;
 uniform vec2 mousePos;
 out vec4 color;
 
@@ -41,11 +42,16 @@ void main()
 	vec4 Image = texture(CoverPicture, (gs_out.UV.xz+vec2(100.0,100.0))/200.0f);
 
 	color = vec4(vec3(0.25, 0.25 + (mod(gs_out.instanceID, 8)) / 255, 0) * diffuse, 1.0)*vec4(0.5+(gs_out.index/3.0));
+//	vec4 mapPath = texture2D(MapPath, gs_out.UV.xz + vec2(100.0, 100.0)) / 200.0f);
 	//color = texture(Fractal, gs_out.UV.xz/200.0f) * vec4(diffuse,1);
 	float alpha = 1.0;
 	if (distance(gl_FragCoord.xy, mousePos+vec2(8,8)) < 80)
 		alpha = 1.0;
 	color = Image * vec4(diffuse, alpha);
+	//if (mapPath.r < 0.5)
+	//{
+	//	discard;
+	//}
 //	color = vec4(1);
 }
 

@@ -23,7 +23,7 @@ public:
 	vec3 StartPoint;
 	vec3 Position;
 	vec3 Rotation;
-	list<vec3> Path;
+	vector<vec3> Path;
 	vec3 Destination;
 	bool PathChanged = false;
 	milliseconds StartPointTime;
