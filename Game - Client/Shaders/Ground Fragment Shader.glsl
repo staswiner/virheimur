@@ -30,15 +30,32 @@ vec3 CalcBumpedNormal()
 	Tangent = normalize(Tangent - dot(Tangent, Normal) * Normal);
 	vec3 Bitangent = cross(Tangent, Normal);
 
+	vec4 TexturedNormal = texture2D(Texture4, fs_in.UVs * Texelation);
+	TexturedNormal = (TexturedNormal*2.0 - vec4(1.0));
+	vec3 BumpMapNormal = vec3(TexturedNormal.xzy);// vec3(TexturedNormal.x, TexturedNormal.z, TexturedNormal.y);
+
+	vec3 NewNormal;
+	mat3 TBN = mat3(Tangent, Bitangent, Normal);
+	TBN = transpose(TBN);
+	NewNormal = TBN * BumpMapNormal;
+	NewNormal = normalize(NewNormal);
+	return BumpMapNormal;
+}
+mat3 CalculateTBN()
+{
+	vec3 Normal = normalize(fs_in.Normals);
+	vec3 Tangent = normalize(fs_in.tangent);
+	Tangent = normalize(Tangent - dot(Tangent, Normal) * Normal);
+	vec3 Bitangent = cross(Tangent, Normal);
+
 	vec4 TexturedNormal = texture2D(Texture4, fs_in.UVs);
 	TexturedNormal = (TexturedNormal*2.0 - vec4(1.0));
 	vec3 BumpMapNormal = vec3(TexturedNormal.xyz);// vec3(TexturedNormal.x, TexturedNormal.z, TexturedNormal.y);
 
 	vec3 NewNormal;
 	mat3 TBN = mat3(Tangent, Bitangent, Normal);
-	NewNormal = TBN * BumpMapNormal;
-	NewNormal = normalize(NewNormal);
-	return NewNormal;
+	TBN = transpose(TBN);
+	return TBN;
 }
 vec3 CalcNormal()
 {
@@ -47,9 +64,9 @@ vec3 CalcNormal()
 }
 void main()
 {
-	
-
-	vec3 norm = CalcBumpedNormal();
+	vec3 LightColor = vec3(1,1,0.9);
+	//mat3 TBN = CalculateTBN();
+	vec3 norm = CalcNormal();//CalcBumpedNormal();
 	vec3 textnorm = normalize(norm);
 	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
 	float diff = max(dot(textnorm, lightDir), 0.0);
@@ -61,30 +78,36 @@ void main()
 	vec3 textnormBumped = normalize(normBumped);
 	vec3 lightDirBumped = normalize(lightPos - fs_in.FragPos);
 	float diffBumped = max(dot(textnormBumped, lightDirBumped), 0.0);
-	vec3 diffuseBumped = diffBumped * diffBumped * diffBumped * vec3(0.8) + vec3(0.2);
+	vec3 diffuseBumped = diffBumped * diffBumped * diffBumped * LightColor * 0.8 + LightColor * 0.2;
 
 	vec4 color0 = texture2D(Texture0, fs_in.UVs * Texelation);
 	vec4 color1 = texture2D(Texture1, fs_in.UVs * Texelation);
 	vec4 color2 = texture2D(Texture2, fs_in.UVs);
 	vec4 color3 = texture2D(Texture3, fs_in.UVs * Texelation);
 	vec4 color5 = texture2D(Texture5, fs_in.UVs * Texelation);
+	color5 = (vec4(LightColor,1.0) * (1.0 - color5)) * diffBumped * 0.0;
+	if (color5.b < 0.8)
+	{
+		color5 = vec4(1);
+	}
+	float DistanceLightFade = min(1.0,10.0f/sqrt(distance(fs_in.FragPos, lightPos)));
 	//color5 = color5 * 2 - vec4(1);
 	//color5 = vec4(1);
 	//if (color2.r < 0.5)
 	//// normal version
-	//if (abs(dot(norm, vec3(0, 1, 0))) > 0.8)
-	//{
-	//	color = color3 * vec4(diffuse, 1) * color5 * 2;// *vec4(TexturedNormal.z, TexturedNormal.z, TexturedNormal.z, 1);
-	//}
-	//else
-	//{
-	//	color = (color0 * dot(norm, vec3(0, 1, 0))) + (color1 * (1 - dot(norm, vec3(0, 1, 0)))) * vec4(diffuse, 1.0f);
-	//}
-	float DistanceLightFade = min(1.0,10.0f/sqrt(distance(fs_in.FragPos, lightPos)));
-	// Tiled version
-	color = (color3 * vec4(diffuseBumped, 1.0) * color5 * 2.0) * color2.r * DistanceLightFade +
-		((color0 * dot(norm, vec3(0.0, 1.0, 0.0)) * vec4(diffuse, 1.0f)) + 
-		(color1 * (1.0 - dot(norm, vec3(0.0, 1.0, 0.0)))) * vec4(diffuse, 1.0f)) * (1.0-color2.r) * DistanceLightFade;
+	if (abs(dot(norm, vec3(0, 1, 0))) > 0.8)
+	{
+		color = (color3 * vec4(diffuseBumped, 1.0) * color5) * DistanceLightFade;// *vec4(TexturedNormal.z, TexturedNormal.z, TexturedNormal.z, 1);
+	}
+	else
+	{
+		color = ((color0 * dot(norm, vec3(0.0, 1.0, 0.0)) * vec4(diffuse, 1.0f)) +
+				(color1 * (1.0 - dot(norm, vec3(0.0, 1.0, 0.0)))) * vec4(diffuse, 1.0f)) * DistanceLightFade;
+	}
+	//// Tiled version
+	//color = (color3 * vec4(diffuseBumped, 1.0) * color5 * 2.0) * color2.r * DistanceLightFade +
+	//	((color0 * dot(norm, vec3(0.0, 1.0, 0.0)) * vec4(diffuse, 1.0f)) + 
+	//	(color1 * (1.0 - dot(norm, vec3(0.0, 1.0, 0.0)))) * vec4(diffuse, 1.0f)) * (1.0-color2.r) * DistanceLightFade;
 
 }
 

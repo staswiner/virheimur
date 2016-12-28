@@ -54,6 +54,35 @@ void Mesh::ProcessMesh()
 	//	vertex.TexCoords = UVs;
 	//	vertices.push_back(vertex);
 	//}
+	
+	// Bitangent tangent normal 
+	//for (GLuint i = 0; i < mesh->mNumVertices; i++)
+	//{
+	//	// positions
+	//	glm::vec3 pos1(-1.0, 1.0, 0.0);
+	//	glm::vec3 pos2(-1.0, -1.0, 0.0);
+	//	glm::vec3 pos3(1.0, -1.0, 0.0);
+	//	// texture coordinates
+	//	glm::vec2 uv1(0.0, 1.0);
+	//	glm::vec2 uv2(0.0, 0.0);
+	//	glm::vec2 uv3(1.0, 0.0);
+	//	glm::vec2 uv4(1.0, 1.0);
+	//	// normal vector
+	//	glm::vec3 nm(0.0, 0.0, 1.0);
+
+	//	glm::vec3 edge1 = pos2 - pos1;
+	//	glm::vec3 edge2 = pos3 - pos1;
+	//	glm::vec2 deltaUV1 = uv2 - uv1;
+	//	glm::vec2 deltaUV2 = uv3 - uv1;
+
+
+	//	GLfloat f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+	//	vec3 tangent1;
+	//	tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	//	tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	//	tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+	//	tangent1 = glm::normalize(tangent1);
+	//}
 	if (this->CollisionType == "Ground")
 	{
 		vector<Stas::Vertex> Vertices;

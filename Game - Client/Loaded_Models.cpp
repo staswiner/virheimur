@@ -27,7 +27,7 @@ void staticLoaded_Models::initialize_Models()
 	Models["Land"]->AddTexture("Texture3", "Map/brickwork-texture_converted.jpg");
 	//Models["Land"]->AddTexture("Texture3", "Map/TestTile.jpg");
 	Models["Land"]->AddTexture("Texture4", "Map/brickwork_normal-map_converted.jpg");
-	Models["Land"]->AddTexture("Texture5", "Map/brickwork-bump-map_converted.jpg");
+	Models["Land"]->AddTexture("Texture5", "Map/brickwork-bump-map_converted1.jpg");
 
 	Models["Collada"] = new Model("Collada/Robot.dae", "");
 	Models["Collada"]->AddTexture("Texture0","Katarina/Katarina Glowing.bmp");
