@@ -20,6 +20,6 @@ void main()
 	vec4 Color = texture(ourTexture, TexCoords);
 	vec4 BrightColor = texture(ourShine, TexCoords);
 //	color = BrightColor *(Distance) + Color * (1.0 - Distance);
-	color = Color * 0.5 + BrightColor * BrightColor * BrightColor * 5.0;
+	color = Color * 0.5 + BrightColor * BrightColor * BrightColor * 2.0;
 //	color = Color;
 }

@@ -490,6 +490,9 @@ void Scene::DrawCollada()
 	WVM = ProjectionMatrix * ViewMatrix * landmat;
 	LightPosition = vec3(rand()%50-25, rand() % 50 - 25, rand() % 50 - 25);
 	LightPosition = -camera.GetCameraPosition();
+	LightPosition = vec3(30, 50, 30);
+	//LightPosition.y *= -1;
+	//LightPosition.y *= -1;
 	ShaderBuilder::LoadShader(Shader::At("Ground"))->
 		Add_mat4("WVM", WVM).
 		Add_float("Texelation", 10.0f).
@@ -534,7 +537,7 @@ void Scene::DrawCollada()
 		}
 
 		mat4 WVM = ProjectionMatrix * ViewMatrix;
-
+		vec3 cameraPos = camera.GetCameraPosition();
 		ShaderBuilder::LoadShader(Shader::At("Instanced"))->
 			Add_mat4("WVM", WVM).
 			Add_float("time", 0).

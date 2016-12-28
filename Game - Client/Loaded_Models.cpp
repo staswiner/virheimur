@@ -25,6 +25,7 @@ void staticLoaded_Models::initialize_Models()
 	Models["Land"]->AddTexture("Texture1", "Map/Mountain Tile.jpg");
 	Models["Land"]->AddTexture("Texture2", "Map/MapPath.jpg");
 	Models["Land"]->AddTexture("Texture3", "Map/brickwork-texture_converted.jpg");
+	//Models["Land"]->AddTexture("Texture3", "Map/TestTile.jpg");
 	Models["Land"]->AddTexture("Texture4", "Map/brickwork_normal-map_converted.jpg");
 	Models["Land"]->AddTexture("Texture5", "Map/brickwork-bump-map_converted.jpg");
 

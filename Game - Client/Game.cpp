@@ -30,7 +30,7 @@ void Game::Initialize()
 {
 #pragma region Network
 	//network.InitializeConnection();
-	// Authentication
+	//// Authentication
 	//ReadAuthentication();
 	Data.MyUsername = Username;
 	//Receiver = std::thread(&Network::BeginReceive, &network);

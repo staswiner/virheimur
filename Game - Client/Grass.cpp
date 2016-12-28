@@ -22,7 +22,7 @@ void Grass::Initialize()
 	mesh.LoadCustom(Vertices);
 	this->model = Model(mesh);
 	model.AddTexture("Fractal", "Map/CircleArea.jpg");
-	model.AddTexture("CoverPicture", "Map/Grass2.jpg");
+	model.AddTexture("CoverPicture", "Map/Grass3.png");
 	//model.AddTexture("CoverPicture","Map/RussiaFlag.jpg");
 	//MapData = Model::LoadBufferFromImage("Map/Fractal.jpg");
 }

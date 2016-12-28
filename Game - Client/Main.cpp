@@ -212,7 +212,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					/*      Deselect rendering context and delete it*/
 		wglMakeCurrent(hDC, NULL);
-		wglDeleteContext(hRC);
+//		wglDeleteContext(hRC);
 
 		/*      Send quit message to queue*/
 		//Loop.client._CloseConnection(MainLoop::ClientID);
