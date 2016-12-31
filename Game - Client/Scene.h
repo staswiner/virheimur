@@ -76,7 +76,7 @@ private:
 	Model Soldier;
 	Sea mSea;
 	Shadow_Mapping *shadow;
-	vec3 LightPosition;
+	vec3 LightPosition = vec3(30,50,0);
 
 	Loaded_Models loaded_Models;
 	//SkyBox* skyBox;
@@ -91,6 +91,7 @@ private:
 	Grass grass;
 	SeaAnimated seaAnim;
 
+	int counter = 0;
 	//static GlobalDataObject Data;
 	// develop this please
 	//vector<Objects*> ObjectsToDraw

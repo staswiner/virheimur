@@ -40,7 +40,7 @@ void main()
 	}
 
 	gl_Position = WVM * objectpos;
-	vs_out.UVs = uvs;
+	vs_out.UVs = vec2(uvs.x,1.0-uvs.y);
 	vs_out.Normals = normals;
 	vs_out.FragPos = position;
 

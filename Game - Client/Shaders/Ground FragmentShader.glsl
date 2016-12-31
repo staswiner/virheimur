@@ -76,7 +76,6 @@ void main()
 	else
 		lighting *= MountainColor;*/
 	lighting *= GrassColor * TextureComponent + MountainColor * (1.0 - TextureComponent);
-
 	float MaxVisibleDistance = 1000.0f;
 	float DistanceToPixel = (MaxVisibleDistance - distance(-cameraPos,WorldPos))/MaxVisibleDistance;
 	DistanceToPixel = clamp(DistanceToPixel,0.0,1.0);

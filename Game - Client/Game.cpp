@@ -22,19 +22,19 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 
 Game::~Game()
 {
-	//Receiver.detach();
+	Receiver.detach();
 	//network.Send("FIN","127.0.0.1","27045");
 }
 
 void Game::Initialize()
 {
 #pragma region Network
-	//network.InitializeConnection();
-	//// Authentication
-	//ReadAuthentication();
+	network.InitializeConnection();
+	// Authentication
+	ReadAuthentication();
 	Data.MyUsername = Username;
-	//Receiver = std::thread(&Network::BeginReceive, &network);
-	//network.Send("Authentication " + Username + " " + Password);
+	Receiver = std::thread(&Network::BeginReceive, &network);
+	network.Send("Authentication " + Username + " " + Password);
 #pragma endregion Network
 	// Initialize 3D Graphics
 	scene.Initialize();

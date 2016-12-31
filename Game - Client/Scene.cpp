@@ -212,7 +212,7 @@ void Scene::DrawScene_PostProcessing()
 	//DrawEntities();
 	//DrawSea();
 	DrawSeaAnimated();
-	DrawUI();
+	//DrawUI();
 #pragma endregion 3D Elements
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
@@ -488,19 +488,69 @@ void Scene::DrawCollada()
 	float SlowTime = time / 40.0f;
 	mat4 landmat;
 	WVM = ProjectionMatrix * ViewMatrix * landmat;
-	LightPosition = vec3(rand()%50-25, rand() % 50 - 25, rand() % 50 - 25);
+	/*LightPosition = vec3(rand()%50-25, rand() % 50 - 25, rand() % 50 - 25);
 	LightPosition = -camera.GetCameraPosition();
-	LightPosition = vec3(30, 50, 30);
+	LightPosition = vec3(30, 50, 30);*/
+	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f),0,0);
 	//LightPosition.y *= -1;
 	//LightPosition.y *= -1;
 	ShaderBuilder::LoadShader(Shader::At("Ground"))->
 		Add_mat4("WVM", WVM).
-		Add_float("Texelation", 10.0f).
-		Add_vec3("lightPos",LightPosition).
+		Add_float("Texelation", 25.0f).
+		Add_vec3("lightPos", NewLightPos).
+		Add_vec3("cameraPos", -camera.GetCameraPosition()).
 		Add_textures(loaded_Models["Land"]->Textures).
+		Add_Material("Brick", Materials::GetInstance()["chrome"]).
+		Add_Material("Grass",Materials::GetInstance()["emerald"]).
 		Add_bool("isAnimated", false);
 	loaded_Models["Land"]->Draw();
 
+	// light source
+	mat4 LightModel = translate(mat4(), NewLightPos+vec3(0,-10,0));
+	WVM = ProjectionMatrix * ViewMatrix * LightModel;
+	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		Add_mat4("WVM", WVM).
+		Add_bool("isAnimated", true).
+		Add_float("Texelation", 1.0f).
+		Add_textures(loaded_Models["Collada"]->Textures);
+	loaded_Models["Collada"]->Draw();
+	WVM = ProjectionMatrix * ViewMatrix;
+	//
+	/*uniform vec3 lightPos;
+	uniform vec3 cameraPos;
+	uniform Material Wood;*/
+	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		Add_mat4("WVM", WVM).
+		Add_bool("isAnimated", false).
+		Add_float("Texelation", 1.0f).
+		Add_vec3("lightPos", NewLightPos).
+		Add_vec3("cameraPos", -camera.GetCameraPosition()).
+		Add_Material("Wood", Materials::GetInstance()["chrome"]).
+		Add_textures(loaded_Models["House"]->Textures);
+	for (int i = -8; i < 8; i++)
+	{
+		mat4 ModelMat = translate(mat4(), vec3(i * 12, 0, 20));
+		ModelMat = rotate(ModelMat, radians(180.0f), vec3(0, 1, 0));
+
+		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
+		ShaderBuilder::LoadShader(Shader::At("Animation"))->
+			Add_mat4("WVM", WVM);
+		loaded_Models["House"]->Draw();
+	}
+	for (int i = -8; i < 8; i++)
+	{
+		mat4 ModelMat = translate(mat4(), vec3(i * 12, 0, -20));
+		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
+		ShaderBuilder::LoadShader(Shader::At("Animation"))->
+			Add_mat4("WVM", WVM);
+		loaded_Models["House"]->Draw();
+	}
+	WVM = ProjectionMatrix * ViewMatrix;
+	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		Add_textures(loaded_Models["Grass"]->Textures).
+		Add_mat4("WVM", WVM);
+	loaded_Models["Grass"]->Draw();
+	
 	for (auto e : Data.Effects)
 	{
 		WVM = ProjectionMatrix * ViewMatrix * e.ModelMatrix;

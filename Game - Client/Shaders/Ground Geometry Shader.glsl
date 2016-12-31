@@ -13,7 +13,8 @@ out GS_OUT{
 vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
-vec3 tangent;
+vec3 T;
+vec3 B;
 }gs_out;
 
 uniform mat4 WVM;
@@ -32,31 +33,34 @@ void CalculateTangent()
 	vec3 Edge1 = vs_in[1].FragPos - vs_in[0].FragPos;
 	vec3 Edge2 = vs_in[2].FragPos - vs_in[0].FragPos;
 
-	float DeltaU1 = vs_in[1].UVs.x - vs_in[0].UVs.x;
-	float DeltaV1 = vs_in[1].UVs.y - vs_in[0].UVs.y;
-	float DeltaU2 = vs_in[2].UVs.x - vs_in[0].UVs.x;
-	float DeltaV2 = vs_in[2].UVs.y - vs_in[0].UVs.y;
+	vec2 DeltaUV1 = vs_in[1].UVs - vs_in[0].UVs;
+	vec2 DeltaUV2 = vs_in[2].UVs - vs_in[0].UVs;
 
-	float f = 1.0f / (DeltaU1 * DeltaV2 - DeltaU2 * DeltaV1);
+	float f = 1.0f / (DeltaUV1.x * DeltaUV2.y - DeltaUV2.x * DeltaUV1.y);
 
 	vec3 Tangent, Bitangent;
 
-	Tangent.x = f * (DeltaV2 * Edge1.x - DeltaV1 * Edge2.x);
-	Tangent.y = f * (DeltaV2 * Edge1.y - DeltaV1 * Edge2.y);
-	Tangent.z = f * (DeltaV2 * Edge1.z - DeltaV1 * Edge2.z);
+	Tangent.x = f * (DeltaUV2.y * Edge1.x - DeltaUV1.y * Edge2.x);
+	Tangent.y = f * (DeltaUV2.y * Edge1.y - DeltaUV1.y * Edge2.y);
+	Tangent.z = f * (DeltaUV2.y * Edge1.z - DeltaUV1.y * Edge2.z);
 
-	Bitangent.x = f * (-DeltaU2 * Edge1.x - DeltaU1 * Edge2.x);
-	Bitangent.y = f * (-DeltaU2 * Edge1.y - DeltaU1 * Edge2.y);
-	Bitangent.z = f * (-DeltaU2 * Edge1.z - DeltaU1 * Edge2.z);
+	Bitangent.x = f * (-DeltaUV2.x * Edge1.x - DeltaUV1.x * Edge2.x);
+	Bitangent.y = f * (-DeltaUV2.x * Edge1.y - DeltaUV1.x * Edge2.y);
+	Bitangent.z = f * (-DeltaUV2.x * Edge1.z - DeltaUV1.x * Edge2.z);
 
-	gs_out.tangent = vec3(WVM*vec4(Tangent,0.0));
+	Tangent = normalize(Tangent);
+	Bitangent = normalize(Bitangent);
+	gs_out.T = Tangent; // WVM * vector
+	gs_out.B = Bitangent;
 
 }
 void main()
 {
 	for (int i = 0; i < 3; i++)
 	{
+
 		TransferData(i);
+		CalculateTangent();
 		//// MBT::
 		//	vec3 Edge1 = v1.m_pos - v0.m_pos;
 		//	vec3 Edge2 = v2.m_pos - v0.m_pos;

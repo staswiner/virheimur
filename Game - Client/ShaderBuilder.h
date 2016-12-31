@@ -6,6 +6,21 @@
 #include "assimp\scene.h"
 #include "assimp\postprocess.h"  
 using namespace glm;
+struct Material {
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
+class Materials {
+public:
+	static Materials& GetInstance();
+	Material& operator[](string s);
+private:
+	Materials();
+	static Materials& Instance;
+	map<string, Material> MaterialMap;
+};
 class ShaderBuilder
 {
 public:
@@ -21,6 +36,7 @@ public:
 	ShaderBuilder& Add_mat3(string, const mat3&);
 	ShaderBuilder& Add_mat4(string, const mat4&);
 	ShaderBuilder& Add_aimat4(string name, const aiMatrix4x4 & rhs);
+	ShaderBuilder& Add_Material(string, const Material & rhs);
 	static std::unique_ptr<ShaderBuilder> GetCurrentProgram();
 	static std::unique_ptr<ShaderBuilder> LoadShader(Shader&);
 private:
