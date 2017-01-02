@@ -19,10 +19,13 @@ public:
 	UserInterface();
 	~UserInterface();
 	void GenerateForm(); 
+	void GenerateForm(UIElement* root);
+	void GenerateLoginForm();
 	void AcceptInput();
 	void CleanWindows();
 	void FocusControl();
 	void LeftClick();
+	void LeftPress();
 	map<GLchar,GLuint> Inputs;
 	//vector<pair<unique_ptr<ChampionChat>, GLuint>> tempWindows;
 	vector<tempW> tempWindows;

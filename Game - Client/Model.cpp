@@ -110,7 +110,12 @@ int Model::LoadTexture(string Filename)
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);// (GL_UNPACK_ALIGNMENT, 3); ​
 	image = SOIL_load_image(Filename.c_str(), &Width, &Height, 0, SOIL_LOAD_AUTO);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	const char* error = SOIL_last_result();
+	if (Filename.find(".png") != -1)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Width, Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	else
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
 	//	SOIL_free_image_data(image);
 	//}
 

@@ -16,6 +16,7 @@
 #include "glm\glm\gtc\matrix_transform.hpp"
 using namespace glm;
 using namespace std;
+//#define (A) isInstanceOf(B) (dynamic_cast<A*>(B))
 namespace Stas
 {
 	class Maths

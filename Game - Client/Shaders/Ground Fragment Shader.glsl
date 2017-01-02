@@ -8,6 +8,7 @@ vec3 Normals;
 vec3 FragPos;
 vec3 T;
 vec3 B;
+
 }fs_in;
 struct Material {
 	vec3 ambient;
@@ -36,6 +37,10 @@ uniform Material Grass;
 //uniform sampler2D Texture1;
 //varying vec3 varColor;
 out vec4 color;
+//varying in vec3 a; 
+//varying vec3 varNormalf;
+
+
 
 vec3 CalcNormal()
 {
@@ -81,11 +86,22 @@ vec3 AddLight(Material material,vec3 LightColor, vec3 LightDir, sampler2D normal
 	////float spec = pow(max(dot(normalize(toCameraVector.xz), reflectedLight.xz), 0.0), shineDamper);//phong
 	float spec = pow(max(dot(norm, reflectedLight), 0.0), int(material.diffuse * 128.0));//blinn-phong
 	vec3 specular = material.specular * spec * LightColor;
-	vec3 Light = (diffuse + specular + ambient);
+	vec3 Light = (diffuse + 4.0 * specular + ambient);
 	return Light;
 }
+vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
+{ 
+	float height_scale = 1;
+    float height =  texture(Texture4, texCoords).r;    
+    vec2 p = viewDir.xy / viewDir.z * (height * height_scale);
+    return texCoords - p;    
+} 
 void main()
 {
+	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
+	vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
+
+	vec2 TextureCoords = ParallaxMapping(fs_in.UVs, toCameraVector) * Texelation;
 	vec4 color0 = texture2D(Texture0, fs_in.UVs * Texelation);
 	vec4 color1 = texture2D(Texture1, fs_in.UVs * Texelation);
 	vec4 color2 = texture2D(Texture2, fs_in.UVs);
@@ -105,8 +121,6 @@ void main()
 	brickMaterial.specular = vec3(0.774597);
 	brickMaterial.shininess = 0.6f;
 
-	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
-	vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
 
 	// flat Light
 	vec3 norm = CalcNormal();//CalcBumpedNormal(); (0,1,0)
@@ -137,17 +151,6 @@ void main()
 	vec3 TotalTileColor = BrickColor * (1.0 - waterDepth) + Water * (waterDepth);
 
 	// Grass Bumped
-	vec3 normGrass = CalcBumpedNormal(Texture7);
-	vec3 textnormGrass = normalize(normGrass);
-	float diffGrass = max(dot(textnormGrass, lightDir), 0.0);
-	vec3 diffuseGrass = diffGrass * diffuseStrength * LightColor;
-
-	// bumped specular
-	float shineDamperGrass = 32;
-	vec3 reflectedLightGrass = normalize(lightDir - normalize(toCameraVector));//blinn-phong
-	float specGrass = pow(max(dot(normGrass, reflectedLightGrass), 0.0), shineDamperGrass);//blinn-phong
-	vec3 specularGrass = specularStrength * specGrass * LightColor;
-	//vec3 GrassLight = (diffuseGrass + specularGrass);
 	vec3 GrassLight = AddLight(Grass, LightColor, lightDir, Texture7);
 	vec3 GrassColor = vec3(color0) * GrassLight * vec3(color8);
 

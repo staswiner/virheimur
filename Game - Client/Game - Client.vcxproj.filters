@@ -323,6 +323,9 @@
     <ClInclude Include="Effect.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="SelectionState.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -499,6 +502,7 @@
     <ClCompile Include="SeaAnimated.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="SelectionState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">

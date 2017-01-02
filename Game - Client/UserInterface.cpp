@@ -78,6 +78,62 @@ void UserInterface::GenerateForm()
 
 }
 
+void UserInterface::GenerateForm(UIElement * root)
+{
+	this->root = root;
+}
+
+void UserInterface::GenerateLoginForm()
+{
+	vec2 Position;
+	root = new UIElement("Root", "");
+
+	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
+	Position = vec2(10, 80);
+	UsernameElement->TopLeft = Position;
+	UsernameElement->SetByTrueSize(Position);
+	UsernameElement->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	UsernameElement->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	UsernameElement->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	UsernameElement->AddClickEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+	root->AppendChild(UsernameElement);
+
+	UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
+	Position = vec2(10, 180);
+	PasswordElement->TopLeft = Position;
+	PasswordElement->SetByTrueSize(Position);
+	PasswordElement->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	PasswordElement->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	PasswordElement->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	PasswordElement->AddClickEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+	root->AppendChild(PasswordElement);
+
+	UIElement* LogInElement = new UIElement("LoginButton", "Interface/Button1.png");
+	Position = vec2(230, 180);
+	LogInElement->TopLeft = Position;
+	LogInElement->SetByTrueSize(Position);
+	LogInElement->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
+	LogInElement->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+	LogInElement->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+	LogInElement->AddClickEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Selected.png"); });
+	LogInElement->AddPressEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
+	root->AppendChild(LogInElement);
+
+}
+
 void UserInterface::AcceptInput()
 {
 	CleanWindows();
@@ -152,6 +208,16 @@ void UserInterface::LeftClick()
 	Pressed = Focused;
 	if (Pressed != nullptr)
 		Pressed->OnClick();
+}
+void UserInterface::LeftPress()
+{
+	if (Pressed != nullptr)
+	{
+		Pressed->OnReturnDefault();
+	}
+	Pressed = Focused;
+	if (Pressed != nullptr)
+		Pressed->OnPress();
 }
 
 void UserInterface::OpenStatWindow()

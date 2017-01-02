@@ -25,7 +25,7 @@ void staticLoaded_Models::initialize_Models()
 	Models["Land"]->AddTexture("Texture1", "Map/Brick/Mountain Tile.jpg");
 	Models["Land"]->AddTexture("Texture2", "Map/MapPath.jpg");
 	Models["Land"]->AddTexture("Texture3", "Map/Brick/brickwork-texture_converted.jpg");
-	//Models["Land"]->AddTexture("Texture3", "Map/TestTile.jpg");
+
 	Models["Land"]->AddTexture("Texture4", "Map/Brick/brickwork_normal-map_converted.jpg");
 	Models["Land"]->AddTexture("Texture5", "Map/Brick/brickwork-bump-water.jpg");
 	Models["Land"]->AddTexture("Texture6", "Map/Brick/brickwork-bump-map_converted.jpg");
@@ -33,15 +33,19 @@ void staticLoaded_Models::initialize_Models()
 	Models["Land"]->AddTexture("Texture8", "Map/Grass/grass01_h_converted.jpg");
 
 	Models["Collada"] = new Model("Collada/Robot.dae", "");
-	Models["Collada"]->AddTexture("Texture0","Katarina/Katarina Glowing.bmp");
+	Models["Collada"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
+	Models["Collada"]->AddTexture("NormalMap[0]","Katarina/katarina_base_normal.png");
 	Models["Obstacle"] = new Model("Map/Grass.dae", "");
 	Models["House"] = new Model("Collada/House.dae", "");
-	Models["House"]->AddTexture("Texture[0]", "Textures/196.jpg");
-	Models["House"]->AddTexture("NormalMap[0]", "Textures/196_norm.jpg");
+	//Models["House"]->AddTexture("Texture[0]", "Textures/196.jpg");
+	//Models["House"]->AddTexture("NormalMap[0]", "Textures/196_norm.jpg");
+	Models["House"]->AddTexture("Texture[0]", "Map/HeightMap/bricks2.jpg");
+	Models["House"]->AddTexture("NormalMap[0]", "Map/HeightMap/bricks2_normal.jpg");
+	Models["House"]->AddTexture("Dispose", "Map/HeightMap/bricks2_disp.jpg");
 
 	Models["Grass"] = new Model("Map/3DGrass.dae", "");
-	Models["Grass"]->AddTexture("Texture[0]", "Textures/3DGrass.jpg");
-	Models["Grass"]->AddTexture("NormalMap[0]", "Textures/196_norm.jpg");
+	Models["Grass"]->AddTexture("Texture[0]", "Map/3DGrass.png");
+	Models["Grass"]->AddTexture("NormalMap[0]", "Textures/basicNormal.jpg");
 
 //	Models["cursor"] = new Model("Map/cursor.dae","");
 	//Models2["Lara"]->LoadMesh("Collada/Lara_Croft.dae");

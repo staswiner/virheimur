@@ -50,12 +50,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	windowClass.cbWndExtra = 0;
 	windowClass.hInstance = hInstance;
 	windowClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	windowClass.hCursor = LoadCursorFromFile("cursor1.cur");// (NULL, IDC_ICON);
+	windowClass.hCursor = LoadCursor(nullptr,IDC_ARROW);//(HCURSOR)LoadImage(NULL, "/cursor1.cur", IMAGE_CURSOR, 0, 0, LR_SHARED);//LoadCursorFromFile("cursor1.cur");// (NULL, IDC_ICON);
 	windowClass.hbrBackground = NULL;
 	windowClass.lpszMenuName = NULL;
 	windowClass.lpszClassName = "MyClass";
 	windowClass.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
-
+	
 	/*      Register window class*/
 	if (!RegisterClassEx(&windowClass))
 	{

@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Network.h"
 #include "LoginState.h"
+#include "SelectionState.h"
 #include "UserInterface.h"
 #include <thread>
 class Game
@@ -15,11 +16,12 @@ public:
 	void Initialize();
 	void Loop();
 	void ThreadedLoop();
-	void SetHDC(HDC& hdc) { this->scene.SetWindowHDC(hdc); }
+	void SetHDC(HDC& hdc) { this->scene.SetWindowHDC(hdc); this->m_hdc = hdc; }
 private:
 	// Major States
 	void LoginScreen();
-	void GameState();
+	void SelectionScreen();
+	void GameScreen();
 
 #pragma region LoginState
 	void LoginUserInput();
@@ -40,6 +42,7 @@ private:
 	static FBO Index;
 	GameLogic& logic;
 	LoginState loginState;
+	SelectionState selectionState;
 	static UserInterface UI;
 	static GlobalDataObject NewData;
 	static GlobalDataObject ReceivedData;
@@ -50,10 +53,10 @@ private:
 	mat4 ProjectionMatrix;
 	mat4 ViewMatrix;
 	std::thread Receiver;
-
+	HDC m_hdc;
 	void ReadAuthentication();
 	string Username;
 	string Password;
-	bool Loggedin;
+	char State; // 0 Login, 1 Selection, 2 game
 };
 

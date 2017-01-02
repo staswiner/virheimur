@@ -29,12 +29,14 @@ public:
 	void AddHoverDoneEvent(std::function<void(UIElement*)> onhoverdone);
 	void AddReturnDefaultEvent(std::function<void(UIElement*)> onreturndefault);
 	void AddClickEvent(std::function<void(UIElement*)> onclick);
+	void AddPressEvent(std::function<void(UIElement*)> onpress);
 	UIElement* GetHover(vec2 MouseCoords);
 	UIElement* GetClick(vec2 MouseCoords);
 	void OnHover();
 	void OnHoverDone();
 	void OnReturnDefault();
 	void OnClick();
+	void OnPress();
 	void Hide();
 	void Show();
 	void Destroy();
@@ -58,6 +60,7 @@ private:
 	std::function<void(UIElement*)> hoverdone;
 	std::function<void(UIElement*)> returndefault;
 	std::function<void(UIElement*)> click;
+	std::function<void(UIElement*)> press;
 	void UpdateParentSize(vec2 TopLeft, vec2 BotRight);
 	void LoadPicture(string Filename);
 	Element Name;
@@ -67,6 +70,7 @@ private:
 	UIElement* Parent;
 	bool visible = true;
 	bool IsRoot;
+	bool IsWriteableTo;
 	static map <string, ImageLoader*> Repository;
 };
 

@@ -53,6 +53,12 @@ void UIElement::AddClickEvent(std::function<void(UIElement*)> onclick)
 	this->click = onclick;
 }
 
+void UIElement::AddPressEvent(std::function<void(UIElement*)> onpress)
+{
+	this->press = onpress;
+
+}
+
 UIElement* UIElement::GetHover(vec2 MouseCoords)
 {
 	for (auto uie : Children)
@@ -119,6 +125,15 @@ void UIElement::OnClick()
 	if (click)
 	{
 		click(this);
+	}
+}
+
+void UIElement::OnPress()
+{
+	// checks if function bind to anything
+	if (press)
+	{
+		press(this);
 	}
 }
 

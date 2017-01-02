@@ -16,8 +16,11 @@ vec3 FragPos;
 vec3 T;
 vec3 B;
 }gs_out;
-
+//varying out vec3 a;
 uniform mat4 WVM;
+//varying in vec3 varNormal[];
+//varying vec3 varNormalf;
+
 
 void TransferData(int i)
 {
@@ -25,6 +28,7 @@ void TransferData(int i)
 	gs_out.UVs = vs_in[i].UVs;
 	gs_out.Normals = vs_in[i].Normals;
 	gs_out.FragPos = vs_in[i].FragPos;
+	//varNormalf = varNormal[i];
 	return;
 }
 void CalculateTangent()

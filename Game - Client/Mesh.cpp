@@ -1,6 +1,5 @@
 ﻿#include "Mesh.h"
 
-
 Mesh::Mesh()
 {
 }
@@ -266,6 +265,8 @@ void Mesh::setupMesh()
 }
 void Mesh::setupMeshCustom()	
 {
+	using namespace Stas;
+
 	Vertices_Amount = vertices.size();
 	Indices_Amount = indices.size();
 	glGenVertexArrays(1, &this->VAO);
@@ -385,8 +386,10 @@ void Mesh::DrawModel()
 	vector<aiMatrix4x4> Transforms;
 	if (scene->HasAnimations())
 	{
-		BoneTransform(float(GetTickCount()) / 1000.0f, Transforms);
+		BoneTransform(double(GetTickCount()) / 1000.0f, Transforms);
 		ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
+		int BoneNum = Transforms.size();
+		myshader.Add_int("BoneNum", BoneNum);
 		for (int i = 0; i < Transforms.size(); i++)
 		{
 			myshader.Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
@@ -417,7 +420,7 @@ void Mesh::DrawInstanced(vector<mat4>& ModelMatrix)
 	glDrawArraysInstanced(GL_POINTS , 0 , Vertices_Amount, ModelMatrix.size());
 	glBindVertexArray(0);
 }
-void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
+void Mesh::ReadNodeHeirarchy(double AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
 {
 	string NodeName(pNode->mName.data);
 
@@ -477,7 +480,7 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiM
 		ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
 	}
 }
-uint Mesh::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
+uint Mesh::FindPosition(double AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	for (uint i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
 		if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
@@ -490,7 +493,7 @@ uint Mesh::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
 	return 0;
 }
 
-uint Mesh::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
+uint Mesh::FindRotation(double AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumRotationKeys > 0);
 
@@ -506,7 +509,7 @@ uint Mesh::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
 }
 
 
-uint Mesh::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
+uint Mesh::FindScaling(double AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumScalingKeys > 0);
 
@@ -589,7 +592,7 @@ void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const a
 	aiVector3D Delta = End - Start;
 	Out = Start + Factor * Delta;
 }
-void Mesh::BoneTransform(float TimeInSeconds, vector<aiMatrix4x4>& Transforms)
+void Mesh::BoneTransform(double TimeInSeconds, vector<aiMatrix4x4>& Transforms)
 {
 	aiMatrix4x4 Identity;
 	m_NumBones = mesh->mNumBones;

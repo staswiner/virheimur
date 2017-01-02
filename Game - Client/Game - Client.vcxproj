@@ -168,6 +168,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sea.h" />
     <ClInclude Include="SeaAnimated.h" />
+    <ClInclude Include="SelectionState.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderBuilder.h" />
     <ClInclude Include="Shadow_Mapping.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sea.cpp" />
     <ClCompile Include="SeaAnimated.cpp" />
+    <ClCompile Include="SelectionState.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderBuilder.cpp" />
     <ClCompile Include="Shadow_Mapping.cpp" />

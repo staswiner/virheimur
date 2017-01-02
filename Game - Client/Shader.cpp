@@ -37,6 +37,44 @@ Shader::~Shader()
 }
 
 
+void Shader::InitializeShaderProgram(string Path, GLuint shaderID)
+{
+	string VertexShaderCode;
+	ifstream VertexShaderStream(Path, std::ios::in);
+	if (VertexShaderStream.is_open())
+	{
+		string Line = "";
+		while (getline(VertexShaderStream, Line))
+			VertexShaderCode += "\n" + Line;
+		VertexShaderStream.close();
+	}
+	else
+	{
+		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", Path);
+	}
+	GLint Result = GL_FALSE;
+	int InfoLogLength;
+	// Compile Vertex Shader
+	const GLchar* VertexSourcePointer = VertexShaderCode.c_str();
+	glShaderSource(shaderID, 1, &VertexSourcePointer, NULL);
+	glCompileShader(shaderID);
+
+	// Check Vertex Shader
+	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &Result);
+	glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	if (InfoLogLength > 0)
+	{
+		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
+		glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
+		string error;
+		for (unsigned int i = 0; i < VertexShaderErrorMessage.size(); ++i)
+		{
+			error += VertexShaderErrorMessage[i];
+		}
+		//MessageBoxA(0, error.c_str() ,"",MB_OK);
+	}
+
+}
 Shader::Shader(string vertexPath, string fragmentPath)
 {
 	string Folder = "Shaders/";

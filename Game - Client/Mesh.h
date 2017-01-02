@@ -36,7 +36,6 @@
 
 using namespace glm;
 using namespace std;
-using namespace Stas;
 class Mesh {
 public:
 	
@@ -83,7 +82,7 @@ public:
 
 public:
 	/*  Mesh Data  */
-	vector<Vertex> vertices;
+	vector<Stas::Vertex> vertices;
 	vector<GLuint> indices;
 	vector<Texture> textures;
 	vector<VertexBoneData> Bones;
@@ -97,14 +96,14 @@ public:
 	void DrawModel();
 	void DrawInstanced(vector<mat4>& ModelMatrix);
 
-	void ReadNodeHeirarchy(float AnimationTime, const aiNode * pNode, const aiMatrix4x4 & ParentTransform);
-	uint FindPosition(float AnimationTime, const aiNodeAnim * pNodeAnim);
-	uint FindRotation(float AnimationTime, const aiNodeAnim * pNodeAnim);
-	uint FindScaling(float AnimationTime, const aiNodeAnim * pNodeAnim);
+	void ReadNodeHeirarchy(double AnimationTime, const aiNode * pNode, const aiMatrix4x4 & ParentTransform);
+	uint FindPosition(double AnimationTime, const aiNodeAnim * pNodeAnim);
+	uint FindRotation(double AnimationTime, const aiNodeAnim * pNodeAnim);
+	uint FindScaling(double AnimationTime, const aiNodeAnim * pNodeAnim);
 	void CalcInterpolatedPosition(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
 	void CalcInterpolatedRotation(aiQuaternion & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
 	void CalcInterpolatedScaling(aiVector3D & Out, float AnimationTime, const aiNodeAnim * pNodeAnim);
-	void BoneTransform(float TimeInSeconds, vector<aiMatrix4x4>& Transforms);
+	void BoneTransform(double TimeInSeconds, vector<aiMatrix4x4>& Transforms);
 	const aiNodeAnim * FindNodeAnim(const aiAnimation * pAnimation, const string NodeName);
 	int LoadTexture(string Filename);
 	void Draw(Shader shader);

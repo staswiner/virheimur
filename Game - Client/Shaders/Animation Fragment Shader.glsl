@@ -7,6 +7,7 @@ vec3 FragPos;
 vec3 T;
 vec3 B;
 }fs_in;
+//varying vec3 varNormalf;
 struct Material {
 	vec3 ambient;
 	vec3 diffuse;
@@ -17,6 +18,7 @@ struct Material {
 //uniform uint TextureCount;
 uniform sampler2D Texture[5];
 uniform sampler2D NormalMap[5];
+uniform sampler2D Dispose;
 uniform float Texelation;
 uniform vec3 lightPos;
 uniform vec3 cameraPos;
@@ -84,7 +86,8 @@ void main()
 	float depth = gl_FragCoord.z;
 	float Distance = 2.0 * near * far / (far + near - (2.0 * depth - 1.0) * (far - near));
 
-	color = vec4(TotalColor,1);
+	color = vec4(TotalColor,color0.w);
+	color = vec4( AddLight(Wood,LightColor,lightDir,NormalMap[0]),1);
 }
 
   

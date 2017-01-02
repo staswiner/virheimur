@@ -16,28 +16,29 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	input(input),
 	logic(logic)
 {
-	Loggedin = true;
+	State = 1;
 }
 
 
 Game::~Game()
 {
-	Receiver.detach();
+	//Receiver.detach();
 	//network.Send("FIN","127.0.0.1","27045");
 }
 
 void Game::Initialize()
 {
 #pragma region Network
-	network.InitializeConnection();
-	// Authentication
-	ReadAuthentication();
-	Data.MyUsername = Username;
-	Receiver = std::thread(&Network::BeginReceive, &network);
-	network.Send("Authentication " + Username + " " + Password);
+	//network.InitializeConnection();
+	//// Authentication
+	//ReadAuthentication();
+	//Data.MyUsername = Username;
+	//Receiver = std::thread(&Network::BeginReceive, &network);
+	//network.Send("Authentication " + Username + " " + Password);
 #pragma endregion Network
 	// Initialize 3D Graphics
 	scene.Initialize();
+	selectionState.Initialize();
 	loginState.Initialize();
 	// Sets NewData (spawn) 
 
@@ -46,76 +47,20 @@ void Game::Initialize()
 int i = 0;
 void Game::Loop()
 {
-	if (!Loggedin)
+#define is ==
+	if (State is 0)
 	{
 		LoginScreen();
 	}
-	else
+	else if (State is 1)
 	{
-		// Accepts input
-		try {
-
-			UserInput();
-		}
-		catch (exception ex)
-		{
-			int i = 0;
-		}
-		// Sets last frame updates to transfer
-		/*try {
-
-			AddToNewData();
-		}
-		catch (exception ex)
-		{
-			int i = 0;
-		}*/
-		// Sends 'NewData' object to the server
-		try {
-
-			UpdateNetwork();
-		}
-		catch (exception ex)
-		{
-			int i = 0;
-		}
-		// Updates Variables
-		try {
-
-			UpdateVariables(ProjectionMatrix, ViewMatrix);
-		}
-		catch (exception ex)
-		{
-			int i = 0;
-		}
-		// Creates 'Data' object as a combination of NewData and ReceivedData
-		try {
-
-			CombineData();
-		}
-		catch (exception ex)
-		{
-			int i = 0;
-		}
-		// proceeds logic of the final 'Data' object
-		try {
-
-			ApplyGameLogic();
-		}
-		catch (exception ex)
-		{
-			int i = 0;
-		}
-
-		// Draws 'Data' object
-		try {
-			DrawScene();
-		}
-		catch (exception ex)
-		{
-			int i = 0;
-		}
+		SelectionScreen();
 	}
+	else if (State is 2)
+	{
+		GameScreen();
+	}
+#undef is
 }
 
 void Game::ThreadedLoop()
@@ -126,14 +71,87 @@ void Game::ThreadedLoop()
 
 void Game::LoginScreen()
 {
-	LoginUserInput();
-	ApplyGameLogic();
+	//LoginUserInput();
+	//ApplyGameLogic();
 
 	//LoginUpdateNetwork();
 	//UpdateVariables(ProjectionMatrix, ViewMatrix);
 	//GetGameOnlineGameState();
-	DrawScene();
-	loginState.Draw();
+	//DrawScene();
+	loginState.Input();
+	loginState.Draw(this->m_hdc);
+}
+
+void Game::SelectionScreen()
+{
+	selectionState.Draw(this->m_hdc);
+}
+
+void Game::GameScreen()
+{
+	// Accepts input
+	try {
+
+		UserInput();
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
+	// Sets last frame updates to transfer
+	/*try {
+
+	AddToNewData();
+	}
+	catch (exception ex)
+	{
+	int i = 0;
+	}*/
+	// Sends 'NewData' object to the server
+	try {
+
+		UpdateNetwork();
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
+	// Updates Variables
+	try {
+
+		UpdateVariables(ProjectionMatrix, ViewMatrix);
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
+	// Creates 'Data' object as a combination of NewData and ReceivedData
+	try {
+
+		CombineData();
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
+	// proceeds logic of the final 'Data' object
+	try {
+
+		ApplyGameLogic();
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
+
+	// Draws 'Data' object
+	try {
+		DrawScene();
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
 }
 
 void Game::LoginUserInput()

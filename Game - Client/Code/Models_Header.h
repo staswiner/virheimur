@@ -1,9 +1,0 @@
-#pragma once
-//#include "_2D_IMAGE.h"
-#include "Ground_Graphics.h"
-#include "SkyBox_Graphics.h"
-#include "_Champion_Model.h"
-#include "Grass.h"
-//#include "_Minion_Model.h"
-#include "Loader.h"
-#include "Load_FBX_file.h"

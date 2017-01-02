@@ -25,6 +25,7 @@ public:
 	static bool LoadShaders();
 	static Shader& At(string ID);
 private:
+	void InitializeShaderProgram(string Path, GLuint shaderID);
 	static map<string, Shader*> mapShader;
 
 };
