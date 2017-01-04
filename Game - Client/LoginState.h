@@ -9,9 +9,10 @@ class LoginState
 public:
 	LoginState();
 	~LoginState();
-	void Initialize();
+	void Initialize(char* State);
 	void Input();
 	void Draw(HDC hdc);
+
 	void PerformLogin();
 private:
 	UIElement* GenerateForm();
@@ -19,5 +20,7 @@ private:
 	string Password;
 	UserInterface UI;
 	HDC m_hdc;
+	char* GameState;
+
 };
 

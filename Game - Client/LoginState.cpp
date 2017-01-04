@@ -11,9 +11,10 @@ LoginState::~LoginState()
 {
 }
 
-void LoginState::Initialize()
+void LoginState::Initialize(char* State)
 {
 	UI.GenerateForm(this->GenerateForm());
+	this->GameState = State;
 }
 
 void LoginState::Input()
@@ -57,7 +58,7 @@ void LoginState::Draw(HDC hdc)
 
 void LoginState::PerformLogin()
 {
-	int i = 0;
+	*this->GameState = 1;
 }
 
 UIElement* LoginState::GenerateForm()

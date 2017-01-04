@@ -6,6 +6,7 @@
 #include "LoginState.h"
 #include "SelectionState.h"
 #include "UserInterface.h"
+#include "CharacterCreationState.h"
 #include <thread>
 class Game
 {
@@ -22,6 +23,8 @@ private:
 	void LoginScreen();
 	void SelectionScreen();
 	void GameScreen();
+
+	void CharacterCreationScreen();
 
 #pragma region LoginState
 	void LoginUserInput();
@@ -43,6 +46,7 @@ private:
 	GameLogic& logic;
 	LoginState loginState;
 	SelectionState selectionState;
+	CharacterCreationState characterCreationState;
 	static UserInterface UI;
 	static GlobalDataObject NewData;
 	static GlobalDataObject ReceivedData;

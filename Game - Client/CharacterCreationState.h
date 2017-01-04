@@ -6,19 +6,17 @@
 #include "GameLogic.h"
 #include "MultiSampleFBO.h"
 #include "FBO.h"
-using namespace glm;
-class SelectionState
+class CharacterCreationState
 {
 public:
-	SelectionState();
-	~SelectionState();
+	CharacterCreationState();
+	~CharacterCreationState();
 	void Initialize(char* State);
 	void Input();
 	void Draw(HDC hdc);
 	void Draw3D();
 	void PerformLogin();
 	void CreateNewCharacter();
-	void ChangeCharacter(bool direction);
 private:
 	UIElement* GenerateForm();
 	string Username;
@@ -28,8 +26,6 @@ private:
 	vec2 LeftBot;
 	vec2 RightTop;
 	MultiSampleFBO mAntiAliasing;
-	vector<Player*> Characters;
-	vector<Player*>::iterator SelectedPlayer;
 	char* GameState;
 };
 

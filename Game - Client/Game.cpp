@@ -38,8 +38,9 @@ void Game::Initialize()
 #pragma endregion Network
 	// Initialize 3D Graphics
 	scene.Initialize();
-	selectionState.Initialize();
-	loginState.Initialize();
+	selectionState.Initialize(&State);
+	loginState.Initialize(&State);
+	characterCreationState.Initialize(&State);
 	// Sets NewData (spawn) 
 
 
@@ -59,6 +60,10 @@ void Game::Loop()
 	else if (State is 2)
 	{
 		GameScreen();
+	}
+	else if (State is 3)
+	{
+		CharacterCreationScreen();
 	}
 #undef is
 }
@@ -84,6 +89,7 @@ void Game::LoginScreen()
 
 void Game::SelectionScreen()
 {
+	selectionState.Input();
 	selectionState.Draw(this->m_hdc);
 }
 
@@ -152,6 +158,11 @@ void Game::GameScreen()
 	{
 		int i = 0;
 	}
+}
+void Game::CharacterCreationScreen()
+{
+	characterCreationState.Input();
+	characterCreationState.Draw(this->m_hdc);
 }
 
 void Game::LoginUserInput()

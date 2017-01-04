@@ -326,6 +326,15 @@
     <ClInclude Include="SelectionState.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="CharacterCreationState.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterData.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="TCP.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -503,6 +512,9 @@
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="SelectionState.cpp" />
+    <ClCompile Include="CharacterCreationState.cpp" />
+    <ClCompile Include="CharacterData.cpp" />
+    <ClCompile Include="TCP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">
@@ -700,6 +712,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="Shaders\Ground Geometry Shader.glsl" />
+    <None Include="Shaders\AnimationShadow Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc">

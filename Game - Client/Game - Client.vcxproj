@@ -119,6 +119,8 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChampionChat.h" />
+    <ClInclude Include="CharacterCreationState.h" />
+    <ClInclude Include="CharacterData.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Header.h" />
     <ClInclude Include="Collision.h" />
@@ -176,6 +178,7 @@
     <ClInclude Include="SkyBox_Graphics.h" />
     <ClInclude Include="StatsWindow.h" />
     <ClInclude Include="Structures.h" />
+    <ClInclude Include="TCP.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Textbox.h" />
     <ClInclude Include="TransferedData.h" />
@@ -190,6 +193,8 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChampionChat.cpp" />
+    <ClCompile Include="CharacterCreationState.cpp" />
+    <ClCompile Include="CharacterData.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Cursor.cpp" />
@@ -244,6 +249,7 @@
     <ClCompile Include="SkyBox_Data.cpp" />
     <ClCompile Include="SkyBox_Graphics.cpp" />
     <ClCompile Include="StatsWindow.cpp" />
+    <ClCompile Include="TCP.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Textbox.cpp" />
     <ClCompile Include="TODO list.cpp" />
@@ -260,6 +266,7 @@
     <None Include="Shaders\3D Text Vertex Shader.glsl" />
     <None Include="Shaders\Animation Fragment Shader.glsl" />
     <None Include="Shaders\Animation Vertex Shader.glsl" />
+    <None Include="Shaders\AnimationShadow Fragment Shader.glsl" />
     <None Include="Shaders\Basic Fragment Shader.glsl" />
     <None Include="Shaders\Basic Vertex Shader.glsl" />
     <None Include="Shaders\Bright Fragment Shader.glsl" />

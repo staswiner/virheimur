@@ -19,7 +19,9 @@ public:
 	string GetIP() { return this->IpAddress; }
 	string GetUsername() { return this->Username; }
 	string Username;
+	string CharacterName;
 	struct Stats{
+		uint Level;
 		uint Exp;
 		uint MaxHp;
 		uint Hp;

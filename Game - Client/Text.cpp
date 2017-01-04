@@ -1,5 +1,5 @@
 #include "Text.h"
-#define RESOLUTION 64.0f
+#define RESOLUTION 32.0f
 
 std::map<GLchar, Text::Character> Text::Characters;
 vector<Text::Vertices> Text::vertices;
@@ -34,7 +34,7 @@ void Text::Initialize()
 	shader = Shader("Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
 
 	GLuint error = FT_Init_FreeType(&library);
-	error = FT_New_Face(library,"C://Windows/Fonts/Arial.ttf",
+	error = FT_New_Face(library,"C://Windows/Fonts/ARBERKLEY.ttf",
 		0,&face);
 	FT_Set_Pixel_Sizes(face, 0, RESOLUTION);
 	//error = FT_Set_Char_Size(

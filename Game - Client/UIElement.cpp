@@ -198,21 +198,24 @@ void UIElement::Draw()
 {
 	if (visible == false)
 		return;
-	for(auto uie : Children)
-	{
-		uie.second->Draw();
-	}
+	// back to front, draws parent before child
 	if (this->IsRoot == false)
 	{
 		float FontSize = 20;
-		vec2 margin(20.0f,(TrueSize.y + FontSize/2.0f)/2.0f);
+		vec2 margin(20.0f,((BotRight.y-TopLeft.y) + FontSize/2.0f)/2.0f);
 		TextPosition = TopLeft + margin;
 		this->UIImage->Draw(this->TopLeft, this->BotRight);
 
 
 		Text::LoadTextShader(vec3(0, 0, 0));
 		Text& text = Text::getInstance();
-		text.RenderText(this->innerText, this->TextPosition.x, this->TextPosition.y, this->TrueSize.x - margin.x*2, FontSize);
+		text.RenderText(this->innerText, this->TextPosition.x, this->TextPosition.y, 
+			(this->BotRight.x-this->TopLeft.x) - margin.x*2, FontSize);
+	}
+	// proceeds to drawing children
+	for (auto uie : Children)
+	{
+		uie.second->Draw();
 	}
 }
 

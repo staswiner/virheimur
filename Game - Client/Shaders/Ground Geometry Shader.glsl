@@ -7,12 +7,14 @@ in VS_OUT{
 vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
+vec3 LightFragPos;
 }vs_in[];
 
 out GS_OUT{
 vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
+vec3 LightFragPos;
 vec3 T;
 vec3 B;
 }gs_out;
@@ -28,6 +30,7 @@ void TransferData(int i)
 	gs_out.UVs = vs_in[i].UVs;
 	gs_out.Normals = vs_in[i].Normals;
 	gs_out.FragPos = vs_in[i].FragPos;
+	gs_out.LightFragPos = vs_in[i].LightFragPos;
 	//varNormalf = varNormal[i];
 	return;
 }

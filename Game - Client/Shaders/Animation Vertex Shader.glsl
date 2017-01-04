@@ -13,6 +13,7 @@ out VS_OUT{
 vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
+vec3 LightFragPos;
 }vs_out;
 varying vec3 varNormal;
 
@@ -21,6 +22,7 @@ varying vec3 varNormal;
 
 uniform bool isAnimated;
 uniform mat4 WVM;
+uniform mat4 LightViewMatrix;
 uniform mat4 Model;
 
 uniform int BoneNum;
@@ -49,7 +51,8 @@ void main()
 	vs_out.UVs = vec2(uvs.x,1.0-uvs.y);
 	vs_out.Normals = normals;
 	vs_out.FragPos = vec3(Model * vec4(position,1));
-	varNormal = normals;
+	vec4 lFragPos = LightViewMatrix * vec4(vs_out.FragPos,1);
+	vs_out.LightFragPos = vec3(lFragPos.xyz)/lFragPos.w; 
 
 	//vec3 lightDirection = vec3(30, 30, 0);
 	//vec4 modelViewPos = vec4(position, 1.0);

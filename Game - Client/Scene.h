@@ -51,6 +51,7 @@ private:
 	void SetCameraView();
 	void Shadow_DrawGround(Shader&);
 	void DrawSeaAnimated();
+	void DrawColladaShadow();
 	void Draw_Skeletal();
 	void DrawUI();
 	

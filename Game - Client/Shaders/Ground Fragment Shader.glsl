@@ -6,6 +6,7 @@ in GS_OUT{
 vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
+vec3 LightFragPos;
 vec3 T;
 vec3 B;
 
@@ -26,6 +27,7 @@ uniform sampler2D Texture5;//road bump texture
 uniform sampler2D Texture6;//road dark texture
 uniform sampler2D Texture7;//texture normal texture
 uniform sampler2D Texture8;
+uniform sampler2D shadowMap;
 uniform float Texelation;
 uniform mat4 WVM;
 uniform mat4 Model;
@@ -40,7 +42,26 @@ out vec4 color;
 //varying in vec3 a; 
 //varying vec3 varNormalf;
 
+float ShadowCalculation(vec3 FragPos,vec3 lightDir, vec3 normal)
+{
+    // perform perspective divide
+    vec3 projCoords = FragPos;
+    // Transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+	if (projCoords.x > 1 || projCoords.y > 1)
+		discard;
+	projCoords.x = clamp(projCoords.x, 0.0 , 1.0);
+	projCoords.y = clamp(projCoords.y, 0.0 , 1.0);
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    // Get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+	float bias =  max(0.0005 * (1.0 - dot(normal, lightDir)), 0.00005);
+    // Check whether current frag pos is in shadow
+    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
+    return shadow;
+}  
 
 vec3 CalcNormal()
 {
@@ -86,7 +107,8 @@ vec3 AddLight(Material material,vec3 LightColor, vec3 LightDir, sampler2D normal
 	////float spec = pow(max(dot(normalize(toCameraVector.xz), reflectedLight.xz), 0.0), shineDamper);//phong
 	float spec = pow(max(dot(norm, reflectedLight), 0.0), int(material.diffuse * 128.0));//blinn-phong
 	vec3 specular = material.specular * spec * LightColor;
-	vec3 Light = (diffuse + 4.0 * specular + ambient);
+	float shadow = ShadowCalculation(fs_in.LightFragPos,LightDir, textnorm);       
+	vec3 Light = (diffuse + (1.0 - shadow) * ( 4.0 * specular + ambient));
 	return Light;
 }
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
