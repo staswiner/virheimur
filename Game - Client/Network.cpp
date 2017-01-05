@@ -35,7 +35,7 @@ void Network::Send(string msg)
 {
 	//bool result = client._SendMessage(msg);
 	//udpClient.Send(msg);
-	this->Send(msg, ServerIP, SERVER_PORT);
+	this->Send(msg, ServerIP, SERVER_PORT_UDP);
 
 }
 

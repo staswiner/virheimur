@@ -16,7 +16,7 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	input(input),
 	logic(logic)
 {
-	State = 1;
+	State = 4;
 }
 
 
@@ -37,10 +37,10 @@ void Game::Initialize()
 	//network.Send("Authentication " + Username + " " + Password);
 #pragma endregion Network
 	// Initialize 3D Graphics
-	scene.Initialize();
-	selectionState.Initialize(&State);
-	loginState.Initialize(&State);
-	characterCreationState.Initialize(&State);
+	//scene.Initialize();
+//	selectionState.Initialize(&State);
+//	loginState.Initialize(&State);
+//	characterCreationState.Initialize(&State);
 	// Sets NewData (spawn) 
 
 
@@ -49,21 +49,18 @@ int i = 0;
 void Game::Loop()
 {
 #define is ==
-	if (State is 0)
+	switch (State)
 	{
-		LoginScreen();
-	}
-	else if (State is 1)
-	{
-		SelectionScreen();
-	}
-	else if (State is 2)
-	{
-		GameScreen();
-	}
-	else if (State is 3)
-	{
-		CharacterCreationScreen();
+	case 0:LoginScreen(); break;
+	case 1:SelectionScreen(); break;
+	case 2:GameScreen(); break;
+	case 3:CharacterCreationScreen(); break;
+	case 4:TestGround(); break;
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	default:break;
 	}
 #undef is
 }
@@ -158,6 +155,13 @@ void Game::GameScreen()
 	{
 		int i = 0;
 	}
+}
+void Game::TestGround()
+{
+	TCP tcp;
+	tcp.SendPacket("Hello world hi<EOF>");
+	string Receive = tcp.ReceivePacketsAsync();
+ 	OutputDebugString(Receive.c_str());
 }
 void Game::CharacterCreationScreen()
 {

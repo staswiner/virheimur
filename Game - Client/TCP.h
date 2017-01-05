@@ -6,11 +6,11 @@ class TCP
 public:
 	TCP();
 	~TCP();
-	void Initialize();
-	void Connect();
-	void SendPacket();
-	void ReceivePacket();
+	void SendPacket(string Data);
+	string ReceivePacketsAsync();
 private:
+	void Connect();
+	void Initialize();
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	struct addrinfo *result = NULL,

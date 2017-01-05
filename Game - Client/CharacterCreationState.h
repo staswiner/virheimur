@@ -6,6 +6,9 @@
 #include "GameLogic.h"
 #include "MultiSampleFBO.h"
 #include "FBO.h"
+#include "TCP.h"
+#include "json.hpp"
+#include "Session.h"
 class CharacterCreationState
 {
 public:
@@ -15,7 +18,6 @@ public:
 	void Input();
 	void Draw(HDC hdc);
 	void Draw3D();
-	void PerformLogin();
 	void CreateNewCharacter();
 private:
 	UIElement* GenerateForm();

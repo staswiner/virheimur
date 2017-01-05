@@ -7,6 +7,7 @@
 #include "SelectionState.h"
 #include "UserInterface.h"
 #include "CharacterCreationState.h"
+#include "TCP.h"
 #include <thread>
 class Game
 {
@@ -23,6 +24,7 @@ private:
 	void LoginScreen();
 	void SelectionScreen();
 	void GameScreen();
+	void TestGround();
 
 	void CharacterCreationScreen();
 

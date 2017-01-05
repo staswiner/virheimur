@@ -17,7 +17,6 @@ void TCP::Initialize()
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed with error: %d\n", iResult);
-		exit(1);
 	}
 	ZeroMemory(&hints, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
@@ -25,13 +24,15 @@ void TCP::Initialize()
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo(SERVER_ADDRESS, DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(SERVER_ADDRESS, SERVER_PORT_TCP, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
-		exit(1);
 	}
+}
 
+void TCP::Connect()
+{
 	// Attempt to connect to an address until one succeeds
 	for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
 
@@ -59,16 +60,20 @@ void TCP::Initialize()
 	if (ConnectSocket == INVALID_SOCKET) {
 		printf("Unable to connect to server!\n");
 		WSACleanup();
-		exit(1);
+		// Error
 	}
+}
 
+void TCP::SendPacket(string Data)
+{
+	this->Initialize();
+	this->Connect();
 	// Send an initial buffer
-	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
+	iResult = send(ConnectSocket, Data.c_str(), Data.size(), 0);
 	if (iResult == SOCKET_ERROR) {
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(ConnectSocket);
 		WSACleanup();
-		exit(1);
 	}
 
 	printf("Bytes Sent: %ld\n", iResult);
@@ -79,19 +84,26 @@ void TCP::Initialize()
 		printf("shutdown failed with error: %d\n", WSAGetLastError());
 		closesocket(ConnectSocket);
 		WSACleanup();
-		exit(1);
 	}
+}
 
+string TCP::ReceivePacketsAsync()
+{
+	string ReceivedString;
 	// Receive until the peer closes the connection
 	do {
 
 		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0)
-			printf("Bytes received: %d\n", iResult);
+		{
+			ReceivedString += recvbuf;
+		}
 		else if (iResult == 0)
 			printf("Connection closed\n");
 		else
-			printf("recv failed with error: %d\n", WSAGetLastError());
+		{
+			int recieveError = WSAGetLastError();
+		}
 
 	} while (iResult > 0);
 
@@ -99,16 +111,5 @@ void TCP::Initialize()
 	closesocket(ConnectSocket);
 	WSACleanup();
 	//success
-}
-
-void TCP::Connect()
-{
-}
-
-void TCP::SendPacket()
-{
-}
-
-void TCP::ReceivePacket()
-{
+	return ReceivedString;
 }

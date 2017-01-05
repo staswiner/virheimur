@@ -335,6 +335,9 @@
     <ClInclude Include="TCP.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -515,6 +518,7 @@
     <ClCompile Include="CharacterCreationState.cpp" />
     <ClCompile Include="CharacterData.cpp" />
     <ClCompile Include="TCP.cpp" />
+    <ClCompile Include="Session.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">

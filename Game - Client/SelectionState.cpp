@@ -127,7 +127,7 @@ void SelectionState::PerformLogin()
 
 void SelectionState::CreateNewCharacter()
 {
-
+	*this->GameState = 3;
 }
 
 void SelectionState::ChangeCharacter(bool direction)

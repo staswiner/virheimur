@@ -101,7 +101,7 @@ bool Client::_Initialize()
 
 	// Resolve the server address and port
 	string Adress(SERVER_ADDRESS);
-	iResult = getaddrinfo(Adress.c_str(), DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(Adress.c_str(), SERVER_PORT_UDP, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
