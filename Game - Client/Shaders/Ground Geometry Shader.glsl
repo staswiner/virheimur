@@ -1,4 +1,4 @@
-#version 400 core
+#version 400 compatibility
 layout(triangles) in;
 layout(triangle_strip, max_vertices = 3) out;
 
@@ -24,7 +24,7 @@ uniform mat4 WVM;
 //varying vec3 varNormalf;
 
 
-void TransferData(int i)
+void TransferData(in int i)
 {
 	gl_Position = gl_in[i].gl_Position;
 	gs_out.UVs = vs_in[i].UVs;
@@ -32,7 +32,6 @@ void TransferData(int i)
 	gs_out.FragPos = vs_in[i].FragPos;
 	gs_out.LightFragPos = vs_in[i].LightFragPos;
 	//varNormalf = varNormal[i];
-	return;
 }
 void CalculateTangent()
 {
@@ -68,14 +67,6 @@ void main()
 
 		TransferData(i);
 		CalculateTangent();
-		//// MBT::
-		//	vec3 Edge1 = v1.m_pos - v0.m_pos;
-		//	vec3 Edge2 = v2.m_pos - v0.m_pos;
-		//
-		//	float DeltaU1 = v1.m_tex.x - v0.m_tex.x;
-		//	float DeltaV1 = v1.m_tex.y - v0.m_tex.y;
-		//	float DeltaU2 = v2.m_tex.x - v0.m_tex.x;
-		//	float DeltaV2 = v2.m_tex.y - v0.m_tex.y;
 		EmitVertex();
 	}
 	EndPrimitive();

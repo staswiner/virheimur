@@ -4,6 +4,7 @@
 #include "Text.h"
 #include "Keyboard.h"
 #include "GameLogic.h"
+#include "TCP.h"
 #include "Session.h"
 class LoginState
 {

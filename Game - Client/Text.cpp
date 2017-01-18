@@ -34,7 +34,7 @@ void Text::Initialize()
 	shader = Shader("Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
 
 	GLuint error = FT_Init_FreeType(&library);
-	error = FT_New_Face(library,"C://Windows/Fonts/ARBERKLEY.ttf",
+	error = FT_New_Face(library,"C://Windows/Fonts/arial.ttf",
 		0,&face);
 	FT_Set_Pixel_Sizes(face, 0, RESOLUTION);
 	//error = FT_Set_Char_Size(
@@ -101,7 +101,7 @@ void Text::ReserveVBO()
 
 }
 
-void Text::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat xMax, GLfloat scale)
+void Text::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat xMax, GLfloat scale, vec3 color)
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -110,6 +110,8 @@ void Text::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat xMax, GLfl
 	glBindVertexArray(VAO);
 	glEnableVertexAttribArray(0);
 	
+	Text::LoadTextShader(color);
+
 	scale /= RESOLUTION;
 	vec2 start(x, y);
 	// Iterate through all characters

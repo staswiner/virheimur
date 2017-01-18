@@ -201,7 +201,7 @@ void UIElement::Draw()
 	// back to front, draws parent before child
 	if (this->IsRoot == false)
 	{
-		float FontSize = 20;
+		float FontSize = this->style.font.size;
 		vec2 margin(20.0f,((BotRight.y-TopLeft.y) + FontSize/2.0f)/2.0f);
 		TextPosition = TopLeft + margin;
 		this->UIImage->Draw(this->TopLeft, this->BotRight);
@@ -210,7 +210,7 @@ void UIElement::Draw()
 		Text::LoadTextShader(vec3(0, 0, 0));
 		Text& text = Text::getInstance();
 		text.RenderText(this->innerText, this->TextPosition.x, this->TextPosition.y, 
-			(this->BotRight.x-this->TopLeft.x) - margin.x*2, FontSize);
+			(this->BotRight.x-this->TopLeft.x) - margin.x*2, FontSize, style.font.color);
 	}
 	// proceeds to drawing children
 	for (auto uie : Children)

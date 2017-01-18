@@ -58,7 +58,32 @@ void LoginState::Draw(HDC hdc)
 
 void LoginState::PerformLogin()
 {
-	*this->GameState = 1;
+	TCP tcp;
+	string username = this->UI.root->GetUIElement("Username")->innerText;
+	string password = this->UI.root->GetUIElement("Password")->innerText;
+	/// add support when i get home & get a tcp server working
+	/*tcp.SendPacket("");
+	string output = tcp.ReceivePacketsAsync();*/
+	string output = "Test";// default for tests
+#define is ==
+//#define then {
+//#define end }
+//#define else }else
+	if (output is "valid")
+	{
+		Session& session = Session::GetInstance();
+		session.Username = username;
+		session.UserID = stoi(output);
+		*this->GameState = 1;
+	}
+	else if (output is "Invalid")
+	{
+		this->UI.root->GetUIElement("Invalid")->Show();
+	}
+	else if (output is "Test")
+	{
+		*this->GameState = 1;
+	}
 }
 
 UIElement* LoginState::GenerateForm()
@@ -109,5 +134,23 @@ UIElement* LoginState::GenerateForm()
 	LogInElement->AddPressEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
 	root->AppendChild(LogInElement);
+
+	LogInElement = new UIElement("Invalid", "Interface/Button1.png");
+	Position = vec2(30, 30);
+	LogInElement->TopLeft = Position;
+	LogInElement->BotRight = vec2(300,50);
+	LogInElement->Hide();
+	LogInElement->style.font.size = 15.0f;
+	LogInElement->style.font.color = vec3(1,0.2,0.2);
+
+	LogInElement->innerText = "Username or Password invalid";
+	LogInElement->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
+	LogInElement->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+	LogInElement->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+	root->AppendChild(LogInElement);
+
 	return root;
 }

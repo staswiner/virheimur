@@ -16,7 +16,7 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	input(input),
 	logic(logic)
 {
-	State = 4;
+	State = 1;
 }
 
 
@@ -37,10 +37,10 @@ void Game::Initialize()
 	//network.Send("Authentication " + Username + " " + Password);
 #pragma endregion Network
 	// Initialize 3D Graphics
-	//scene.Initialize();
-//	selectionState.Initialize(&State);
-//	loginState.Initialize(&State);
-//	characterCreationState.Initialize(&State);
+	scene.Initialize();
+	selectionState.Initialize(&State);
+	loginState.Initialize(&State);
+	characterCreationState.Initialize(&State);
 	// Sets NewData (spawn) 
 
 

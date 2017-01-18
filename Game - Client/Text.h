@@ -25,7 +25,7 @@ public:
 	void Initialize();
 	//void Draw(char charCode);
 	void RenderText(std::string text,
-		GLfloat x, GLfloat y, GLfloat xMax, GLfloat scale);
+		GLfloat x, GLfloat y, GLfloat xMax, GLfloat scale, vec3 color = vec3(0));
 	void RenderTextReverse(std::string text,
 		GLfloat x, GLfloat y, GLfloat xMax, GLfloat scale);
 	static void LoadTextShader(vec3 color);

@@ -64,4 +64,6 @@ UIElement * CharacterCreationState::GenerateForm()
 	CreateButton->AddClickEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
 	root->AppendChild(CreateButton);
+
+	return root;
 }

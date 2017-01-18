@@ -1,4 +1,4 @@
-#version 400 core
+#version 400 compatibility
 
 in GS_OUT{
 vec2 UVs;
@@ -33,7 +33,7 @@ vec3 CalcNormal()
 	vec3 Normal = normalize(fs_in.Normals);
 	return Normal;
 }
-vec3 CalcBumpedNormal(sampler2D normalTexture)
+vec3 CalcBumpedNormal(in sampler2D normalTexture)
 {
 	vec3 Normal = CalcNormal();
 	vec3 T = fs_in.T;
@@ -54,7 +54,7 @@ vec3 CalcBumpedNormal(sampler2D normalTexture)
 	NewNormal = normalize(NewNormal);
 	return NewNormal.xyz;
 }
-vec3 AddLight(Material material,vec3 LightColor, vec3 LightDir, sampler2D normalTexture)
+vec3 AddLight(in Material material,in vec3 LightColor, in vec3 LightDir, in sampler2D normalTexture)
 {
 	// Mathematics
 	vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
@@ -87,8 +87,6 @@ void main()
 	float depth = gl_FragCoord.z;
 	float Distance = 2.0 * near * far / (far + near - (2.0 * depth - 1.0) * (far - near));
 
-	color = vec4(TotalColor,color0.w);
 	color = vec4( AddLight(Wood,LightColor,lightDir,NormalMap[0]),1);
+	//color = vec4(1.0,0,0,1.0);
 }
-
-  

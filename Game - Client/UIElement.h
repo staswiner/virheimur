@@ -22,6 +22,15 @@ public:
 			return this->z_index > rhs.z_index;
 		}
 	};
+	struct Font {
+		GLuint size = 14;
+		vec3 color = vec3(0);
+	};
+	struct Style {
+		Font font;
+		vec3 maskColor = vec3(1);
+		float opacity = 1.0f;
+	};
 public:
 	UIElement(string Name, string Filename, int z_index=1);
 	~UIElement();
@@ -54,6 +63,7 @@ public:
 	vec2 TextPosition;
 	string innerText;
 	vec2 TrueSize;
+	Style style;
 	
 private:
 	std::function<void(UIElement*)> hover;
