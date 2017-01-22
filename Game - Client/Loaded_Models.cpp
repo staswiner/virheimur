@@ -20,7 +20,7 @@ void staticLoaded_Models::initialize_Models()
 	//Models_Collection["Grass"] = new Grass(5);
 	
 	//Models["Lara"] = new Model("Collada/CartoonTree.dae");
-	Models["Land"] = new Model("Map/FlatLand.dae","Ground");
+	Models["Land"] = new Model("Map/Land2.dae","Ground");
 	Models["Land"]->AddTexture("Texture0", "Map/Grass/grass01_converted.jpg");
 	Models["Land"]->AddTexture("Texture1", "Map/Brick/Mountain Tile.jpg");
 	Models["Land"]->AddTexture("Texture2", "Map/MapPath.jpg");
@@ -31,6 +31,12 @@ void staticLoaded_Models::initialize_Models()
 	Models["Land"]->AddTexture("Texture6", "Map/Brick/brickwork-bump-map_converted.jpg");
 	Models["Land"]->AddTexture("Texture7", "Map/Grass/grass01_n_converted.jpg");
 	Models["Land"]->AddTexture("Texture8", "Map/Grass/grass01_h_converted.jpg");
+
+	Models["Water"] = new Model("Map/FlatLand.dae", "");
+	Models["Water"]->AddTexture("Texture0", "Map/Water/waterDUDV.png");
+	Models["Water"]->AddTexture("Texture1", "Map/Water/waterNormals.jpg");
+	
+
 
 	Models["Collada"] = new Model("Collada/Robot.dae", "");
 	Models["Collada"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");

@@ -12,6 +12,7 @@ vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
 vec3 LightFragPos;
+vec4 clipSpace;
 }vs_out;
 
 //varying vec3 varColor;
@@ -45,7 +46,8 @@ void main()
 	//	objectpos = vec4(position, 1.0);
 	//}
 
-	gl_Position = WVM * objectpos;
+	vs_out.clipSpace = WVM * objectpos;
+	gl_Position = vs_out.clipSpace;
 	vs_out.UVs = vec2(uvs.x,1.0-uvs.y);
 	vs_out.Normals = normals;
 	vs_out.FragPos = vec3(Model * vec4(position,1));

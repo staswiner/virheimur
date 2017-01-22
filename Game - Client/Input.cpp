@@ -90,7 +90,7 @@ void Input::GetMouseInput()
 		
 		//{
 
-	/*	PRMalgorithm prm;
+		PRMalgorithm prm;
 		if (ReceivedData.Graph)
 		{
 			delete ReceivedData.Graph;
@@ -112,8 +112,8 @@ void Input::GetMouseInput()
 		if (myPlayer->unit_Data.Path.size() == 0)
 		{
 			int i = 0;
-		}*/
-	//	ReceivedData.Path = prm.FoundPath(ReceivedData.Graph, myPlayer->GetUnitData().Position, Destination);
+		}
+		ReceivedData.Path = &myPlayer->unit_Data.Path;
 
 		Data->Effects.push_back(Effect("Collada", milliseconds(500), Destination));
 	}

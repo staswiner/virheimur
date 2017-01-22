@@ -65,7 +65,7 @@ void Minimap::DrawMinimap(GDO & Data)
 				DrawLine(j.first, i.first, u8vec3(255,255,255));
 			}
 		}
-		if (Data.Path)
+		if (Data.Path && Data.Path->size() > 0)
 		{
 			for (auto i = (*Data.Path).begin(); i != Data.Path->end() - 1; i++)
 			{

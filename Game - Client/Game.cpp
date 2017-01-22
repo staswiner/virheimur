@@ -16,26 +16,47 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	input(input),
 	logic(logic)
 {
-	State = 1;
+	State = 2;
 }
 
 
 Game::~Game()
 {
-	//Receiver.detach();
+	Receiver.detach();
 	//network.Send("FIN","127.0.0.1","27045");
+	if (not Online)
+	{
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+	}
 }
 
 void Game::Initialize()
 {
 #pragma region Network
-	//network.InitializeConnection();
-	//// Authentication
-	//ReadAuthentication();
-	//Data.MyUsername = Username;
-	//Receiver = std::thread(&Network::BeginReceive, &network);
-	//network.Send("Authentication " + Username + " " + Password);
+	if (Online)
+	{
+		network.InitializeConnection();
+		// Authentication
+		ReadAuthentication();
+		Data.MyUsername = Username;
+		Receiver = std::thread(&Network::BeginReceive, &network);
+		network.Send("Authentication " + Username + " " + Password);
+	}
 #pragma endregion Network
+#pragma region Offline Network Simulator
+	if (not Online)
+	{
+		// set the size of the structures
+		ZeroMemory(&si, sizeof(si));
+		si.cb = sizeof(si);
+		ZeroMemory(&pi, sizeof(pi));
+		CreateProcess("ReannLove.exe","",NULL,NULL,FALSE,0,NULL,NULL,&si,&pi);
+		network.InitializeLocalConnection();
+		//ReadAuthentication();
+		Receiver = std::thread(&Network::BeginReceive, &network);
+	}
+#pragma endregion
 	// Initialize 3D Graphics
 	scene.Initialize();
 	selectionState.Initialize(&State);

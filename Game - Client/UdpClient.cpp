@@ -42,7 +42,7 @@ bool UdpClient::Initialize()
 	//Prepare the sockaddr_in structure
 	// The Receiver component of the Client
 	server.sin_family = AF_INET;
-	server.sin_port = htons(stoi(SERVER_PORT_UDP));
+	server.sin_port = htons(stoi(CLIENT_PORT_UDP));
 	server.sin_addr.s_addr = INADDR_ANY;
 
 	// Set timeout to 5seconds

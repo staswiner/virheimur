@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <list>
 #include <set>
+#include <functional>
 
 #include "GL\glew.h"
 #include "glm\glm\vec2.hpp"
@@ -29,11 +30,32 @@ namespace Stas
 		//static vector<vec3> Dijekstra(map<vec3,pair<vec3, float>> Nodes,vec3 Start,vec3 Destination);
 		static vector<vec3> Dijkstra(const map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
-		static vector<vec3>* Astar(const map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
+		vector<vec3> DijkstraB(std::map<vec3, vector<vec3>, std::function<bool(const vec3&lhs, const vec3&rhs)>> &graph, vec3 source, vec3 target);
+		static vector<vec3> Astar(const map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
 		static unsigned long long llrand();
 		static bool vec3Compare(const vec3&, const vec3&);
 		static bool IsIn(vec2 TopLeft, vec2 BotRight, vec2 TestSample);
+		struct node {
+			node(vec3 pos) {
+				this->f = numeric_limits<float>::infinity();
+				this->parent = nullptr;
+				this->pos = pos;
+				this->g = numeric_limits<float>::infinity();
+				this->h = numeric_limits<float>::infinity();
+				this->List = 0;
+			}
+			node() {}
+			vec3 pos;
+			node *parent;
+			float f, g, h;
+			int List; // 0 none, 1 open, 2 closed
+		};
+	private:
+		static vector<vec3> AstarB(
+			std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
+			& graph, vec3 source, vec3 target);
+		vector<vec3> AstarGrid(std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3&lhs, const vec3&rhs)>>& graph, vec3 source, vec3 target);
 	};
 	struct MinimapData
 	{

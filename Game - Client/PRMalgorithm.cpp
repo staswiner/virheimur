@@ -138,7 +138,7 @@ map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 vector<vec3> PRMalgorithm::FoundPath(map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)>* Map, vec3& Source, vec3& Destination)
 {
-	vector<vec3> Backtrack = Stas::Maths::Dijkstra(*Map, Source, Destination);
+	vector<vec3> Backtrack = Stas::Maths::Astar(*Map, Source, Destination);
 	return Backtrack;
 }
 

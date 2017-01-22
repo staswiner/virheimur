@@ -17,8 +17,12 @@ void Network::InitializeConnection()
 {
 	//bool result = client._Initialize();
 	bool result;
+	int i = 0;
 	do {
 		result = udpClient.Initialize();
+		i++;
+		if (i > 10000)
+			exit(1);
 	} while (!result);
 	hostent * record = gethostbyname("virheimur.com");
 	if (record == NULL)
@@ -28,7 +32,20 @@ void Network::InitializeConnection()
 	in_addr * address = (in_addr *)record->h_addr;
 //	address = inet_addr("83.130.207.1");
 	ServerIP = inet_ntoa(*address);
-	ServerIP = "83.130.207.1";
+	ServerIP = "80.178.27.112";
+}
+
+void Network::InitializeLocalConnection()
+{
+	bool result;
+	do {
+		result = udpClient.Initialize();
+	} while (!result);
+
+	ServerIP = "127.0.0.1";
+
+	// Send TCP Connection Request
+	tcpClient.SendPacket("Connecting<EOF>");
 }
 
 void Network::Send(string msg)

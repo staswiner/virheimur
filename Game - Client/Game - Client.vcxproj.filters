@@ -338,6 +338,9 @@
     <ClInclude Include="Session.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Default.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -519,6 +522,7 @@
     <ClCompile Include="CharacterData.cpp" />
     <ClCompile Include="TCP.cpp" />
     <ClCompile Include="Session.cpp" />
+    <ClCompile Include="Default.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">
@@ -719,6 +723,7 @@
     <None Include="Shaders\AnimationShadow Fragment Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Water Fragment Shader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc">

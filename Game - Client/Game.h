@@ -8,6 +8,7 @@
 #include "UserInterface.h"
 #include "CharacterCreationState.h"
 #include "TCP.h"
+#include <process.h>
 #include <thread>
 class Game
 {
@@ -64,5 +65,9 @@ private:
 	string Username;
 	string Password;
 	char State; // 0 Login, 1 Selection, 2 game
+	bool Online = true;
+	// process running variables
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
 };
 

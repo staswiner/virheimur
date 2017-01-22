@@ -36,6 +36,7 @@ void Scene::Initialize()
 	mFBO["Gaussic Effect"].Initialize(1, 1, Shader::At("Combine"));
 	mFBO["RadialBlur"].Initialize(1, 1, Shader("RadialBlur Vertex Shader.glsl", "RadialBlur Fragment Shader.glsl"));
 	mFBO["Basic"].Initialize(1, 1, Shader());
+	mFBO["LakeReflection"].Initialize(1, 1, Shader());
 	//mFBO["Index"].Initialize(1, 1, Shader::At("PostProcessing"));
 	IndexFBO->InitializeBig(1, 1, Shader::At("PostProcessing"));
 	mAntiAliasing.InitializeMultiSample();
@@ -167,13 +168,14 @@ void Scene::DrawScene_Refraction()
 }
 void Scene::DrawScene_Reflection()
 {
-	mSea.BindReflection();
+	mFBO["LakeReflection"].BindFrameBuffer();
 	{
 		SetCameraView();
 		camera.SetCameraPosition(vec3(camera.CameraPositionCalculated.x, -camera.CameraPositionCalculated.y, camera.CameraPositionCalculated.z));
 		camera.InvertPitch();
 		SetCameraView();
 		DrawSky();
+		DrawCollada();
 		//DrawGround(mSea.sReflection_Ground);
 		//Draw_All_Units();
 		//DrawEntities();
@@ -624,6 +626,26 @@ void Scene::DrawCollada()
 		Add_Material("Grass", Materials::GetInstance()["emerald"]).
 		Add_bool("isAnimated", false);
 	loaded_Models["Land"]->Draw();
+
+	/*landmat = translate(mat4(), vec3(0,0,0));
+	WVM = ProjectionMatrix * ViewMatrix * landmat;
+	ShaderBuilder::LoadShader(Shader::At("Water"))->
+		Add_mat4("WVM", WVM).
+		Add_mat4("Model", landmat).
+		Add_float("Texelation", 25.0f).
+		Add_vec3("lightPos", NewLightPos).
+		Add_vec3("cameraPos", -camera.GetCameraPosition()).
+		Add_textures(loaded_Models["Water"]->Textures).
+		Add_texture("shadowMap", shadow->depthMap).
+		Add_mat4("LightViewMatrix", LightViewMatrix).
+		Add_Material("Brick", Materials::GetInstance()["chrome"]).
+		Add_Material("Grass", Materials::GetInstance()["chrome"]).
+		Add_float("time", fmod(GetTickCount(),100000000)).
+		Add_texture("reflection",mFBO["LakeReflection"].texture).
+		Add_bool("isAnimated", false);
+	loaded_Models["Water"]->Draw();
+*/
+	
 
 	// light source
 	mat4 LightModel = translate(mat4(), NewLightPos + vec3(0, -10, 0));

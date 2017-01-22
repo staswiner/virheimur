@@ -29,6 +29,6 @@ using namespace std;
 #define DEFAULT_BUFLEN 1024
 #define SERVER_PORT_TCP "27046"
 #define SERVER_PORT_UDP "27045"
-#define CLIENT_PORT "27046"
+#define CLIENT_PORT_UDP "27047"
 #define CLIENT_ADDRESS "192.168.1.50"
 #define SERVER_ADDRESS "192.168.1.50"

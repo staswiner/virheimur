@@ -8,12 +8,14 @@ vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
 vec3 LightFragPos;
+vec4 clipSpace;
 }vs_in[];
 
 out GS_OUT{
 vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
+vec4 clipSpace;
 vec3 LightFragPos;
 vec3 T;
 vec3 B;

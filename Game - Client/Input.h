@@ -9,6 +9,7 @@
 #include "Loaded_Models.h"
 #include "FBO.h"
 #include <chrono>
+#include <memory>
 using namespace std::chrono;
 class Input
 {

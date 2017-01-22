@@ -125,6 +125,7 @@
     <ClInclude Include="Client_Header.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="Default.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="ExistingMesh.h" />
     <ClInclude Include="FPS.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="Default.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="ExistingMesh.cpp" />
     <ClCompile Include="FPS.cpp" />
@@ -334,6 +336,7 @@
     <None Include="Shaders\Text Vertex Shader.glsl" />
     <None Include="Shaders\VBlur Fragment Shader.glsl" />
     <None Include="Shaders\VBlur Vertex Shader.glsl" />
+    <None Include="Shaders\Water Fragment Shader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc" />
