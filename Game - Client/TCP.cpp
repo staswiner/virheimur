@@ -24,6 +24,7 @@ void TCP::Initialize()
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
+	// replaced to localhost
 	iResult = getaddrinfo(SERVER_ADDRESS, SERVER_PORT_TCP, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);

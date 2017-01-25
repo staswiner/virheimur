@@ -281,10 +281,12 @@ void Scene::DrawScene_PostProcessing()
 	DrawSky();
 	//DrawGround(Shader::At("Ground"));
 	DrawCollada();
+	//DrawUI();
+
 	//DrawEntities();
 	//DrawSea();
 	DrawSeaAnimated();
-	DrawUI();
+	
 #pragma endregion 3D Elements
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
@@ -319,6 +321,8 @@ void Scene::DrawScene_PostProcessing()
 	mFBO["Combine"].DrawDirectly(Textures,ShaderNames);
 	
 	mFBO["Combine"].DrawFrameBuffer();
+	// draw ui after postprocessing effect
+	DrawUI();
 	//shadow->Draw();
 }
 void Scene::Shadow_DrawGround(Shader& shader)
@@ -724,10 +728,10 @@ void Scene::DrawCollada()
 	WVM = ProjectionMatrix * ViewMatrix * LightModel;
 	ShaderBuilder::LoadShader(Shader::At("Animation"))->
 		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", true).
+		Add_bool("isAnimated", false).
 		Add_float("Texelation", 1.0f).
-		Add_textures(loaded_Models["Collada"]->Textures);
-	loaded_Models["Collada"]->Draw();
+		Add_textures(loaded_Models["Sphere"]->Textures);
+	loaded_Models["Sphere"]->Draw();
 	WVM = ProjectionMatrix * ViewMatrix;
 	//
 	/*uniform vec3 lightPos;
@@ -743,7 +747,6 @@ void Scene::DrawCollada()
 		Add_textures(loaded_Models["House"]->Textures);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	for (int i = -8; i < 8; i++)
 	{
 		vec3 housePosition(i * 12, 0, 20);

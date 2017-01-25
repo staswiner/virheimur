@@ -6,10 +6,10 @@ in GS_OUT{
 vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
+vec4 clipSpace;
 vec3 LightFragPos;
 vec3 T;
 vec3 B;
-
 }fs_in;
 struct Material {
 	vec3 ambient;
@@ -121,9 +121,9 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
 } 
 void main()
 {
+	
 	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
 	vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
-
 	vec2 TextureCoords = ParallaxMapping(fs_in.UVs, toCameraVector) * Texelation;
 	vec4 color0 = texture2D(Texture0, fs_in.UVs * Texelation);
 	vec4 color1 = texture2D(Texture1, fs_in.UVs * Texelation);
@@ -205,6 +205,7 @@ void main()
 	//color = (color3 * vec4(diffuseBumped, 1.0) * color5) * color2.r * DistanceLightFade/* +
 	//	((color0 * dot(norm, vec3(0.0, 1.0, 0.0)) * vec4(diffuse, 1.0f)) + 
 	//	(color1 * (1.0 - dot(norm, vec3(0.0, 1.0, 0.0)))) * vec4(diffuse, 1.0f)) * (1.0-color2.r) * DistanceLightFade*/;
+
 
 }
 

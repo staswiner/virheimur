@@ -41,6 +41,12 @@ void staticLoaded_Models::initialize_Models()
 	Models["Collada"] = new Model("Collada/Robot.dae", "");
 	Models["Collada"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
 	Models["Collada"]->AddTexture("NormalMap[0]","Katarina/katarina_base_normal.png");
+
+	Models["Sphere"] = new Model("Collada/sphere.dae", "");
+	Models["Sphere"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
+	Models["Sphere"]->AddTexture("NormalMap[0]", "Katarina/katarina_base_normal.png");
+
+
 	Models["Obstacle"] = new Model("Map/Grass.dae", "");
 	Models["House"] = new Model("Collada/House.dae", "");
 	//Models["House"]->AddTexture("Texture[0]", "Textures/196.jpg");

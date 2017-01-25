@@ -16,7 +16,7 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	input(input),
 	logic(logic)
 {
-	State = 0;
+	State = 2;
 }
 
 
@@ -40,8 +40,8 @@ void Game::Initialize()
 	{
 		network.InitializeConnection();
 		// Authentication
-		ReadAuthentication();
-		Data.MyUsername = Username;
+		/*ReadAuthentication();
+		Data.MyUsername = Username;*/
 		Receiver = std::thread(&Network::BeginReceive, &network);
 	}
 #pragma endregion Network

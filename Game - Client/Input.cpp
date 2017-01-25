@@ -89,38 +89,46 @@ void Input::GetMouseInput()
 	//	myPlayer.GetUnitData().Position = Destination;
 		
 		//{
-	/*	vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
-		for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+#define ASTAR 0
+#define DIJKSTRA 1
+		int AlgorithmType = ASTAR;
+		if (AlgorithmType == ASTAR)
 		{
-			myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
-			ReceivedData.RouteChanged = true;
+			vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+			for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+			{
+				myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
+				ReceivedData.RouteChanged = true;
+			}
+			ReceivedData.Path = &myPlayer->unit_Data.Path;
 		}
-		ReceivedData.Path = &myPlayer->unit_Data.Path;*/
-
-		PRMalgorithm prm;
-		if (ReceivedData.Graph)
+		else if (AlgorithmType == DIJKSTRA)
 		{
-			delete ReceivedData.Graph;
+			PRMalgorithm prm;
+			if (ReceivedData.Graph)
+			{
+				delete ReceivedData.Graph;
+			}
+			try
+			{
+				ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+				ReceivedData.RouteChanged = true;
+			}
+			catch (exception ex)
+			{
+				int i = 0;
+			}
+			vector<vec3> BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer->unit_Data.StartPoint, Destination);
+			for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+			{
+				myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
+			}
+			if (myPlayer->unit_Data.Path.size() == 0)
+			{
+				int i = 0;
+			}
+			ReceivedData.Path = &myPlayer->unit_Data.Path;
 		}
-		try
-		{
-			ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
-			ReceivedData.RouteChanged = true;
-		}
-		catch (exception ex)
-		{
-			int i = 0;
-		}
-		vector<vec3> BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer->unit_Data.StartPoint, Destination);
-		for (int i = BacktrackPath.size() - 1; i >= 0; i--)
-		{
-			myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
-		}
-		if (myPlayer->unit_Data.Path.size() == 0)
-		{
-			int i = 0;
-		}
-		ReceivedData.Path = &myPlayer->unit_Data.Path;
 
 		Data->Effects.push_back(Effect("Collada", milliseconds(500), Destination));
 	}
