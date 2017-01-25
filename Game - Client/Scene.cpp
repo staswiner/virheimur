@@ -281,10 +281,12 @@ void Scene::DrawScene_PostProcessing()
 	DrawSky();
 	//DrawGround(Shader::At("Ground"));
 	DrawCollada();
+	//DrawUI();
+
 	//DrawEntities();
 	//DrawSea();
 	DrawSeaAnimated();
-	DrawUI();
+	
 #pragma endregion 3D Elements
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
@@ -319,6 +321,8 @@ void Scene::DrawScene_PostProcessing()
 	mFBO["Combine"].DrawDirectly(Textures,ShaderNames);
 	
 	mFBO["Combine"].DrawFrameBuffer();
+	// draw ui after postprocessing effect
+	DrawUI();
 	//shadow->Draw();
 }
 void Scene::Shadow_DrawGround(Shader& shader)

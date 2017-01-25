@@ -40,8 +40,8 @@ void Game::Initialize()
 	{
 		network.InitializeConnection();
 		// Authentication
-		ReadAuthentication();
-		Data.MyUsername = Username;
+		/*ReadAuthentication();
+		Data.MyUsername = Username;*/
 		Receiver = std::thread(&Network::BeginReceive, &network);
 	}
 #pragma endregion Network
