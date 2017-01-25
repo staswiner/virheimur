@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 
-vec3 Camera::CameraPosition(0,-5,-50);
+vec3 Camera::CameraPosition(0,-5,-20);
 vec3 Camera::CameraDestination(CameraPosition);
 vec3 Camera::CameraPositionCalculated;
 vec3 Camera::MouseCameraAngle;

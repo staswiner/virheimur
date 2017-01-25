@@ -232,6 +232,8 @@ namespace Stas
 		std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
 		& graph, vec3 source, vec3 target)
 	{
+		using namespace std::chrono;
+		milliseconds StartTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		list<node*> openList;
 		list<node*> closedList;
 		node* StartNode = graph.at(source).first;
@@ -304,38 +306,91 @@ namespace Stas
 		} while (currentNode.parent != nullptr);
 		returnPath.push_back(currentNode.pos);
 
+		milliseconds EndTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		milliseconds TotalTime = EndTime - StartTime;
 		return returnPath;
 	}
-	vector<vec3> Maths::AstarGrid(
-		std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
-		& graph, vec3 source, vec3 target)
+	int ConvertToArray(int WorldWidth, int WorldHeight,int Width, int Height, int x, int z)
+	{
+		int newx = float(float(x + WorldWidth / 2) / float(WorldWidth)) * Width;
+		int newz = float(float(z + WorldHeight / 2) / float(WorldHeight)) * Height;
+		return (newx + Width*newz);
+	}
+	vec3 ConvertToWorldCoords(int WorldWidth, int WorldHeight, int Width, int Height, vec3 pos)
+	{
+		vec3 newpos = ((pos - vec3(Width/2)) / float(Width)) * float(WorldWidth);
+		return newpos;
+	}
+	vec3 ConvertToMapCoords(int WorldWidth, int WorldHeight, int Width, int Height, vec3 pos)
+	{
+		vec3 newpos = (pos + (vec3(WorldWidth) / 2.0f)) / float(WorldWidth) * (float)Width;
+		return newpos;
+	}
+	vector<vec3> Maths::AstarGridB(MinimapData& minimapData,
+		vec3 source, vec3 target)
 	{
 		// Create grid graph
-		MinimapData NewGraph;
 		vector<node> NewGraphNodes;
-		NewGraphNodes.resize(NewGraph.Height*NewGraph.Width);
-
-
-		// algorithm
-		list<node*> openList;
-		list<node*> closedList;
-		node* StartNode = graph.at(source).first;
-		(*StartNode).g = 0; // sets values for the starting node
-		(*StartNode).h = glm::distance(source, target);
-		(*StartNode).f = (*StartNode).g + (*StartNode).h;
-		openList.push_back(StartNode); // adds to the open list
-		while (openList.size() > 0)
+		int Height = minimapData.Height, Width = minimapData.Width;
+		NewGraphNodes.resize(minimapData.Height*minimapData.Width);
+		vector<vec3> Neighbors =
+		{ vec3(1,0,0), vec3(-1,0,0),
+			vec3(0,0,1), vec3(0,0,-1),
+			vec3(1,0,1), vec3(-1,0,1),
+			vec3(-1,0,1), vec3(-1,0,-1)
+		};
+		for (auto& n : Neighbors)
 		{
-			// sort the open list to find the smallest element
-			openList.sort([](const node* lhs, const node* rhs)->bool { // O(nlog(n))
-				return lhs->f < rhs->f;
-			});
-			node* BestNode = graph.at((*openList.front()).pos).first;
-			if ((*BestNode).pos == target)
+			n *= 1;
+		}
+		vec3 Position = vec3(ConvertToArray(200, 200, 300, 300, source.x, source.z) % Width
+			, 0, ConvertToArray(200, 200, 300, 300, source.x, source.z) / Width);
+		vec3 targetPos = vec3(ConvertToArray(200, 200, 300, 300, target.x, target.z) % Width
+			, 0, ConvertToArray(200, 200, 300, 300, target.x, target.z) / Width);
+		// stuck in a fucking wall
+		if (minimapData.Map[(int)targetPos.x + (int)targetPos.z * Width] == u8vec4(115, 77, 38, 255))
+			return vector<vec3>();
+		// algorithm
+		//auto cmp = [](node* lhs, node* rhs)->bool { // O(nlog(n))
+		//	return lhs->f > rhs->f; // reversed due to priority queue specification
+		//};
+		//priority_queue<node*,std::vector<node*>,decltype(cmp)> openList(cmp);
+		//priority_queue<node*> openList;
+		list<node*> openList;
+
+		list<node*> closedList;
+
+		node* StartNode = &NewGraphNodes[Position.x + Position.z * Width];
+		(*StartNode).g = 0; // sets values for the starting node
+		(*StartNode).h = glm::distance(Position, targetPos);
+		(*StartNode).f = (*StartNode).g + (*StartNode).h;
+		(*StartNode).pos = Position;
+		openList.push_back(StartNode); // adds to the open list
+		bool PathFound = false;
+		while ((openList.size() > 0) && !PathFound)
+		{
+			///// sort the open list to find the smallest element
+			///openList.sort([](const node* lhs, const node* rhs)->bool { // O(nlog(n)) * log n << n
+			///	return lhs->f < rhs->f;
+			///});
+			auto min = openList.begin();
+			for (auto it = openList.begin(); it != openList.end(); it++)
+			{
+				if ((*it)->f < (*min)->f)
+				{
+					min = it;
+				}
+			}
+			///vec3 BestPosition = openList.front()->pos;
+			vec3 BestPosition = (*min)->pos;
+			//int Position = ConvertToArray(200, 200, 300, 300, BestNodePos.x, BestNodePos.z);
+			node* BestNode = &NewGraphNodes[BestPosition.x + (int)BestPosition.z * minimapData.Width];
+			if (BestPosition == targetPos)
 			{
 				break;
 			}
-			openList.pop_front();
+			///openList.pop_front();
+			openList.erase(min);
 
 			if ((*BestNode).parent)
 			{
@@ -349,9 +404,18 @@ namespace Stas
 				(*BestNode).List = CLOSEDLIST;
 			}
 
-			for (auto v : graph.at((*BestNode).pos).second)
+			for (auto offset : Neighbors)
 			{
-				node* n = graph.at((*v).pos).first;
+				//int Position = ConvertToArray(200, 200, 300, 300, BestNodePos.x + offset.x, BestNodePos.z + offset.z);
+				vec3 OffsetPosition = BestPosition + offset;
+				// obstacle
+				if (minimapData.Map[(int)OffsetPosition.x + (int)(OffsetPosition.z) * Width] == u8vec4(115, 77, 38, 255))
+				{
+					continue;
+				}
+				node* n = &NewGraphNodes[OffsetPosition.x + (int)OffsetPosition.z * minimapData.Width];
+				if (n->List == 0) // new node
+					*n = node(OffsetPosition);
 				if ((*n).List == CLOSEDLIST)
 					continue;
 				if ((*n).List != OPENLIST)
@@ -359,13 +423,18 @@ namespace Stas
 					(*n).List = OPENLIST;
 					openList.push_back(n);
 				}
-				if ((*v).pos == target)
+				else
 				{
-					(*v).parent = BestNode;
+					int i = 0;
+				}
+				if (OffsetPosition == targetPos)
+				{
+					(*n).parent = BestNode;
+					PathFound = true;
 					break;
 				}
-				float g = (*BestNode).g + distance((*BestNode).pos, (*v).pos);
-				float h = distance(target, (*v).pos);
+				float g = (*BestNode).g + distance(BestPosition, OffsetPosition);
+				float h = distance(targetPos, OffsetPosition);
 				float f = g + h;
 				if ((*n).f > f)
 				{
@@ -376,7 +445,7 @@ namespace Stas
 			}
 		}
 		vector<vec3> returnPath;
-		node currentNode = *graph.at(target).first;
+		node currentNode = NewGraphNodes[ConvertToArray(200, 200, 300, 300, target.x, target.z)];
 		// if no path found
 		if (currentNode.parent == nullptr)
 		{
@@ -384,10 +453,10 @@ namespace Stas
 		}
 		// path found
 		do {
-			returnPath.push_back(currentNode.pos);
+			returnPath.push_back(ConvertToWorldCoords(200,200,300,300,currentNode.pos));
 			currentNode = *currentNode.parent;
 		} while (currentNode.parent != nullptr);
-		returnPath.push_back(currentNode.pos);
+		returnPath.push_back(ConvertToWorldCoords(200, 200, 300, 300, currentNode.pos));
 
 		return returnPath;
 	}

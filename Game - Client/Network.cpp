@@ -32,7 +32,7 @@ void Network::InitializeConnection()
 	in_addr * address = (in_addr *)record->h_addr;
 //	address = inet_addr("83.130.207.1");
 	ServerIP = inet_ntoa(*address);
-	ServerIP = "80.178.27.112";
+	ServerIP = SERVER_ADDRESS;
 }
 
 void Network::InitializeLocalConnection()
@@ -42,7 +42,7 @@ void Network::InitializeLocalConnection()
 		result = udpClient.Initialize();
 	} while (!result);
 
-	ServerIP = "127.0.0.1";
+	ServerIP = LOCAL_HOST;
 
 	// Send TCP Connection Request
 	tcpClient.SendPacket("Connecting<EOF>");
@@ -121,7 +121,7 @@ void Network::SendNewData(GlobalDataObject & NewData)
 		JPlayers.push_back(i->second->GetJson());
 	}
 	json JNewData(JPlayers);
-	string Jstring = "NewData " + NewData.MyUsername + " " +
+	string Jstring = "NewData " + Session::GetInstance().CharacterName + " " +
 		to_string(TimeSinceEpoch.count()) + " " + JNewData.dump();
 	Send(Jstring);
 	int i = 0;

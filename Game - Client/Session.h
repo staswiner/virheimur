@@ -1,5 +1,6 @@
 #pragma once
 #include "string"
+#include "TCP.h"
 using namespace std;
 class Session
 {

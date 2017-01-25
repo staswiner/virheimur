@@ -16,15 +16,6 @@ SelectionState::~SelectionState()
 void SelectionState::Initialize(char* State)
 {
 
-	// test purposes
-	Characters.push_back(new Player());
-	Characters.push_back(new Player());
-	Characters[0]->stats.Exp = 100;
-	Characters[0]->CharacterName = "Nightblue3";
-	Characters[1]->stats.Exp = 250;
-	Characters[1]->CharacterName = "Nightblue4";
-	SelectedPlayer = Characters.begin();
-
 	// not test
 	UI.GenerateForm(this->GenerateForm());
 	mAntiAliasing.InitializeMultiSample();
@@ -122,7 +113,21 @@ void SelectionState::Draw3D()
 
 void SelectionState::PerformLogin()
 {
-	*this->GameState = 2;
+	TCP tcp;
+	// Login Character for others to see
+	string SelectedCharacterName = (*SelectedPlayer)->CharacterName;
+	string SendContent = "GetOnline " + SelectedCharacterName + " <EOF>";
+	tcp.SendPacket(SendContent);
+	string ReceiveContent = tcp.ReceivePacketsAsync();
+	if (ReceiveContent == "True")
+	{
+		Session::GetInstance().CharacterName = SelectedCharacterName;
+		*this->GameState = 2;
+	}
+	else
+	{
+
+	}
 }
 
 void SelectionState::CreateNewCharacter()
@@ -144,6 +149,30 @@ void SelectionState::ChangeCharacter(bool direction)
 		if (SelectedPlayer != Characters.begin())
 		SelectedPlayer--;
 	}
+	this->UI.root->GetUIElement("Exp")->innerText = "Exp: " + to_string((*SelectedPlayer)->stats.Exp);
+	this->UI.root->GetUIElement("Name")->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
+}
+
+void SelectionState::Reload()
+{
+	TCP tcp;
+	string Username = Session::GetInstance().Username;
+	// Get characters based on login session from server
+	tcp.SendPacket("LoadCharacters " + Username + " <EOF>");
+	string ReceiveContent = tcp.ReceivePacketsAsync();
+	json jCharacters = json::parse(ReceiveContent.c_str());
+	Characters.clear();
+	// Fill characters with retrieved data
+	for (int i = 0; i < jCharacters.size(); i++)
+	{
+		Characters.push_back(new Player());
+		Characters[i]->stats.Exp = 100;
+		string Name = jCharacters[i]["CharacterName"];
+		Characters[i]->CharacterName = Name;
+	}
+	// Initialize first selected character
+	SelectedPlayer = Characters.begin();
+	// Initialize UI Values
 	this->UI.root->GetUIElement("Exp")->innerText = "Exp: " + to_string((*SelectedPlayer)->stats.Exp);
 	this->UI.root->GetUIElement("Name")->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
 }
@@ -255,14 +284,14 @@ UIElement * SelectionState::GenerateForm()
 	Position = vec2(550, 350);
 	Stat->TopLeft = Position;
 	Stat->BotRight = Position + vec2(200,50);
-	Stat->innerText = "Exp: " + to_string((*SelectedPlayer)->stats.Exp);
+	//Stat->innerText = "Exp: " + to_string((*SelectedPlayer)->stats.Exp);
 	root->AppendChild(Stat);
 
 	Stat = new UIElement("Name", "Interface/Button1.png");
 	Position = vec2(250, 230);
 	Stat->TopLeft = Position;
 	Stat->BotRight = Position + vec2(200, 50);
-	Stat->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
+	//Stat->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
 	root->GetUIElement("CharacterFrame")->AppendChild(Stat);
 
 	return root;

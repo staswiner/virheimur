@@ -59,6 +59,11 @@ void UIElement::AddPressEvent(std::function<void(UIElement*)> onpress)
 
 }
 
+void UIElement::AddTextChangedEvent(std::function<void(UIElement*)> ontextchanged)
+{
+	this->textchanged = ontextchanged;
+}
+
 UIElement* UIElement::GetHover(vec2 MouseCoords)
 {
 	for (auto uie : Children)
@@ -137,6 +142,15 @@ void UIElement::OnPress()
 	}
 }
 
+void UIElement::OnTextChanged()
+{
+	// checks if function bind to anything
+	if (textchanged)
+	{
+		textchanged(this);
+	}
+}
+
 void UIElement::Hide()
 {
 	this->visible = false;
@@ -154,6 +168,25 @@ void UIElement::Destroy()
 		uie->second->Destroy();
 	}
 	delete this;
+}
+
+UIElement* UIElement::FocusNext()
+{
+	if (this->Children.size() > 0)
+	{
+		return this->Children.begin()->second;
+	}
+	else if ((++this->Parent->Children.find(this->Name)) != this->Parent->Children.end())
+	{
+
+		UIElement* brother = (++this->Parent->Children.find(this->Name))->second;
+		return brother;
+	}
+	else
+	{
+		return Parent;
+	}
+
 }
 
 void UIElement::AppendChild(UIElement * child)

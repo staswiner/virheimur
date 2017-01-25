@@ -48,6 +48,7 @@ private:
 	MenuPanel menuPanel;
 	StatsWindow statsWindow;
 	MasteryWindow masteryWindow;
+	void FocusNext();
 	void OpenStatWindow();
 	bool StatWindowOpen = true;;
 

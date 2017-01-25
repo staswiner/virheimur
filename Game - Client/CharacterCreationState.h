@@ -19,6 +19,7 @@ public:
 	void Draw(HDC hdc);
 	void Draw3D();
 	void CreateNewCharacter();
+	void GoBackToSelectionPage();
 private:
 	UIElement* GenerateForm();
 	string Username;

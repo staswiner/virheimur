@@ -123,7 +123,76 @@ void Scene::SetWindowHDC(HDC & hdc)
 
 void Scene::GenerateForm()
 {
-	UI.GenerateForm();
+	vec2 Position;
+	UI.root = new UIElement("Root", "");
+
+	/*UIElement* GreyCover = new UIElement("GreyCover", "Interface/GreyCover.png",0);
+	Position = vec2(0, 0);
+	GreyCover->TopLeft = Position;
+	GreyCover->SetByTrueSize(Position);
+	GreyCover->innerText = "PAUSE";
+	root->AppendChild(GreyCover);*/
+
+	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
+	Position = vec2(10, 80);
+	UsernameElement->TopLeft = Position;
+	UsernameElement->SetByTrueSize(Position);
+	UsernameElement->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	UsernameElement->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	UsernameElement->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	UsernameElement->AddClickEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+	UsernameElement->AddTextChangedEvent([]
+	(UIElement* Element)mutable-> void {
+		if (Element->innerText.back() == '\r') 
+		{
+			TCP tcp; tcp.SendPacket(Element->innerText); Element->innerText.pop_back();
+		}
+	});
+	UI.root->AppendChild(UsernameElement);
+
+	//UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
+	//Position = vec2(10, 160);
+	//PasswordElement->TopLeft = Position;
+	//PasswordElement->SetByTrueSize(Position);
+	//PasswordElement->AddHoverEvent([]
+	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	//PasswordElement->AddHoverDoneEvent([]
+	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	//PasswordElement->AddReturnDefaultEvent([]
+	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	//PasswordElement->AddClickEvent([]
+	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+	//root->AppendChild(PasswordElement);
+
+	//UIElement* StatsWindow = new UIElement("StatsWindow", "Interface/StatsWindow.png");
+	//Position = vec2(710, 300);
+	//StatsWindow->TopLeft = Position;
+	//StatsWindow->SetByTrueSize(Position);
+	//root->AppendChild(StatsWindow);
+
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	UIElement* StatsField = new UIElement("StatsField"+i, "Interface/StatsField.png");
+	//	Position = vec2(710, 300 + (i * 50));
+	//	StatsField->TopLeft = Position;
+	//	StatsField->SetByTrueSize(Position);
+	//	StatsField->AddHoverEvent([]
+	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldHovered.png"); });
+	//	StatsField->AddHoverDoneEvent([]
+	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
+	//	StatsField->AddReturnDefaultEvent([]
+	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
+	//	StatsField->AddClickEvent([]
+	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldSelected.png"); });
+	//	StatsWindow->AppendChild(StatsField);
+	//}
+	// load up for later use
+	UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
+	UIElement* FullHPBar = new UIElement("FullHPBar", "Interface/FullHPBar.png");
 }
 
 void Scene::Draw_Units()
@@ -406,7 +475,7 @@ void Scene::DrawUI()
 		vec3 pos = p.second->GetUnitData().GetPosition();
 		mat4 ModelMatrix;
 		ModelMatrix = translate(ModelMatrix, pos);
-		championChat->Draw2D(p.second->GetUsername(), ProjectionMatrix, ViewMatrix, ModelMatrix);
+		championChat->Draw2D(p.second->CharacterName, ProjectionMatrix, ViewMatrix, ModelMatrix);
 	}
 	championChat->Draw("OpenGL", ProjectionMatrix, ViewMatrix, mat4());
 	/*else
@@ -537,7 +606,10 @@ void Scene::DrawColladaShadow()
 	}
 	for (int i = -8; i < 8; i++)
 	{
-		mat4 ModelMat = translate(mat4(), vec3(i * 12, 0, -20));
+		vec3 housePosition(i * 12, 0, -20);
+		housePosition = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(housePosition);
+		mat4 ModelMat = translate(mat4(), housePosition);
+
 		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
 		ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
 			Add_mat4("Model", ModelMat).
@@ -674,7 +746,10 @@ void Scene::DrawCollada()
 
 	for (int i = -8; i < 8; i++)
 	{
-		mat4 ModelMat = translate(mat4(), vec3(i * 12, 0, 20));
+		vec3 housePosition(i * 12, 0, 20);
+		housePosition = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(housePosition);
+
+		mat4 ModelMat = translate(mat4(), housePosition);
 		ModelMat = rotate(ModelMat, radians(180.0f), vec3(0, 1, 0));
 
 		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
@@ -685,7 +760,10 @@ void Scene::DrawCollada()
 	}
 	for (int i = -8; i < 8; i++)
 	{
-		mat4 ModelMat = translate(mat4(), vec3(i * 12, 0, -20));
+		vec3 housePosition(i * 12, 0, -20);
+		housePosition = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(housePosition);
+		mat4 ModelMat = translate(mat4(), housePosition);
+
 		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
 		ShaderBuilder::LoadShader(Shader::At("Animation"))->
 			Add_mat4("Model", ModelMat).

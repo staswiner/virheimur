@@ -58,11 +58,14 @@ void Minimap::DrawMinimap(GDO & Data)
 	{
 		memcpy(NewImageData, MinimapFrameData, Width*Height * sizeof(u8vec4));
 		Data.RouteChanged = false;
-		for (auto i : *Data.Graph)
+		if (Data.Graph)
 		{
-			for (auto j : i.second)
+			for (auto i : *Data.Graph)
 			{
-				DrawLine(j.first, i.first, u8vec3(255,255,255));
+				for (auto j : i.second)
+				{
+					DrawLine(j.first, i.first, u8vec3(255, 255, 255));
+				}
 			}
 		}
 		if (Data.Path && Data.Path->size() > 0)

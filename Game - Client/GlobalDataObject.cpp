@@ -62,25 +62,27 @@ void GlobalDataObject::ReceiveDataString(string Message)
 			json PlayerParsed = Data[i];
 			vec3 StartPoint(PlayerParsed["x"], PlayerParsed["y"], PlayerParsed["z"]);
 			vec3 Destination(PlayerParsed["Destx"], PlayerParsed["Desty"], PlayerParsed["Destz"]);
+			string s = PlayerParsed["IpAddress"];
+			string jCharacterName = PlayerParsed["CharacterName"];
+			string jUsername = PlayerParsed["Username"];
 			
 			if (auto test = abs(milliseconds(PlayerParsed["TimeDelta"]).count()) > 10000)
 			{//exception
 				int i = 0;
 			}
-			Players[PlayerParsed["Username"]]->unit_Data.Path.clear();
+			Players[jCharacterName]->unit_Data.Path.clear();
 			for (int i = 0; i < PlayerParsed["Path"].size(); i++)
 			{
-				Players[PlayerParsed["Username"]]->unit_Data.Path.push_back(
+				Players[jCharacterName]->unit_Data.Path.push_back(
 					vec3(PlayerParsed["Path"][i]["x"], PlayerParsed["Path"][i]["y"], PlayerParsed["Path"][i]["z"]));
 			}
 			//vector<vec3> Path = PlayerParsed["Path"];
-			string s = PlayerParsed["IpAddress"];
-			string Jusername = PlayerParsed["Username"];
-			Players[PlayerParsed["Username"]]->unit_Data.StartPoint = StartPoint;
-			Players[PlayerParsed["Username"]]->unit_Data.Destination = Destination;
-			Players[PlayerParsed["Username"]]->unit_Data.StartPointTime = milliseconds(PlayerParsed["StartTime"]);
-			Players[PlayerParsed["Username"]]->Username = Jusername;
-			Players[PlayerParsed["Username"]]->TimeDelta = milliseconds(PlayerParsed["TimeDelta"]); 
+			Players[jCharacterName]->unit_Data.StartPoint = StartPoint;
+			Players[jCharacterName]->unit_Data.Destination = Destination;
+			Players[jCharacterName]->unit_Data.StartPointTime = milliseconds(PlayerParsed["StartTime"]);
+			Players[jCharacterName]->Username = jUsername;
+			Players[jCharacterName]->TimeDelta = milliseconds(PlayerParsed["TimeDelta"]); 
+			Players[jCharacterName]->CharacterName = jCharacterName;
 			//Players[PlayerParsed["Username"]]->stats.Hp = PlayerParsed["Hp"];
 			//Players[PlayerParsed["Username"]]->stats.MaxHp = PlayerParsed["MaxHp"];
 		}

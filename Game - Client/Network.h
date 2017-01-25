@@ -4,6 +4,7 @@
 #include "UdpClient.h"
 #include "TCP.h"
 #include "GlobalDataObject.h"
+#include "Session.h"
 #include <chrono>
 class Network
 {

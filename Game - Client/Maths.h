@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <list>
 #include <set>
+#include <chrono>
 #include <functional>
 
 #include "GL\glew.h"
@@ -20,6 +21,12 @@ using namespace std;
 //#define (A) isInstanceOf(B) (dynamic_cast<A*>(B))
 namespace Stas
 {
+	struct MinimapData
+	{
+		u8vec4* Map;
+		int Width;
+		int Height;
+	};
 	class Maths
 	{
 	public:
@@ -38,30 +45,34 @@ namespace Stas
 		static bool IsIn(vec2 TopLeft, vec2 BotRight, vec2 TestSample);
 		struct node {
 			node(vec3 pos) {
-				this->f = numeric_limits<float>::infinity();
 				this->parent = nullptr;
 				this->pos = pos;
+				this->f = numeric_limits<float>::infinity();
 				this->g = numeric_limits<float>::infinity();
 				this->h = numeric_limits<float>::infinity();
 				this->List = 0;
 			}
-			node() {}
+			node() {
+				this->parent = nullptr;
+				this->f = numeric_limits<float>::infinity();
+				this->g = numeric_limits<float>::infinity();
+				this->h = numeric_limits<float>::infinity();
+				this->List = 0;
+			}
 			vec3 pos;
 			node *parent;
 			float f, g, h;
 			int List; // 0 none, 1 open, 2 closed
 		};
+		static vector<vec3> AstarGrid(MinimapData& minimapData,
+			vec3 source, vec3 target);
+		static vector<vec3> AstarGridB(MinimapData & minimapData, vec3 source, vec3 target);
 	private:
 		static vector<vec3> AstarB(
 			std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
 			& graph, vec3 source, vec3 target);
-		vector<vec3> AstarGrid(std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3&lhs, const vec3&rhs)>>& graph, vec3 source, vec3 target);
+		
 	};
-	struct MinimapData
-	{
-		u8vec4* Map;
-		int Width;
-		int Height;
-	};
+
 }
 

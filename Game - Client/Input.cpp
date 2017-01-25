@@ -89,6 +89,13 @@ void Input::GetMouseInput()
 	//	myPlayer.GetUnitData().Position = Destination;
 		
 		//{
+	/*	vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+		for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+		{
+			myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
+			ReceivedData.RouteChanged = true;
+		}
+		ReceivedData.Path = &myPlayer->unit_Data.Path;*/
 
 		PRMalgorithm prm;
 		if (ReceivedData.Graph)

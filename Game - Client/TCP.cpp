@@ -44,7 +44,14 @@ void TCP::Connect()
 			WSACleanup();
 			exit(1);
 		}
-
+		//// Check if connection available
+		//::select(0,&ConnectSocket
+		//	_In_    int                  nfds,
+		//	_Inout_ fd_set               *readfds,
+		//	_Inout_ fd_set               *writefds,
+		//	_Inout_ fd_set               *exceptfds,
+		//	_In_    const struct timeval *timeout
+		//);
 		// Connect to server.
 		iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
 		if (iResult == SOCKET_ERROR) {
@@ -111,5 +118,6 @@ string TCP::ReceivePacketsAsync()
 	closesocket(ConnectSocket);
 	WSACleanup();
 	//success
-	return ReceivedString;
+	// remove <EOF>
+	return ReceivedString.substr(0,ReceivedString.find("<EOF>"));
 }

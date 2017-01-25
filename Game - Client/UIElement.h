@@ -39,6 +39,7 @@ public:
 	void AddReturnDefaultEvent(std::function<void(UIElement*)> onreturndefault);
 	void AddClickEvent(std::function<void(UIElement*)> onclick);
 	void AddPressEvent(std::function<void(UIElement*)> onpress);
+	void AddTextChangedEvent(std::function<void(UIElement*)> ontextchanged);
 	UIElement* GetHover(vec2 MouseCoords);
 	UIElement* GetClick(vec2 MouseCoords);
 	void OnHover();
@@ -46,10 +47,12 @@ public:
 	void OnReturnDefault();
 	void OnClick();
 	void OnPress();
+	void OnTextChanged();
 	void Hide();
 	void Show();
 	void Destroy();
 
+	UIElement* FocusNext();
 	void AppendChild(UIElement*);
 	void RemoveChild(UIElement*);
 	void RemoveChild(string Name);
@@ -71,6 +74,7 @@ private:
 	std::function<void(UIElement*)> returndefault;
 	std::function<void(UIElement*)> click;
 	std::function<void(UIElement*)> press;
+	std::function<void(UIElement*)> textchanged;
 	void UpdateParentSize(vec2 TopLeft, vec2 BotRight);
 	void LoadPicture(string Filename);
 	Element Name;

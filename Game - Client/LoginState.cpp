@@ -35,8 +35,8 @@ void LoginState::Input()
 		LeftIsPressed = false;
 		UI.LeftClick();
 	}
-	UI.FocusControl();
 	UI.AcceptInput();
+	UI.FocusControl();
 #undef is
 }
 
@@ -62,9 +62,8 @@ void LoginState::PerformLogin()
 	string username = this->UI.root->GetUIElement("Username")->innerText;
 	string password = this->UI.root->GetUIElement("Password")->innerText;
 	/// add support when i get home & get a tcp server working
-	/*tcp.SendPacket("");
-	string output = tcp.ReceivePacketsAsync();*/
-	string output = "Test";// default for tests
+	tcp.SendPacket("Authentication "+username+" "+password+" <EOF>");
+	string output = tcp.ReceivePacketsAsync();	
 #define is ==
 //#define then {
 //#define end }
@@ -73,16 +72,11 @@ void LoginState::PerformLogin()
 	{
 		Session& session = Session::GetInstance();
 		session.Username = username;
-		session.UserID = stoi(output);
 		*this->GameState = 1;
 	}
 	else if (output is "Invalid")
 	{
 		this->UI.root->GetUIElement("Invalid")->Show();
-	}
-	else if (output is "Test")
-	{
-		*this->GameState = 1;
 	}
 }
 
@@ -93,6 +87,7 @@ UIElement* LoginState::GenerateForm()
 
 	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
 	Position = vec2(10, 80);
+	UsernameElement->innerText = "Came2fame";
 	UsernameElement->TopLeft = Position;
 	UsernameElement->SetByTrueSize(Position);
 	UsernameElement->AddHoverEvent([]
@@ -107,6 +102,7 @@ UIElement* LoginState::GenerateForm()
 
 	UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
 	Position = vec2(10, 180);
+	PasswordElement->innerText = "ilovemyreann<3";
 	PasswordElement->TopLeft = Position;
 	PasswordElement->SetByTrueSize(Position);
 	PasswordElement->AddHoverEvent([]

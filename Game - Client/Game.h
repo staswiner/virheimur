@@ -20,13 +20,14 @@ public:
 	void Loop();
 	void ThreadedLoop();
 	void SetHDC(HDC& hdc) { this->scene.SetWindowHDC(hdc); this->m_hdc = hdc; }
+	
 private:
 	// Major States
 	void LoginScreen();
 	void SelectionScreen();
 	void GameScreen();
 	void TestGround();
-
+	void GenerateForm();
 	void CharacterCreationScreen();
 
 #pragma region LoginState
@@ -65,6 +66,7 @@ private:
 	string Username;
 	string Password;
 	char State; // 0 Login, 1 Selection, 2 game
+	bool StateChanged;
 	bool Online = true;
 	// process running variables
 	STARTUPINFO si;

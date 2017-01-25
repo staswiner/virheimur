@@ -7,6 +7,7 @@
 #include "MultiSampleFBO.h"
 #include "FBO.h"
 #include "TCP.h"
+#include "Session.h"
 using namespace glm;
 class SelectionState
 {
@@ -20,6 +21,7 @@ public:
 	void PerformLogin();
 	void CreateNewCharacter();
 	void ChangeCharacter(bool direction);
+	void Reload();
 private:
 	UIElement* GenerateForm();
 	string Username;

@@ -16,7 +16,7 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	input(input),
 	logic(logic)
 {
-	State = 2;
+	State = 0;
 }
 
 
@@ -29,10 +29,12 @@ Game::~Game()
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 	}
+
 }
 
 void Game::Initialize()
 {
+	Online = true;
 #pragma region Network
 	if (Online)
 	{
@@ -41,7 +43,6 @@ void Game::Initialize()
 		ReadAuthentication();
 		Data.MyUsername = Username;
 		Receiver = std::thread(&Network::BeginReceive, &network);
-		network.Send("Authentication " + Username + " " + Password);
 	}
 #pragma endregion Network
 #pragma region Offline Network Simulator
@@ -51,7 +52,7 @@ void Game::Initialize()
 		ZeroMemory(&si, sizeof(si));
 		si.cb = sizeof(si);
 		ZeroMemory(&pi, sizeof(pi));
-		CreateProcess("ReannLove.exe","",NULL,NULL,FALSE,0,NULL,NULL,&si,&pi);
+	//	CreateProcess("Local_Server_CS.exe","",NULL,NULL,FALSE,0,NULL,NULL,&si,&pi);
 		network.InitializeLocalConnection();
 		//ReadAuthentication();
 		Receiver = std::thread(&Network::BeginReceive, &network);
@@ -70,6 +71,16 @@ int i = 0;
 void Game::Loop()
 {
 #define is ==
+	static char LastState = State;
+	if (State != LastState)
+	{
+		StateChanged = true;
+		LastState = State;
+	}
+	else
+	{
+		StateChanged = false;
+	}
 	switch (State)
 	{
 	case 0:LoginScreen(); break;
@@ -92,6 +103,7 @@ void Game::ThreadedLoop()
 	scene.DrawThreaded();
 }
 
+
 void Game::LoginScreen()
 {
 	//LoginUserInput();
@@ -107,6 +119,8 @@ void Game::LoginScreen()
 
 void Game::SelectionScreen()
 {
+	if (StateChanged)
+		selectionState.Reload();
 	selectionState.Input();
 	selectionState.Draw(this->m_hdc);
 }
@@ -183,6 +197,9 @@ void Game::TestGround()
 	tcp.SendPacket("Hello world hi<EOF>");
 	string Receive = tcp.ReceivePacketsAsync();
  	OutputDebugString(Receive.c_str());
+}
+void Game::GenerateForm()
+{
 }
 void Game::CharacterCreationScreen()
 {
