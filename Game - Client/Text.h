@@ -33,8 +33,8 @@ public:
 private:
 	Text(string font);
 	static Text Instance;
-
-	void LoadCharacters();
+	void AddFont(string font, float scale);
+	void LoadCharacters(float scale);
 	void ReserveVBO();
 	//void Text::Draw_Interface(int top, int bot, int left, int right, vec2 offset);
 	GLuint Texture, VAO, VBO;
@@ -54,6 +54,7 @@ private:
 	};
 
 	static std::map<GLchar, Character> Characters;
+	map<float, map<GLchar, Character>> Fonts;
 
 	static vector<Vertices> vertices;
 	static unsigned int Vertices_Amount;

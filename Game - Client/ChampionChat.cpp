@@ -33,7 +33,7 @@ void ChampionChat::Draw(string a_Text, mat4& projection, mat4& view, mat4& model
 	ShaderBuilder::LoadShader(shader)->Add_mat4("projection", projection).Add_mat4("view", view).
 		Add_mat4("model", model).Add_vec3("textColor", color).Add_texture("text", 0);
 	Text& text = Text::getInstance();
-	text.RenderTextReverse(a_Text, 0.0f, 0.0f, 200.0f, 10.0f);
+	text.RenderTextReverse(a_Text, 0.0f, 0.0f, 200.0f, 100.0f);
 }
 
 void ChampionChat::Draw2D(string a_Text, mat4 & projection, mat4 & view, mat4 & model)

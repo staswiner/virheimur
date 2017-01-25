@@ -23,7 +23,7 @@ public:
 		}
 	};
 	struct Font {
-		GLuint size = 14;
+		GLuint size = 20;
 		vec3 color = vec3(0);
 	};
 	struct Style {

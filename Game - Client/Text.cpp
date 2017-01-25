@@ -25,30 +25,44 @@ Text::~Text()
 
 void Text::Initialize()
 {
-	/*glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
-	
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	///*glEnable(GL_CULL_FACE);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+	//
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//shader = Shader("Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
+
+	//GLuint error = FT_Init_FreeType(&library);
+	//error = FT_New_Face(library,"C://Windows/Fonts/arial.ttf",
+	//	0,&face);
+	//FT_Set_Pixel_Sizes(face, 0, RESOLUTION);
+	////error = FT_Set_Char_Size(
+	////	face,    /* handle to face object           */
+	////	16 * 64,       /* char_width in 1/64th of points  */
+	////	16 * 64,   /* char_height in 1/64th of points */
+	////	800,     /* horizontal device resolution    */
+	////	600);   /* vertical device resolution      */
+	ReserveVBO();
 	shader = Shader("Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
 
-	GLuint error = FT_Init_FreeType(&library);
-	error = FT_New_Face(library,"C://Windows/Fonts/arial.ttf",
-		0,&face);
-	FT_Set_Pixel_Sizes(face, 0, RESOLUTION);
-	//error = FT_Set_Char_Size(
-	//	face,    /* handle to face object           */
-	//	16 * 64,       /* char_width in 1/64th of points  */
-	//	16 * 64,   /* char_height in 1/64th of points */
-	//	800,     /* horizontal device resolution    */
-	//	600);   /* vertical device resolution      */
-	ReserveVBO();
-	LoadCharacters();
+	//LoadCharacters();
 }
 
 
-void Text::LoadCharacters()
+void Text::AddFont(string font, float scale)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	GLuint error = FT_Init_FreeType(&library);
+	error = FT_New_Face(library, "C://Windows/Fonts/arial.ttf",
+		0, &face);
+	FT_Set_Pixel_Sizes(face, 0, scale);
+	LoadCharacters(scale);
+}
+
+void Text::LoadCharacters(float scale)
 {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
@@ -78,6 +92,7 @@ void Text::LoadCharacters()
 			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 			(GLuint)face->glyph->advance.x
 		};
+		Fonts[scale][c] = character;
 		Characters.insert(std::pair<GLchar, Character>(c, character));
 	}
 	glEnable(GL_TEXTURE_2D);
@@ -103,6 +118,12 @@ void Text::ReserveVBO()
 
 void Text::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat xMax, GLfloat scale, vec3 color)
 {
+	float FontScale = scale;
+	if (Fonts.find(FontScale) == Fonts.end())
+	{
+		// TODO : add font specification
+		AddFont("", FontScale);
+	}
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	// Activate corresponding render state	
@@ -112,16 +133,17 @@ void Text::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat xMax, GLfl
 	
 	Text::LoadTextShader(color);
 
-	scale /= RESOLUTION;
+	scale /= FontScale;
 	vec2 start(x, y);
 	// Iterate through all characters
 	std::string::const_iterator c;
 	for (c = text.begin(); c != text.end(); c++)
 	{
-		Character ch = Characters[*c];
+		//Character ch = Characters[*c];
+		Character ch = Fonts[FontScale][*c];
 		if (*c == '\r' || (x-start.x > xMax && xMax != 0.0f))
 		{
-			y += scale * RESOLUTION;
+			y += scale * FontScale;
 			x = start.x;
 			if (*c == '\r')
 				continue;
@@ -161,6 +183,12 @@ void Text::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat xMax, GLfl
 }
 void Text::RenderTextReverse(std::string text, GLfloat x, GLfloat y, GLfloat xMax, GLfloat scale)
 {
+	float FontScale = scale;
+	if (Fonts.find(FontScale) == Fonts.end())
+	{
+		// TODO : add font specification
+		AddFont("", FontScale);
+	}
 	//glClear(GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
 	//glEnable(GL_CULL_FACE);
@@ -171,7 +199,7 @@ void Text::RenderTextReverse(std::string text, GLfloat x, GLfloat y, GLfloat xMa
 	glBindVertexArray(VAO);
 	glEnableVertexAttribArray(0);
 
-	scale /= RESOLUTION / 2;
+	scale /= FontScale;
 	vec2 start(x, y);
 	// Iterate through all characters
 	std::string::const_iterator c;
@@ -180,7 +208,7 @@ void Text::RenderTextReverse(std::string text, GLfloat x, GLfloat y, GLfloat xMa
 		Character ch = Characters[*c];
 		if (*c == '\r' || (x - start.x > xMax && xMax != 0.0f))
 		{
-			y -= ((ch.Advance >> 6) + RESOLUTION / 3) * scale;
+			y -= ((ch.Advance >> 6) + FontScale) * scale;
 			x = start.x;
 			continue;
 		}
