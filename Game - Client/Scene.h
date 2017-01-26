@@ -61,6 +61,7 @@ private:
 	void DrawSea();
 	void DrawPreBuffer();
 	void DrawCollada();
+	void DrawWater();
 	void DrawIndexColor();
 
 	void DrawColladaDistance();

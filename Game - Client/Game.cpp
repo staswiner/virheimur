@@ -287,19 +287,3 @@ void Game::CombineData()
 	}
 
 }
-
-void Game::ReadAuthentication()
-{
-	string line;
-	ifstream myfile("Authentication.txt");
-	if (myfile.is_open())
-	{
-		getline(myfile, line);
-		Username = line;
-		getline(myfile, line);
-		Password = line;
-		myfile.close();
-	}
-	else
-		exit(2);
-}

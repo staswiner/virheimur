@@ -116,6 +116,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIObjects.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChampionChat.h" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="GaussicEffect.h" />
     <ClInclude Include="GlobalDataObject.h" />
     <ClInclude Include="Graphics_Header.h" />
@@ -192,6 +194,7 @@
     <ClInclude Include="XMLBuilder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIObjects.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChampionChat.cpp" />
@@ -207,6 +210,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GameLogic.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GaussicEffect.cpp" />
     <ClCompile Include="GlobalDataObject.cpp" />
     <ClCompile Include="Grass.cpp" />

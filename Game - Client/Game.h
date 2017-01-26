@@ -1,13 +1,11 @@
 #pragma once
-#include "Scene.h"
-#include "GameLogic.h"
-#include "Input.h"
-#include "Network.h"
+
 #include "LoginState.h"
 #include "SelectionState.h"
 #include "UserInterface.h"
 #include "CharacterCreationState.h"
 #include "TCP.h"
+#include "GameState.h"
 #include <process.h>
 #include <thread>
 class Game
@@ -62,9 +60,6 @@ private:
 	mat4 ViewMatrix;
 	std::thread Receiver;
 	HDC m_hdc;
-	void ReadAuthentication();
-	string Username;
-	string Password;
 	char State; // 0 Login, 1 Selection, 2 game
 	bool StateChanged;
 	bool Online = true;

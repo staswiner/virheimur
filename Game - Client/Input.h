@@ -8,6 +8,7 @@
 #include "PRMalgorithm.h"
 #include "Loaded_Models.h"
 #include "FBO.h"
+#include "Session.h"
 #include <chrono>
 #include <memory>
 using namespace std::chrono;

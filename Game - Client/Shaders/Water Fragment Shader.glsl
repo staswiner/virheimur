@@ -6,8 +6,8 @@ in GS_OUT{
 vec2 UVs;
 vec3 Normals;
 vec3 FragPos;
-vec3 LightFragPos;
 vec4 clipSpace;
+vec3 LightFragPos;
 vec3 T;
 vec3 B;
 
@@ -22,7 +22,7 @@ struct Material {
 uniform sampler2D Texture0;//grass
 uniform sampler2D Texture1;//mountain
 uniform sampler2D Texture2;//map path
-uniform sampler2D Texture3;//road texture
+uniform sampler2D Texture3;//reflection
 uniform sampler2D Texture4;//road normal texture
 uniform sampler2D Texture5;//road bump texture
 uniform sampler2D Texture6;//road dark texture
@@ -44,7 +44,11 @@ uniform float time;
 out vec4 color;
 //varying in vec3 a; 
 //varying vec3 varNormalf;
-
+vec3 CalcNormal()
+{
+	vec3 Normal = normalize(fs_in.Normals);
+	return Normal;
+}
 float ShadowCalculation(vec3 FragPos,vec3 lightDir, vec3 normal)
 {
     // perform perspective divide
@@ -66,18 +70,14 @@ float ShadowCalculation(vec3 FragPos,vec3 lightDir, vec3 normal)
     return shadow;
 }  
 
-vec3 CalcNormal()
-{
-	vec3 Normal = normalize(fs_in.Normals);
-	return Normal;
-}
+
 vec3 CalcBumpedNormal(vec4 normalTexture)
 {
 	vec3 Normal = CalcNormal();
 	vec3 T = fs_in.T;
 	T = normalize(T - dot(T, Normal) * Normal);
 	vec3 B = cross(T, Normal);
-	B = fs_in.B;
+//	B = fs_in.B;
 
 	vec4 TexturedNormal = normalTexture;
 	TexturedNormal = (TexturedNormal*2.0 - vec4(1.0));
@@ -90,7 +90,7 @@ vec3 CalcBumpedNormal(vec4 normalTexture)
 	//NewNormal.x *= -1.0;
 	//NewNormal.z *= -1.0;
 	NewNormal = normalize(NewNormal);
-	return NewNormal.xyz;
+	return NewNormal;
 }
 vec3 AddLight(Material material,vec3 LightColor, vec3 LightDir, vec4 normalTexture )
 {
@@ -127,30 +127,40 @@ void main()
 	vec2 refractTexCoords = vec2(ndc.x, ndc.y);
 	vec2 reflectTexCoords = vec2(ndc.x, -ndc.y);
 
-	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
-	vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
+	//vec3 lightDir = normalize(lightPos - fs_in.FragPos);
+	//vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
 
-	//// distortion
-	//vec2 distortionTexCoords = texture(DUDVmap, TexCoords + vec2(WaveOffset, 0.0)).rg * 0.1; 
+	// distortion
+	//vec2 distortionTexCoords = texture(Texture0, TexCoords + vec2(WaveOffset, 0.0)).rg * 0.1; 
 	//distortionTexCoords = fs_in.UVs + vec2(distortionTexCoords.x,distortionTexCoords.x + WaveOffset);
-	//vec2 dudvmap = (texture(DUDVmap,distortionTexCoords).rg * 2.0 - 1.0) * waveStrength;
+	//vec2 dudvmap = (texture(Texture0,distortionTexCoords).rg * 2.0 - 1.0) * waveStrength;
 
-	vec2 TextureCoords = ParallaxMapping(fs_in.UVs, toCameraVector) * Texelation;
+	//vec2 TextureCoords = ParallaxMapping(fs_in.UVs, toCameraVector) * Texelation;
 	vec4 color0 = texture2D(Texture0, fs_in.UVs * Texelation);
 	vec4 color1 = texture2D(Texture1, (fs_in.UVs + vec2(time/500000.0)) * Texelation);
 
-	vec3 LightColor = vec3(1,0.9,0.7);
-	vec3 WaterColor = vec3(0,0.3,0.7);
+	//vec3 LightColor = vec3(1,0.9,0.7);
+	//vec3 WaterColor = vec3(0,0.3,0.7);
 
 
-	//// Grass Bumped
-	vec3 WaterLight = AddLight(Grass, LightColor, lightDir, color1);
-	vec3 TotalWaterColor = WaterLight * WaterColor;
+	////// Grass Bumped
+	//vec3 WaterLight = AddLight(Grass, LightColor, lightDir, color1);
+	//vec3 TotalWaterColor = WaterLight * WaterColor;
 
-	vec3 TotalColor = TotalWaterColor;
-	vec3 grey = vec3(0.5,0.5,0.5);
-	color = vec4(TotalWaterColor,1);
-	color = texture(reflection,reflectTexCoords);
+	//vec3 TotalColor = TotalWaterColor;
+	//vec3 grey = vec3(0.5,0.5,0.5);
+	//color = vec4(TotalWaterColor,1);
+	//color = texture(reflection,reflectTexCoords);
+	
+	vec3 LightColor = vec3(1.0,0.9,0.7);
+	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
+	vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
+	vec3 LightColorCalculated = AddLight(Water,LightColor,lightDir,texture2D(Texture1,(fs_in.UVs + vec2(time/200000.0) )* Texelation));
+
+	vec4 reflectionColor = texture(Texture3,fs_in.UVs * vec2(1,-1));
+
+	color = vec4(LightColorCalculated, 1.0f) * vec4(0.2,0.25,0.85,1);
+	color = reflectionColor;//vec4(1.0) * texture2D(Texture1,fs_in.UVs * 10.0);//* vec4(LightColorCalculated,1.0);// * LightColor;
 //color = vec4(1);
 
 }

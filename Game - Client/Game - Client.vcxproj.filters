@@ -341,6 +341,12 @@
     <ClInclude Include="Default.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AIObjects.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -523,6 +529,8 @@
     <ClCompile Include="TCP.cpp" />
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="Default.cpp" />
+    <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="AIObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">

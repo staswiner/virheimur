@@ -281,7 +281,8 @@ void Scene::DrawScene_PostProcessing()
 	DrawSky();
 	//DrawGround(Shader::At("Ground"));
 	DrawCollada();
-	//DrawUI();
+	DrawWater();
+	DrawUI();
 
 	//DrawEntities();
 	//DrawSea();
@@ -654,6 +655,7 @@ void Scene::DrawColladaShadow()
 }
 void Scene::DrawCollada()
 {
+	glEnable(GL_CLIP_DISTANCE0);
 	mat4 WVM;
 	// Light Source
 	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
@@ -737,42 +739,48 @@ void Scene::DrawCollada()
 	/*uniform vec3 lightPos;
 	uniform vec3 cameraPos;
 	uniform Material Wood;*/
-	ShaderBuilder::LoadShader(Shader::At("Animation"))->
-		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", false).
-		Add_float("Texelation", 10.0f).
-		Add_vec3("lightPos", NewLightPos).
-		Add_vec3("cameraPos", -camera.GetCameraPosition()).
-		Add_Material("Wood", Materials::GetInstance()["chrome"]).
-		Add_textures(loaded_Models["House"]->Textures);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	for (int i = -8; i < 8; i++)
-	{
-		vec3 housePosition(i * 12, 0, 20);
-		housePosition = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(housePosition);
+	
+#pragma region Houses
 
-		mat4 ModelMat = translate(mat4(), housePosition);
-		ModelMat = rotate(ModelMat, radians(180.0f), vec3(0, 1, 0));
 
-		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
-		ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("Model", ModelMat).
-			Add_mat4("WVM", WVM);
-		loaded_Models["House"]->Draw();
-	}
-	for (int i = -8; i < 8; i++)
-	{
-		vec3 housePosition(i * 12, 0, -20);
-		housePosition = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(housePosition);
-		mat4 ModelMat = translate(mat4(), housePosition);
+	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	//	Add_mat4("WVM", WVM).
+	//	Add_bool("isAnimated", false).
+	//	Add_float("Texelation", 10.0f).
+	//	Add_vec3("lightPos", NewLightPos).
+	//	Add_vec3("cameraPos", -camera.GetCameraPosition()).
+	//	Add_Material("Wood", Materials::GetInstance()["chrome"]).
+	//	Add_textures(loaded_Models["House"]->Textures);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//for (int i = -8; i < 8; i++)
+	//{
+	//	vec3 housePosition(i * 12, 0, 20);
+	//	housePosition = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(housePosition);
 
-		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
-		ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("Model", ModelMat).
-			Add_mat4("WVM", WVM);
-		loaded_Models["House"]->Draw();
-	}
+	//	mat4 ModelMat = translate(mat4(), housePosition);
+	//	ModelMat = rotate(ModelMat, radians(180.0f), vec3(0, 1, 0));
+
+	//	WVM = ProjectionMatrix * ViewMatrix * ModelMat;
+	//	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	//		Add_mat4("Model", ModelMat).
+	//		Add_mat4("WVM", WVM);
+	//	loaded_Models["House"]->Draw();
+	//}
+	//for (int i = -8; i < 8; i++)
+	//{
+	//	vec3 housePosition(i * 12, 0, -20);
+	//	housePosition = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(housePosition);
+	//	mat4 ModelMat = translate(mat4(), housePosition);
+
+	//	WVM = ProjectionMatrix * ViewMatrix * ModelMat;
+	//	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	//		Add_mat4("Model", ModelMat).
+	//		Add_mat4("WVM", WVM);
+	//	loaded_Models["House"]->Draw();
+	//}
+#pragma endregion
+
 	glEnable(GL_BLEND);
 	for (int j = 3; j < 4; j++)
 	{
@@ -841,4 +849,25 @@ void Scene::DrawCollada()
 #pragma endregion Grass
 
 
+}
+
+
+void Scene::DrawWater()
+{
+	mat4 WVM = ProjectionMatrix * ViewMatrix;
+	mat4 landmat;
+	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(counter) / 90.0f), 0, 0);
+
+	ShaderBuilder::LoadShader(Shader::At("Water"))->
+		Add_mat4("WVM", WVM).
+		Add_bool("isAnimated", false).
+		Add_float("Texelation", 10.0f).
+		Add_vec3("lightPos", NewLightPos).
+		Add_mat4("Model", landmat).
+		Add_float("time", fmod(GetTickCount(), 100000000)).
+		Add_vec3("cameraPos", -camera.GetCameraPosition()).
+		Add_Material("Water", Materials::GetInstance()["chrome"]).
+		Add_texture("Texture3", mFBO["LakeReflection"].texture).
+		Add_textures(loaded_Models["Water"]->Textures);
+	loaded_Models["Water"]->Draw();
 }

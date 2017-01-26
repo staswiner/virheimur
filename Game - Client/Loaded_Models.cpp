@@ -32,9 +32,10 @@ void staticLoaded_Models::initialize_Models()
 	Models["Land"]->AddTexture("Texture7", "Map/Grass/grass01_n_converted.jpg");
 	Models["Land"]->AddTexture("Texture8", "Map/Grass/grass01_h_converted.jpg");
 
-	Models["Water"] = new Model("Map/FlatLand.dae", "");
+	Models["Water"] = new Model("Map/Sea.dae", "");
 	Models["Water"]->AddTexture("Texture0", "Map/Water/waterDUDV.png");
 	Models["Water"]->AddTexture("Texture1", "Map/Water/waterNormals.jpg");
+	Models["Water"]->AddTexture("Texture2","Map/Default Normal Map.jpg");
 	
 
 

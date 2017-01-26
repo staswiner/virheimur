@@ -2,6 +2,7 @@
 #include "json.hpp"
 #include "Player.h"
 #include "Effect.h"
+#include "AIObjects.h"
 #include <string>
 #include <vector>
 using namespace std;
@@ -34,6 +35,7 @@ public:
 private:
 	json Data;
 	PlayerRepository& Players;
+	vector<AIObjects> Monsters;
 	PlayerRepository NewPlayers;
 	string MyIP;
 };

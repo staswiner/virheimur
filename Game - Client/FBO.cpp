@@ -125,7 +125,7 @@ void FBO::BindFrameBuffer()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	glClearColor(0.0f, 0.0f, 0, 0);
+	glClearColor(255,255,255,255);
 	glDepthMask(GL_TRUE);
 	glViewport(0, 0, this->Width,this->Height);
 

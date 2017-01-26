@@ -53,6 +53,7 @@ void Input::GetMouseInput()
 
 	if (mouse.RightIsPressed())
 	{
+		Session& session = Session::GetInstance();
 		//glNamedFramebufferReadBuffer(Index->PostProcessingFBO,GL_COLOR_ATTACHMENT0);
 #pragma region FBO Read Pixel
 		glBindFramebuffer(GL_FRAMEBUFFER, Index->PostProcessingFBO);
@@ -67,7 +68,7 @@ void Input::GetMouseInput()
 		PlaneCoord.push_back(vec3(0, 0, 1)); // second vector of the plane
 		PlaneCoord.push_back(vec3(0, 50, 0)); // point on the plane
 		// unused, just for reference
-		vec3 CurrentPosition = Data->GetPlayerInformation()[ReceivedData.MyUsername]->GetUnitData().GetPosition();
+		vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().GetPosition();
 		// Get Fragment Plane
 		PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r,pixel.g,pixel.b));
 		// Get Ray Cast
@@ -76,10 +77,10 @@ void Input::GetMouseInput()
 		vec3 Destination = ray.PlaneIntersection(PlaneCoord[0], PlaneCoord[1], PlaneCoord[2],
 			ray.GetWorldRay(),camera.GetCameraPosition());
 		// Set Destination to player
-		Player* myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername];
-		myPlayer->Username = ReceivedData.MyUsername;
+		Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName];
+		myPlayer->Username = session.Username;
 		// Other variables
-		myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[ReceivedData.MyUsername]->unit_Data.Position;
+		myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[session.CharacterName]->unit_Data.Position;
 		myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		// Set Path
 		myPlayer->unit_Data.Path.clear();
@@ -90,8 +91,8 @@ void Input::GetMouseInput()
 		
 		//{
 #define ASTAR 0
-#define DIJKSTRA 1
-		int AlgorithmType = ASTAR;
+#define PRM 1
+		int AlgorithmType = PRM;
 		if (AlgorithmType == ASTAR)
 		{
 			vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
@@ -102,7 +103,7 @@ void Input::GetMouseInput()
 			}
 			ReceivedData.Path = &myPlayer->unit_Data.Path;
 		}
-		else if (AlgorithmType == DIJKSTRA)
+		else if (AlgorithmType == PRM)
 		{
 			PRMalgorithm prm;
 			if (ReceivedData.Graph)
@@ -181,8 +182,9 @@ void Input::GetKeyboardInput()
 
 void Input::ResetCharacterPosition()
 {
+	Session& session = Session::GetInstance();
 	vec3 Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
-	Player* myPlayer = NewData.GetPlayerInformation()[ReceivedData.MyUsername]; // also creates the character
+	Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
 	myPlayer->Username = ReceivedData.MyUsername;
 	myPlayer->unit_Data.Path.clear();
 	myPlayer->unit_Data.Path.push_back(Position);

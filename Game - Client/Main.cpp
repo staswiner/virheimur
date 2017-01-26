@@ -1,5 +1,6 @@
 #define _WINSOCKAPI_
 //#define _WINSOCKAPI2_
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <Windowsx.h>
 #include "MainLoop.h"
@@ -287,12 +288,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		/*   DeltaB << GET_WHEEL_DELTA_WPARAM(wParam) << endl;
 		OutputDebugString(DeltaB.str().c_str());*/
 		break;
-	case MM_WIM_OPEN:
-		cout << "hello";
-		break;
-	case MM_WIM_DATA:
-		cout << "hello";
-		break;
+	//case MM_WIM_OPEN:
+	//	cout << "hello";
+	//	break;
+	//case MM_WIM_DATA:
+	//	cout << "hello"; 
+	//	break;
 	default:
 
 		break;

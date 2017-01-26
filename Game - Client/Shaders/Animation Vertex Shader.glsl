@@ -6,7 +6,7 @@ layout(location = 2) in vec2 uvs;
 layout(location = 3) in ivec4 bonesID;
 layout(location = 4) in vec4 Weights;
 
-
+out float gl_ClipDistance[6];
 out VS_OUT{
 vec2 UVs;
 vec3 Normals;
@@ -26,6 +26,7 @@ uniform mat4 Model;
 uniform int BoneNum;
 uniform mat4 Bones[100];
 
+const vec4 plane = vec4(0,1,0,0);
 void main()
 {
 	vec4 objectpos = vec4(position, 1.0);
@@ -47,10 +48,15 @@ void main()
 	//}
 
 	vs_out.clipSpace = WVM * objectpos;
+
 	gl_Position = vs_out.clipSpace;
 	vs_out.UVs = vec2(uvs.x,1.0-uvs.y);
 	vs_out.Normals = normals;
 	vs_out.FragPos = vec3(Model * vec4(position,1));
+	gl_ClipDistance[0] = -10;//dot(plane, vec4(vs_out.FragPos,1.0));
 	vec4 lFragPos = LightViewMatrix * vec4(vs_out.FragPos,1);
 	vs_out.LightFragPos = vec3(lFragPos.xyz)/lFragPos.w; 
+
+//	gl_ClipDistance[0] = dot(plane, vs_out.clipSpace);
+
 }
