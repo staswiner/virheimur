@@ -250,7 +250,17 @@ void UIElement::Draw()
 
 		Text::LoadTextShader(vec3(0, 0, 0));
 		Text& text = Text::getInstance();
-		text.RenderText(this->innerText, this->TextPosition.x, this->TextPosition.y, 
+		// Mask text
+		string NewInnerText;
+		if (this->style.MaskedText)
+		{
+			NewInnerText.resize(this->innerText.size(), '*');
+		}
+		else
+		{
+			NewInnerText = this->innerText;
+		}
+		text.RenderText(NewInnerText, this->TextPosition.x, this->TextPosition.y,
 			(this->BotRight.x-this->TopLeft.x) - margin.x*2, FontSize, style.font.color);
 	}
 	// proceeds to drawing children

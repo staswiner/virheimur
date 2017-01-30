@@ -30,6 +30,7 @@ public:
 		Font font;
 		vec3 maskColor = vec3(1);
 		float opacity = 1.0f;
+		bool MaskedText = false;
 	};
 public:
 	UIElement(string Name, string Filename, int z_index=1);

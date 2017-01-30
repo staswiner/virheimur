@@ -104,6 +104,7 @@ UIElement* LoginState::GenerateForm()
 	Position = vec2(10, 180);
 	PasswordElement->innerText = "ilovemyreann<3";
 	PasswordElement->TopLeft = Position;
+	PasswordElement->style.MaskedText = true;
 	PasswordElement->SetByTrueSize(Position);
 	PasswordElement->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });

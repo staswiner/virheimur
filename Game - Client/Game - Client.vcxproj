@@ -125,6 +125,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Header.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="Cookies.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Default.h" />
     <ClInclude Include="Effect.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="CharacterData.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Cookies.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Default.cpp" />
     <ClCompile Include="Effect.cpp" />
