@@ -88,6 +88,6 @@ void main()
 	float depth = gl_FragCoord.z;
 	float Distance = 2.0 * near * far / (far + near - (2.0 * depth - 1.0) * (far - near));
 
-	color = vec4( AddLight(Wood,LightColor,lightDir,NormalMap[0]),1);
+	color = vec4( TotalColor,1);
 	//color = vec4(1.0,0,0,1.0);
 }

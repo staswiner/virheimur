@@ -121,6 +121,7 @@ void FBO::BindFrameBuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glEnable(GL_CLIP_DISTANCE0);
 
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

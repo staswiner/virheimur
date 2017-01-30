@@ -16,7 +16,7 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	input(input),
 	logic(logic)
 {
-	State = 2;
+	State = 0;
 }
 
 

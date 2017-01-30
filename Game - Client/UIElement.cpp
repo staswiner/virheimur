@@ -153,11 +153,19 @@ void UIElement::OnTextChanged()
 
 void UIElement::Hide()
 {
+	for (auto& uie : Children)
+	{
+		uie.second->Hide();
+	}
 	this->visible = false;
 }
 
 void UIElement::Show()
 {
+	for (auto& uie : Children)
+	{
+		uie.second->Show();
+	}
 	this->visible = true;
 }
 

@@ -122,6 +122,7 @@ void Sea::Initialize()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glGenerateMipmap(GL_TEXTURE_2D);
+		if (image)
 		SOIL_free_image_data(image);
 	}
 
@@ -145,7 +146,7 @@ void Sea::Initialize()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glGenerateMipmap(GL_TEXTURE_2D);
-
+		if (image)
 		SOIL_free_image_data(image);
 	}
 	glEnable(GL_TEXTURE_2D);

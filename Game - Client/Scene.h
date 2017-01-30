@@ -20,6 +20,8 @@
 #include "UIElement.h"
 #include "Cursor.h"
 #include "SeaAnimated.h"
+#include "NPC.h"
+#include "Default.h"
 using namespace glm;
 class Scene
 {
@@ -92,6 +94,7 @@ private:
 	vector<vec3> Obstacles;
 	Grass grass;
 	SeaAnimated seaAnim;
+	vector<NPC> NPCs;
 
 	int counter = 0;
 	//static GlobalDataObject Data;

@@ -29,10 +29,12 @@ uniform mat4 WVM;
 void TransferData(in int i)
 {
 	gl_Position = gl_in[i].gl_Position;
+	//gl_ClipDistance[0] = gl_in[i].gl_ClipDistance[0];
 	gs_out.UVs = vs_in[i].UVs;
 	gs_out.Normals = vs_in[i].Normals;
 	gs_out.FragPos = vs_in[i].FragPos;
 	gs_out.LightFragPos = vs_in[i].LightFragPos;
+	gs_out.clipSpace = vs_in[i].clipSpace;
 	//varNormalf = varNormal[i];
 }
 void CalculateTangent()

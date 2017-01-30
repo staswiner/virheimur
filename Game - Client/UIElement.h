@@ -67,6 +67,9 @@ public:
 	string innerText;
 	vec2 TrueSize;
 	Style style;
+	UIElement* Parent;
+	bool visible = true;
+
 	
 private:
 	std::function<void(UIElement*)> hover;
@@ -81,8 +84,6 @@ private:
 	int Width, Height;
 	ImageLoader* UIImage;
 	map<Element,UIElement*> Children;
-	UIElement* Parent;
-	bool visible = true;
 	bool IsRoot;
 	bool IsWriteableTo;
 	static map <string, ImageLoader*> Repository;

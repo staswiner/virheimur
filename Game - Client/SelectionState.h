@@ -24,8 +24,6 @@ public:
 	void Reload();
 private:
 	UIElement* GenerateForm();
-	string Username;
-	string Password;
 	UserInterface UI;
 	HDC m_hdc;
 	vec2 LeftBot;

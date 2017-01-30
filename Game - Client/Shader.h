@@ -20,6 +20,7 @@ public:
 	~Shader();
 	Shader(string vertexPath,string fragmentPath);
 	Shader(string vertexPath, string geometryPath, string fragmentPath);
+	Shader(string vertexShader, string geometryShader, string fragmentShader, bool);
 	// Use the program
 	void Use();
 	static bool LoadShaders();

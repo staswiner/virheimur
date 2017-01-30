@@ -125,7 +125,7 @@ private:
 
 	vector<MeshEntry> m_Entries;
 	int MeshIndex = 0;
-
+public:
 	unsigned int Vertices_Amount;
 	unsigned int Indices_Amount;
 public:

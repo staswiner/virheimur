@@ -123,21 +123,27 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
 } 
 void main()
 {
+	float WaveOffset = time/500000.0f;
+	float waveStrength = 0.5f;
 	vec2 ndc = (fs_in.clipSpace.xy / fs_in.clipSpace.w) / 2.0 + 0.5;
-	vec2 refractTexCoords = vec2(ndc.x, ndc.y);
-	vec2 reflectTexCoords = vec2(ndc.x, -ndc.y);
+	vec2 refractTexCoords = ndc;
+	vec2 reflectTexCoords = ndc;
 
 	//vec3 lightDir = normalize(lightPos - fs_in.FragPos);
 	//vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
 
 	// distortion
-	//vec2 distortionTexCoords = texture(Texture0, TexCoords + vec2(WaveOffset, 0.0)).rg * 0.1; 
-	//distortionTexCoords = fs_in.UVs + vec2(distortionTexCoords.x,distortionTexCoords.x + WaveOffset);
-	//vec2 dudvmap = (texture(Texture0,distortionTexCoords).rg * 2.0 - 1.0) * waveStrength;
+	vec2 distortionTexCoords = texture(Texture0, (fs_in.UVs + vec2(WaveOffset, 0.0)) * Texelation).rg * 0.1; 
+	distortionTexCoords = fs_in.UVs + vec2(distortionTexCoords.x,distortionTexCoords.x + WaveOffset);
+	vec2 dudvmap = (texture(Texture0,distortionTexCoords * Texelation).rg * 2.0 - 1.0) * waveStrength;
 
+	reflectTexCoords += dudvmap;
+	reflectTexCoords = clamp(reflectTexCoords,0.001,0.999);
+	reflectTexCoords *= vec2(1,-1);
 	//vec2 TextureCoords = ParallaxMapping(fs_in.UVs, toCameraVector) * Texelation;
 	vec4 color0 = texture2D(Texture0, fs_in.UVs * Texelation);
-	vec4 color1 = texture2D(Texture1, (fs_in.UVs + vec2(time/500000.0)) * Texelation);
+	vec4 color1 = texture2D(Texture1, (fs_in.UVs + vec2(time/500000.0f)) * Texelation);
+
 
 	//vec3 LightColor = vec3(1,0.9,0.7);
 	//vec3 WaterColor = vec3(0,0.3,0.7);
@@ -155,12 +161,13 @@ void main()
 	vec3 LightColor = vec3(1.0,0.9,0.7);
 	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
 	vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
-	vec3 LightColorCalculated = AddLight(Water,LightColor,lightDir,texture2D(Texture1,(fs_in.UVs + vec2(time/200000.0) )* Texelation));
+	vec3 LightColorCalculated = AddLight(Water,LightColor,lightDir,texture2D(Texture1,dudvmap/* + vec2(time/200000.0) )* Texelation*/));
 
-	vec4 reflectionColor = texture(Texture3,fs_in.UVs * vec2(1,-1));
+	vec4 reflectionColor = texture(Texture3,reflectTexCoords);
 
-	color = vec4(LightColorCalculated, 1.0f) * vec4(0.2,0.25,0.85,1);
-	color = reflectionColor;//vec4(1.0) * texture2D(Texture1,fs_in.UVs * 10.0);//* vec4(LightColorCalculated,1.0);// * LightColor;
+	vec4 pureWaterColor = vec4(LightColorCalculated, 1.0f);
+	color = mix(reflectionColor,pureWaterColor,0.7);
+	//color = reflectionColor;//vec4(1.0) * texture2D(Texture1,fs_in.UVs * 10.0);//* vec4(LightColorCalculated,1.0);// * LightColor;
 //color = vec4(1);
 
 }

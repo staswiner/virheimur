@@ -24,7 +24,7 @@ public:
 	void AcceptInput();
 	void CleanWindows();
 	void FocusControl();
-	void LeftClick();
+	bool LeftClick();
 	void LeftPress();
 	map<GLchar,GLuint> Inputs;
 	//vector<pair<unique_ptr<ChampionChat>, GLuint>> tempWindows;

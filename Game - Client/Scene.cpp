@@ -36,7 +36,8 @@ void Scene::Initialize()
 	mFBO["Gaussic Effect"].Initialize(1, 1, Shader::At("Combine"));
 	mFBO["RadialBlur"].Initialize(1, 1, Shader("RadialBlur Vertex Shader.glsl", "RadialBlur Fragment Shader.glsl"));
 	mFBO["Basic"].Initialize(1, 1, Shader());
-	mFBO["LakeReflection"].Initialize(1, 1, Shader());
+	mFBO["LakeReflectionBlur"].Initialize(1, 1, Shader());
+	mFBO["LakeReflection"].Initialize(1, 1, Shader::At("PostProcessing"));
 	//mFBO["Index"].Initialize(1, 1, Shader::At("PostProcessing"));
 	IndexFBO->InitializeBig(1, 1, Shader::At("PostProcessing"));
 	mAntiAliasing.InitializeMultiSample();
@@ -45,6 +46,10 @@ void Scene::Initialize()
 	//skyBox = new SkyBox;
 	//skyBox->InitTexture();
 	minimap.Initialize();
+	//TODO: remove
+	NPC npc;
+	npc.Name = "House1";
+	NPCs.push_back(npc);
 
 #pragma region 2D Interface
 	GenerateForm();
@@ -98,6 +103,8 @@ void Scene::Frame()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
 	glDepthMask(GL_TRUE);
+	glEnable(GL_CLIP_DISTANCE0);
+
 
 	ViewMatrix = camera.GetCameraMatrix();
 	SetProjectionMatrix(camera.GetProjectionMatrix());
@@ -154,19 +161,26 @@ void Scene::GenerateForm()
 	});
 	UI.root->AppendChild(UsernameElement);
 
-	//UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
-	//Position = vec2(10, 160);
-	//PasswordElement->TopLeft = Position;
-	//PasswordElement->SetByTrueSize(Position);
-	//PasswordElement->AddHoverEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	//PasswordElement->AddHoverDoneEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	//PasswordElement->AddReturnDefaultEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	//PasswordElement->AddClickEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
-	//root->AppendChild(PasswordElement);
+	UIElement* Element = new UIElement("Shop", "Interface/InventoryRow.png");
+	Position = vec2(300, 160);
+	Element->TopLeft = Position;
+	Element->SetByTrueSize(Position);
+	Element->Hide();
+	UI.root->AppendChild(Element);
+
+	Element = new UIElement("Shop-X", "Interface/X.png");
+	Position = vec2(485, 165); // 5 padding
+	Element->TopLeft = Position;
+	Element->SetByTrueSize(Position);
+	Element->AddClickEvent([]
+	(UIElement* Element)mutable-> void { Element->Parent->Hide(); });
+	UI.root->GetUIElement("Shop")->AppendChild(Element);
+
+	Element = new UIElement("Shop-Gold", "Interface/Textbox.png");
+	Position = vec2(300, 110); // 5 padding
+	Element->TopLeft = Position;
+	Element->SetByTrueSize(Position);
+	UI.root->GetUIElement("Shop")->AppendChild(Element);
 
 	//UIElement* StatsWindow = new UIElement("StatsWindow", "Interface/StatsWindow.png");
 	//Position = vec2(710, 300);
@@ -201,8 +215,8 @@ void Scene::Draw_Units()
 	// Draw To Depth Buffer
 	DrawScene_Depth();
 	// Draw Water
-	DrawScene_Refraction();
-	DrawScene_Reflection();
+	/*DrawScene_Refraction();
+	DrawScene_Reflection();*/
 	// Draw postprocesser
 	DrawScene_PostProcessing();
 }
@@ -253,6 +267,22 @@ void Scene::DrawScene_Reflection()
 		camera.InvertPitch();
 		SetCameraView();
 	}
+
+	mFBO["HBlurS"].BindFrameBuffer();//1
+	mFBO["LakeReflection"].DrawFrameBuffer();//0
+	mFBO["VBlurS"].BindFrameBuffer();//2 b
+	mFBO["HBlurS"].DrawFrameBuffer();//1 d 
+	mFBO["HBlur"].BindFrameBuffer();//3 b
+	mFBO["VBlurS"].DrawFrameBuffer();//2 d
+	mFBO["VBlur"].BindFrameBuffer();//4 b 
+	mFBO["HBlur"].DrawFrameBuffer();//3 d
+	mFBO["HBlurS"].BindFrameBuffer();//1 b
+	mFBO["VBlur"].DrawFrameBuffer();//4 d
+	mFBO["VBlurS"].BindFrameBuffer();//2 b
+	mFBO["HBlurS"].DrawFrameBuffer();//1 d
+	mFBO["LakeReflection"].BindFrameBuffer();//5 b
+	mFBO["VBlurS"].DrawFrameBuffer();//2 d
+
 }
 void Scene::DrawScene_NoEffect()
 {
@@ -276,12 +306,13 @@ void Scene::DrawScene_PostProcessing()
 {
 	mAntiAliasing.BindFrameBuffer();
 #pragma region 3D Elements
+	glEnable(GL_CLIP_DISTANCE0);
 
 	SetCameraView();
 	DrawSky();
 	//DrawGround(Shader::At("Ground"));
 	DrawCollada();
-	DrawWater();
+	//DrawWater();
 	DrawUI();
 
 	//DrawEntities();
@@ -362,35 +393,34 @@ void Scene::DrawGround(Shader& shader)
 		Add_float("GravityHeight", zeroval);
 	loaded_Models["Ground"]->Draw();
 }
-void Scene::DrawSea()
-{
-	mat4 ModelMat;
-	ModelMat = scale(ModelMat, vec3(100, 100, 100));
-	mSea.Draw(ProjectionMatrix, ViewMatrix, ModelMat);
-}
-char ToLower(char a)
-{
-	if (a <= 'Z')
-		return (a - 'A' + 'a');
-	else return a;
-}
 
 void Scene::DrawIndexColor()
 {
 	// Draws All Entities with Color
 	IndexFBO->BindFrameBuffer();
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
 	mat4 WVM = ProjectionMatrix*ViewMatrix;
 	/*ShaderBuilder::LoadShader(Shader::At("Index"))->
 		Add_mat4("WVM",WVM);
 	loaded_Models["Land"]->Draw();
-*/
+*/	
 	ShaderBuilder::LoadShader(Shader::At("Index"))->
+		Add_bool("indexType",true).
 		Add_mat4("WVM", WVM);
 	loaded_Models["Land"]->Draw();
+	for(auto npc : NPCs)
+	{
+		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
+		ShaderBuilder::LoadShader(Shader::At("Index"))->
+			Add_bool("indexType", false).
+			Add_float("Index", npc.npcID).
+			Add_mat4("WVM", WVM);
+		loaded_Models[npc.Name]->Draw();
+	}
 
-	
-	FBO::UnbindFrameBuffer();
 }
 void Scene::DrawColladaDistance()
 {
@@ -424,7 +454,7 @@ void Scene::DrawColladaDistance()
 	//loaded_Models["Collada"]->Draw();
 
 #pragma region Grass
-	{
+	/*{
 		vector<vec4> ModelMatrixs;
 		mat4 Animation;
 		ShaderBuilder shader = *ShaderBuilder::LoadShader(Shader::At("InstancedDistance"));
@@ -450,15 +480,13 @@ void Scene::DrawColladaDistance()
 
 			Add_bool("isAnimated", false);
 		grass.Draw(grass.ObstaclesMat);
-	}
+	}*/
 #pragma endregion Grass
 
 }
 
 void Scene::SetCameraView()
 {
-	/*if (m_Unit_Data[Channel].size() <= ClientID)
-	return;*/
 	ViewMatrix = camera.GetCameraMatrix();
 }
 void Scene::DrawUI()
@@ -655,7 +683,6 @@ void Scene::DrawColladaShadow()
 }
 void Scene::DrawCollada()
 {
-	glEnable(GL_CLIP_DISTANCE0);
 	mat4 WVM;
 	// Light Source
 	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
@@ -700,6 +727,7 @@ void Scene::DrawCollada()
 		Add_textures(loaded_Models["Land"]->Textures).
 		Add_texture("shadowMap", shadow->depthMap).
 		Add_mat4("LightViewMatrix", LightViewMatrix).
+		Add_bool("clip", true).
 		Add_Material("Brick", Materials::GetInstance()["chrome"]).
 		Add_Material("Grass", Materials::GetInstance()["emerald"]).
 		Add_bool("isAnimated", false);
@@ -781,24 +809,24 @@ void Scene::DrawCollada()
 	//}
 #pragma endregion
 
-	glEnable(GL_BLEND);
-	for (int j = 3; j < 4; j++)
-	{
-		for (int i = -4; i < 4; i++)
-		{
-			mat4 ModelMat = translate(mat4(), vec3(i * 1, 0, j * 1));
-			ModelMat = rotate(ModelMat, degrees(float((i+j) * 13)), vec3(0, 1, 0));
-			WVM = ProjectionMatrix * ViewMatrix * ModelMat;
-			ShaderBuilder::LoadShader(Shader::At("Animation"))->
-				Add_textures(loaded_Models["Grass"]->Textures).
-				Add_bool("isAnimated", true).
-				Add_float("Texelation", 1.0f).
-				Add_mat4("Model", ModelMat).
-				Add_mat4("WVM", WVM);
-			loaded_Models["Grass"]->Draw();
-		}
-	}
-	glDisable(GL_BLEND);
+	//glEnable(GL_BLEND);
+	//for (int j = 3; j < 4; j++)
+	//{
+	//	for (int i = -4; i < 4; i++)
+	//	{
+	//		mat4 ModelMat = translate(mat4(), vec3(i * 1, 0, j * 1));
+	//		ModelMat = rotate(ModelMat, degrees(float((i+j) * 13)), vec3(0, 1, 0));
+	//		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
+	//		ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	//			Add_textures(loaded_Models["Grass"]->Textures).
+	//			Add_bool("isAnimated", true).
+	//			Add_float("Texelation", 1.0f).
+	//			Add_mat4("Model", ModelMat).
+	//			Add_mat4("WVM", WVM);
+	//		loaded_Models["Grass"]->Draw();
+	//	}
+	//}
+	//glDisable(GL_BLEND);
 
 	for (auto e : Data.Effects)
 	{
@@ -810,6 +838,16 @@ void Scene::DrawCollada()
 			Add_textures(e.EffectModel->Textures);
 		e.Draw();
 	}
+	for (auto npc : NPCs)
+	{
+		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
+		ShaderBuilder::LoadShader(Shader::At("Animation"))->
+			Add_mat4("WVM", WVM).
+			Add_bool("isAnimated", false).
+			Add_float("Texelation", 1.0f).
+			Add_textures(loaded_Models[npc.Name]->Textures);
+		loaded_Models[npc.Name]->Draw();
+	}
 	//ShaderBuilder::LoadShader(Shader::At("Index"))->
 	//	Add_mat4("WVM", WVM);
 	//loaded_Models["Land"]->Draw();
@@ -817,7 +855,7 @@ void Scene::DrawCollada()
 	//loaded_Models["Collada"]->Draw();
 
 #pragma region Grass
-	{
+	/*{
 		vector<vec4> ModelMatrixs;
 		mat4 Animation;
 		ShaderBuilder shader = *ShaderBuilder::LoadShader(Shader::At("Instanced"));
@@ -845,7 +883,7 @@ void Scene::DrawCollada()
 			Add_textures(grass.model.Textures).
 			Add_bool("isAnimated", false);
 		grass.Draw(grass.ObstaclesMat);
-	}
+	}*/
 #pragma endregion Grass
 
 
@@ -854,6 +892,8 @@ void Scene::DrawCollada()
 
 void Scene::DrawWater()
 {
+	glDisable(GL_CLIP_DISTANCE0);
+
 	mat4 WVM = ProjectionMatrix * ViewMatrix;
 	mat4 landmat;
 	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(counter) / 90.0f), 0, 0);
@@ -866,7 +906,8 @@ void Scene::DrawWater()
 		Add_mat4("Model", landmat).
 		Add_float("time", fmod(GetTickCount(), 100000000)).
 		Add_vec3("cameraPos", -camera.GetCameraPosition()).
-		Add_Material("Water", Materials::GetInstance()["chrome"]).
+		Add_Material("Water", Materials::GetInstance()["water"]).
+		Add_bool("clip", false).
 		Add_texture("Texture3", mFBO["LakeReflection"].texture).
 		Add_textures(loaded_Models["Water"]->Textures);
 	loaded_Models["Water"]->Draw();

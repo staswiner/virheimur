@@ -9,10 +9,7 @@
 using namespace glm;
 using namespace std;
 using namespace nlohmann;
-class Data {
-public: Data() {}
-		~Data() {}
-};
+
 class TransferedData
 {
 public:
@@ -29,8 +26,6 @@ public:
 	short static CalculateChecksum(string& Message);
 private:
 	bool CheckChecksumValidation(string& Message);
-	Data LastData;
-	Data CurrentData;
 	json Data;
 };
 

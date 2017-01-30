@@ -51,7 +51,7 @@ vec3 Camera::GetCameraRotation()
 mat4 Camera::GetProjectionMatrix()
 {
 	this->ProjectionMatrix=glm::perspective(
-		glm::radians(54.0f), (GLfloat)this->mouse.GetWindowSize().x /
+		glm::radians(70.0f), (GLfloat)this->mouse.GetWindowSize().x /
 		(GLfloat)this->mouse.GetWindowSize().y, 1.0f, 1000.0f);
 	return this->ProjectionMatrix;
 }

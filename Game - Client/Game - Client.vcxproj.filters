@@ -347,6 +347,15 @@
     <ClInclude Include="AIObjects.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderGenerator.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GLM_Headers.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -531,6 +540,8 @@
     <ClCompile Include="Default.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="AIObjects.cpp" />
+    <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="ShaderGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">

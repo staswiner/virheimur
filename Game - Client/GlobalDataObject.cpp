@@ -83,6 +83,7 @@ void GlobalDataObject::ReceiveDataString(string Message)
 			Players[jCharacterName]->Username = jUsername;
 			Players[jCharacterName]->TimeDelta = milliseconds(PlayerParsed["TimeDelta"]); 
 			Players[jCharacterName]->CharacterName = jCharacterName;
+			Players[jCharacterName]->stats.Gold = PlayerParsed["stats"]["Gold"];
 			//Players[PlayerParsed["Username"]]->stats.Hp = PlayerParsed["Hp"];
 			//Players[PlayerParsed["Username"]]->stats.MaxHp = PlayerParsed["MaxHp"];
 		}

@@ -134,12 +134,41 @@ void Input::GetMouseInput()
 		Data->Effects.push_back(Effect("Collada", milliseconds(500), Destination));
 	}
 	/*Left Click would change focus of User Interface Windows*/
+
 	if (mouse.LeftIsPressed())
 	{
-		UI.LeftClick();
+		UI.LeftPress();
+		LeftWasPressed = true;
+	}
+
+	// on left release
+	if (!mouse.LeftIsPressed() and LeftWasPressed == true)
+	{
+		LeftWasPressed = false;
+		if (UI.LeftClick() == false) // something other than UI was clicked
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, Index->PostProcessingFBO);
+			glReadBuffer(GL_COLOR_ATTACHMENT0);
+			vec4 pixel;
+			glReadPixels(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY(), 1, 1, GL_RGBA, GL_FLOAT, &pixel);
+			if (pixel.g == 0 && pixel.b == 0 && !LeftWasPressed)
+			{
+				// NPCS
+				int i = pixel.r;
+				auto Shop = UI.root->GetUIElement("Shop");
+				Shop->GetUIElement("Shop-Gold")->innerText = to_string(Data->GetPlayerInformation()[
+					Session::GetInstance().CharacterName]->stats.Gold);
+				Shop->Show();
+			}
+			if (pixel.r == 0 && pixel.b == 0 && !LeftWasPressed)
+			{
+				// Players
+				int i = pixel.g;
+			}
+		}
 	}
 	UI.FocusControl();
-	if (UI.Pressed == nullptr)
+	if (UI.Pressed == nullptr or not UI.Pressed->visible)
 	{
 		// Allow camera, and game interactions
 		camera.GetUpdatedCamera();

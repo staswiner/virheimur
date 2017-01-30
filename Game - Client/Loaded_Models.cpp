@@ -33,7 +33,7 @@ void staticLoaded_Models::initialize_Models()
 	Models["Land"]->AddTexture("Texture8", "Map/Grass/grass01_h_converted.jpg");
 
 	Models["Water"] = new Model("Map/Sea.dae", "");
-	Models["Water"]->AddTexture("Texture0", "Map/Water/waterDUDV.png");
+	Models["Water"]->AddTexture("Texture0", "Map/Water/waterDUDV.jpg");
 	Models["Water"]->AddTexture("Texture1", "Map/Water/waterNormals.jpg");
 	Models["Water"]->AddTexture("Texture2","Map/Default Normal Map.jpg");
 	
@@ -42,6 +42,10 @@ void staticLoaded_Models::initialize_Models()
 	Models["Collada"] = new Model("Collada/Robot.dae", "");
 	Models["Collada"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
 	Models["Collada"]->AddTexture("NormalMap[0]","Katarina/katarina_base_normal.png");
+
+	Models["Shop"] = new Model("Map/Shop.dae", "");
+	Models["Shop"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
+	Models["Shop"]->AddTexture("NormalMap[0]", "Katarina/katarina_base_normal.png");
 
 	Models["Sphere"] = new Model("Collada/sphere.dae", "");
 	Models["Sphere"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
@@ -55,6 +59,10 @@ void staticLoaded_Models::initialize_Models()
 	Models["House"]->AddTexture("Texture[0]", "Map/HeightMap/bricks2.jpg");
 	Models["House"]->AddTexture("NormalMap[0]", "Map/HeightMap/bricks2_normal.jpg");
 	Models["House"]->AddTexture("Dispose", "Map/HeightMap/bricks2_disp.jpg");
+
+	Models["House1"] = new Model("Collada/Small_Building_1.dae", "");
+	Models["House1"]->AddTexture("Texture[0]","Collada/textures/Col Klein Haus_C.jpg");
+	Models["House1"]->AddTexture("NormalMap[0]","Collada/textures/Col Klein Haus_N.jpg");
 
 	Models["Grass"] = new Model("Map/3DGrass.dae", "");
 	Models["Grass"]->AddTexture("Texture[0]", "Map/3DGrass.png");

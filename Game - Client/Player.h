@@ -27,6 +27,7 @@ public:
 		uint Hp;
 		uint Mp;
 		uint MovementSpeed;
+		uint Gold;
 
 	};
 	Stats stats;

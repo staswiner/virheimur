@@ -135,6 +135,7 @@
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GaussicEffect.h" />
+    <ClInclude Include="GLM_Headers.h" />
     <ClInclude Include="GlobalDataObject.h" />
     <ClInclude Include="Graphics_Header.h" />
     <ClInclude Include="Grass.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="MultiSampleFBO.h" />
     <ClInclude Include="FBO.h" />
     <ClInclude Include="Network.h" />
+    <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreEffect.h" />
     <ClInclude Include="PRMalgorithm.h" />
@@ -177,6 +179,7 @@
     <ClInclude Include="Session.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderBuilder.h" />
+    <ClInclude Include="ShaderGenerator.h" />
     <ClInclude Include="Shadow_Mapping.h" />
     <ClInclude Include="SkyBox_Data.h" />
     <ClInclude Include="SkyBox_Graphics.h" />
@@ -242,6 +245,7 @@
     <ClCompile Include="MultiSampleFBO.cpp" />
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Network.cpp" />
+    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreEffect.cpp" />
     <ClCompile Include="PRMalgorithm.cpp" />
@@ -253,6 +257,7 @@
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderBuilder.cpp" />
+    <ClCompile Include="ShaderGenerator.cpp" />
     <ClCompile Include="Shadow_Mapping.cpp" />
     <ClCompile Include="SkyBox_Data.cpp" />
     <ClCompile Include="SkyBox_Graphics.cpp" />
