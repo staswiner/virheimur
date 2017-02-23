@@ -19,7 +19,6 @@ public:
 
 	Model(Mesh& mesh);
 
-	void Draw(Shader shader);
 	void Draw();
 	void DrawInstanced(vector<mat4>& ModelMatrix);
 	int LoadTexture(string Filename);

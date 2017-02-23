@@ -51,6 +51,48 @@ void Player::Draw(mat4& ProjectionMatrix, mat4& ViewMatrix)
 	loaded_Models["Collada"]->Draw();
 
 }
+void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
+{
+	Mouse mouse;
+	// Model
+	Unit_Data& ud = this->unit_Data;
+	vec3 position = ud.GetPosition();
+	Loaded_Models loaded_Models;
+#pragma region Mathematics
+	mat4 ModelMatrix;
+	ModelMatrix = glm::translate(ModelMatrix, position);
+	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
+	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+#pragma endregion Mathematics
+	ShaderBuilder::GetCurrentProgram()->
+		Add_mat4("WVM", WVM).
+		Add_bool("isAnimated", true).
+		Add_float("Texelation", 1.0f).
+		Add_textures(loaded_Models["Collada"]->Textures);
+	loaded_Models["Collada"]->Draw();
+
+}
+void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
+{
+	Mouse mouse;
+	// Model
+	Unit_Data& ud = this->unit_Data;
+	vec3 position = ud.GetPosition();
+	Loaded_Models loaded_Models;
+#pragma region Mathematics
+	mat4 ModelMatrix;
+	ModelMatrix = glm::translate(ModelMatrix, position);
+	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
+	ModelMatrix = glm::scale(ModelMatrix, vec3(1.03f));
+	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+#pragma endregion Mathematics
+	ShaderBuilder::LoadShader(Shader::At("Color"))->
+		Add_mat4("WVM", WVM).
+		Add_bool("isAnimated", true).
+		Add_vec3("Color", Color);
+	loaded_Models["Collada"]->Draw();
+
+}
 
 void Player::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 {

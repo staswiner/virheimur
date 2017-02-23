@@ -1,8 +1,18 @@
 /*
 
 1. Add Edge Clippers for all shaders
-2. Implement Escape key to post quitting message 
-
+2. Create a launcher/updater
+3. implement simple combat
+4. implement server sided AI monsters
+5. switch to binary instead of json
+6. fix website 
+7. Shader Generator
+8. optimize drawing objects into a single collectible
+9. Deffered shading
+10. shadow mapping
+11. order transparent objects
+12. construct DLLs
+13. create offline version that uses server subprogram without a database.
 
 
 */

@@ -31,6 +31,9 @@ void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 			{
 				vec3 start = unit.Path[i - 1];
 				vec3 end = unit.Path[i];
+			/*	subscript out of range
+					i = 3;
+				unit.Path.size() = 7;*/
 				float Distance = distance(end, start);
 				unit.Destination = unit.Path[i];
 				if (TotalDistance > Distance)
@@ -47,6 +50,8 @@ void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 				}
 			}
 		}
+		
+
 		catch (exception ex)
 		{
 			int i = 0;

@@ -359,6 +359,9 @@
     <ClInclude Include="Cookies.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -546,6 +549,7 @@
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="ShaderGenerator.cpp" />
     <ClCompile Include="Cookies.cpp" />
+    <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">
@@ -747,6 +751,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Water Fragment Shader.glsl" />
+    <None Include="Shaders\Color Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Color Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc">

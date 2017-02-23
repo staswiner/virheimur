@@ -171,6 +171,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PreEffect.h" />
     <ClInclude Include="PRMalgorithm.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="RayCast.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
@@ -251,6 +252,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PreEffect.cpp" />
     <ClCompile Include="PRMalgorithm.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="RayCast.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sea.cpp" />
@@ -288,6 +290,8 @@
     <None Include="Shaders\Champion FragmentShader.glsl" />
     <None Include="Shaders\Champion Geometry Shader.glsl" />
     <None Include="Shaders\Champion VertexShader.glsl" />
+    <None Include="Shaders\Color Fragment Shader.glsl" />
+    <None Include="Shaders\Color Vertex Shader.glsl" />
     <None Include="Shaders\Combine Fragment Shader.glsl" />
     <None Include="Shaders\Distance Fragment Shader.glsl" />
     <None Include="Shaders\Fractal Vertex Shader.glsl" />

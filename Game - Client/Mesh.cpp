@@ -338,56 +338,13 @@ void Mesh::VertexBoneData::AddBoneData(uint BoneID, float Weight)
 	// should never get here - more bones than we have space for
 	assert(0);
 }
-void Mesh::Draw(Shader shader)
-{
-	GLuint diffuseNr = 1;
-	GLuint specularNr = 1;
-	for (GLuint i = 0; i < this->textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i); // Activate proper texture unit before binding
-										  // Retrieve texture number (the N in diffuse_textureN)
-		stringstream ss;
-		string number;
-		string name = this->textures[i].type;
-		if (name == "texture_diffuse")
-			ss << diffuseNr++; // Transfer GLuint to stream
-		else if (name == "texture_specular")
-			ss << specularNr++; // Transfer GLuint to stream
-		number = ss.str();
-
-		glUniform1i(glGetUniformLocation(shader.ProgramID, ("material." + name + number).c_str()), i);
-		glBindTexture(GL_TEXTURE_2D, this->textures[i].id);
-	}
-	glActiveTexture(GL_TEXTURE0);
-
-	shader.Use();
-	Mouse mouse;
-	mat4 ModelMat;
-	mat4 ViewMat;
-	mat4 PerspectiveMat = glm::perspective(radians(120.0f),
-		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
-	GLint modelID = glGetUniformLocation(shader.ProgramID, "model");
-	GLint viewID = glGetUniformLocation(shader.ProgramID, "view");
-	GLint projectionID = glGetUniformLocation(shader.ProgramID, "projection");
-	glUniformMatrix4fv(modelID, 1, GL_FALSE, value_ptr(ModelMat));
-	glUniformMatrix4fv(viewID, 1, GL_FALSE, value_ptr(ViewMat));
-	glUniformMatrix4fv(projectionID, 1, GL_FALSE, value_ptr(PerspectiveMat));
-
-	// Draw mesh
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, this->vertices.size());
-	glBindVertexArray(0);
-	/*glBindVertexArray(this->VAO);
-	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);*/
-}
 void Mesh::DrawModel()
 {
 	vector<aiMatrix4x4> Transforms;
 	if (scene->HasAnimations())
 	{
 		BoneTransform(double(GetTickCount()) / 1000.0f, Transforms);
-		ShaderBuilder myshader = *ShaderBuilder::LoadShader(Shader::At("Animation"));
+		ShaderBuilder myshader = *ShaderBuilder::GetCurrentProgram();
 		int BoneNum = Transforms.size();
 		myshader.Add_int("BoneNum", BoneNum);
 		for (int i = 0; i < Transforms.size(); i++)
@@ -401,6 +358,7 @@ void Mesh::DrawModel()
 	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
 	glBindVertexArray(0);
 }
+
 void Mesh::DrawInstanced(vector<mat4>& ModelMatrix)
 {
 	if (ModelMatrix.size() == 0)

@@ -4,6 +4,7 @@
 
 LoginState::LoginState()
 {
+	this->SaveUsername = false;
 }
 
 
@@ -15,6 +16,7 @@ void LoginState::Initialize(char* State)
 {
 	UI.GenerateForm(this->GenerateForm());
 	this->GameState = State;
+	this->UI.root->GetUIElement("Username")->innerText = Cookies::GetInstance().GetCookie("Username");
 }
 
 void LoginState::Input()
@@ -61,6 +63,12 @@ void LoginState::PerformLogin()
 	TCP tcp;
 	string username = this->UI.root->GetUIElement("Username")->innerText;
 	string password = this->UI.root->GetUIElement("Password")->innerText;
+	/// Set Username Cookie
+	if (this->SaveUsername == true)
+	{
+		Cookies::GetInstance().SetCookie("Username", username);
+	}
+
 	/// add support when i get home & get a tcp server working
 	tcp.SendPacket("Authentication "+username+" "+password+" <EOF>");
 	string output = tcp.ReceivePacketsAsync();	
@@ -87,9 +95,10 @@ UIElement* LoginState::GenerateForm()
 
 	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
 	Position = vec2(10, 80);
-	UsernameElement->innerText = "Came2fame";
+	UsernameElement->innerText = "";
 	UsernameElement->TopLeft = Position;
 	UsernameElement->SetByTrueSize(Position);
+	UsernameElement->writable = true;
 	UsernameElement->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
 	UsernameElement->AddHoverDoneEvent([]
@@ -100,11 +109,26 @@ UIElement* LoginState::GenerateForm()
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
 	root->AppendChild(UsernameElement);
 
+	UIElement* Element = new UIElement("UsernameSaveCheckbox", "Interface/Textbox.png");
+	Position = vec2(210, 80);
+	Element->TopLeft = Position;
+	Element->BotRight = Position + vec2(50,50);
+	Element->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	Element->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddClickEvent([&]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); this->SaveUsername = true; });
+	root->AppendChild(Element);
+
 	UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
 	Position = vec2(10, 180);
 	PasswordElement->innerText = "ilovemyreann<3";
 	PasswordElement->TopLeft = Position;
 	PasswordElement->style.MaskedText = true;
+	PasswordElement->writable = true;
 	PasswordElement->SetByTrueSize(Position);
 	PasswordElement->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });

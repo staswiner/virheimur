@@ -5,6 +5,7 @@ PlayerRepository Game::NewPlayers;
 PlayerRepository Game::ReceivedPlayers;
 GlobalDataObject Game::NewData;
 GlobalDataObject Game::ReceivedData(ReceivedPlayers);
+GlobalDataObject Game::InputToScene;
 GlobalDataObject Game::Data(Players);
 FBO Game::Index;
 

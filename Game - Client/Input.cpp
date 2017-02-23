@@ -2,8 +2,8 @@
 
 
 
-Input::Input(GlobalDataObject& Data, UserInterface& UI,FBO* Index)
-	:ReceivedData(Data),UI(UI)
+Input::Input(GlobalDataObject& Data, UserInterface& UI,FBO* Index, GlobalDataObject& InputToScene)
+	:ReceivedData(Data),UI(UI), InputToScene(InputToScene)
 {
 	this->Index = Index;
 }
@@ -112,7 +112,7 @@ void Input::GetMouseInput()
 			}
 			try
 			{
-				ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+				ReceivedData.Graph = prm.GeneratePointsSelfFixing(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
 				ReceivedData.RouteChanged = true;
 			}
 			catch (exception ex)
@@ -167,6 +167,21 @@ void Input::GetMouseInput()
 			}
 		}
 	}
+	// Hover Ingame
+	glBindFramebuffer(GL_FRAMEBUFFER, Index->PostProcessingFBO);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	vec4 pixel;
+	InputToScene.Highlight.clear();
+
+	glReadPixels(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY(), 1, 1, GL_RGBA, GL_FLOAT, &pixel);
+	if (pixel.g == 0 && pixel.b == 0 && !LeftWasPressed)
+	{
+		// NPCS
+		int i = pixel.r;
+		InputToScene.Highlight.push_back("House1");
+	}
+
+	// UI checks
 	UI.FocusControl();
 	if (UI.Pressed == nullptr or not UI.Pressed->visible)
 	{

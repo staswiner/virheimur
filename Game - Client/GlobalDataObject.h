@@ -32,6 +32,7 @@ public:
 	// Normal Map Heights should be in data, sent to Map to draw
 	Stas::MinimapData Map;
 	vector<Effect> Effects;
+	vector<string> Highlight;
 private:
 	json Data;
 	PlayerRepository& Players;

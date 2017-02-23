@@ -11,8 +11,8 @@
 class Game
 {
 public:
-	Game(Scene& scene = *(new Scene(Data, UI, &Index)), Network& network = *(new Network(ReceivedData)),
-		Input& input = *(new Input(Data,UI, &Index)), GameLogic& logic = *(new GameLogic(Data)));
+	Game(Scene& scene = *(new Scene(Data, UI, &Index, InputToScene)), Network& network = *(new Network(ReceivedData)),
+		Input& input = *(new Input(Data,UI, &Index, InputToScene)), GameLogic& logic = *(new GameLogic(Data)));
 	~Game();
 	void Initialize();
 	void Loop();
@@ -52,6 +52,7 @@ private:
 	static UserInterface UI;
 	static GlobalDataObject NewData;
 	static GlobalDataObject ReceivedData;
+	static GlobalDataObject InputToScene;
 	static GlobalDataObject Data;
 	static PlayerRepository Players;
 	static PlayerRepository NewPlayers;

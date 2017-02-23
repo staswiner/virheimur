@@ -134,7 +134,187 @@ map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 	}
 	return Graph;
 }
+map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
+	, bool(*)(const vec3&, const vec3&)>* PRMalgorithm::
+	GeneratePointsSelfFixing(Stas::MinimapData Map, vec3& Source, vec3& Destination)
+{
+	srand(time(NULL));
+	const int MapScale = 100;
+	const int MAX_DISTANCE = 5000;
+	const int MAX_POINTS = 40;
+	int Width, Height;
+	u8vec4* MapData = Map.Map;
+	Width = Map.Width;
+	Height = Map.Height;
+	auto Graph = new map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
+		, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
 
+	vector<vec3> Points;
+	Points.push_back(Source);
+	Points.push_back(Destination);
+	vec3 ConvertToMinimapCoords = Points.back();
+	ConvertToMinimapCoords += float(MapScale);
+	ConvertToMinimapCoords /= float(2 * MapScale);
+	ConvertToMinimapCoords *= float(Width);
+	if (MapData[int(ConvertToMinimapCoords.z)*Width + (int)ConvertToMinimapCoords.x] == u8vec4(115, 77, 38, 255))
+	{
+		Points.pop_back();
+	}
+
+	for (int i = 0; i < MAX_POINTS; i++)
+	{
+		Points.push_back(vec3((rand() % (2 * MapScale)) - MapScale,
+			0, (rand() % (2 * MapScale)) - MapScale));
+		vec3 ConvertToMinimapCoords = Points.back();
+		ConvertToMinimapCoords += float(MapScale);
+		ConvertToMinimapCoords /= float(2 * MapScale);
+		ConvertToMinimapCoords *= float(Width);
+		if (MapData[int(ConvertToMinimapCoords.z)*Width + (int)ConvertToMinimapCoords.x] == u8vec4(115, 77, 38, 255))
+		{
+			Points.pop_back();
+			i--;
+		}
+	}
+	for (auto i = Points.begin(); i != Points.end(); i++)
+	{
+		(*Graph)[*i] = map<vec3, int, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
+	}
+	vector<map<vec3, int, bool(*)(const vec3&, const vec3&)>*> Paths(Points.size());
+
+
+
+
+	for (auto i = Points.begin(); i != Points.end(); i++)
+	{
+		//map<vec3, int, bool(*)(const vec3&, const vec3&)> Paths(Stas::Maths::vec3Compare);
+		for (auto j = i + 1; j != Points.end();)
+		{
+			if (glm::distance(*i, *j) < MAX_DISTANCE)
+			{
+				if (IsPathAvailable(Map, *i, *j))
+				{
+					(*Graph)[*i][*j] = glm::distance(*i, *j);
+					(*Graph)[*j][*i] = glm::distance(*i, *j);
+				}
+
+				//	j = Points.erase(j);
+				j++;
+			}
+			else
+			{
+				j++;
+			}
+		}
+	}
+	while (true)
+	{
+		// Create Graph by connections
+		vector<pair<vec3, int>> GraphOrderedByConnections;
+		// Fill with Graph current connections
+		for (auto& v : *Graph)
+		{
+			GraphOrderedByConnections.push_back(make_pair(v.first, v.second.size()));
+		}
+		// Order graph by connections
+		std::sort(GraphOrderedByConnections.begin(), GraphOrderedByConnections.end(),
+			[](const pair<vec3, int>& lhs, const pair<vec3, int>& rhs)->bool {
+			return lhs.second < rhs.second;
+		});
+		int ThreshHold = 0;
+		// End Loop
+		if (GraphOrderedByConnections.front().second > ThreshHold)
+			break;
+		for (auto& g : GraphOrderedByConnections)
+		{
+			if (g.second > ThreshHold)
+			{
+				break;
+			}
+			while (g.second <= ThreshHold)
+			{
+				vec3 FixingPoint;
+				// Generate Points
+				FixingPoint = vec3((rand() % (2 * MapScale)) - MapScale,
+					0, (rand() % (2 * MapScale)) - MapScale);
+				vec3 ConvertToMinimapCoords = FixingPoint;
+				ConvertToMinimapCoords += float(MapScale);
+				ConvertToMinimapCoords /= float(2 * MapScale);
+				ConvertToMinimapCoords *= float(Width);
+				if (MapData[int(ConvertToMinimapCoords.z)*Width + (int)ConvertToMinimapCoords.x] == u8vec4(115, 77, 38, 255))
+				{
+					// Point in obstacle, continue the loop as if nothing happened
+					continue;
+				}
+			
+				// connect Point to current node
+				if (IsPathAvailable(Map, g.first, FixingPoint))
+				{
+					// Initialize Path with Graph node
+					if ((*Graph).find(FixingPoint) == (*Graph).end())
+					{
+						(*Graph)[FixingPoint] = map<vec3, int, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
+					}
+					(*Graph)[g.first][FixingPoint] = glm::distance(g.first, FixingPoint);
+					(*Graph)[FixingPoint][g.first] = glm::distance(g.first, FixingPoint);
+					g.second++;
+				}
+				else continue;
+				// Connect Points to the rest of the Graph
+				for (auto i = Points.begin(); i != Points.end(); i++)
+				{
+					if (*i == g.first) continue;
+					if (glm::distance(*i, FixingPoint) < MAX_DISTANCE)
+					{
+						if (IsPathAvailable(Map, *i, FixingPoint))
+						{
+							(*Graph)[*i][FixingPoint] = glm::distance(*i, FixingPoint);
+							(*Graph)[FixingPoint][*i] = glm::distance(*i, FixingPoint);
+						}
+					}
+				}
+				Points.push_back(FixingPoint);
+				// Assign points from start
+			}
+		}
+	}
+/*
+	// Addition to PRM
+	Order Graph by Edges per Points;
+	Threshold = MIN_EDGES;
+	do {
+		// rand1() : gives random number between 0 and 1
+		lambdaGetRandPoint = []()->(x, y) {
+			(((2 * rand1()) - 1.0) * MAX_DISTANCE, ((2 * rand1()) - 1.0) * MAX_DISTANCE);
+		};
+		newPoint = lambdaGetRandPoint;
+
+		while (Map[NewPoint] == obstacle)
+			newPoint = lambdaGetRandPoint;
+		Points <-newPoint;
+	} while (Graph[i].size() < Threshold); // size of edges of point index `i`
+
+
+
+
+
+
+
+
+
+
+
+										   // Connect Points
+	for (i = 0; i < length of Points; i++)
+	{
+		for (j = i + 1; j < length of Points; j++)
+		{
+			Graph<-edge(Points[i], Points[j]);
+			Graph<-edge(Points[j], Points[i]);
+		}
+	}
+*/
+	return Graph;
+}
 vector<vec3> PRMalgorithm::FoundPath(map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)>* Map, vec3& Source, vec3& Destination)
 {

@@ -67,6 +67,10 @@ void Minimap::DrawMinimap(GDO & Data)
 					DrawLine(j.first, i.first, u8vec3(255, 255, 255));
 				}
 			}
+			for (auto i : *Data.Graph)
+			{		
+				DrawDotEdge(i.first, u8vec3(0, 0, 1));
+			}
 		}
 		if (Data.Path && Data.Path->size() > 0)
 		{
@@ -180,6 +184,7 @@ void Minimap::DrawDotStatic(vec3 Point, u8vec3 Color)
 	Point /= 200;
 	Point *= Width;
 
+
 	MinimapFrameData[int(Point.z)*Width + int(Point.x) - 1] = u8vec4(Color, 255);
 
 	if (Point.x < Width - 3 and Point.z < Height - 3)
@@ -189,6 +194,26 @@ void Minimap::DrawDotStatic(vec3 Point, u8vec3 Color)
 			for (int j = 0; j < 3; j++)
 			{
 				MinimapFrameData[(int)((Point.z + i)*Width + (Point.x + j)) - 1] = u8vec4(Color, 255);
+			}
+		}
+	}
+}
+void Minimap::DrawDotEdge(vec3 Point, u8vec3 Color)
+{
+	Point += 100;
+	Point /= 200;
+	Point *= Width;
+
+
+	NewImageData[int(Point.z)*Width + int(Point.x) - 1] = u8vec4(Color, 255);
+
+	if (Point.x < Width - 3 and Point.z < Height - 3)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				NewImageData[(int)(int(Point.z + i)*Width + int(Point.x + j)) - 1] = u8vec4(Color, 255);
 			}
 		}
 	}

@@ -27,9 +27,10 @@ class Scene
 {
 public:
 	//Scene() {}
-	Scene(GlobalDataObject&,UserInterface&,FBO* Index);
+	Scene(GlobalDataObject&,UserInterface&,FBO* Index,GlobalDataObject&);
 	~Scene();
 	GlobalDataObject& Data;
+	GlobalDataObject& InputToScene;
 
 	void Frame();
 	void DrawThreaded();
@@ -52,6 +53,7 @@ private:
 	void DrawEntities();
 	void SetCameraView();
 	void Shadow_DrawGround(Shader&);
+	void Outline();
 	void DrawSeaAnimated();
 	void DrawColladaShadow();
 	void Draw_Skeletal();
@@ -64,6 +66,7 @@ private:
 	void DrawPreBuffer();
 	void DrawCollada();
 	void DrawWater();
+	void DrawOutlineObjects();
 	void DrawIndexColor();
 
 	void DrawColladaDistance();
@@ -95,6 +98,7 @@ private:
 	Grass grass;
 	SeaAnimated seaAnim;
 	vector<NPC> NPCs;
+	vector<string> OutlineObjects;
 
 	int counter = 0;
 	//static GlobalDataObject Data;

@@ -15,7 +15,7 @@ using namespace std::chrono;
 class Input
 {
 public:
-	Input(GlobalDataObject&,UserInterface&,FBO* Index);
+	Input(GlobalDataObject&,UserInterface&,FBO* Index, GlobalDataObject&);
 	~Input();
 	void SetInitialCharacterData(GDO);
 	GlobalDataObject& TranslateInput(GlobalDataObject& Data);
@@ -30,6 +30,7 @@ private:
 	Keyboard keyboard;
 	Mouse mouse;
 	GlobalDataObject& ReceivedData;
+	GlobalDataObject& InputToScene;
 	GlobalDataObject* Data;
 	GlobalDataObject NewData;
 	// the Interface object in focus 
@@ -40,5 +41,6 @@ private:
 	Loaded_Models loaded_Models;
 	bool LeftWasPressed = false;
 	void ResetCharacterPosition();
+
 };
 

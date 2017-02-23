@@ -11,6 +11,8 @@ public:
 	~Player();
 	Unit_Data& GetUnitData();
 	void Draw(mat4& Projection, mat4& View);
+	void DrawShadow(mat4 & ProjectionMatrix, mat4 & ViewMatrix);
+	void DrawOutline(mat4 & ProjectionMatrix, mat4 & ViewMatrix, vec3 Color);
 	void DrawUI(mat4& Projection, mat4& View);
 	void LoadInterface();
 	void UpdateUnitData(Unit_Data uData);

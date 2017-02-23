@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "TCP.h"
 using namespace std;
 class Cookies
 {
@@ -9,6 +10,10 @@ private:
 	void operator=(Cookies const&) = delete;
 	static Cookies Instance;
 	static string Encrypt(string Text);
+
+	string Key;
+	void GenerateKey();
+	string GetCookieKey();
 public:
 	~Cookies();
 	static Cookies& GetInstance()
@@ -16,8 +21,8 @@ public:
 		static Cookies Instance;
 		return Instance;
 	}
-	static string GetCookie(string Field);
-	static void SetCookie(string Field, string Data);
+	string GetCookie(string Field);
+	void SetCookie(string Field, string Data);
 };
 
 

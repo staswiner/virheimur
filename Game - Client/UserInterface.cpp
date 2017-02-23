@@ -38,7 +38,8 @@ void UserInterface::AcceptInput()
 			case '\b': innerText.size() > 0 ? innerText.pop_back() : nullptr; break;
 			case '\t': FocusNext(); break;
 			case 'p': OpenStatWindow(); StatWindowOpen ? StatWindowOpen = false : StatWindowOpen = true;
-			default: innerText.push_back(input); Pressed->OnTextChanged(); break;
+			default: innerText.push_back(input); Pressed->OnTextChanged(); 
+				(!Pressed->writable ? innerText.clear() : nullptr );  break;
 			}
 			Letters.pop_front();
 		}

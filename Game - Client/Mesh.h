@@ -106,7 +106,6 @@ public:
 	void BoneTransform(double TimeInSeconds, vector<aiMatrix4x4>& Transforms);
 	const aiNodeAnim * FindNodeAnim(const aiAnimation * pAnimation, const string NodeName);
 	int LoadTexture(string Filename);
-	void Draw(Shader shader);
 	/*  Render data  */
 	GLuint VAO, VBO[NUM_VBs], EBO;
 private:

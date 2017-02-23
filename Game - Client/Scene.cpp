@@ -2,8 +2,8 @@
 
 
 
-Scene::Scene(GlobalDataObject& Data,UserInterface& UI,FBO* Index)
-	:Data(Data), UI(UI)
+Scene::Scene(GlobalDataObject& Data,UserInterface& UI,FBO* Index, GlobalDataObject& InputToScene)
+	:Data(Data), UI(UI), InputToScene(InputToScene)
 {
 	IndexFBO = Index;
 	int i = 0;
@@ -50,7 +50,7 @@ void Scene::Initialize()
 	NPC npc;
 	npc.Name = "House1";
 	NPCs.push_back(npc);
-
+	//OutlineObjects.push_back("House1");
 #pragma region 2D Interface
 	GenerateForm();
 
@@ -99,9 +99,15 @@ void Scene::Frame()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearColor(255, 255, 255, 255);
+
 	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilFunc(GL_ALWAYS, 1, 1);
+	glStencilMask(1);
+	glClearStencil(0);
+	
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
+
 	glDepthMask(GL_TRUE);
 	glEnable(GL_CLIP_DISTANCE0);
 
@@ -311,6 +317,8 @@ void Scene::DrawScene_PostProcessing()
 	SetCameraView();
 	DrawSky();
 	//DrawGround(Shader::At("Ground"));
+	DrawOutlineObjects();
+	Outline();
 	DrawCollada();
 	//DrawWater();
 	DrawUI();
@@ -364,6 +372,32 @@ void Scene::Shadow_DrawGround(Shader& shader)
 	mat4 l_ViewMatrix = glm::lookAt(LightPosition, vec3(0.0f), vec3(1.0f, 1.0f, 1.0f));
 	mat4 ModelMatrix;
 	//loaded_Models["Ground"]->DrawModel(l_ProjectionMatrix, l_ViewMatrix, ModelMatrix, shader); // TODO remove mat arguements
+}
+void Scene::Outline()
+{
+	// set stencil mode to only draw those not previous drawn
+	glStencilFunc(GL_EQUAL, 0, 1);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0x00);
+
+	// Hover NPC
+	mat4 ModelMatrix = glm::scale(mat4(), vec3(1.02f));
+	mat4 WVM = ProjectionMatrix * ViewMatrix* Default::GetInstance().BlenderConversion * ModelMatrix;
+	for (auto o : InputToScene.Highlight)
+	{
+		ShaderBuilder::LoadShader(Shader::At("Color"))->
+			Add_mat4("WVM", WVM).
+			Add_bool("isAnimated", false).
+			Add_vec3("Color",vec3(0, 0.8, 0.9));
+		loaded_Models[o]->Draw();
+	}
+
+	// All Units get a base outline
+	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	{
+		i->second->DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
+	}
+	glDisable(GL_STENCIL_TEST);
 }
 void Scene::DrawGround(Shader& shader)
 {
@@ -560,13 +594,12 @@ void Scene::DrawColladaShadow()
 	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
 	// Light Source
 	mat4 LightViewMatrix = glm::lookAt(NewLightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
-	// ortho<float>(0.0f, 1024, 0, 1024)
 	LightViewMatrix = ProjectionMatrix * LightViewMatrix;
-	//for each (Player P in Data.GetPlayerInformation())
-	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-	{
-		i->second->Draw(ProjectionMatrix, ViewMatrix);
-	}
+	////for each (Player P in Data.GetPlayerInformation())
+	//for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	//{
+	//	i->second->Draw(ProjectionMatrix, ViewMatrix);
+	//}
 	// default unit, internet connection independent
 	vec3 position;
 	mat4 ModelMatrix;
@@ -574,39 +607,17 @@ void Scene::DrawColladaShadow()
 	vec3 color;
 	mat4 CharMat;
 	WVM = ProjectionMatrix * ViewMatrix * CharMat;
-	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
-	//	Add_mat4("WVM", WVM).
-	//	Add_bool("isAnimated", true).
-	//	Add_textures(loaded_Models["Collada"]->Textures);
-	//loaded_Models["Collada"]->Draw();
-	//position = vec3(50, 0, 0);
-	//ModelMatrix = glm::translate(ModelMatrix, position);
-	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
-	//	Add_mat4("model", ModelMatrix);
+
 	float time = float(GetTickCount());
 	float SlowTime = time / 40.0f;
 	mat4 landmat;
 	WVM = ProjectionMatrix * ViewMatrix * landmat;
 
-	ShaderBuilder::LoadShader(Shader::At("Ground"))->
-		Add_mat4("WVM", LightViewMatrix * landmat).
-		Add_mat4("Model", landmat).
-		Add_float("Texelation", 25.0f).
-		Add_vec3("lightPos", NewLightPos).
-		Add_vec3("cameraPos", -camera.GetCameraPosition()).
-		Add_textures(loaded_Models["Land"]->Textures).
-		Add_texture("shadowMap", shadow->depthMap).
-		Add_mat4("LightViewMatrix", LightViewMatrix).
-		Add_Material("Brick", Materials::GetInstance()["chrome"]).
-		Add_Material("Grass", Materials::GetInstance()["emerald"]).
-		Add_bool("isAnimated", false);
-	loaded_Models["Land"]->Draw();
-
 	// light source
 	mat4 LightModel = translate(mat4(), NewLightPos + vec3(0, -10, 0));
 	WVM = ProjectionMatrix * ViewMatrix * LightModel;
 	ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
-		Add_mat4("WVM", LightViewMatrix * LightModel).
+		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", true).
 		Add_float("Texelation", 1.0f).
 		Add_textures(loaded_Models["Collada"]->Textures);
@@ -616,6 +627,7 @@ void Scene::DrawColladaShadow()
 	/*uniform vec3 lightPos;
 	uniform vec3 cameraPos;
 	uniform Material Wood;*/
+	// Initialize Shader
 	ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
 		Add_bool("isAnimated", false).
 		Add_float("Texelation", 10.0f).
@@ -623,60 +635,18 @@ void Scene::DrawColladaShadow()
 		Add_vec3("cameraPos", -camera.GetCameraPosition()).
 		Add_Material("Wood", Materials::GetInstance()["chrome"]).
 		Add_textures(loaded_Models["House"]->Textures);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	for (int i = -8; i < 8; i++)
+	// Draw NPC
+	for (auto npc : NPCs)
 	{
-		mat4 ModelMat = translate(mat4(), vec3(i * 12, 0, 20));
-		ModelMat = rotate(ModelMat, radians(180.0f), vec3(0, 1, 0));
-
-		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
+		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
 		ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
-			Add_mat4("Model", ModelMat).
-			Add_mat4("WVM", LightViewMatrix * ModelMat);
-		loaded_Models["House"]->Draw();
+			Add_mat4("WVM", LightViewMatrix);
+		loaded_Models[npc.Name]->Draw();
 	}
-	for (int i = -8; i < 8; i++)
+	// Draw Players
+	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
 	{
-		vec3 housePosition(i * 12, 0, -20);
-		housePosition = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(housePosition);
-		mat4 ModelMat = translate(mat4(), housePosition);
-
-		WVM = ProjectionMatrix * ViewMatrix * ModelMat;
-		ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
-			Add_mat4("Model", ModelMat).
-			Add_mat4("WVM", LightViewMatrix * ModelMat);
-		loaded_Models["House"]->Draw();
-	}
-	glEnable(GL_BLEND);
-	for (int j = 3; j < 4; j++)
-	{
-		for (int i = -4; i < 4; i++)
-		{
-			mat4 ModelMat = translate(mat4(), vec3(i * 1, 0, j * 1));
-			ModelMat = rotate(ModelMat, degrees(float((i + j) * 13)), vec3(0, 1, 0));
-			WVM = ProjectionMatrix * ViewMatrix * ModelMat;
-			ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
-				Add_textures(loaded_Models["Grass"]->Textures).
-				Add_bool("isAnimated", true).
-				Add_float("Texelation", 1.0f).
-				Add_mat4("Model", ModelMat).
-				Add_mat4("WVM", LightViewMatrix * ModelMat);
-			loaded_Models["Grass"]->Draw();
-		}
-	}
-	glDisable(GL_BLEND);
-
-	for (auto e : Data.Effects)
-	{
-		WVM = ProjectionMatrix * ViewMatrix * e.ModelMatrix;
-		ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("WVM", LightViewMatrix * e.ModelMatrix).
-			Add_bool("isAnimated", true).
-			Add_float("Texelation", 1.0f).
-			Add_textures(e.EffectModel->Textures);
-		e.Draw();
+		i->second->DrawShadow(LightViewMatrix, mat4());
 	}
 
 
@@ -688,11 +658,11 @@ void Scene::DrawCollada()
 	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
 	mat4 LightViewMatrix = glm::lookAt(NewLightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
 	LightViewMatrix = ProjectionMatrix * LightViewMatrix;
-	//for each (Player P in Data.GetPlayerInformation())
-	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-	{
-		i->second->Draw(ProjectionMatrix, ViewMatrix);
-	}
+	////for each (Player P in Data.GetPlayerInformation())
+	//for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	//{
+	//	i->second->Draw(ProjectionMatrix, ViewMatrix);
+	//}
 	// default unit, internet connection independent
 	vec3 position;
 	mat4 ModelMatrix;
@@ -911,4 +881,22 @@ void Scene::DrawWater()
 		Add_texture("Texture3", mFBO["LakeReflection"].texture).
 		Add_textures(loaded_Models["Water"]->Textures);
 	loaded_Models["Water"]->Draw();
+}
+void Scene::DrawOutlineObjects()
+{
+	mat4 WVM;
+	for (auto npc : NPCs)
+	{
+		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
+		ShaderBuilder::LoadShader(Shader::At("Animation"))->
+			Add_mat4("WVM", WVM).
+			Add_bool("isAnimated", false).
+			Add_float("Texelation", 1.0f).
+			Add_textures(loaded_Models[npc.Name]->Textures);
+		loaded_Models[npc.Name]->Draw();
+	}
+	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	{
+		i->second->Draw(ProjectionMatrix, ViewMatrix);
+	}
 }

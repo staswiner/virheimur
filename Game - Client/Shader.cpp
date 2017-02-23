@@ -30,7 +30,8 @@ bool Shader::LoadShaders()
 	mapShader["InstancedDistance"]		= new Shader("Instanced Vertex Shader.glsl", "Instanced Geometry Shader.glsl", "Distance Fragment Shader.glsl");
 	mapShader["SeaAnimated"]	= new Shader("SeaAnimated Vertex Shader.glsl","SeaAnimated Geometry Shader.glsl","SeaAnimated Fragment Shader.glsl");
 	mapShader["Index"]			= new Shader("Index1 Vertex Shader.glsl","Index1 Geometry Shader.glsl", "Index1 Fragment Shader.glsl");
-	mapShader["Text"]			= new Shader("Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
+	mapShader["Text"] = new Shader("Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
+	mapShader["Color"]			= new Shader("Color Vertex Shader.glsl", "Color Fragment Shader.glsl");
 	//	new Shader("Index Vertex Shader.glsl", "Index Geometry Shader.glsl", "Index Fragment Shader.glsl");
 	return true;
 }

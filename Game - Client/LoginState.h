@@ -6,6 +6,7 @@
 #include "GameLogic.h"
 #include "TCP.h"
 #include "Session.h"
+#include "Cookies.h"
 class LoginState
 {
 public:
@@ -16,6 +17,7 @@ public:
 	void Draw(HDC hdc);
 
 	void PerformLogin();
+	bool SaveUsername;
 private:
 	UIElement* GenerateForm();
 	UserInterface UI;

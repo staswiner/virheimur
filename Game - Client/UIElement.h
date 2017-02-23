@@ -70,7 +70,7 @@ public:
 	Style style;
 	UIElement* Parent;
 	bool visible = true;
-
+	bool writable = false;
 	
 private:
 	std::function<void(UIElement*)> hover;
