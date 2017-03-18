@@ -34,13 +34,13 @@ vec3 CalcNormal()
 	vec3 Normal = normalize(fs_in.Normals);
 	return Normal;
 }
-vec3 CalcBumpedNormal(in sampler2D normalTexture)
+vec3 CalcBumpedNormal(sampler2D normalTexture)
 {
 	vec3 Normal = CalcNormal();
 	vec3 T = fs_in.T;
 	T = normalize(T - dot(T, Normal) * Normal);
 	vec3 B = cross(T, Normal);
-	B = fs_in.B;
+	//B = fs_in.B;
 
 	vec4 TexturedNormal = texture2D(normalTexture, fs_in.UVs * Texelation);
 	TexturedNormal = (TexturedNormal*2.0 - vec4(1.0));
@@ -53,9 +53,9 @@ vec3 CalcBumpedNormal(in sampler2D normalTexture)
 	//NewNormal.x *= -1.0;
 	//NewNormal.z *= -1.0;
 	NewNormal = normalize(NewNormal);
-	return NewNormal.xyz;
+	return NewNormal;
 }
-vec3 AddLight(in Material material,in vec3 LightColor, in vec3 LightDir, in sampler2D normalTexture)
+vec3 AddLight(Material material,vec3 LightColor, vec3 LightDir, sampler2D normalTexture)
 {
 	// Mathematics
 	vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
@@ -63,7 +63,8 @@ vec3 AddLight(in Material material,in vec3 LightColor, in vec3 LightDir, in samp
 	// Light
 	vec3 ambient = LightColor * material.ambient;
 	vec3 norm = CalcBumpedNormal(normalTexture);
-	float diff = max(dot(norm, LightDir), 0.0);
+	vec3 textnorm = normalize(norm);
+	float diff = max(dot(textnorm, LightDir), 0.0);
 	vec3 diffuse = diff * material.diffuse * LightColor;
 
 	//  specular
@@ -72,7 +73,10 @@ vec3 AddLight(in Material material,in vec3 LightColor, in vec3 LightDir, in samp
 	////float spec = pow(max(dot(normalize(toCameraVector.xz), reflectedLight.xz), 0.0), shineDamper);//phong
 	float spec = pow(max(dot(norm, reflectedLight), 0.0), int(material.diffuse * 128.0));//blinn-phong
 	vec3 specular = material.specular * spec * LightColor;
-	vec3 Light = (diffuse + specular + ambient);
+//	float shadow = ShadowCalculation(fs_in.LightFragPos,LightDir, textnorm);    
+	// Enable Shadows
+//	shadow = 0;   
+	vec3 Light = (diffuse + (1.0) * ( 4.0 * specular + ambient));
 	return Light;
 }
 void main()
@@ -88,6 +92,5 @@ void main()
 	float depth = gl_FragCoord.z;
 	float Distance = 2.0 * near * far / (far + near - (2.0 * depth - 1.0) * (far - near));
 
-	color = vec4( TotalColor,1);
-	//color = vec4(1.0,0,0,1.0);
+	color = vec4(TotalColor,1);
 }

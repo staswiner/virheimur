@@ -13,6 +13,7 @@ public:
 	~Session();
 	static Session& GetInstance()
 	{
+
 		static Session Instance;
 		return Instance;
 	}
@@ -21,4 +22,19 @@ public:
 	string CharacterID;
 	string CharacterName;
 };
-
+class Core
+{
+private:
+	Core() {}
+	Core(Core const&) = delete;
+	void operator=(Core const&) = delete;
+	static Core Instance;
+public:
+	~Core() {}
+	static Core& GetInstance()
+	{
+		static Core Instance;
+		return Instance;
+	}
+	bool Online;
+};

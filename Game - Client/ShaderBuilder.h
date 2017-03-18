@@ -24,6 +24,7 @@ private:
 class ShaderBuilder
 {
 public:
+
 	ShaderBuilder(GLuint);
 	~ShaderBuilder();
 	ShaderBuilder& Add_texture(string, const GLuint);
@@ -42,5 +43,28 @@ public:
 private:
 	GLuint textureCount;
 	GLuint shaderID;
+};
+
+class ShaderInfo
+{
+public:
+	ShaderInfo(GLuint);
+	~ShaderInfo();
+	void Add_texture(string, const GLuint);
+	void Add_textures(map<string, GLuint>& Textures);
+	void Add_vec2(string, const vec2&);
+	void Add_vec3(string, const vec3&);
+	void Add_float(string, const float&);
+	void Add_bool(string name, const bool & rhs);
+	void Add_int(string, int&);
+	void Add_mat3(string, const mat3&);
+	void Add_mat4(string, const mat4&);
+	void Add_aimat4(string name, const aiMatrix4x4 & rhs);
+	void Add_Material(string, const Material & rhs);
+	static std::unique_ptr<ShaderBuilder> GetCurrentProgram();
+	static std::unique_ptr<ShaderBuilder> LoadShader(Shader&);
+private:
+	//chunks of data 
+	//string parse
 };
 

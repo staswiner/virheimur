@@ -32,6 +32,9 @@ Unit_Data& Player::GetUnitData()
 
 void Player::Draw(mat4& ProjectionMatrix, mat4& ViewMatrix)
 {
+	FrameData& frameData = FrameData::GetInstance();
+	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
+	mat4 ViewMatrix = frameData.ViewMatrix;
 	Mouse mouse;
 	// Model
 	Unit_Data& ud = this->unit_Data;

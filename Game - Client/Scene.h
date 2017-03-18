@@ -22,6 +22,7 @@
 #include "SeaAnimated.h"
 #include "NPC.h"
 #include "Default.h"
+#include "FrameData.h"
 using namespace glm;
 class Scene
 {

@@ -131,6 +131,7 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="ExistingMesh.h" />
     <ClInclude Include="FPS.h" />
+    <ClInclude Include="FrameData.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameLogic.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item_Base_Class.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Layer.h" />
     <ClInclude Include="Loaded_Models.h" />
     <ClInclude Include="Loading_Screen.h" />
     <ClInclude Include="Load_FBX_file.h" />
@@ -213,6 +215,7 @@
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="ExistingMesh.cpp" />
     <ClCompile Include="FPS.cpp" />
+    <ClCompile Include="FrameData.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GameLogic.cpp" />
@@ -228,6 +231,7 @@
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item_Base_Class.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Loaded_Models.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Loading_Screen.cpp" />

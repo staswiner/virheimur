@@ -1,5 +1,6 @@
 /*
 
+0. Drawing objects assigned to layers before drawn, and sorted by layer asc
 1. Add Edge Clippers for all shaders
 2. Create a launcher/updater
 3. implement simple combat

@@ -27,8 +27,8 @@ map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 {
 	srand(time(NULL));
 	const int MapScale = 100;
-	const int MAX_DISTANCE = 50;
-	const int MAX_POINTS = 200;
+	const int MAX_DISTANCE = 100;
+	const int MAX_POINTS = 50;
 	int Width, Height;
 	u8vec4* MapData = Map.Map;
 	Width = Map.Width;
@@ -318,7 +318,7 @@ map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 vector<vec3> PRMalgorithm::FoundPath(map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)>* Map, vec3& Source, vec3& Destination)
 {
-	vector<vec3> Backtrack = Stas::Maths::Astar(*Map, Source, Destination);
+	vector<vec3> Backtrack = Stas::Maths::Dijkstra(*Map, Source, Destination);
 	return Backtrack;
 }
 

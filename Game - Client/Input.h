@@ -19,13 +19,16 @@ public:
 	~Input();
 	void SetInitialCharacterData(GDO);
 	GlobalDataObject& TranslateInput(GlobalDataObject& Data);
+	GlobalDataObject & TranslateInputOffline(GlobalDataObject & Data);
 	Camera& GetCamera();
 	Keyboard& GetKeyboard();
 	Mouse& GetMouse();
 
 private:
 	void GetMouseInput();
+	void GetMouseInputOffline();
 	void GetKeyboardInput();
+	vec3 GetMouseCoord_MapCoord();
 	Camera camera;
 	Keyboard keyboard;
 	Mouse mouse;

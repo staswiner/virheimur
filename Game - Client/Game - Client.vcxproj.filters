@@ -362,6 +362,12 @@
     <ClInclude Include="Projectile.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="FrameData.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -550,6 +556,8 @@
     <ClCompile Include="ShaderGenerator.cpp" />
     <ClCompile Include="Cookies.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="FrameData.cpp" />
+    <ClCompile Include="Layer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">

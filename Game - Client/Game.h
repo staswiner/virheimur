@@ -24,6 +24,7 @@ private:
 	void LoginScreen();
 	void SelectionScreen();
 	void GameScreen();
+	void GameScreenOffline();
 	void TestGround();
 	void GenerateForm();
 	void CharacterCreationScreen();
@@ -32,9 +33,9 @@ private:
 	void LoginUserInput();
 #pragma endregion LoginState
 #pragma region GameState
-	void UpdateVariables(mat4& ProjectionMatrix,mat4& ViewMatrix);
 	void AddToNewData();
 	void UserInput();
+	void UserInputOffline();
 	void ApplyGameLogic();
 	void GetGameOnlineGameState();
 	void DrawScene();
@@ -57,8 +58,6 @@ private:
 	static PlayerRepository Players;
 	static PlayerRepository NewPlayers;
 	static PlayerRepository ReceivedPlayers;
-	mat4 ProjectionMatrix;
-	mat4 ViewMatrix;
 	std::thread Receiver;
 	HDC m_hdc;
 	char State; // 0 Login, 1 Selection, 2 game

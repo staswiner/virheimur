@@ -12,8 +12,11 @@ GameLogic::~GameLogic()
 {
 }
 
-void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
+void GameLogic::Proceed(GDO& FinalData)
 {
+	FrameData& frameData = FrameData::GetInstance();
+	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
+	mat4 ViewMatrix = frameData.ViewMatrix;
 	// Calculate moving position
 	// TODO: CRASHES IN THIS FUNCTION SOMEWHERE
 #pragma region bug
@@ -119,6 +122,18 @@ void GameLogic::Proceed(GDO& FinalData,mat4& ProjectionMatrix, mat4& ViewMatrix)
 		if (e->CheckStatus())
 		{
 			e = FinalData.Effects.erase(e);
+		}
+		else
+		{
+			e++;
+		}
+	}
+	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+	for (auto e = offlineData.Effects.begin(); e != offlineData.Effects.end();)
+	{
+		if (e->CheckStatus())
+		{
+			e = offlineData.Effects.erase(e);
 		}
 		else
 		{

@@ -41,3 +41,22 @@ private:
 	string MyIP;
 };
 typedef GlobalDataObject GDO;
+class OfflineDataObject
+{
+private:
+	OfflineDataObject() {}
+	OfflineDataObject(OfflineDataObject const&) = delete;
+	void operator=(OfflineDataObject const&) = delete;
+	static OfflineDataObject Instance;
+public:
+	~OfflineDataObject() {}
+	static OfflineDataObject& GetInstance()
+	{
+		static OfflineDataObject Instance;
+		return Instance;
+	}
+	Player player;
+	vector<Effect> Effects;
+	vector<vec3>* Path;
+	bool RouteChanged = false;
+};

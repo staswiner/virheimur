@@ -797,8 +797,17 @@ void Scene::DrawCollada()
 	//	}
 	//}
 	//glDisable(GL_BLEND);
-
-	for (auto e : Data.Effects)
+	Core & core = Core::GetInstance();
+	vector<Effect>* effects;
+	if (core.Online)
+	{
+		effects = &Data.Effects;
+	}
+	else
+	{
+		effects = &OfflineDataObject::GetInstance().Effects;
+	}
+	for (auto e : *effects)
 	{
 		WVM = ProjectionMatrix * ViewMatrix * e.ModelMatrix;
 		ShaderBuilder::LoadShader(Shader::At("Animation"))->
@@ -814,6 +823,7 @@ void Scene::DrawCollada()
 		ShaderBuilder::LoadShader(Shader::At("Animation"))->
 			Add_mat4("WVM", WVM).
 			Add_bool("isAnimated", false).
+			Add_Material("Wood",Materials::GetInstance()["chrome"]).
 			Add_float("Texelation", 1.0f).
 			Add_textures(loaded_Models[npc.Name]->Textures);
 		loaded_Models[npc.Name]->Draw();
@@ -895,8 +905,17 @@ void Scene::DrawOutlineObjects()
 			Add_textures(loaded_Models[npc.Name]->Textures);
 		loaded_Models[npc.Name]->Draw();
 	}
-	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	Core & core = Core::GetInstance();
+	if (core.Online)
 	{
-		i->second->Draw(ProjectionMatrix, ViewMatrix);
+		for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+		{
+			i->second->Draw(ProjectionMatrix, ViewMatrix);
+		}
+	}
+	else
+	{
+		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		offlineData.player.Draw(ProjectionMatrix, ViewMatrix);
 	}
 }

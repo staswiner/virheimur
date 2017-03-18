@@ -17,25 +17,33 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	input(input),
 	logic(logic)
 {
-	State = 0;
+	Online = false;
+	Core & core = Core::GetInstance();
+	core.Online = false;
+	State = Online?0:2;
+
 }
 
 
 Game::~Game()
 {
-	Receiver.detach();
+	if (Online)
+	{
+		Receiver.detach();
+	}
 	//network.Send("FIN","127.0.0.1","27045");
 	if (not Online)
 	{
-		CloseHandle(pi.hProcess);
-		CloseHandle(pi.hThread);
+		/// local server process deletion
+		//CloseHandle(pi.hProcess);
+		//CloseHandle(pi.hThread);
+		/// other workaround
 	}
 
 }
 
 void Game::Initialize()
 {
-	Online = true;
 #pragma region Network
 	if (Online)
 	{
@@ -49,21 +57,26 @@ void Game::Initialize()
 #pragma region Offline Network Simulator
 	if (not Online)
 	{
-		// set the size of the structures
-		ZeroMemory(&si, sizeof(si));
-		si.cb = sizeof(si);
-		ZeroMemory(&pi, sizeof(pi));
-	//	CreateProcess("Local_Server_CS.exe","",NULL,NULL,FALSE,0,NULL,NULL,&si,&pi);
-		network.InitializeLocalConnection();
-		//ReadAuthentication();
-		Receiver = std::thread(&Network::BeginReceive, &network);
+		/// create local server instance
+	//	// set the size of the structures
+	//	ZeroMemory(&si, sizeof(si));
+	//	si.cb = sizeof(si);
+	//	ZeroMemory(&pi, sizeof(pi));
+	////	CreateProcess("Local_Server_CS.exe","",NULL,NULL,FALSE,0,NULL,NULL,&si,&pi);
+	//	network.InitializeLocalConnection();
+	//	//ReadAuthentication();
+	//	Receiver = std::thread(&Network::BeginReceive, &network);
+		/// other workaround
 	}
 #pragma endregion
 	// Initialize 3D Graphics
 	scene.Initialize();
-	selectionState.Initialize(&State);
-	loginState.Initialize(&State);
-	characterCreationState.Initialize(&State);
+	if (Online)
+	{
+		selectionState.Initialize(&State);
+		loginState.Initialize(&State);
+		characterCreationState.Initialize(&State);
+	}
 	// Sets NewData (spawn) 
 
 
@@ -86,7 +99,7 @@ void Game::Loop()
 	{
 	case 0:LoginScreen(); break;
 	case 1:SelectionScreen(); break;
-	case 2:GameScreen(); break;
+	case 2:(Online ? GameScreen() : GameScreenOffline()); break;
 	case 3:CharacterCreationScreen(); break;
 	case 4:TestGround(); break;
 	case 5:
@@ -155,15 +168,47 @@ void Game::GameScreen()
 	{
 		int i = 0;
 	}
-	// Updates Variables
+
+	// Creates 'Data' object as a combination of NewData and ReceivedData
 	try {
 
-		UpdateVariables(ProjectionMatrix, ViewMatrix);
+		CombineData();
 	}
 	catch (exception ex)
 	{
 		int i = 0;
 	}
+	// proceeds logic of the final 'Data' object
+	try {
+
+		ApplyGameLogic();
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
+
+	// Draws 'Data' object
+	try {
+		DrawScene();
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
+}
+void Game::GameScreenOffline()
+{
+	// Accepts input
+	try {
+
+		UserInput();
+	}
+	catch (exception ex)
+	{
+		int i = 0;
+	}
+
 	// Creates 'Data' object as a combination of NewData and ReceivedData
 	try {
 
@@ -211,12 +256,6 @@ void Game::CharacterCreationScreen()
 void Game::LoginUserInput()
 {
 }
-
-void Game::UpdateVariables(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
-{
-	this->ProjectionMatrix = ProjectionMatrix;
-	this->ViewMatrix = ViewMatrix;
-}
 void Game::AddToNewData()
 {
 	for (auto p : Data.GetPlayerInformation())
@@ -234,17 +273,23 @@ void Game::AddToNewData()
 
 void Game::UserInput()
 {
-	NewData = input.TranslateInput(Data);
+	NewData = ( Online? input.TranslateInput(Data) : input.TranslateInputOffline(Data));
 	// Camera
 	Camera& camera = input.GetCamera();
-	ViewMatrix = camera.GetCameraMatrix();
-	ProjectionMatrix = camera.GetProjectionMatrix();
+	FrameData& frameData = FrameData::GetInstance();
+	frameData.ProjectionMatrix = camera.GetProjectionMatrix();
+	frameData.ViewMatrix = camera.GetCameraMatrix();
+}
+void Game::UserInputOffline()
+{
+	GlobalDataObject Data;
+	Data.GetPlayerInformation();
 }
 
 void Game::ApplyGameLogic()
 {
 	// Alters Data object 
-	logic.Proceed(Data,ProjectionMatrix,ViewMatrix);
+	logic.Proceed(Data);
 }
 
 void Game::GetGameOnlineGameState()

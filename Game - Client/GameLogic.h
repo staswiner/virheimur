@@ -8,13 +8,14 @@
 #include "GameData.h"
 #include "GlobalDataObject.h"
 #include "InGameInteractions.h"
+#include "FrameData.h"
 #include <chrono>
 class GameLogic
 {
 public:
 	GameLogic(GDO& Data);
 	~GameLogic();
-	void Proceed(GDO& NewData,mat4& ProjectionMatrix, mat4& ViewMatrix);
+	void Proceed(GDO& NewData);
 	void ChainCommands();
 	void BuildData();
 private:
