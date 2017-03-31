@@ -289,7 +289,15 @@ void Game::UserInputOffline()
 void Game::ApplyGameLogic()
 {
 	// Alters Data object 
-	logic.Proceed(Data);
+	Core& core = Core::GetInstance();
+	if (core.Online)
+	{
+		logic.Proceed(Data);
+	}
+	else
+	{
+		logic.ProcessDataOffline();
+	}
 }
 
 void Game::GetGameOnlineGameState()

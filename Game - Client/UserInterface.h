@@ -22,6 +22,7 @@ public:
 	void GenerateForm(UIElement* root);
 	void GenerateLoginForm();
 	void AcceptInput();
+	char AccessFirstInput();
 	void CleanWindows();
 	void FocusControl();
 	bool LeftClick();

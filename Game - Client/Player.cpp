@@ -30,11 +30,12 @@ Unit_Data& Player::GetUnitData()
 	return this->unit_Data;
 }
 
+// TODO : remove projection matrix and view matrix
 void Player::Draw(mat4& ProjectionMatrix, mat4& ViewMatrix)
 {
 	FrameData& frameData = FrameData::GetInstance();
-	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
-	mat4 ViewMatrix = frameData.ViewMatrix;
+	mat4 l_ProjectionMatrix = frameData.ProjectionMatrix;
+	mat4 l_ViewMatrix = frameData.ViewMatrix;
 	Mouse mouse;
 	// Model
 	Unit_Data& ud = this->unit_Data;
@@ -44,7 +45,7 @@ void Player::Draw(mat4& ProjectionMatrix, mat4& ViewMatrix)
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
 	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
-	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+	mat4 WVM = l_ProjectionMatrix * l_ViewMatrix * ModelMatrix;
 #pragma endregion Mathematics
 	ShaderBuilder::LoadShader(Shader::At("Animation"))->
 		Add_mat4("WVM", WVM).
@@ -179,6 +180,17 @@ json Player::GetJson()
 int Player::GetType()
 {
 	return this->Type;
+}
+
+void * Player::SetMemoryData(string VarName)
+{
+	// TODO:
+	return nullptr;
+}
+
+void Player::SetMemoryData(string VarName, string VarType, void * data)
+{
+	//TODO:
 }
 
 Player *& PlayerRepository::operator[](string Key)

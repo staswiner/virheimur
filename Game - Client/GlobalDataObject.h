@@ -44,7 +44,9 @@ typedef GlobalDataObject GDO;
 class OfflineDataObject
 {
 private:
-	OfflineDataObject() {}
+	OfflineDataObject() {
+		
+	}
 	OfflineDataObject(OfflineDataObject const&) = delete;
 	void operator=(OfflineDataObject const&) = delete;
 	static OfflineDataObject Instance;

@@ -16,6 +16,7 @@ public:
 	GameLogic(GDO& Data);
 	~GameLogic();
 	void Proceed(GDO& NewData);
+	void ProcessDataOffline();
 	void ChainCommands();
 	void BuildData();
 private:

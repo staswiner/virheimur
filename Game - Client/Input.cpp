@@ -268,12 +268,12 @@ void Input::GetMouseInputOffline()
 		vec3 CurrentPosition = offlineData.player.GetUnitData().GetPosition();
 
 		// Set Destination to player
-		Player* myPlayer = &offlineData.player;
+		Player& myPlayer = offlineData.player;
 		// Other variables
-		myPlayer->unit_Data.StartPoint = offlineData.player.unit_Data.Position;
-		myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		myPlayer.unit_Data.StartPoint = offlineData.player.unit_Data.Position;
+		myPlayer.unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		// Set Path
-		myPlayer->unit_Data.Path.clear();
+		myPlayer.unit_Data.Path.clear();
 		/*myPlayer->unit_Data.Path.push_back(myPlayer->unit_Data.StartPoint);
 		myPlayer->unit_Data.Path.push_back(Destination);*/
 		//myPlayer->stats.Hp = Data->GetPlayerInformation()[ReceivedData.MyUsername]->stats.Hp - 5;
@@ -285,13 +285,13 @@ void Input::GetMouseInputOffline()
 		int AlgorithmType = PRM;
 		if (AlgorithmType == ASTAR)
 		{
-			vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, ClickOnMapCoord);
+			vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
 			for (int i = BacktrackPath.size() - 1; i >= 0; i--)
 			{
-				myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
+				myPlayer.unit_Data.Path.push_back(BacktrackPath[i]);
 				ReceivedData.RouteChanged = true;
 			}
-			ReceivedData.Path = &myPlayer->unit_Data.Path;
+			ReceivedData.Path = &myPlayer.unit_Data.Path;
 		}
 		else if (AlgorithmType == PRM)
 		{
@@ -315,14 +315,14 @@ void Input::GetMouseInputOffline()
 
 				try
 				{
-					ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer->unit_Data.StartPoint, ClickOnMapCoord);
+					ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
 					ReceivedData.RouteChanged = true;
 				}
 				catch (exception ex)
 				{
 					int i = 0;
 				}
-				BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer->unit_Data.StartPoint, ClickOnMapCoord);
+				BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
 				//BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
 
 				//auto endTimeSingle = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
@@ -346,13 +346,13 @@ void Input::GetMouseInputOffline()
 			auto deltaTime = endTime - startTime;*/
 			for (int i = BacktrackPath.size() - 1; i >= 0; i--)
 			{
-				myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
+				myPlayer.unit_Data.Path.push_back(BacktrackPath[i]);
 			}
-			if (myPlayer->unit_Data.Path.size() == 0)
+			if (myPlayer.unit_Data.Path.size() == 0)
 			{
 				int i = 0;
 			}
-			ReceivedData.Path = &myPlayer->unit_Data.Path;
+			ReceivedData.Path = &myPlayer.unit_Data.Path;
 		}
 	}
 	/*Left Click would change focus of User Interface Windows*/
@@ -432,18 +432,175 @@ void Input::GetMouseInputOffline()
 
 void Input::GetKeyboardInput()
 {
-
-	if (UI.InWorldCommands.size() > 0)
+	char input;
+	if ((input = UI.AccessFirstInput()) > -1)
 	{
 		/* body of processed commands */
-		GLchar input = UI.InWorldCommands.front();
 		switch (input)
 		{
 		case ' ': ResetCharacterPosition(); break;
+		case 's': SetCircleScript(); break;
 		}
 		// end
-		UI.InWorldCommands.pop_front();
 	}
+}
+
+void Input::OnlineRightMouseClick()
+{
+	Session& session = Session::GetInstance();
+	//glNamedFramebufferReadBuffer(Index->PostProcessingFBO,GL_COLOR_ATTACHMENT0);
+#pragma region FBO Read Pixel
+	glBindFramebuffer(GL_FRAMEBUFFER, Index->PostProcessingFBO);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	vec4 pixel;
+	int x = mouse.GetMouseX();
+	glReadPixels(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY(), 1, 1, GL_RGBA, GL_FLOAT, &pixel);
+	FBO::UnbindFrameBuffer();
+#pragma endregion FBO Read Pixel
+	vector<vec3> PlaneCoord;
+	PlaneCoord.push_back(vec3(1, 0, 0)); // 1st vector of the plane
+	PlaneCoord.push_back(vec3(0, 0, 1)); // second vector of the plane
+	PlaneCoord.push_back(vec3(0, 50, 0)); // point on the plane
+										  // unused, just for reference
+	vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().GetPosition();
+	// Get Fragment Plane
+	PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
+	// Get Ray Cast
+	RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
+	// Intersect Raycast with the plane
+	vec3 Destination = ray.PlaneIntersection(PlaneCoord[0], PlaneCoord[1], PlaneCoord[2],
+		ray.GetWorldRay(), camera.GetCameraPosition());
+	// Set Destination to player
+	Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName];
+	myPlayer->Username = session.Username;
+	// Other variables
+	myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[session.CharacterName]->unit_Data.Position;
+	myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	// Set Path
+	myPlayer->unit_Data.Path.clear();
+	/*myPlayer->unit_Data.Path.push_back(myPlayer->unit_Data.StartPoint);
+	myPlayer->unit_Data.Path.push_back(Destination);*/
+	//myPlayer->stats.Hp = Data->GetPlayerInformation()[ReceivedData.MyUsername]->stats.Hp - 5;
+	//	myPlayer.GetUnitData().Position = Destination;
+
+	//{
+#define ASTAR 0
+#define PRM 1
+	int AlgorithmType = PRM;
+	if (AlgorithmType == ASTAR)
+	{
+		vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+		for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+		{
+			myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
+			ReceivedData.RouteChanged = true;
+		}
+		ReceivedData.Path = &myPlayer->unit_Data.Path;
+	}
+	else if (AlgorithmType == PRM)
+	{
+		PRMalgorithm prm;
+		auto startTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+
+		if (ReceivedData.Graph)
+		{
+			delete ReceivedData.Graph;
+		}
+		vector<vec3> BacktrackPath;
+
+		milliseconds FastestRun(100000);
+		milliseconds SlowestRun(0);
+		float averageDistance = 0;
+		int FindingChance = 0;
+		for (int i = 0; i < 1; i++)
+		{
+
+			//	auto startTimeSingle = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+
+			try
+			{
+				ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+				ReceivedData.RouteChanged = true;
+			}
+			catch (exception ex)
+			{
+				int i = 0;
+			}
+			BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer->unit_Data.StartPoint, Destination);
+			//BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+
+			//auto endTimeSingle = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+			//auto deltaSingle = endTimeSingle - startTimeSingle;
+			//if (deltaSingle > SlowestRun)
+			//	SlowestRun = deltaSingle;
+
+			//if (deltaSingle < FastestRun)
+			//	FastestRun = deltaSingle;
+
+			//float TotalDistance = 0;
+			//for (int i = 0; i < BacktrackPath.size()-1; i++)
+			//{
+			//	TotalDistance += glm::distance(BacktrackPath[i], BacktrackPath[i + 1]);
+			//}
+			//averageDistance += TotalDistance;
+			//if (BacktrackPath.size() > 0)
+			//	FindingChance++;
+		}
+		/*auto endTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		auto deltaTime = endTime - startTime;*/
+		for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+		{
+			myPlayer->unit_Data.Path.push_back(BacktrackPath[i]);
+		}
+		if (myPlayer->unit_Data.Path.size() == 0)
+		{
+			int i = 0;
+		}
+		ReceivedData.Path = &myPlayer->unit_Data.Path;
+	}
+	Data->Effects.push_back(Effect("Collada", milliseconds(500), Destination));
+}
+
+void Input::OfflineRightMouseClick()
+{
+}
+
+void Input::SetCircleScript()
+{
+	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+	offlineData.player.LongPath = false;
+	offlineData.player.script = [&]() mutable-> void {
+		// TODO: current path, octagon
+		Unit_Data& ud = offlineData.player.unit_Data;
+		// fix to check if passed
+		if (glm::distance(ud.Position.xz(), ud.StartPoint.xz()) >= glm::distance(ud.Destination.xz(), ud.StartPoint.xz())) // passed destination
+		{
+			// TODO: Add first iteration values
+			if (offlineData.player.PathingStarted == false)
+			{
+				offlineData.player.PathingStarted = true;
+				float nextAngle = 0;
+				ud.StartPoint = ud.Destination;
+				ud.Destination = vec3(ud.StartPoint.x + cos(nextAngle) * 1.0f, 0, ud.StartPoint.x + sin(nextAngle) * 1.0f);
+				ud.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+				ud.Path.clear();
+				ud.Path.push_back(ud.StartPoint);
+				ud.Path.push_back(ud.Destination);
+				return;
+			}
+			// set next track
+			float currentAngle = -acos(dot(glm::normalize(vec2(ud.Destination.x, ud.Destination.z) -
+				vec2(ud.StartPoint.x, ud.StartPoint.z)), vec2(0, 1)));
+			//atan2()
+			float nextAngle = currentAngle + radians(45.0f);
+			ud.StartPoint = ud.Destination;
+			ud.Destination = vec3(ud.StartPoint.x + cos(nextAngle) * cos(nextAngle) * 1.0f, 0, ud.StartPoint.x + sin(nextAngle) * sin(nextAngle) * 1.0f);
+			ud.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+			ud.Path.clear();
+			ud.Path.push_back(ud.StartPoint);
+			ud.Path.push_back(ud.Destination);
+		}
+	};
 }
 
 vec3 Input::GetMouseCoord_MapCoord()

@@ -373,32 +373,7 @@ void Scene::Shadow_DrawGround(Shader& shader)
 	mat4 ModelMatrix;
 	//loaded_Models["Ground"]->DrawModel(l_ProjectionMatrix, l_ViewMatrix, ModelMatrix, shader); // TODO remove mat arguements
 }
-void Scene::Outline()
-{
-	// set stencil mode to only draw those not previous drawn
-	glStencilFunc(GL_EQUAL, 0, 1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	glStencilMask(0x00);
 
-	// Hover NPC
-	mat4 ModelMatrix = glm::scale(mat4(), vec3(1.02f));
-	mat4 WVM = ProjectionMatrix * ViewMatrix* Default::GetInstance().BlenderConversion * ModelMatrix;
-	for (auto o : InputToScene.Highlight)
-	{
-		ShaderBuilder::LoadShader(Shader::At("Color"))->
-			Add_mat4("WVM", WVM).
-			Add_bool("isAnimated", false).
-			Add_vec3("Color",vec3(0, 0.8, 0.9));
-		loaded_Models[o]->Draw();
-	}
-
-	// All Units get a base outline
-	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-	{
-		i->second->DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
-	}
-	glDisable(GL_STENCIL_TEST);
-}
 void Scene::DrawGround(Shader& shader)
 {
 	vec3 LightPos = vec3(0,10,10);
@@ -891,6 +866,41 @@ void Scene::DrawWater()
 		Add_texture("Texture3", mFBO["LakeReflection"].texture).
 		Add_textures(loaded_Models["Water"]->Textures);
 	loaded_Models["Water"]->Draw();
+}
+void Scene::Outline()
+{
+	// set stencil mode to only draw those not previous drawn
+	glStencilFunc(GL_EQUAL, 0, 1);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0x00);
+
+	// Hover NPC
+	mat4 ModelMatrix = glm::scale(mat4(), vec3(1.02f));
+	mat4 WVM = ProjectionMatrix * ViewMatrix* Default::GetInstance().BlenderConversion * ModelMatrix;
+	for (auto o : InputToScene.Highlight)
+	{
+		ShaderBuilder::LoadShader(Shader::At("Color"))->
+			Add_mat4("WVM", WVM).
+			Add_bool("isAnimated", false).
+			Add_vec3("Color", vec3(0, 0.8, 0.9));
+		loaded_Models[o]->Draw();
+	}
+
+	Core & core = Core::GetInstance();
+	if (core.Online)
+	{
+		// All Units get a base outline
+		for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+		{
+			i->second->DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
+		}
+	}
+	else
+	{
+		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		offlineData.player.DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
+	}
+	glDisable(GL_STENCIL_TEST);
 }
 void Scene::DrawOutlineObjects()
 {

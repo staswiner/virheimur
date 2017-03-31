@@ -52,6 +52,21 @@ void UserInterface::AcceptInput()
 
 }
 
+char UserInterface::AccessFirstInput()
+{
+	if (this->InWorldCommands.size() > 0)
+	{
+		char value = this->InWorldCommands.front();
+		this->InWorldCommands.pop_front();
+		return value;
+	}
+	else
+	{
+		// queue is empty
+		return -1;
+	}
+}
+
 void UserInterface::CleanWindows()
 {
 	time_t curTime = time(NULL);

@@ -28,6 +28,9 @@ private:
 	void GetMouseInput();
 	void GetMouseInputOffline();
 	void GetKeyboardInput();
+	void OnlineRightMouseClick();
+	void OfflineRightMouseClick();
+	void SetCircleScript();
 	vec3 GetMouseCoord_MapCoord();
 	Camera camera;
 	Keyboard keyboard;
