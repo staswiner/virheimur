@@ -181,16 +181,29 @@ int Player::GetType()
 {
 	return this->Type;
 }
-
-void * Player::SetMemoryData(string VarName)
+//	void* SetMemoryData(string VarName);
+//void SetMemoryData(string VarName, string VarType, void* data);
+//
+//map<string, void*> MemoryBlock;
+//map<string, string> MemoryTypeTable;
+#define StringToType(string) ()
+void * Player::GetMemoryData(string VarName)
 {
 	// TODO:
-	return nullptr;
+	if (MemoryBlock.find(VarName) == MemoryBlock.end())
+	{
+		return nullptr;
+	}
+	else
+	{
+		return MemoryBlock[VarName];
+	}
 }
 
 void Player::SetMemoryData(string VarName, string VarType, void * data)
 {
-	//TODO:
+	//TODO:	
+	MemoryBlock[VarName] = data;
 }
 
 Player *& PlayerRepository::operator[](string Key)

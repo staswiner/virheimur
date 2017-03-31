@@ -564,14 +564,23 @@ void Input::OnlineRightMouseClick()
 void Input::OfflineRightMouseClick()
 {
 }
-
+#define ToType(type) *static_cast<type*>
 void Input::SetCircleScript()
 {
 	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
 	offlineData.player.LongPath = false;
 	offlineData.player.script = [&]() mutable-> void {
 		// TODO: current path, octagon
+		Player& p = offlineData.player;
 		Unit_Data& ud = offlineData.player.unit_Data;
+		vec3 test(3, 2, 1);
+		p.SetMemoryData("Test", "", &test);
+		if (p.GetMemoryData("Test") != nullptr)
+		{
+			vec3 test2 = ToType(vec3)(p.GetMemoryData("Test"));
+			int i = 0;
+			i++;
+		}
 		// fix to check if passed
 		if (glm::distance(ud.Position.xz(), ud.StartPoint.xz()) >= glm::distance(ud.Destination.xz(), ud.StartPoint.xz())) // passed destination
 		{
@@ -589,9 +598,13 @@ void Input::SetCircleScript()
 				return;
 			}
 			// set next track
-			float currentAngle = -acos(dot(glm::normalize(vec2(ud.Destination.x, ud.Destination.z) -
-				vec2(ud.StartPoint.x, ud.StartPoint.z)), vec2(0, 1)));
+		//	float currentAngle = -acos(dot(glm::normalize(ud.Destination.xz() - 
+		//		ud.StartPoint.xz()), vec2(0, 1)));
 			//atan2()
+			auto dot = ud.Destination.x * ud.StartPoint.x + ud.Destination.y * ud.StartPoint.y;
+			auto det = ud.Destination.x * ud.StartPoint.y - ud.Destination.y * ud.StartPoint.x;
+			float currentAngle = atan2(det, dot);
+
 			float nextAngle = currentAngle + radians(45.0f);
 			ud.StartPoint = ud.Destination;
 			ud.Destination = vec3(ud.StartPoint.x + cos(nextAngle) * cos(nextAngle) * 1.0f, 0, ud.StartPoint.x + sin(nextAngle) * sin(nextAngle) * 1.0f);

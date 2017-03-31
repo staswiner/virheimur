@@ -40,7 +40,7 @@ public:
 	Unit_Data unit_Data;
 	// AI preparations
 	function<void()> script;
-	void* SetMemoryData(string VarName);
+	void* GetMemoryData(string VarName);
 	void SetMemoryData(string VarName, string VarType, void* data);
 	bool disablePathing = false;
 	// TO remove variable
