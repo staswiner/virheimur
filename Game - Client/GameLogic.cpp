@@ -136,50 +136,88 @@ void GameLogic::ProcessDataOffline()
 	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
 	mat4 ViewMatrix = frameData.ViewMatrix;
 	// Calculate moving position
-	// TODO: CRASHES IN THIS FUNCTION SOMEWHERE
-#pragma region bug
 	OfflineDataObject& OfflineData = OfflineDataObject::GetInstance();
 	Player& p = OfflineData.player;
-	
+	// Controls movements if scripted or not
+	ProcessPlayerMovement();
+
+	// Effect lifetimes
+	for (auto e = OfflineData.Effects.begin(); e != OfflineData.Effects.end();)
+	{
+		if (e->CheckStatus())
+		{
+			e = OfflineData.Effects.erase(e);
+		}
+		else
+		{
+			e++;
+		}
+	}
+}
+
+void GameLogic::ProcessPlayerMovement()
+{
+	// Declarations
+	FrameData& frameData = FrameData::GetInstance();
+	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
+	mat4 ViewMatrix = frameData.ViewMatrix;
+	OfflineDataObject& OfflineData = OfflineDataObject::GetInstance();
+	Player& p = OfflineData.player;
+	Unit_Data& ud = p.GetUnitData();
+	// Calculate moving position
 	if (p.script)
 	{
-		p.script();
+		p.script(p);
 	}
-	if (p.disablePathing)
-	{
-		return;
-	}
-	using namespace chrono;
-	Unit_Data& unit = p.GetUnitData();
-	milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-	float Delta = float(currTime.count() - unit.StartPointTime.count()) / 1000.0f; // movement delta
-	float TotalDistance = unit.MovementSpeed * (Delta) * 0.5f;
-	if (p.LongPath)
+	if (p.control == Player::controls::Manual)
 	{
 
-		try {
+	}
+	// Rotation
+	else if (ud.Destination.xz() != ud.StartPoint.xz())
+	{
+		ud.Rotation.y = -acos(dot(glm::normalize(vec2(ud.Destination.x, ud.Destination.z)
+			- vec2(ud.StartPoint.x, ud.StartPoint.z)), vec2(1, 0)));
+		// fix Rotation to 360°
+		(ud.Destination.z - ud.StartPoint.z < 0) ?
+			ud.Rotation.y = radians(360.0f) - ud.Rotation.y : ud.Rotation.y;
+	}
+	ud.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
+}
+// old moving script
+/*
+if (p.disablePathing)
+{
+return;
+}
+using namespace chrono;
+Unit_Data& unit = p.GetUnitData();
+milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+float Delta = float(currTime.count() - unit.StartPointTime.count()) / 1000.0f; // movement delta
+float TotalDistance = unit.MovementSpeed * (Delta) * 0.5f;
+if (p.LongPath)
+{
 
-			for (int i = 1; i < unit.Path.size(); i++)
-			{
-				vec3 start = unit.Path[i - 1];
-				vec3 end = unit.Path[i];
-				/*	subscript out of range
-				i = 3;
-				unit.Path.size() = 7;*/
-				float Distance = distance(end, start);
-				unit.Destination = unit.Path[i];
-				if (TotalDistance > Distance)
-					TotalDistance -= Distance;
-				else
-				{
-					unit.Destination = unit.Path[i];
-					unit.StartPoint = unit.Path[i - 1];
-					unit.Position = glm::normalize(unit.Destination - unit.StartPoint) *
-						TotalDistance +
-						unit.StartPoint;
-					TotalDistance = 0;
-					break;
-				}
+try {
+
+for (int i = 1; i < unit.Path.size(); i++)
+{
+vec3 start = unit.Path[i - 1];
+vec3 end = unit.Path[i];
+float Distance = distance(end, start);
+unit.Destination = unit.Path[i];
+if (TotalDistance > Distance)
+TotalDistance -= Distance;
+else
+{
+	unit.Destination = unit.Path[i];
+	unit.StartPoint = unit.Path[i - 1];
+	unit.Position = glm::normalize(unit.Destination - unit.StartPoint) *
+		TotalDistance +
+		unit.StartPoint;
+	TotalDistance = 0;
+	break;
+}
 			}
 		}
 		catch (exception ex)
@@ -212,32 +250,12 @@ void GameLogic::ProcessDataOffline()
 		vec3 test = glm::normalize(unit.Destination - unit.StartPoint);
 		float test1 = dot(test, vec3(1, 0, 0));
 		unit.Rotation.y = -acos(dot(glm::normalize(vec2(unit.Destination.x, unit.Destination.z) - vec2(unit.StartPoint.x, unit.StartPoint.z)), vec2(1, 0)));
-		
+
 		(unit.Destination.z - unit.StartPoint.z < 0) ?
 			unit.Rotation.y = radians(360.0f) - unit.Rotation.y
 			: unit.Rotation.y
 			;
-	}
-
-	unit.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
-
-
-#pragma endregion bug
-
-	// Effect lifetimes
-	for (auto e = OfflineData.Effects.begin(); e != OfflineData.Effects.end();)
-	{
-		if (e->CheckStatus())
-		{
-			e = OfflineData.Effects.erase(e);
-		}
-		else
-		{
-			e++;
-		}
-	}
-}
-
+	}*/
 void GameLogic::ChainCommands()
 {
 	typedef void (GameLogic::*function)();

@@ -179,24 +179,25 @@ void Camera::KeyboardInput()
 	float CameraMovementSpeed = Camera::Delta / 16.67f / 2.0f
 		//* (-CameraPosition.z / 40.0f);
 		* 1.0f;
-	if (keyboard.isKeyPressed(UP)) // up
-	{
-		CameraDestination.z += CameraMovementSpeed * cos((MouseCameraAngle.y) / 180 * PI);
-		CameraDestination.x -= CameraMovementSpeed * sin((MouseCameraAngle.y) / 180 * PI);
-	}
-	if (keyboard.isKeyPressed(DOWN)) // down
-	{
-		CameraDestination.z -= CameraMovementSpeed * cos((MouseCameraAngle.y) / 180 * PI);
-		CameraDestination.x += CameraMovementSpeed * sin((MouseCameraAngle.y) / 180 * PI);
-	}
-	if (keyboard.isKeyPressed(RIGHT)) // left
-	{
-		MouseCameraAngle.y++;
-	}
-	if (keyboard.isKeyPressed(LEFT))// && CameraPosition.x > -900) // right
-	{
-		MouseCameraAngle.y--;
-	}
+	///Keyboard camera move
+	//if (keyboard.isKeyPressed(UP)) // up
+	//{
+	//	CameraDestination.z += CameraMovementSpeed * cos((MouseCameraAngle.y) / 180 * PI);
+	//	CameraDestination.x -= CameraMovementSpeed * sin((MouseCameraAngle.y) / 180 * PI);
+	//}
+	//if (keyboard.isKeyPressed(DOWN)) // down
+	//{
+	//	CameraDestination.z -= CameraMovementSpeed * cos((MouseCameraAngle.y) / 180 * PI);
+	//	CameraDestination.x += CameraMovementSpeed * sin((MouseCameraAngle.y) / 180 * PI);
+	//}
+	//if (keyboard.isKeyPressed(RIGHT)) // left
+	//{
+	//	MouseCameraAngle.y++;
+	//}
+	//if (keyboard.isKeyPressed(LEFT))// && CameraPosition.x > -900) // right
+	//{
+	//	MouseCameraAngle.y--;
+	//}
 }
 void Camera::CalculateCameraValues()
 {

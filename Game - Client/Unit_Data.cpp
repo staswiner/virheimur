@@ -37,6 +37,13 @@ void Unit_Data::SetPosition(const vec3 Position)
 {
 	this->Position = Position;
 }
+mat4 Unit_Data::GetModelMatrix()
+{
+	mat4 ModelMatrix;
+	ModelMatrix = glm::translate(ModelMatrix, this->Position);
+	ModelMatrix = glm::rotate(ModelMatrix, this->Rotation.y, vec3(0, 1, 0));
+	return ModelMatrix;
+}
 void Unit_Data::SetDestination(const vec3 & Destination)
 {
 	this->Destination = Destination;

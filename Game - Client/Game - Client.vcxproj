@@ -96,10 +96,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\GL Files\freetype-2.6.2\include;D:\assimp-3.1.1-win-binaries\include;D:\GL Files\freeglut\include;D:\GL Files\GL Files\include\GL;D:\GL Files\glew-1.11.0\include;D:\GL Files\glm\glm;D:\GL Files\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>D:\XML library\Debug;D:\GL Files\GL Files\lib;D:\GL Files\freeglut\lib;D:\GL Files\glew-1.11.0\lib;D:\assimp-3.1.1-win-binaries\lib32;D:\GL Files\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetyped.lib;opengl32.lib;glu32.lib;glaux.lib;freeglut.lib;glew32.lib;legacy_stdio_definitions.lib;assimpd.lib;SOIL.lib;tinyxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -192,6 +195,7 @@
     <ClInclude Include="TCP.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Textbox.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="TransferedData.h" />
     <ClInclude Include="UdpClient.h" />
     <ClInclude Include="UIElement.h" />
@@ -273,6 +277,7 @@
     <ClCompile Include="TCP.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Textbox.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="TODO list.cpp" />
     <ClCompile Include="TransferedData.cpp" />
     <ClCompile Include="UdpClient.cpp" />

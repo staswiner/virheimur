@@ -13,7 +13,7 @@ public:
 	Player(Unit_Data, string Username);
 	~Player();
 	Unit_Data& GetUnitData();
-	void Draw(mat4& Projection, mat4& View);
+	void Draw();
 	void DrawShadow(mat4 & ProjectionMatrix, mat4 & ViewMatrix);
 	void DrawOutline(mat4 & ProjectionMatrix, mat4 & ViewMatrix, vec3 Color);
 	void DrawUI(mat4& Projection, mat4& View);
@@ -38,10 +38,19 @@ public:
 	Stats stats;
 	milliseconds TimeDelta;
 	Unit_Data unit_Data;
+	// Controls
+	enum class controls
+	{
+		Manual,
+		Direct,
+		Script,
+		Mouse
+	}; 
+	controls control;
 	// AI preparations
-	function<void()> script;
+	function<void(Player&)> script;
 	void* GetMemoryData(string VarName);
-	void SetMemoryData(string VarName, string VarType, void* data);
+	void SetMemoryData(string VarName, void* data, size_t);
 	bool disablePathing = false;
 	// TO remove variable
 	bool PathingStarted = false;

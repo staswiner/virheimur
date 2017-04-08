@@ -368,6 +368,9 @@
     <ClInclude Include="Layer.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Data.cpp">
@@ -558,6 +561,7 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="FrameData.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">

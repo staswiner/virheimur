@@ -3,6 +3,7 @@
 #include "Mouse.h"
 #include <vector>
 #include "glm\glm\vec2.hpp"
+#include "glm\glm\vec4.hpp"
 #include "Shader.h"
 
 
@@ -19,6 +20,7 @@ public:
 	void DrawFrameBuffer();
 	void DrawDirectly(vector<GLuint>,vector<string>);
 	void ChangeBuffersSize();
+	vec4 GetPixel(int x, int y);
 	~FBO();
 
 public:

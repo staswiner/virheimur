@@ -13,6 +13,7 @@ public:
 	void Update_Unit_Data(const vec3 Position, const vec3 Destination);// , const string ModelIndex, const unsigned int, const int);
 	vec3 GetPosition() const;
 	void SetPosition(const vec3);
+	mat4 GetModelMatrix();
 	void SetDestination(const vec3&);
 	Model* GetModelData() const;
 	unsigned int GetClientID() const;

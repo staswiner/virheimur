@@ -107,6 +107,7 @@ namespace glm
 			{
 				return vec2(this->x, this->z);
 			}
+#define xz1 xz()
 
 			GLM_FUNC_DECL T & operator[](length_type i);
 			GLM_FUNC_DECL T const & operator[](length_type i) const;

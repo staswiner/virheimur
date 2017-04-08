@@ -31,7 +31,7 @@ Unit_Data& Player::GetUnitData()
 }
 
 // TODO : remove projection matrix and view matrix
-void Player::Draw(mat4& ProjectionMatrix, mat4& ViewMatrix)
+void Player::Draw()
 {
 	FrameData& frameData = FrameData::GetInstance();
 	mat4 l_ProjectionMatrix = frameData.ProjectionMatrix;
@@ -196,14 +196,27 @@ void * Player::GetMemoryData(string VarName)
 	}
 	else
 	{
+		float number = *reinterpret_cast<float*>(MemoryBlock[VarName]);
 		return MemoryBlock[VarName];
 	}
 }
 
-void Player::SetMemoryData(string VarName, string VarType, void * data)
+void Player::SetMemoryData(string VarName, void * data, size_t s)
 {
 	//TODO:	
-	MemoryBlock[VarName] = data;
+	
+	float number = *reinterpret_cast<float*>(data);
+	void * AllocationData = malloc(sizeof(s));
+	memcpy(AllocationData, data, s);
+	number = *reinterpret_cast<float*>(AllocationData);
+	void * ptr = MemoryBlock[VarName];
+	if (MemoryBlock.find(VarName) != MemoryBlock.end())
+	{
+
+		//float number = *reinterpret_cast<float*>(MemoryBlock[VarName]);
+		MemoryBlock.erase(VarName);
+	}
+	MemoryBlock[VarName] = AllocationData;
 }
 
 Player *& PlayerRepository::operator[](string Key)

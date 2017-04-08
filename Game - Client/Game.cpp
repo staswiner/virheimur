@@ -85,6 +85,11 @@ int i = 0;
 void Game::Loop()
 {
 #define is ==
+	// Frame Time
+	Time& time = Time::GetST();
+	time.CalculateFrame();
+
+
 	static char LastState = State;
 	if (State != LastState)
 	{

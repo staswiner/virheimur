@@ -153,6 +153,16 @@ void FBO::ChangeBuffersSize()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+vec4 FBO::GetPixel(int x, int y)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, this->PostProcessingFBO);
+	glReadBuffer(GL_COLOR_ATTACHMENT0);
+	vec4 pixel;
+	glReadPixels(x , y, 1, 1, GL_RGBA, GL_FLOAT, &pixel);
+	FBO::UnbindFrameBuffer();
+	return pixel;
+}
+
 void FBO::Load_VAO()
 {
 	vertices.push_back(vec2(-1, -1));

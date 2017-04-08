@@ -52,7 +52,7 @@ void UserInterface::AcceptInput()
 
 }
 
-char UserInterface::AccessFirstInput()
+char UserInterface::AccessWorldCommands()
 {
 	if (this->InWorldCommands.size() > 0)
 	{

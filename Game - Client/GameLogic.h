@@ -20,6 +20,7 @@ public:
 	void ChainCommands();
 	void BuildData();
 private:
+	void ProcessPlayerMovement();
 	Keyboard keyboard;
 	Mouse mouse;
 	//GameData Data;

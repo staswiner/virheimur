@@ -429,7 +429,17 @@ void Scene::DrawIndexColor()
 			Add_mat4("WVM", WVM);
 		loaded_Models[npc.Name]->Draw();
 	}
-
+	Core& core = Core::GetInstance();
+	if (!core.Online)
+	{
+		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		WVM = ProjectionMatrix * ViewMatrix * offlineData.player.unit_Data.GetModelMatrix();
+		ShaderBuilder::LoadShader(Shader::At("Index"))->
+			Add_bool("indexType", false).
+			Add_float("Index", 5).
+			Add_mat4("WVM", WVM);
+		offlineData.player.Draw();
+	}
 }
 void Scene::DrawColladaDistance()
 {
@@ -899,6 +909,7 @@ void Scene::Outline()
 	{
 		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
 		offlineData.player.DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
+	/*	if (InputToScene.Highlight)*/
 	}
 	glDisable(GL_STENCIL_TEST);
 }
@@ -920,12 +931,12 @@ void Scene::DrawOutlineObjects()
 	{
 		for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
 		{
-			i->second->Draw(ProjectionMatrix, ViewMatrix);
+			i->second->Draw();
 		}
 	}
 	else
 	{
 		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
-		offlineData.player.Draw(ProjectionMatrix, ViewMatrix);
+		offlineData.player.Draw();
 	}
 }

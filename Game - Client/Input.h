@@ -9,8 +9,12 @@
 #include "Loaded_Models.h"
 #include "FBO.h"
 #include "Session.h"
+#include "Time.h"
+#include <Windows.h>
 #include <chrono>
 #include <memory>
+#include <sys/stat.h>
+#include <sys/types.h>
 using namespace std::chrono;
 class Input
 {
@@ -31,6 +35,12 @@ private:
 	void OnlineRightMouseClick();
 	void OfflineRightMouseClick();
 	void SetCircleScript();
+	void RunScript();
+	void OpenProfileUI();
+	void SetCircleScriptIterative();
+	void SetPlayerControl(Player::controls control);
+	void ManualControl();
+	void DirectControl();
 	vec3 GetMouseCoord_MapCoord();
 	Camera camera;
 	Keyboard keyboard;
@@ -47,6 +57,11 @@ private:
 	Loaded_Models loaded_Models;
 	bool LeftWasPressed = false;
 	void ResetCharacterPosition();
-
+	enum class Key {
+		Up=24,
+		Down=25,
+		Right=26,
+		Left=27
+	};
 };
 
