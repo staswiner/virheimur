@@ -3,8 +3,7 @@
 
 Effect::Effect(string Name, milliseconds Duration,vec3 Position)
 {
-	Loaded_Models lModels;
-	this->EffectModel = lModels[Name];
+	this->EffectModel = ModelsCollection::getInstance()[Name];
 	this->Duration = Duration;
 	this->StartTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	this->ModelMatrix = glm::translate(mat4(), Position);

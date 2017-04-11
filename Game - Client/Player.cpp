@@ -40,7 +40,6 @@ void Player::Draw()
 	// Model
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
-	Loaded_Models loaded_Models;
 #pragma region Mathematics
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
@@ -51,8 +50,8 @@ void Player::Draw()
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", true).
 		Add_float("Texelation", 1.0f).
-		Add_textures(loaded_Models["Collada"]->Textures);
-	loaded_Models["Collada"]->Draw();
+		Add_textures(ModelsCollection::getInstance()["Collada"]->Textures);
+	ModelsCollection::getInstance()["Collada"]->Draw();
 
 }
 void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
@@ -61,7 +60,7 @@ void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 	// Model
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
-	Loaded_Models loaded_Models;
+
 #pragma region Mathematics
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
@@ -72,8 +71,8 @@ void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", true).
 		Add_float("Texelation", 1.0f).
-		Add_textures(loaded_Models["Collada"]->Textures);
-	loaded_Models["Collada"]->Draw();
+		Add_textures(ModelsCollection::getInstance()["Collada"]->Textures);
+	ModelsCollection::getInstance()["Collada"]->Draw();
 
 }
 void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
@@ -82,7 +81,6 @@ void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
 	// Model
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
-	Loaded_Models loaded_Models;
 #pragma region Mathematics
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
@@ -94,7 +92,7 @@ void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", false).
 		Add_vec3("Color", Color);
-	loaded_Models["Collada"]->Draw();
+	ModelsCollection::getInstance()["Collada"]->Draw();
 
 }
 

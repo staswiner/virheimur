@@ -89,7 +89,7 @@ void GameLogic::Proceed(GDO& FinalData)
 				;
 		}
 
-		unit.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
+		unit.Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
 		
 	}
 #pragma endregion bug
@@ -182,7 +182,7 @@ void GameLogic::ProcessPlayerMovement()
 		(ud.Destination.z - ud.StartPoint.z < 0) ?
 			ud.Rotation.y = radians(360.0f) - ud.Rotation.y : ud.Rotation.y;
 	}
-	ud.Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
+	ud.Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
 }
 // old moving script
 /*

@@ -91,7 +91,6 @@ private:
 	Shadow_Mapping *shadow;
 	vec3 LightPosition = vec3(30,50,0);
 
-	Loaded_Models loaded_Models;
 	//SkyBox* skyBox;
 	GLuint Channel;
 	FPS fps;

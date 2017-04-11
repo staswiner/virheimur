@@ -33,7 +33,6 @@ private:
 	//GameData Data;
 	GDO& Data;
 	InGameInteractions inGameInteractions;
-	Loaded_Models loaded_Models;
 
 
 };

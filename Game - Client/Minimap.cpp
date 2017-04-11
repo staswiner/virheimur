@@ -29,13 +29,12 @@ void Minimap::Initialize()
 }
 void Minimap::UpdateMap()
 {
-	Loaded_Models loaded_Models;
 	if (MinimapFrameData)
 	{
 		SOIL_free_image_data(reinterpret_cast<GLubyte*>(MinimapFrameData));
 	}
 	MinimapFrameData = this->GetImageData("Minimap/Minimap.png", Width, Height);
-	for (auto vertex : dynamic_cast<Ground_Collision*>(loaded_Models["Land"]->meshes[0].mCollision)->GetVertices())
+	for (auto vertex : dynamic_cast<Ground_Collision*>(ModelsCollection::getInstance()["Land"]->meshes[0].mCollision)->GetVertices())
 	{
 		if (dot(vertex.Normal, vec3(0, 1, 0)) < 0.8f)
 		{

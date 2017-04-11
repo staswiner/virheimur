@@ -52,7 +52,6 @@ private:
 	int HoverFocus;
 	UserInterface& UI;
 	FBO* Index;
-	Loaded_Models loaded_Models;
 	bool LeftWasPressed = false;
 	void ResetCharacterPosition();
 	void ResetCameraPosition();

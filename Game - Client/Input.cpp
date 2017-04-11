@@ -71,7 +71,7 @@ void Input::GetMouseInput()
 		// unused, just for reference
 		vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().Position;
 		// Get Fragment Plane
-		PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r,pixel.g,pixel.b));
+		PlaneCoord = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r,pixel.g,pixel.b));
 		// Get Ray Cast
 		RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
 		// Intersect Raycast with the plane
@@ -468,7 +468,7 @@ void Input::OnlineRightMouseClick()
 										  // unused, just for reference
 	vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().Position;
 	// Get Fragment Plane
-	PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
+	PlaneCoord = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
 	// Get Ray Cast
 	RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
 	// Intersect Raycast with the plane
@@ -812,7 +812,7 @@ vec3 Input::GetMouseCoord_MapCoord()
 	PlaneCoord.push_back(vec3(0, 50, 0)); // point on the plane
 										  // unused, just for reference
 	// Get Fragment Plane
-	PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
+	PlaneCoord = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
 	// Get Ray Cast
 	RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
 	// Intersect Raycast with the plane
@@ -828,7 +828,7 @@ void Input::ResetCharacterPosition()
 	if (core.Online)
 	{
 		Session& session = Session::GetInstance();
-		vec3 Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
+		vec3 Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
 		Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
 		myPlayer->Username = ReceivedData.MyUsername;
 		myPlayer->unit_Data.Path.clear();

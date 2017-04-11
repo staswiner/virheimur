@@ -58,7 +58,6 @@ void Scene::Initialize()
 #pragma endregion 2D Interface
 
 
-	loaded_Models.initialize_Models();
 	minimap.UpdateMap();
 //	Data.Map = &minimap;
 	Data.Map.Map = minimap.GetMinimapData(Data.Map.Width, Data.Map.Height);
@@ -404,7 +403,7 @@ void Scene::DrawGround(Shader& shader)
 		Add_vec3("lightPos", vec3(0.0f, 100.0f, 0.0f)).
 		Add_vec3("cameraPos", camera.GetCameraPosition()).
 		Add_float("GravityHeight", zeroval);
-	loaded_Models["Ground"]->Draw();
+	ModelsCollection::getInstance()["Ground"]->Draw();
 }
 
 void Scene::DrawIndexColor()
@@ -423,7 +422,7 @@ void Scene::DrawIndexColor()
 	ShaderBuilder::LoadShader(Shader::At("Index"))->
 		Add_bool("indexType",true).
 		Add_mat4("WVM", WVM);
-	loaded_Models["Land"]->Draw();
+	ModelsCollection::getInstance()["Land"]->Draw();
 	for(auto npc : NPCs)
 	{
 		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
@@ -431,7 +430,7 @@ void Scene::DrawIndexColor()
 			Add_bool("indexType", false).
 			Add_float("Index", (float)npc.npcID).
 			Add_mat4("WVM", WVM);
-		loaded_Models[npc.Name]->Draw();
+		ModelsCollection::getInstance()[npc.Name]->Draw();
 	}
 	Core& core = Core::GetInstance();
 	if (!core.Online)
@@ -473,7 +472,7 @@ void Scene::DrawColladaDistance()
 	ShaderBuilder::LoadShader(Shader::At("AnimationDistance"))->
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", false);
-	loaded_Models["Land"]->Draw();
+	ModelsCollection::getInstance()["Land"]->Draw();
 	//loaded_Models["Collada"]->Draw();
 
 #pragma region Grass
@@ -613,8 +612,8 @@ void Scene::DrawColladaShadow()
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", true).
 		Add_float("Texelation", 1.0f).
-		Add_textures(loaded_Models["Collada"]->Textures);
-	loaded_Models["Collada"]->Draw();
+		Add_textures(ModelsCollection::getInstance()["Collada"]->Textures);
+	ModelsCollection::getInstance()["Collada"]->Draw();
 	WVM = ProjectionMatrix * ViewMatrix;
 	//
 	/*uniform vec3 lightPos;
@@ -627,14 +626,14 @@ void Scene::DrawColladaShadow()
 		Add_vec3("lightPos", NewLightPos).
 		Add_vec3("cameraPos", -camera.GetCameraPosition()).
 		Add_Material("Wood", Materials::GetInstance()["chrome"]).
-		Add_textures(loaded_Models["House"]->Textures);
+		Add_textures(ModelsCollection::getInstance()["House"]->Textures);
 	// Draw NPC
 	for (auto npc : NPCs)
 	{
 		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
 		ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
 			Add_mat4("WVM", LightViewMatrix);
-		loaded_Models[npc.Name]->Draw();
+		ModelsCollection::getInstance()[npc.Name]->Draw();
 	}
 	// Draw Players
 	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
@@ -689,14 +688,14 @@ void Scene::DrawCollada()
 		Add_float("Texelation", 25.0f).
 		Add_vec3("lightPos", NewLightPos).
 		Add_vec3("cameraPos", -camera.GetCameraPosition()).
-		Add_textures(loaded_Models["Land"]->Textures).
+		Add_textures(ModelsCollection::getInstance()["Land"]->Textures).
 		Add_texture("shadowMap", shadow->depthMap).
 		Add_mat4("LightViewMatrix", LightViewMatrix).
 		Add_bool("clip", true).
 		Add_Material("Brick", Materials::GetInstance()["chrome"]).
 		Add_Material("Grass", Materials::GetInstance()["emerald"]).
 		Add_bool("isAnimated", false);
-	loaded_Models["Land"]->Draw();
+	ModelsCollection::getInstance()["Land"]->Draw();
 
 	/*landmat = translate(mat4(), vec3(0,0,0));
 	WVM = ProjectionMatrix * ViewMatrix * landmat;
@@ -725,8 +724,8 @@ void Scene::DrawCollada()
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", false).
 		Add_float("Texelation", 1.0f).
-		Add_textures(loaded_Models["Sphere"]->Textures);
-	loaded_Models["Sphere"]->Draw();
+		Add_textures(ModelsCollection::getInstance()["Sphere"]->Textures);
+	ModelsCollection::getInstance()["Sphere"]->Draw();
 	WVM = ProjectionMatrix * ViewMatrix;
 	//
 	/*uniform vec3 lightPos;
@@ -820,8 +819,8 @@ void Scene::DrawCollada()
 			Add_bool("isAnimated", false).
 			Add_Material("Wood",Materials::GetInstance()["chrome"]).
 			Add_float("Texelation", 1.0f).
-			Add_textures(loaded_Models[npc.Name]->Textures);
-		loaded_Models[npc.Name]->Draw();
+			Add_textures(ModelsCollection::getInstance()[npc.Name]->Textures);
+		ModelsCollection::getInstance()[npc.Name]->Draw();
 	}
 	//ShaderBuilder::LoadShader(Shader::At("Index"))->
 	//	Add_mat4("WVM", WVM);
@@ -886,8 +885,8 @@ void Scene::DrawWater()
 		Add_Material("Water", Materials::GetInstance()["water"]).
 		Add_bool("clip", false).
 		Add_texture("Texture3", mFBO["LakeReflection"].texture).
-		Add_textures(loaded_Models["Water"]->Textures);
-	loaded_Models["Water"]->Draw();
+		Add_textures(ModelsCollection::getInstance()["Water"]->Textures);
+	ModelsCollection::getInstance()["Water"]->Draw();
 }
 void Scene::Outline()
 {
@@ -905,7 +904,7 @@ void Scene::Outline()
 			Add_mat4("WVM", WVM).
 			Add_bool("isAnimated", false).
 			Add_vec3("Color", vec3(0, 0.8, 0.9));
-		loaded_Models[o]->Draw();
+		ModelsCollection::getInstance()[o]->Draw();
 	}
 
 	Core & core = Core::GetInstance();
@@ -935,8 +934,8 @@ void Scene::DrawOutlineObjects()
 			Add_mat4("WVM", WVM).
 			Add_bool("isAnimated", false).
 			Add_float("Texelation", 1.0f).
-			Add_textures(loaded_Models[npc.Name]->Textures);
-		loaded_Models[npc.Name]->Draw();
+			Add_textures(ModelsCollection::getInstance()[npc.Name]->Textures);
+		ModelsCollection::getInstance()[npc.Name]->Draw();
 	}
 	Core & core = Core::GetInstance();
 	if (core.Online)
