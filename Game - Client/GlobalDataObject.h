@@ -24,7 +24,7 @@ public:
 	PlayerRepository& GetPlayerInformation();
 
 	string MyUsername;
-	map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
+	map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 		, bool(*)(const vec3&, const vec3&)>* Graph;
 	vector<vec3>* Path;
 	bool RouteChanged = false;

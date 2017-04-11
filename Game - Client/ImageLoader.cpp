@@ -145,7 +145,6 @@ int ImageLoader::LoadTexture(u8vec4* ColorData,int Width, int Height)
 // 2x expensive of loading a picture
 u8vec4 * ImageLoader::GetImageData(string Filename, int & Width, int & Height)
 {
-	unsigned char* image;
 	u8vec4* ImageData;
 	// "Loading Screen/UI.jpg"
 	ImageData = reinterpret_cast<u8vec4*>(SOIL_load_image(Filename.c_str(), &Width, &Height, 0, SOIL_LOAD_AUTO));

@@ -24,7 +24,6 @@ public:
 	void SetInitialCharacterData(GDO);
 	GlobalDataObject& TranslateInput(GlobalDataObject& Data);
 	GlobalDataObject & TranslateInputOffline(GlobalDataObject & Data);
-	Camera& GetCamera();
 	Keyboard& GetKeyboard();
 	Mouse& GetMouse();
 
@@ -42,7 +41,6 @@ private:
 	void ManualControl();
 	void DirectControl();
 	vec3 GetMouseCoord_MapCoord();
-	Camera camera;
 	Keyboard keyboard;
 	Mouse mouse;
 	GlobalDataObject& ReceivedData;
@@ -57,6 +55,7 @@ private:
 	Loaded_Models loaded_Models;
 	bool LeftWasPressed = false;
 	void ResetCharacterPosition();
+	void ResetCameraPosition();
 	enum class Key {
 		Up=24,
 		Down=25,

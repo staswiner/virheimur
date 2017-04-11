@@ -27,10 +27,10 @@ void GameLogic::Proceed(GDO& FinalData)
 		milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		float Delta = float(currTime.count() - unit.StartPointTime.count()) / 1000.0f; // movement delta
 		float ServerDelta = float(p.second->TimeDelta.count() - (currTime.count())) / 1000.0f; // sync delta
-		float TotalDistance = unit.MovementSpeed * (Delta + ServerDelta);
+		float TotalDistance = p.second->stats.MovementSpeed * (Delta + ServerDelta);
 		try {
 
-			for (int i = 1; i < unit.Path.size(); i++)
+			for (uint i = 1; i < unit.Path.size(); i++)
 			{
 				vec3 start = unit.Path[i - 1];
 				vec3 end = unit.Path[i];

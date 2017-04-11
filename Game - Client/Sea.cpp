@@ -19,7 +19,8 @@ void Sea::Draw(mat4 & ProjectionMat, mat4 & ViewMat, mat4 & ModelMat)
 	{
 		WaveOffset -= 2.0f;
 	}
-	Camera camera;
+	Camera& camera = Camera::GetCamera("Main");
+
 	vec3 CameraPosition = camera.GetCameraPosition();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, ViewportTexture);

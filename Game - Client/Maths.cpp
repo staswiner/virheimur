@@ -79,7 +79,7 @@ namespace Stas
 			return false;
 		return true;
 	}
-	vector<vec3> Maths::Dijkstra(const map<vec3,map<vec3,int, bool(*)(const vec3&, const vec3&)>
+	vector<vec3> Maths::Dijkstra(const map<vec3,map<vec3,float, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target)
 	{
 		map<vec3, map<vec3, int>> a;
@@ -193,7 +193,7 @@ namespace Stas
 //
 //		//return INT_MAX;
 //	}
-	vector<vec3> Maths::Astar(const map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>,
+	vector<vec3> Maths::Astar(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>,
 		bool(*)(const vec3&, const vec3&)>& graph, vec3 source, vec3 target)
 	{
 		auto compare = [](const vec3& lhs, const vec3& rhs)->bool {

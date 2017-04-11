@@ -35,11 +35,11 @@ namespace Stas
 		static float barryCentric(vec3, vec3, vec3, vec2);
 		static float Mod(float, float);
 		//static vector<vec3> Dijekstra(map<vec3,pair<vec3, float>> Nodes,vec3 Start,vec3 Destination);
-		static vector<vec3> Dijkstra(const map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
+		static vector<vec3> Dijkstra(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
 		//vector<vec3> DijkstraB(std::map<vec3, vector<vec3>, std::function<bool(const vec3&lhs, const vec3&rhs)>>
 		//	&graph, vec3 source, vec3 target) = delete;
-		static vector<vec3> Astar(const map<vec3, map<vec3, int, bool(*)(const vec3&, const vec3&)>
+		static vector<vec3> Astar(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
 		static unsigned long long llrand();
 		static bool vec3Compare(const vec3&, const vec3&);

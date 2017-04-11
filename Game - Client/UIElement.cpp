@@ -242,7 +242,7 @@ void UIElement::Draw()
 	// back to front, draws parent before child
 	if (this->IsRoot == false)
 	{
-		float FontSize = this->style.font.size;
+		float FontSize = (float)this->style.font.size;
 		vec2 margin(20.0f,((BotRight.y-TopLeft.y) + FontSize/2.0f)/2.0f);
 		TextPosition = TopLeft + margin;
 		this->UIImage->Draw(this->TopLeft, this->BotRight);

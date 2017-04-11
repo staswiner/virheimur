@@ -26,18 +26,6 @@
     <Filter Include="Parser">
       <UniqueIdentifier>{182d3439-885a-4a1b-a086-99233c7bc242}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2D Interface">
-      <UniqueIdentifier>{398c6e4e-ad37-40f3-b41c-ad9a53efbb35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\FBX Objects">
-      <UniqueIdentifier>{0c6090b5-3a08-49d1-b666-c77f0146b70a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2D Interface\Item Tab">
-      <UniqueIdentifier>{87896955-8f82-4fb3-8b08-48c1d8bf0053}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2D Interface\Items">
-      <UniqueIdentifier>{a7af2e23-e1f8-466f-b786-85a57055591f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Maths">
       <UniqueIdentifier>{7075b47e-67db-493c-b4da-9107f5eaedc1}</UniqueIdentifier>
     </Filter>
@@ -114,8 +102,32 @@
     <Filter Include="Network">
       <UniqueIdentifier>{981dddc0-c4a8-46be-9ed2-352ba6561d9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="2D Interface\Base">
+    <Filter Include="GameObjects">
+      <UniqueIdentifier>{c24245bb-d62e-43c0-a191-85cab08c056b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Maths\Algorithms">
+      <UniqueIdentifier>{65f3dbe2-c73c-4673-90d4-e8cbcf260604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SingleTone Classes">
+      <UniqueIdentifier>{5aa4ccef-451e-4b77-9f18-f0935c4d902a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameStates">
+      <UniqueIdentifier>{2c6b8584-0728-4d86-80eb-fb39d1f38808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User Interface">
+      <UniqueIdentifier>{398c6e4e-ad37-40f3-b41c-ad9a53efbb35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User Interface\Item Tab">
+      <UniqueIdentifier>{87896955-8f82-4fb3-8b08-48c1d8bf0053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User Interface\Items">
+      <UniqueIdentifier>{a7af2e23-e1f8-466f-b786-85a57055591f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User Interface\Base">
       <UniqueIdentifier>{0cc16daa-8064-4ae4-87b8-60c2da6b65a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User Interface\UI Windows">
+      <UniqueIdentifier>{d78fc19c-8b7d-4814-99e6-d6fa26243171}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -137,12 +149,6 @@
     <ClInclude Include="Mouse.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Models_Header.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit_Data.h">
-      <Filter>Unit Data</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Camera</Filter>
     </ClInclude>
@@ -158,9 +164,6 @@
     <ClInclude Include="Loading_Screen.h">
       <Filter>Graphics\Loading Screen</Filter>
     </ClInclude>
-    <ClInclude Include="Load_FBX_file.h">
-      <Filter>Graphics\FBX Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Shadow_Mapping.h">
       <Filter>Graphics\Scene\Shadow Mapping</Filter>
     </ClInclude>
@@ -168,7 +171,7 @@
       <Filter>Graphics\Sea</Filter>
     </ClInclude>
     <ClInclude Include="Inventory.h">
-      <Filter>2D Interface\Item Tab</Filter>
+      <Filter>User Interface\Item Tab</Filter>
     </ClInclude>
     <ClInclude Include="Maths.h">
       <Filter>Maths</Filter>
@@ -195,7 +198,7 @@
       <Filter>Graphics\Base Classes</Filter>
     </ClInclude>
     <ClInclude Include="Item_Base_Class.h">
-      <Filter>2D Interface\Items</Filter>
+      <Filter>User Interface\Items</Filter>
     </ClInclude>
     <ClInclude Include="Login_Screen.h">
       <Filter>Login Screen</Filter>
@@ -204,13 +207,13 @@
       <Filter>Login Screen</Filter>
     </ClInclude>
     <ClInclude Include="Textbox.h">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>Graphics\Text</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClInclude>
     <ClInclude Include="PreEffect.h">
       <Filter>Graphics\Scene\PreEffect</Filter>
@@ -227,9 +230,6 @@
     <ClInclude Include="MathGrass.h">
       <Filter>MathGrass</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderBuilder.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="UserInterface.h">
       <Filter>Input</Filter>
     </ClInclude>
@@ -242,17 +242,14 @@
     <ClInclude Include="XMLBuilder.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalDataObject.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="ExistingMesh.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Minimap.h">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClInclude>
     <ClInclude Include="ChampionChat.h">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>GameHeirarchy</Filter>
@@ -279,28 +276,22 @@
       <Filter>GameHeirarchy</Filter>
     </ClInclude>
     <ClInclude Include="UIWindow.h">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClInclude>
     <ClInclude Include="ImageLoader.h">
-      <Filter>2D Interface\Base</Filter>
+      <Filter>User Interface\Base</Filter>
     </ClInclude>
     <ClInclude Include="MenuPanel.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="PRMalgorithm.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="StatsWindow.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="MasteryWindow.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="LoginState.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="UIElement.h">
-      <Filter>2D Interface\Base</Filter>
+      <Filter>User Interface\Base</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Collision</Filter>
@@ -320,25 +311,10 @@
     <ClInclude Include="resource.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Effect.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="SelectionState.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterCreationState.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="CharacterData.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="TCP.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Session.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Default.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
@@ -347,29 +323,56 @@
     <ClInclude Include="AIObjects.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="NPC.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderGenerator.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GLM_Headers.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Cookies.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameData.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Layer.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="PRMalgorithm.h">
+      <Filter>Maths\Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="Default.h">
+      <Filter>SingleTone Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Cookies.h">
+      <Filter>SingleTone Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameData.h">
+      <Filter>SingleTone Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>SingleTone Classes</Filter>
+    </ClInclude>
     <ClInclude Include="Time.h">
-      <Filter>Headers</Filter>
+      <Filter>SingleTone Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="TCP.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterCreationState.h">
+      <Filter>GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalDataObject.h">
+      <Filter>SingleTone Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GLM_Headers.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Models_Header.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderBuilder.h">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderGenerator.h">
+      <Filter>Graphics\Base Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -394,9 +397,6 @@
     <ClCompile Include="Keyboard.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="Unit_Data.cpp">
-      <Filter>Unit Data</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
@@ -409,9 +409,6 @@
     <ClCompile Include="Loading_Screen.cpp">
       <Filter>Graphics\Loading Screen</Filter>
     </ClCompile>
-    <ClCompile Include="Load_FBX_file.cpp">
-      <Filter>Graphics\FBX Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Shadow_Mapping.cpp">
       <Filter>Graphics\Scene\Shadow Mapping</Filter>
     </ClCompile>
@@ -419,7 +416,7 @@
       <Filter>Graphics\Sea</Filter>
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
-      <Filter>2D Interface\Item Tab</Filter>
+      <Filter>User Interface\Item Tab</Filter>
     </ClCompile>
     <ClCompile Include="Maths.cpp">
       <Filter>Maths</Filter>
@@ -449,7 +446,7 @@
       <Filter>Graphics\Base Classes</Filter>
     </ClCompile>
     <ClCompile Include="Item_Base_Class.cpp">
-      <Filter>2D Interface\Items</Filter>
+      <Filter>User Interface\Items</Filter>
     </ClCompile>
     <ClCompile Include="Login_Screen.cpp">
       <Filter>Login Screen</Filter>
@@ -458,13 +455,13 @@
       <Filter>Login Screen</Filter>
     </ClCompile>
     <ClCompile Include="Textbox.cpp">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>Graphics\Text</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClCompile>
     <ClCompile Include="PreEffect.cpp">
       <Filter>Graphics\Scene\PreEffect</Filter>
@@ -485,7 +482,6 @@
     <ClCompile Include="FPS.cpp">
       <Filter>FPS</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderBuilder.cpp" />
     <ClCompile Include="InGameInteractions.cpp" />
     <ClCompile Include="ExistingMesh.cpp" />
     <ClCompile Include="Game.cpp">
@@ -522,46 +518,80 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Minimap.cpp">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClCompile>
     <ClCompile Include="UIWindow.cpp">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClCompile>
     <ClCompile Include="ImageLoader.cpp">
-      <Filter>2D Interface\Base</Filter>
+      <Filter>User Interface\Base</Filter>
     </ClCompile>
     <ClCompile Include="MenuPanel.cpp" />
-    <ClCompile Include="PRMalgorithm.cpp" />
-    <ClCompile Include="StatsWindow.cpp" />
-    <ClCompile Include="MasteryWindow.cpp" />
-    <ClCompile Include="LoginState.cpp" />
     <ClCompile Include="ChampionChat.cpp">
-      <Filter>2D Interface</Filter>
+      <Filter>User Interface</Filter>
     </ClCompile>
     <ClCompile Include="UIElement.cpp">
-      <Filter>2D Interface\Base</Filter>
+      <Filter>User Interface\Base</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
     <ClCompile Include="SeaAnimated.cpp" />
     <ClCompile Include="Cursor.cpp" />
-    <ClCompile Include="Effect.cpp" />
-    <ClCompile Include="SelectionState.cpp" />
-    <ClCompile Include="CharacterCreationState.cpp" />
     <ClCompile Include="CharacterData.cpp" />
-    <ClCompile Include="TCP.cpp" />
-    <ClCompile Include="Session.cpp" />
-    <ClCompile Include="Default.cpp" />
     <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="AIObjects.cpp" />
-    <ClCompile Include="NPC.cpp" />
-    <ClCompile Include="ShaderGenerator.cpp" />
-    <ClCompile Include="Cookies.cpp" />
-    <ClCompile Include="Projectile.cpp" />
-    <ClCompile Include="FrameData.cpp" />
     <ClCompile Include="Layer.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="AIObjects.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>SingleTone Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>SingleTone Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Default.cpp">
+      <Filter>SingleTone Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameData.cpp">
+      <Filter>SingleTone Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="PRMalgorithm.cpp">
+      <Filter>Maths\Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Cookies.cpp">
+      <Filter>SingleTone Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterCreationState.cpp">
+      <Filter>GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="TCP.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderBuilder.cpp">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderGenerator.cpp">
+      <Filter>Graphics\Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsWindow.cpp">
+      <Filter>User Interface\UI Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectionState.cpp">
+      <Filter>GameStates</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginState.cpp">
+      <Filter>GameStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">
@@ -741,7 +771,6 @@
     <None Include="Shaders\SeaAnimated Fragment Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\Distance Fragment Shader.glsl" />
     <None Include="Shaders\Index Vertex Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
@@ -751,22 +780,37 @@
     <None Include="Shaders\Index Geometry Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\Index1 Vertex Shader.glsl" />
-    <None Include="Shaders\Index1 Geometry Shader.glsl" />
-    <None Include="Shaders\Index1 Fragment Shader.glsl" />
-    <None Include="Shaders\Ground Fragment Shader.glsl" />
     <None Include="cursor1.cur">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Shaders\Ground Geometry Shader.glsl" />
     <None Include="Shaders\AnimationShadow Fragment Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\Water Fragment Shader.glsl" />
     <None Include="Shaders\Color Vertex Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\Color Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Ground Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Ground Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Index1 Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Index1 Geometry Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Index1 Vertex Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Distance Fragment Shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Water Fragment Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

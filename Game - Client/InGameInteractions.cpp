@@ -40,6 +40,8 @@ vec3 InGameInteractions::Collision(vec3 WorldRay)
 }
 vec3 InGameInteractions::GetCameraPosition()
 {
+	Camera& camera = Camera::GetCamera("Main");
+
 	vec3 CameraPosition = camera.GetCameraPosition();
 	vec3 CameraRotation = camera.GetCameraRotation();
 	/*********/

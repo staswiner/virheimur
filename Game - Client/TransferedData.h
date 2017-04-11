@@ -3,8 +3,8 @@
 #include <vector>
 #include <iostream>
 #include "glm\glm\vec3.hpp"
-#include "Unit_Data.h"
 #include "json.hpp"
+#include "Player.h"
 
 using namespace glm;
 using namespace std;
@@ -18,8 +18,8 @@ public:
 	~TransferedData();	
 	bool UpdateData(string, int);
 	bool TranslatedData();
-	vector<Unit_Data*> GetUnitData();
-	vector<Unit_Data*> Unit;
+	vector<Player::Unit_Data*> GetUnitData();
+	vector<Player::Unit_Data*> Unit;
 	unsigned int ClientID = 0;
 
 	void ConvertData(string);

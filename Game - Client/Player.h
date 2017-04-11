@@ -1,14 +1,54 @@
 #pragma once
-#include "Unit_Data.h"
 #include "json.hpp"
 #include "UIElement.h"
 #include "FrameData.h"
 #include <functional>
+#include "glm\glm\vec3.hpp"
+#include "Model.h"
+#include "Loaded_Models.h"
+#include "Default.h"
+#include <chrono>
+using namespace chrono;
+using namespace glm;
+
+
 using namespace std;
 using namespace nlohmann;
+
+
 class Player
 {
 public:
+	struct Stats{
+		uint Level;
+		uint Exp;
+		uint MaxHp;
+		uint Hp;
+		uint Mp;
+		uint MovementSpeed = 10;
+		uint Gold;
+	};
+	class Unit_Data
+	{
+	public:
+		Unit_Data();
+		~Unit_Data();
+		mat4 GetModelMatrix();
+		Model* GetModelData() const;
+		// When destination is chosen, StartPointTime is updated with the action time. 
+		// Later Calculates the route based on this factor and walking speed
+	public:
+		vec3 StartPoint;
+		vec3 Position;
+		vec3 Rotation;
+		vector<vec3> Path;
+		vec3 Destination;
+		bool PathChanged = false;
+		milliseconds StartPointTime;
+		Model* Model_Data;
+		unsigned int action;
+	};
+	class Unit_Data;
 	Player();
 	Player(Unit_Data, string Username);
 	~Player();
@@ -20,19 +60,13 @@ public:
 	void LoadInterface();
 	void UpdateUnitData(Unit_Data uData);
 	json GetJson();
+	json GetStructureJson();
 	int GetType();
 	string GetIP() { return this->IpAddress; }
 	string GetUsername() { return this->Username; }
 	string Username;
 	string CharacterName;
-	struct Stats{
-		uint Level;
-		uint Exp;
-		uint MaxHp;
-		uint Hp;
-		uint Mp;
-		uint MovementSpeed;
-		uint Gold;
+	struct Coordinations {
 
 	};
 	Stats stats;
@@ -46,6 +80,7 @@ public:
 		Script,
 		Mouse
 	}; 
+
 	controls control;
 	// AI preparations
 	function<void(Player&)> script;
@@ -62,6 +97,7 @@ private:
 	UIElement* UIroot;
 	int Type;
 };
+typedef Player::Unit_Data Unit_Data;
 
 class PlayerRepository
 {

@@ -8,7 +8,6 @@ class InGameInteractions
 {
 private:
 	Mouse mouse;
-	Camera camera;
 	vec3 Collision(vec3 WorldRay);
 	vec3 InGameInteractions::GetCameraPosition();
 	mat4 ProjectionMatrix;

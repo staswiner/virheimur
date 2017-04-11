@@ -58,7 +58,7 @@ void Text::AddFont(string font, float scale)
 	GLuint error = FT_Init_FreeType(&library);
 	error = FT_New_Face(library, "C://Windows/Fonts/arial.ttf",
 		0, &face);
-	FT_Set_Pixel_Sizes(face, 0, scale);
+	FT_Set_Pixel_Sizes(face, 0, (FT_UInt)scale);
 	LoadCharacters(scale);
 }
 

@@ -8,7 +8,7 @@
 #include "GameState.h"
 #include <process.h>
 #include <thread>
-class Game
+__declspec(align(16)) class Game
 {
 public:
 	Game(Scene& scene = *(new Scene(Data, UI, &Index, InputToScene)), Network& network = *(new Network(ReceivedData)),

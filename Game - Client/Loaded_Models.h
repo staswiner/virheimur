@@ -48,13 +48,15 @@ public:
 	}
 	Loaded_ModelsST(Loaded_ModelsST const&) = delete;
 	void operator=(Loaded_ModelsST const&) = delete;
-private:
-	Loaded_ModelsST() {}
 	~Loaded_ModelsST(){}
+private:
+	Loaded_ModelsST();
 	void initialize_Models();
 	Model* operator[](string i);
 	//Loader* getModelData(const string Model_Code);
 	enum Models_Names { e_KatarinaModel, e_MinionModel, e_MapModel, e_SkyBox, e_2D_IMAGE };
+	map<string, Model*> Models;
+
 public:
 	static Loaded_ModelsST Instance;
 

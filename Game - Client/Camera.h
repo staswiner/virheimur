@@ -16,9 +16,10 @@
 using namespace glm;
 using namespace std;
 class CameraStates;
-class Camera
+__declspec(align(16)) class Camera
 {
 private:
+	Camera();
 	void WheelScroll();
 	void MouseDrag();
 	void MouseMove();
@@ -31,19 +32,29 @@ private:
 	
 	static unsigned int PreviousDelta;
 	/*variables*/
-	static vec3 CameraPosition;
-	static vec3 CameraDestination;
+	vec3 CameraPosition;
+	vec3 CameraDestination;
 
-	static vec3 MouseCameraAngle;
+	vec3 MouseCameraAngle;
 	static bool LeftIsPressed;
 	static vec2 MouseHoldPosition;
 	static vec2 LastSavedMouseOffset;
 
 	mat4 ProjectionMatrix;
 	CameraStates& cameraStates;
+	static map<string, Camera*> Cameras;
 public:
-	Camera();
 	~Camera();
+	static Camera& GetCamera(string Name)
+	{
+		static map<string, Camera*> Cameras;
+		if (Cameras.find(Name) == Cameras.end())
+		{
+			Cameras[Name] = new Camera();
+		}
+		return *Cameras[Name];
+	}
+	void ResetCamera();
 	mat4 GetUpdatedCamera();
 	mat4 GetLockedCamera(vec3 PlayerPos, vec3 PlayerAngle);
 	vec3 GetCameraPosition();
@@ -65,8 +76,16 @@ public:
 	Keyboard keyboard;
 
 	int Lock;
-
+	// Core functions
+	void* operator new(size_t size)
+	{
+		return _mm_malloc(size, 16);
+	}
 		
+	void operator delete(void* p)
+	{
+		_mm_free(p);
+	}
 };
 
 class CameraStates

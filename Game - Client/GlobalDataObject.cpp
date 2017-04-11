@@ -57,7 +57,7 @@ void GlobalDataObject::ReceiveDataString(string Message)
 	//	Players.resize(Data.size()); // bad aproach, easy aproach
 		//map<string, Player>::iterator it = Players.begin();
 	
-		for (int i = 0; i < Data.size(); i++)
+		for (uint i = 0; i < Data.size(); i++)
 		{
 			json PlayerParsed = Data[i];
 			vec3 StartPoint(PlayerParsed["x"], PlayerParsed["y"], PlayerParsed["z"]);
@@ -71,7 +71,7 @@ void GlobalDataObject::ReceiveDataString(string Message)
 				int i = 0;
 			}
 			Players[jCharacterName]->unit_Data.Path.clear();
-			for (int i = 0; i < PlayerParsed["Path"].size(); i++)
+			for (uint i = 0; i < PlayerParsed["Path"].size(); i++)
 			{
 				Players[jCharacterName]->unit_Data.Path.push_back(
 					vec3(PlayerParsed["Path"][i]["x"], PlayerParsed["Path"][i]["y"], PlayerParsed["Path"][i]["z"]));

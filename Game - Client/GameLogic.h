@@ -10,11 +10,18 @@
 #include "InGameInteractions.h"
 #include "FrameData.h"
 #include <chrono>
-class GameLogic
+__declspec(align(16)) class GameLogic
 {
 public:
 	GameLogic(GDO& Data);
 	~GameLogic();
+	void* operator new(size_t size) {
+		return _mm_malloc(size, 16);
+	}
+	void operator delete(void* p) {
+		_mm_free(p);
+	}
+
 	void Proceed(GDO& NewData);
 	void ProcessDataOffline();
 	void ChainCommands();

@@ -51,7 +51,7 @@ void CharacterCreationState::Draw(HDC hdc)
 	glDepthMask(GL_TRUE);
 
 	Mouse mouse;
-	glViewport(0, 0, mouse.GetWindowSize().x, mouse.GetWindowSize().y);
+	glViewport(0, 0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
 
 
 

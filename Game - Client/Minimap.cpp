@@ -13,7 +13,7 @@ Minimap::~Minimap()
 
 void Minimap::Initialize()
 {
-	srand(time(NULL));
+	srand((uint)time(NULL));
 
 	MinimapFrameData = this->GetImageData("Minimap/Minimap.png",Width,Height);
 	MinimapFrame.Initialize("Minimap/Minimap.png");
@@ -112,14 +112,14 @@ void Minimap::DrawLine(vec3 Start, vec3 End, u8vec3 Color)
 		{
 			if (Start.z < End.z)
 			{
-				for (int z = Start.z; z < End.z; z++)
+				for (int z = (int)Start.z; z < (int)End.z; z++)
 				{
 					NewImageData[int(z)*Width + int(End.x) - 1] = u8vec4(Color, 255);
 				}
 			}
 			else
 			{
-				for (int z = End.z; z < Start.z; z++)
+				for (int z = (int)End.z; z < (int)Start.z; z++)
 				{
 					NewImageData[int(z)*Width + int(End.x) - 1] = u8vec4(Color, 255);
 				}
@@ -130,8 +130,8 @@ void Minimap::DrawLine(vec3 Start, vec3 End, u8vec3 Color)
 	{
 		for (int x = 0; x < (End.x-Start.x); x++)
 		{
-			int Finalz = M * x + Start.z;
-			int Finalx = x + Start.x;
+			int Finalz = M * x + (int)Start.z;
+			int Finalx = x + (int)Start.x;
 			if (Finalz > 300 || Finalx > 300 || Finalx < 0 || Finalz < 0)
 			{
 				return;
@@ -148,8 +148,8 @@ void Minimap::DrawLine(vec3 Start, vec3 End, u8vec3 Color)
 		}
 		for (int z = 0; z < (End.z-Start.z); z++)
 		{
-			int Finalz = z + Start.z;
-			int Finalx = M * z + Start.x;
+			int Finalz = z + (int)Start.z;
+			int Finalx = M * z + (int)Start.x;
 			if (Finalz > 300 || Finalx > 300 || Finalx < 0 || Finalz < 0)
 			{
 				return;

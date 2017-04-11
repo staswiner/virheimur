@@ -208,14 +208,14 @@ void FBO::Draw_Interface()
 }
 void FBO::DrawDirectly(vector<GLuint> textures,vector<string> ShaderNames)
 {
-	for (int i = 0; i < textures.size(); i++)
+	for (size_t i = 0; i < textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0+i);
 		glBindTexture(GL_TEXTURE_2D, textures[i]);
 	}
 	glActiveTexture(GL_TEXTURE0);
 	shader.Use();
-	for (int i = 0; i < textures.size(); i++)
+	for (size_t i = 0; i < textures.size(); i++)
 	{
 		glUniform1i(glGetUniformLocation(shader.ProgramID, ShaderNames[i].c_str()), i);
 	}

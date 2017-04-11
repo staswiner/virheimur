@@ -1,10 +1,7 @@
 #include "Camera.h"
 
 
-vec3 Camera::CameraPosition(0,-5,-20);
-vec3 Camera::CameraDestination(CameraPosition);
 vec3 Camera::CameraPositionCalculated;
-vec3 Camera::MouseCameraAngle;
 bool Camera::LeftIsPressed = false;
 vec2 Camera::MouseHoldPosition;
 vec2 Camera::LastSavedMouseOffset;
@@ -14,11 +11,19 @@ unsigned int Camera::PreviousDelta;
 Camera::Camera()
 	:cameraStates(CameraStates::Instance())
 {
+	ResetCamera();
 }
 
 
 Camera::~Camera()
 {
+}
+
+void Camera::ResetCamera()
+{
+	CameraPosition = vec3(0, -5, -20);
+	CameraDestination = vec3(0, -5, -20);
+	MouseCameraAngle = vec3();
 }
 
 mat4 Camera::GetUpdatedCamera()

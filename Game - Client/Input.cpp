@@ -45,12 +45,6 @@ GlobalDataObject& Input::TranslateInputOffline(GlobalDataObject& Data)
 	return NewData;
 }
 
-
-Camera & Input::GetCamera()
-{
-	return this->camera;
-}
-
 Keyboard & Input::GetKeyboard()
 {
 	return this->keyboard;
@@ -67,16 +61,15 @@ void Input::GetMouseInput()
 
 	if (mouse.RightIsPressed())
 	{
+		Camera& camera = Camera::GetCamera("Main");
+
 		Session& session = Session::GetInstance();
 		//glNamedFramebufferReadBuffer(Index->PostProcessingFBO,GL_COLOR_ATTACHMENT0);
-		vec4 pixel = Index->GetPixel(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY());
+		vec4 pixel = Index->GetPixel(mouse.GetMouseX(), (int)mouse.GetWindowSize().y - mouse.GetMouseY());
 
 		vector<vec3> PlaneCoord;
-		PlaneCoord.push_back(vec3(1, 0, 0)); // 1st vector of the plane
-		PlaneCoord.push_back(vec3(0, 0, 1)); // second vector of the plane
-		PlaneCoord.push_back(vec3(0, 50, 0)); // point on the plane
 		// unused, just for reference
-		vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().GetPosition();
+		vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().Position;
 		// Get Fragment Plane
 		PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r,pixel.g,pixel.b));
 		// Get Ray Cast
@@ -188,12 +181,12 @@ void Input::GetMouseInput()
 		LeftWasPressed = false;
 		if (UI.LeftClick() == false) // something other than UI was clicked
 		{
-			vec4 pixel = Index->GetPixel(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY());
+			vec4 pixel = Index->GetPixel(mouse.GetMouseX(), (int)mouse.GetWindowSize().y - mouse.GetMouseY());
 
 			if (pixel.g == 0 && pixel.b == 0 && !LeftWasPressed)
 			{
 				// NPCS
-				int i = pixel.r;
+				int i = (int)pixel.r;
 				auto Shop = UI.root->GetUIElement("Shop");
 				Shop->GetUIElement("Shop-Gold")->innerText = to_string(Data->GetPlayerInformation()[
 					Session::GetInstance().CharacterName]->stats.Gold);
@@ -202,7 +195,7 @@ void Input::GetMouseInput()
 			if (pixel.r == 0 && pixel.b == 0 && !LeftWasPressed)
 			{
 				// Players
-				int i = pixel.g;
+				int i = (int)pixel.g;
 			}
 		}
 	}
@@ -214,13 +207,13 @@ void Input::GetMouseInput()
 	if (pixel.g == 0 && pixel.b == 0 && !LeftWasPressed)
 	{
 		// NPCS
-		int i = pixel.r;
+		int i = (int)pixel.r;
 		InputToScene.Highlight.push_back("House1");
 	}
 	if (pixel.g == 0 && pixel.b == 0 && !LeftWasPressed)
 	{
 		// Characters
-		int i = pixel.r;
+		int i = (int)pixel.r;
 		if (i == 5)
 		InputToScene.Highlight.push_back("House1");
 	}
@@ -228,6 +221,8 @@ void Input::GetMouseInput()
 	UI.FocusControl();
 	if (UI.Pressed == nullptr or not UI.Pressed->visible)
 	{
+		Camera& camera = Camera::GetCamera("Main");
+
 		// Allow camera, and game interactions
 		camera.GetUpdatedCamera();
 		// Locked camera
@@ -261,7 +256,7 @@ void Input::GetMouseInputOffline()
 		
 		offlineData.Effects.push_back(Effect("Collada", milliseconds(500), ClickOnMapCoord));
 
-		vec3 CurrentPosition = offlineData.player.GetUnitData().GetPosition();
+		vec3 CurrentPosition = offlineData.player.GetUnitData().Position;
 
 		// Set Destination to player
 		Player& myPlayer = offlineData.player;
@@ -365,7 +360,7 @@ void Input::GetMouseInputOffline()
 		LeftWasPressed = false;
 		if (UI.LeftClick() == false) // something other than UI was clicked
 		{
-			vec4 pixel = Index->GetPixel(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY());
+			vec4 pixel = Index->GetPixel(mouse.GetMouseX(), (int)mouse.GetWindowSize().y - mouse.GetMouseY());
 	
 			//if (pixel.g == 0 && pixel.b == 0 && !LeftWasPressed)
 			//{
@@ -386,7 +381,7 @@ void Input::GetMouseInputOffline()
 	// Hover Ingame
 	InputToScene.Highlight.clear();
 
-	vec4 pixel = Index->GetPixel(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY());
+	vec4 pixel = Index->GetPixel(mouse.GetMouseX(), (int)mouse.GetWindowSize().y - mouse.GetMouseY());
 	if (pixel.g == 0 && pixel.b == 0 && !LeftWasPressed)
 	{
 		// NPCS
@@ -398,6 +393,8 @@ void Input::GetMouseInputOffline()
 	UI.FocusControl();
 	if (UI.Pressed == nullptr or not UI.Pressed->visible)
 	{
+		Camera& camera = Camera::GetCamera("Main");
+
 		// Allow camera, and game interactions
 		camera.GetUpdatedCamera();
 		// Locked camera
@@ -427,9 +424,10 @@ void Input::GetKeyboardInput()
 	if ((input = UI.AccessWorldCommands()) > -1)
 	{
 		/* body of processed commands */
+		/*TAGS: #KeyboardInput #CommandsInWorld*/
 		switch (input)
 		{
-		case ' ': ResetCharacterPosition(); break;
+		case ' ': ResetCharacterPosition(); ResetCameraPosition(); break;
 		case 's': RunScript(); break; // script
 		case 'm': SetPlayerControl(Player::controls::Manual); break; // manual
 		case 'd': SetPlayerControl(Player::controls::Direct); break; // direct
@@ -451,6 +449,8 @@ void Input::GetKeyboardInput()
 
 void Input::OnlineRightMouseClick()
 {
+	Camera& camera = Camera::GetCamera("Main");
+
 	Session& session = Session::GetInstance();
 	//glNamedFramebufferReadBuffer(Index->PostProcessingFBO,GL_COLOR_ATTACHMENT0);
 #pragma region FBO Read Pixel
@@ -466,7 +466,7 @@ void Input::OnlineRightMouseClick()
 	PlaneCoord.push_back(vec3(0, 0, 1)); // second vector of the plane
 	PlaneCoord.push_back(vec3(0, 50, 0)); // point on the plane
 										  // unused, just for reference
-	vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().GetPosition();
+	vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().Position;
 	// Get Fragment Plane
 	PlaneCoord = loaded_Models["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
 	// Get Ray Cast
@@ -589,6 +589,9 @@ void Input::RunScript()
 	///< malloc for all players in a single data block and last digit is \0 />
 	
 	auto Handle = CreateProcess("RobotScript.exe", "", NULL, NULL, FALSE, 0, NULL, NULL, &siStartInfo, &piProcessInfo);
+	TCP tcp;
+	
+	tcp.SendPacket("");
 	string autism = to_string(GetLastError());
 	
 	
@@ -798,8 +801,10 @@ void Input::DirectControl()
 
 vec3 Input::GetMouseCoord_MapCoord()
 {
+	Camera& camera = Camera::GetCamera("Main");
+
 	// FBO Read Pixel
-	vec4 pixel = Index->GetPixel(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY());
+	vec4 pixel = Index->GetPixel(mouse.GetMouseX(), (int)mouse.GetWindowSize().y - mouse.GetMouseY());
 
 	vector<vec3> PlaneCoord;
 	PlaneCoord.push_back(vec3(1, 0, 0)); // 1st vector of the plane
@@ -819,13 +824,30 @@ vec3 Input::GetMouseCoord_MapCoord()
 
 void Input::ResetCharacterPosition()
 {
-	Session& session = Session::GetInstance();
-	vec3 Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
-	Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
-	myPlayer->Username = ReceivedData.MyUsername;
-	myPlayer->unit_Data.Path.clear();
-	myPlayer->unit_Data.Path.push_back(Position);
-	myPlayer->unit_Data.Destination = myPlayer->GetUnitData().Path.front();
-	myPlayer->unit_Data.StartPoint = Position;
-	myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	Core& core = Core::GetInstance();
+	if (core.Online)
+	{
+		Session& session = Session::GetInstance();
+		vec3 Position = loaded_Models["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
+		Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
+		myPlayer->Username = ReceivedData.MyUsername;
+		myPlayer->unit_Data.Path.clear();
+		myPlayer->unit_Data.Path.push_back(Position);
+		myPlayer->unit_Data.Destination = myPlayer->GetUnitData().Path.front();
+		myPlayer->unit_Data.StartPoint = Position;
+		myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	}
+	else
+	{
+		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		offlineData.player.unit_Data.Position = vec3();
+		offlineData.player.unit_Data.Rotation = vec3();
+	}
+}
+
+void Input::ResetCameraPosition()
+{
+	Camera& camera = Camera::GetCamera("Main");
+
+	camera.ResetCamera();
 }

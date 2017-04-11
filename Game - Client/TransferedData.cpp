@@ -114,7 +114,7 @@ bool TransferedData::CheckChecksumValidation(string & Message)
 	else
 		return false;
 }
-vector<Unit_Data*> TransferedData::GetUnitData()
+vector<Player::Unit_Data*> TransferedData::GetUnitData()
 {
 	return Unit;
 }

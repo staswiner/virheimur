@@ -25,7 +25,7 @@ Player::~Player()
 	UIroot->Destroy();
 }
 
-Unit_Data& Player::GetUnitData()
+Player::Unit_Data& Player::GetUnitData()
 {
 	return this->unit_Data;
 }
@@ -39,7 +39,7 @@ void Player::Draw()
 	Mouse mouse;
 	// Model
 	Unit_Data& ud = this->unit_Data;
-	vec3 position = ud.GetPosition();
+	vec3 position = ud.Position;
 	Loaded_Models loaded_Models;
 #pragma region Mathematics
 	mat4 ModelMatrix;
@@ -60,7 +60,7 @@ void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 	Mouse mouse;
 	// Model
 	Unit_Data& ud = this->unit_Data;
-	vec3 position = ud.GetPosition();
+	vec3 position = ud.Position;
 	Loaded_Models loaded_Models;
 #pragma region Mathematics
 	mat4 ModelMatrix;
@@ -81,18 +81,18 @@ void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
 	Mouse mouse;
 	// Model
 	Unit_Data& ud = this->unit_Data;
-	vec3 position = ud.GetPosition();
+	vec3 position = ud.Position;
 	Loaded_Models loaded_Models;
 #pragma region Mathematics
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
 	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
 	ModelMatrix = glm::scale(ModelMatrix, vec3(1.03f));
-	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix * Default::GetInstance().BlenderConversionCenter;
 #pragma endregion Mathematics
 	ShaderBuilder::LoadShader(Shader::At("Color"))->
 		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", true).
+		Add_bool("isAnimated", false).
 		Add_vec3("Color", Color);
 	loaded_Models["Collada"]->Draw();
 
@@ -104,7 +104,7 @@ void Player::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 	Mouse mouse;
 	mat4 ModelMatrix;
 	Unit_Data& ud = this->unit_Data;
-	vec3 position = ud.GetPosition();
+	vec3 position = ud.Position;
 #pragma endregion Declarations
 	ModelMatrix = glm::translate(ModelMatrix, position);
 	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
@@ -150,7 +150,7 @@ void Player::LoadInterface()
 
 void Player::UpdateUnitData(Unit_Data uData)
 {
-	this->unit_Data.SetDestination(uData.GetPosition());
+	this->unit_Data.Destination = uData.Position;
 }
 
 json Player::GetJson()
@@ -162,7 +162,7 @@ json Player::GetJson()
 	JPlayer["Destx"] = this->unit_Data.Destination.x;
 	JPlayer["Desty"] = this->unit_Data.Destination.y;
 	JPlayer["Destz"] = this->unit_Data.Destination.z;
-	for (int i = 0; i < this->unit_Data.Path.size(); i++)
+	for (uint i = 0; i < this->unit_Data.Path.size(); i++)
 	{
 		JPlayer["Path"][i]["x"] = this->unit_Data.Path[i].x;
 		JPlayer["Path"][i]["y"] = this->unit_Data.Path[i].y;
@@ -267,4 +267,24 @@ void PlayerRepository::clear()
 		delete p.second;
 	}
 	Players.clear();
+}
+
+Player::Unit_Data::Unit_Data()
+{
+}
+
+Player::Unit_Data::~Unit_Data()
+{
+	Path.clear();
+	if (Model_Data)
+	{
+		delete Model_Data;
+	}
+}
+mat4 Player::Unit_Data::GetModelMatrix()
+{
+	mat4 ModelMatrix;
+	ModelMatrix = glm::translate(ModelMatrix, this->Position);
+	ModelMatrix = glm::rotate(ModelMatrix, this->Rotation.y, vec3(0, 1, 0));
+	return ModelMatrix;
 }

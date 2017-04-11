@@ -3,5 +3,4 @@
 #include "SkyBox_Graphics.h"
 #include "Grass.h"
 //#include "_Minion_Model.h"
-#include "Load_FBX_file.h"
 #include "Model.h"

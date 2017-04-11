@@ -146,7 +146,7 @@ void Mesh::ProcessMesh()
 			Bones[VertexID].AddBoneData(BoneIndex, Weight);
 		}
 	}
-	for (int i = 0; i < scene->mNumAnimations; i++)
+	for (uint i = 0; i < scene->mNumAnimations; i++)
 	{
 		Animations.push_back(scene->mAnimations[i]);
 	}
@@ -347,7 +347,7 @@ void Mesh::DrawModel()
 		ShaderBuilder myshader = *ShaderBuilder::GetCurrentProgram();
 		int BoneNum = Transforms.size();
 		myshader.Add_int("BoneNum", BoneNum);
-		for (int i = 0; i < Transforms.size(); i++)
+		for (size_t i = 0; i < Transforms.size(); i++)
 		{
 			myshader.Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
 		}

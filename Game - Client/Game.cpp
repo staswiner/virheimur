@@ -280,7 +280,7 @@ void Game::UserInput()
 {
 	NewData = ( Online? input.TranslateInput(Data) : input.TranslateInputOffline(Data));
 	// Camera
-	Camera& camera = input.GetCamera();
+	Camera& camera = Camera::GetCamera("Main");
 	FrameData& frameData = FrameData::GetInstance();
 	frameData.ProjectionMatrix = camera.GetProjectionMatrix();
 	frameData.ViewMatrix = camera.GetCameraMatrix();

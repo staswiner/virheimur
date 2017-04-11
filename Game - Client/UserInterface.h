@@ -10,7 +10,6 @@
 #include "Minimap.h"
 #include "MenuPanel.h"
 #include "StatsWindow.h"
-#include "MasteryWindow.h"
 using namespace std;
 class UserInterface
 {
@@ -48,7 +47,6 @@ private:
 	Minimap minimap;
 	MenuPanel menuPanel;
 	StatsWindow statsWindow;
-	MasteryWindow masteryWindow;
 	void FocusNext();
 	void OpenStatWindow();
 	bool StatWindowOpen = true;;

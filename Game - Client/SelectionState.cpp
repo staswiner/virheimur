@@ -58,7 +58,7 @@ void SelectionState::Draw(HDC hdc)
 	glDepthMask(GL_TRUE);
 
 	Mouse mouse;
-	glViewport(0,0, mouse.GetWindowSize().x, mouse.GetWindowSize().y);
+	glViewport(0,0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
 	
 
 	
@@ -82,7 +82,7 @@ void SelectionState::Draw3D()
 	Mouse mouse;
 	LeftBot = vec2(200, mouse.GetWindowSize().y - 500);
 	RightTop = vec2(300, 300);
-	glViewport(LeftBot.x, LeftBot.y, RightTop.x, RightTop.y);
+	glViewport((int)LeftBot.x, (int)LeftBot.y, (int)RightTop.x, (int)RightTop.y);
 	vec3 CameraPos(0,20,30);
 	vec3 NewLightPos(-20,30,30);
 	mat4 ProjectionMatrix = glm::perspective(radians(45.0f),
@@ -163,7 +163,7 @@ void SelectionState::Reload()
 	json jCharacters = json::parse(ReceiveContent.c_str());
 	Characters.clear();
 	// Fill characters with retrieved data
-	for (int i = 0; i < jCharacters.size(); i++)
+	for (size_t i = 0; i < jCharacters.size(); i++)
 	{
 		Characters.push_back(new Player());
 		Characters[i]->stats.Exp = 100;

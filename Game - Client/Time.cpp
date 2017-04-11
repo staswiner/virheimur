@@ -14,13 +14,13 @@ Time::~Time()
 double Time::Now()
 {
 	milliseconds currTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-	return currTime.count();
+	return (double)currTime.count();
 }
 
 void Time::CalculateFrame()
 {
 	NewFrameMS = Time::Now();
-	this->FrameMS = NewFrameMS - PreviousFrameMS;
+	this->FrameMS = (float)(NewFrameMS - PreviousFrameMS);
 	PreviousFrameMS = NewFrameMS;
 }
 

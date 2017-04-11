@@ -32,7 +32,13 @@ public:
 	~Scene();
 	GlobalDataObject& Data;
 	GlobalDataObject& InputToScene;
-
+	void* operator new(size_t size){
+		return _mm_malloc(size, 16);
+	}
+	void operator delete(void* p){
+		_mm_free(p);
+	}
+	
 	void Frame();
 	void DrawThreaded();
 	void Initialize();
@@ -72,7 +78,6 @@ private:
 
 	void DrawColladaDistance();
 	
-	Camera camera;
 	Mouse mouse;
 	mat4 ProjectionMatrix;
 	mat4 ViewMatrix;

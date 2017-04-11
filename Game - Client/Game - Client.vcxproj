@@ -97,6 +97,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>D:\GL Files\freetype-2.6.2\include;D:\assimp-3.1.1-win-binaries\include;D:\GL Files\freeglut\include;D:\GL Files\GL Files\include\GL;D:\GL Files\glew-1.11.0\include;D:\GL Files\glm\glm;D:\GL Files\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4244;C4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -155,12 +156,10 @@
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Loaded_Models.h" />
     <ClInclude Include="Loading_Screen.h" />
-    <ClInclude Include="Load_FBX_file.h" />
     <ClInclude Include="LoginState.h" />
     <ClInclude Include="Login_Screen.h" />
     <ClInclude Include="Login_Screen_Graphics.h" />
     <ClInclude Include="MainLoop.h" />
-    <ClInclude Include="MasteryWindow.h" />
     <ClInclude Include="MathGrass.h" />
     <ClInclude Include="Maths.h" />
     <ClInclude Include="MenuPanel.h" />
@@ -200,7 +199,6 @@
     <ClInclude Include="UdpClient.h" />
     <ClInclude Include="UIElement.h" />
     <ClInclude Include="UIWindow.h" />
-    <ClInclude Include="Unit_Data.h" />
     <ClInclude Include="UserInterface.h" />
     <ClInclude Include="XMLBuilder.h" />
   </ItemGroup>
@@ -239,13 +237,11 @@
     <ClCompile Include="Loaded_Models.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Loading_Screen.cpp" />
-    <ClCompile Include="Load_FBX_file.cpp" />
     <ClCompile Include="LoginState.cpp" />
     <ClCompile Include="Login_Screen.cpp" />
     <ClCompile Include="Login_Screen_Graphics.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainLoop.cpp" />
-    <ClCompile Include="MasteryWindow.cpp" />
     <ClCompile Include="MathGrass.cpp" />
     <ClCompile Include="Maths.cpp" />
     <ClCompile Include="MenuPanel.cpp" />
@@ -283,7 +279,6 @@
     <ClCompile Include="UdpClient.cpp" />
     <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="UIWindow.cpp" />
-    <ClCompile Include="Unit_Data.cpp" />
     <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="XMLBuilder.cpp" />
   </ItemGroup>

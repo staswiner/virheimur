@@ -16,5 +16,6 @@ public:
 		return Instance;
 	}
 	mat4 BlenderConversion;
+	mat4 BlenderConversionCenter;
 };
 

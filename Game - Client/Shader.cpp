@@ -54,7 +54,7 @@ void Shader::InitializeShaderProgram(string Path, GLuint shaderID)
 	}
 	else
 	{
-		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", Path);
+//		cout<<"Impossible to open "<< Path <<". Are you in the right directory ? Don't forget to read the FAQ !\n";
 	}
 	GLint Result = GL_FALSE;
 	int InfoLogLength;
@@ -100,7 +100,7 @@ Shader::Shader(string vertexPath, string fragmentPath)
 	}
 	else
 	{
-		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertexPath);
+//		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertexPath);
 	}
 
 	// Read the Fragment Shader code from the file
@@ -205,7 +205,7 @@ Shader::Shader(string vertexPath, string geometryPath, string fragmentPath)
 	}
 	else
 	{
-		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertexPath);
+//		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertexPath);
 	}
 	// Read the Geometry Shader code from the file
 	string GeometryShaderCode;

@@ -112,6 +112,7 @@ void Scene::Frame()
 	glEnable(GL_CLIP_DISTANCE0);
 
 
+	Camera& camera = Camera::GetCamera("Main");
 	ViewMatrix = camera.GetCameraMatrix();
 	SetProjectionMatrix(camera.GetProjectionMatrix());
 
@@ -257,6 +258,7 @@ void Scene::DrawScene_Refraction()
 }
 void Scene::DrawScene_Reflection()
 {
+	Camera& camera = Camera::GetCamera("Main");
 	mFBO["LakeReflection"].BindFrameBuffer();
 	{
 		SetCameraView();
@@ -376,6 +378,8 @@ void Scene::Shadow_DrawGround(Shader& shader)
 
 void Scene::DrawGround(Shader& shader)
 {
+	Camera& camera = Camera::GetCamera("Main");
+
 	vec3 LightPos = vec3(0,10,10);
 	mat4 l_ProjectionMatrix = glm::perspective(radians(120.0f),
 		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
@@ -425,7 +429,7 @@ void Scene::DrawIndexColor()
 		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
 		ShaderBuilder::LoadShader(Shader::At("Index"))->
 			Add_bool("indexType", false).
-			Add_float("Index", npc.npcID).
+			Add_float("Index", (float)npc.npcID).
 			Add_mat4("WVM", WVM);
 		loaded_Models[npc.Name]->Draw();
 	}
@@ -506,6 +510,8 @@ void Scene::DrawColladaDistance()
 
 void Scene::SetCameraView()
 {
+	Camera& camera = Camera::GetCamera("Main");
+
 	ViewMatrix = camera.GetCameraMatrix();
 }
 void Scene::DrawUI()
@@ -524,7 +530,7 @@ void Scene::DrawUI()
 	for (auto p : Data.GetPlayerInformation())
 	{
 		p.second->DrawUI(ProjectionMatrix, ViewMatrix);
-		vec3 pos = p.second->GetUnitData().GetPosition();
+		vec3 pos = p.second->GetUnitData().Position;
 		mat4 ModelMatrix;
 		ModelMatrix = translate(ModelMatrix, pos);
 		championChat->Draw2D(p.second->CharacterName, ProjectionMatrix, ViewMatrix, ModelMatrix);
@@ -575,6 +581,8 @@ void Scene::DrawSeaAnimated()
 }
 void Scene::DrawColladaShadow()
 {
+	Camera& camera = Camera::GetCamera("Main");
+
 	mat4 WVM;
 	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
 	// Light Source
@@ -638,6 +646,8 @@ void Scene::DrawColladaShadow()
 }
 void Scene::DrawCollada()
 {
+	Camera& camera = Camera::GetCamera("Main");
+
 	mat4 WVM;
 	// Light Source
 	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
@@ -857,6 +867,8 @@ void Scene::DrawCollada()
 
 void Scene::DrawWater()
 {
+	Camera& camera = Camera::GetCamera("Main");
+
 	glDisable(GL_CLIP_DISTANCE0);
 
 	mat4 WVM = ProjectionMatrix * ViewMatrix;
