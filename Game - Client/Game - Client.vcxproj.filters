@@ -68,9 +68,6 @@
     <Filter Include="Graphics\Sea\Scene shadesr">
       <UniqueIdentifier>{05106540-ae06-45c0-8120-57e14a9d1134}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Login Screen">
-      <UniqueIdentifier>{9668449a-9e9e-4936-8f5a-92bab3c9ba98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Graphics\Text">
       <UniqueIdentifier>{4b4cebff-a399-42ad-84dc-12b3b111d671}</UniqueIdentifier>
     </Filter>
@@ -199,12 +196,6 @@
     </ClInclude>
     <ClInclude Include="Item_Base_Class.h">
       <Filter>User Interface\Items</Filter>
-    </ClInclude>
-    <ClInclude Include="Login_Screen.h">
-      <Filter>Login Screen</Filter>
-    </ClInclude>
-    <ClInclude Include="Login_Screen_Graphics.h">
-      <Filter>Login Screen</Filter>
     </ClInclude>
     <ClInclude Include="Textbox.h">
       <Filter>User Interface</Filter>
@@ -447,12 +438,6 @@
     </ClCompile>
     <ClCompile Include="Item_Base_Class.cpp">
       <Filter>User Interface\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="Login_Screen.cpp">
-      <Filter>Login Screen</Filter>
-    </ClCompile>
-    <ClCompile Include="Login_Screen_Graphics.cpp">
-      <Filter>Login Screen</Filter>
     </ClCompile>
     <ClCompile Include="Textbox.cpp">
       <Filter>User Interface</Filter>

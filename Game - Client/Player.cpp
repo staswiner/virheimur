@@ -44,7 +44,7 @@ void Player::Draw()
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
 	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
-	mat4 WVM = l_ProjectionMatrix * l_ViewMatrix * ModelMatrix;
+	mat4 WVM = l_ProjectionMatrix * l_ViewMatrix * ModelMatrix* Default::GetInstance().BlenderConversionCenter;
 #pragma endregion Mathematics
 	ShaderBuilder::LoadShader(Shader::At("Animation"))->
 		Add_mat4("WVM", WVM).
@@ -65,7 +65,7 @@ void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
 	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
-	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix* Default::GetInstance().BlenderConversionCenter;
 #pragma endregion Mathematics
 	ShaderBuilder::GetCurrentProgram()->
 		Add_mat4("WVM", WVM).

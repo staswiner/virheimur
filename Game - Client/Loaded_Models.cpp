@@ -28,7 +28,7 @@ ModelsCollection::ModelsCollection()
 
 
 
-	Models["Collada"] = new Model("Collada/MineSweaper.dae", "");
+	Models["Collada"] = new Model("Collada/Robot.dae", "");
 	Models["Collada"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
 	Models["Collada"]->AddTexture("NormalMap[0]", "Katarina/katarina_base_normal.png");
 

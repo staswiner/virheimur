@@ -80,8 +80,14 @@ public:
 		Script,
 		Mouse
 	}; 
-
-	controls control;
+	enum class movements
+	{
+		Ground,
+		Plane, 
+		Aero
+	};
+	movements movement = movements::Ground;
+	controls control = controls::Manual;
 	// AI preparations
 	function<void(Player&)> script;
 	void* GetMemoryData(string VarName);
