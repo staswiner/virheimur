@@ -18,7 +18,6 @@ void GameLogic::Proceed(GDO& FinalData)
 	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
 	mat4 ViewMatrix = frameData.ViewMatrix;
 	// Calculate moving position
-	// TODO: CRASHES IN THIS FUNCTION SOMEWHERE
 #pragma region bug
 	for (auto &p : FinalData.GetPlayerInformation())
 	{
@@ -97,10 +96,6 @@ void GameLogic::Proceed(GDO& FinalData)
 		//unit.Position = unit.Destination;
 		// Test if destination reached or passed
 		// Once reached, send server that current position is destination
-		//if (unit.Destination == unit.StartPoint)
-		//{
-
-		//}
 		////
 		//else if (dot(unit.Destination - unit.Position, unit.Destination - unit.StartPoint) < 0)
 		//{
@@ -139,7 +134,10 @@ void GameLogic::ProcessDataOffline()
 	OfflineDataObject& OfflineData = OfflineDataObject::GetInstance();
 	Player& p = OfflineData.player;
 	// Controls movements if scripted or not
+
+	///<Important Function>
 	ProcessPlayerMovement();
+	///<Important Function/>
 
 	// Effect lifetimes
 	for (auto e = OfflineData.Effects.begin(); e != OfflineData.Effects.end();)
@@ -165,7 +163,7 @@ void GameLogic::ProcessPlayerMovement()
 	Player& p = OfflineData.player;
 	Unit_Data& ud = p.GetUnitData();
 	// Calculate moving position
-	if (p.script)
+	if (p.script || p.control == Player::controls::Script) // even arguements
 	{
 		p.script(p);
 	}
@@ -182,7 +180,9 @@ void GameLogic::ProcessPlayerMovement()
 		(ud.Destination.z - ud.StartPoint.z < 0) ?
 			ud.Rotation.y = radians(360.0f) - ud.Rotation.y : ud.Rotation.y;
 	}
-	ud.Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
+	if (p.movement == Player::movements::Ground) {
+		ud.Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
+	}
 }
 // old moving script
 /*

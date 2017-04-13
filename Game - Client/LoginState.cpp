@@ -90,6 +90,7 @@ void LoginState::PerformLogin()
 
 UIElement* LoginState::GenerateForm()
 {
+	// UI can do few things : change itself, send request to server, change some flag, activate function
 	vec2 Position;
 	UIElement* root = new UIElement("Root", "");
 

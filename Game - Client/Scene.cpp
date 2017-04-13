@@ -919,7 +919,7 @@ void Scene::Outline()
 	else
 	{
 		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
-		offlineData.player.DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
+		//offlineData.player.DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
 	/*	if (InputToScene.Highlight)*/
 	}
 	glDisable(GL_STENCIL_TEST);

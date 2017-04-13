@@ -6,7 +6,6 @@
 #include "MainLoop.h"
 #include "Keyboard.h"
 #include "Mouse.h"
-#include "Login_Screen.h"
 
 #include <GL\glut.h>
 #include <iostream>
