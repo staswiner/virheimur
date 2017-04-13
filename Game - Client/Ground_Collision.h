@@ -4,6 +4,7 @@
 #include <algorithm>
 using namespace std;
 using namespace glm;
+
 class Ground_Collision : public Collision
 {
 public:

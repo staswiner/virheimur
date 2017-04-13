@@ -8,13 +8,12 @@
 #include "Loaded_Models.h"
 #include "Default.h"
 #include <chrono>
+
 using namespace chrono;
 using namespace glm;
 
-
 using namespace std;
 using namespace nlohmann;
-
 
 class Player
 {
@@ -28,6 +27,7 @@ public:
 		uint MovementSpeed = 10;
 		uint Gold;
 	};
+
 	class Unit_Data
 	{
 	public:
@@ -48,7 +48,7 @@ public:
 		Model* Model_Data;
 		unsigned int action;
 	};
-	class Unit_Data;
+
 	Player();
 	Player(Unit_Data, string Username);
 	~Player();
@@ -67,8 +67,8 @@ public:
 	string Username;
 	string CharacterName;
 	struct Coordinations {
-
 	};
+
 	Stats stats;
 	milliseconds TimeDelta;
 	Unit_Data unit_Data;
@@ -90,6 +90,7 @@ public:
 	// TO remove variable
 	bool PathingStarted = false;
 	bool LongPath = true;
+
 private:
 	map<string, void*> MemoryBlock;
 	map<string, string> MemoryTypeTable;
@@ -97,6 +98,7 @@ private:
 	UIElement* UIroot;
 	int Type;
 };
+
 typedef Player::Unit_Data Unit_Data;
 
 class PlayerRepository
@@ -110,6 +112,7 @@ public:
 	map<string, Player*>::iterator begin();
 	map<string, Player*>::iterator end();
 	void clear();
+
 private:
 	mutable map<string, Player*> Players;
 };

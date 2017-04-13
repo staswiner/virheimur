@@ -19,6 +19,7 @@ namespace Stas
 		float l3 = 1.0f - l1 - l2;
 		return l1 * p1.y + l2 * p2.y + l3 * p3.y;
 	}
+
 	float Maths::Mod(float a, float b)
 	{
 		float end = mod(a, b);

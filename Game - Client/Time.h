@@ -2,6 +2,7 @@
 #include <chrono>
 using namespace std;
 using namespace std::chrono;
+
 class Time
 {
 private:

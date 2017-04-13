@@ -3,8 +3,10 @@
 #include <map>
 #include "glm\glm\vec3.hpp"
 #include "Structures.h"
+
 using namespace std;
 using namespace glm;
+
 class Collision
 {
 public:
@@ -20,6 +22,5 @@ public:
 
 protected:
 	vector<Stas::Vertex> Vertices;
-
 };
 

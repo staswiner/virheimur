@@ -15,7 +15,9 @@ public:
 		static Default Instance;
 		return Instance;
 	}
+
 	mat4 BlenderConversion;
 	mat4 BlenderConversionCenter;
+	double PI = 3.14159265358979323419716f;
 };
 

@@ -11,15 +11,16 @@
 #include "Session.h"
 #include "Time.h"
 #include <Windows.h>
-#include <chrono>
 #include <memory>
 #include <sys/stat.h>
 #include <sys/types.h>
+
 using namespace std::chrono;
+
 class Input
 {
 public:
-	Input(GlobalDataObject&,UserInterface&,FBO* Index, GlobalDataObject&);
+	Input(GlobalDataObject&, UserInterface&, FBO* Index, GlobalDataObject&);
 	~Input();
 	void SetInitialCharacterData(GDO);
 	GlobalDataObject& TranslateInput(GlobalDataObject& Data);
@@ -55,6 +56,7 @@ private:
 	bool LeftWasPressed = false;
 	void ResetCharacterPosition();
 	void ResetCameraPosition();
+
 	enum class Key {
 		Up=24,
 		Down=25,
@@ -62,4 +64,3 @@ private:
 		Left=27
 	};
 };
-

@@ -5,6 +5,7 @@
 #include "AIObjects.h"
 #include <string>
 #include <vector>
+
 using namespace std;
 using namespace nlohmann;
 
@@ -15,7 +16,9 @@ public:
 	GlobalDataObject(PlayerRepository& Players); // default constructor
 	GlobalDataObject(const GlobalDataObject&); // copy constructor
 	~GlobalDataObject();
+
 	GlobalDataObject& operator=(const GlobalDataObject& rhs);
+
 	void Clear();
 	void TestInit();
 	void ReceiveDataString(string);
@@ -33,6 +36,7 @@ public:
 	Stas::MinimapData Map;
 	vector<Effect> Effects;
 	vector<string> Highlight;
+
 private:
 	json Data;
 	PlayerRepository& Players;
@@ -40,7 +44,9 @@ private:
 	PlayerRepository NewPlayers;
 	string MyIP;
 };
+
 typedef GlobalDataObject GDO;
+
 class OfflineDataObject
 {
 private:
@@ -49,7 +55,9 @@ private:
 	}
 	OfflineDataObject(OfflineDataObject const&) = delete;
 	void operator=(OfflineDataObject const&) = delete;
+
 	static OfflineDataObject Instance;
+
 public:
 	~OfflineDataObject() {}
 	static OfflineDataObject& GetInstance()
@@ -57,6 +65,7 @@ public:
 		static OfflineDataObject Instance;
 		return Instance;
 	}
+
 	Player player;
 	vector<Effect> Effects;
 	vector<vec3>* Path;

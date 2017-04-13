@@ -57,7 +57,7 @@ Mouse & Input::GetMouse()
 
 void Input::GetMouseInput()
 {
-	/*Right Click Would point the place i want to go*/
+	/*Right Click Would point the place I want to go*/
 
 	if (mouse.RightIsPressed())
 	{
@@ -247,7 +247,7 @@ void Input::GetMouseInput()
 }
 void Input::GetMouseInputOffline()
 {
-	/*Right Click Would point the place i want to go*/
+	/*Right Click Would point the place I want to go*/
 
 	if (mouse.RightIsPressed())
 	{
@@ -293,15 +293,16 @@ void Input::GetMouseInputOffline()
 			{
 				delete ReceivedData.Graph;
 			}
+
 			vector<vec3> BacktrackPath;
 
 			milliseconds FastestRun(100000);
 			milliseconds SlowestRun(0);
 			float averageDistance = 0;
 			int FindingChance = 0;
+
 			for (int i = 0; i < 1; i++)
 			{
-
 				//	auto startTimeSingle = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 
 				try
@@ -313,6 +314,7 @@ void Input::GetMouseInputOffline()
 				{
 					int i = 0;
 				}
+
 				BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
 				//BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
 
@@ -339,10 +341,12 @@ void Input::GetMouseInputOffline()
 			{
 				myPlayer.unit_Data.Path.push_back(BacktrackPath[i]);
 			}
+
 			if (myPlayer.unit_Data.Path.size() == 0)
 			{
 				int i = 0;
 			}
+
 			ReceivedData.Path = &myPlayer.unit_Data.Path;
 		}
 	}
@@ -415,7 +419,6 @@ void Input::GetMouseInputOffline()
 		;
 		camera.GetLockedCamera(myPlayer->unit_Data.Position, vec3(0, Rotation, 0));*/
 	}
-
 }
 
 void Input::GetKeyboardInput()
@@ -435,12 +438,14 @@ void Input::GetKeyboardInput()
 		}
 		// end
 	}
+
 	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
 	
 	if (offlineData.player.control == Player::controls::Manual)
 	{
 		ManualControl();
 	}
+
 	if (offlineData.player.control == Player::controls::Direct)
 	{
 		DirectControl();
@@ -454,12 +459,15 @@ void Input::OnlineRightMouseClick()
 	Session& session = Session::GetInstance();
 	//glNamedFramebufferReadBuffer(Index->PostProcessingFBO,GL_COLOR_ATTACHMENT0);
 #pragma region FBO Read Pixel
+
 	glBindFramebuffer(GL_FRAMEBUFFER, Index->PostProcessingFBO);
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
 	vec4 pixel;
+
 	int x = mouse.GetMouseX();
 	glReadPixels(mouse.GetMouseX(), mouse.GetWindowSize().y - mouse.GetMouseY(), 1, 1, GL_RGBA, GL_FLOAT, &pixel);
 	FBO::UnbindFrameBuffer();
+
 #pragma endregion FBO Read Pixel
 	vector<vec3> PlaneCoord;
 	PlaneCoord.push_back(vec3(1, 0, 0)); // 1st vector of the plane
@@ -491,6 +499,7 @@ void Input::OnlineRightMouseClick()
 #define ASTAR 0
 #define PRM 1
 	int AlgorithmType = PRM;
+
 	if (AlgorithmType == ASTAR)
 	{
 		vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);

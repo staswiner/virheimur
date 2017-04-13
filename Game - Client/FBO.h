@@ -6,9 +6,9 @@
 #include "glm\glm\vec4.hpp"
 #include "Shader.h"
 
-
 using namespace std;
 using namespace glm;
+
 class FBO
 {
 public:
@@ -30,7 +30,6 @@ public:
 	vector<vec2> vertices;
 	unsigned int Vertices_Amount;
 
-
 	GLuint texture;
 	GLuint PostProcessingFBO;
 	GLuint VAO;
@@ -38,6 +37,5 @@ public:
 	GLuint RBO;
 	Shader shader;
 	GLint Width, Height;
-
 };
 

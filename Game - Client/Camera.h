@@ -7,6 +7,7 @@
 #include "glm\glm\gtc\matrix_transform.hpp"
 #include "Mouse.h"
 #include "Keyboard.h"
+#include "Default.h"
 #include "GL\freeglut.h"
 #include <sstream>
 #include <string>
@@ -66,7 +67,6 @@ public:
 	mat4 GetCameraMatrix();
 	void ZoomInto(vec3 CameraPos, vec3 TargetPos);
 	static void CalculateTimeDelta();
-
 
 	static vec3 CameraPositionCalculated;
 	static unsigned int Delta;

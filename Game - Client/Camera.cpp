@@ -37,12 +37,12 @@ mat4 Camera::GetUpdatedCamera()
 }
 mat4 Camera::GetLockedCamera(vec3 Player, vec3 PlayerAngle)
 {
-	const float PI = 3.1415926535897f;
 	CameraDestination = -Player + vec3(0,-50,0);
-	//MouseCameraAngle = PlayerAngle + vec3(PI/2.0,0,0);
-	//MouseCameraAngle *= 180 / PI;
+	//MouseCameraAngle = PlayerAngle + vec3(Default::GetInstance().PI/2.0,0,0);
+	//MouseCameraAngle *= 180 / Default::GetInstance().PI;
 	MouseDrag();
 	CalculateCameraValues();
+
 	return GetCameraMatrix();
 }
 vec3 Camera::GetCameraPosition()
@@ -56,8 +56,11 @@ vec3 Camera::GetCameraRotation()
 mat4 Camera::GetProjectionMatrix()
 {
 	this->ProjectionMatrix=glm::perspective(
-		glm::radians(70.0f), (GLfloat)this->mouse.GetWindowSize().x /
-		(GLfloat)this->mouse.GetWindowSize().y, 1.0f, 1000.0f);
+		glm::radians(70.0f), 
+		(GLfloat)this->mouse.GetWindowSize().x / (GLfloat)this->mouse.GetWindowSize().y, 
+		1.0f, 
+		1000.0f);
+
 	return this->ProjectionMatrix;
 }
 void Camera::SetProjectionMatrix(mat4 & projectionMatrix)
@@ -83,6 +86,7 @@ void Camera::ZoomInto(vec3 CameraPos, vec3 TargetPos)
 		cameraStates.SetState("Zoom");
 		mouse.GetCommands().clear();
 	}
+
 	if (distance((-TargetPos), CameraPosition) > 40.0f && cameraStates.IsInState("Zoom"))
 	{
 		this->CameraDestination = (-TargetPos) - ( 40.0f * normalize((-TargetPos) - CameraPosition));
@@ -95,10 +99,12 @@ void Camera::ZoomInto(vec3 CameraPos, vec3 TargetPos)
 void Camera::WheelScroll()
 {
 	int WheelDelta = mouse.GetWheelDelta() / 120;
+
 	if (WheelDelta != 0)
 	{
 		cameraStates.SetState("Wheel Move");
 	}
+
 	if (WheelDelta != 0 && cameraStates.IsInState("Wheel Move"))
 	{
 		//CameraDestination.z += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 6.0f;

@@ -108,9 +108,6 @@
     <Filter Include="Maths\Algorithms">
       <UniqueIdentifier>{65f3dbe2-c73c-4673-90d4-e8cbcf260604}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SingleTone Classes">
-      <UniqueIdentifier>{5aa4ccef-451e-4b77-9f18-f0935c4d902a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameStates">
       <UniqueIdentifier>{2c6b8584-0728-4d86-80eb-fb39d1f38808}</UniqueIdentifier>
     </Filter>
@@ -128,6 +125,9 @@
     </Filter>
     <Filter Include="User Interface\UI Windows">
       <UniqueIdentifier>{d78fc19c-8b7d-4814-99e6-d6fa26243171}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Singleton Classes">
+      <UniqueIdentifier>{5aa4ccef-451e-4b77-9f18-f0935c4d902a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -330,19 +330,19 @@
       <Filter>Maths\Algorithms</Filter>
     </ClInclude>
     <ClInclude Include="Default.h">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClInclude>
     <ClInclude Include="Cookies.h">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClInclude>
     <ClInclude Include="FrameData.h">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClInclude>
     <ClInclude Include="Session.h">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClInclude>
     <ClInclude Include="NPC.h">
       <Filter>GameObjects</Filter>
@@ -357,7 +357,7 @@
       <Filter>GameStates</Filter>
     </ClInclude>
     <ClInclude Include="GlobalDataObject.h">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>GameObjects</Filter>
@@ -548,16 +548,16 @@
       <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Session.cpp">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClCompile>
     <ClCompile Include="Time.cpp">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClCompile>
     <ClCompile Include="Default.cpp">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClCompile>
     <ClCompile Include="FrameData.cpp">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClCompile>
     <ClCompile Include="PRMalgorithm.cpp">
       <Filter>Maths\Algorithms</Filter>
@@ -566,7 +566,7 @@
       <Filter>GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Cookies.cpp">
-      <Filter>SingleTone Classes</Filter>
+      <Filter>Singleton Classes</Filter>
     </ClCompile>
     <ClCompile Include="CharacterCreationState.cpp">
       <Filter>GameStates</Filter>

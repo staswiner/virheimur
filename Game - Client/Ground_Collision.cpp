@@ -1,4 +1,5 @@
 #include "Ground_Collision.h"
+
 bool vec2compare(const vec2& lhs, const vec2& rhs)
 {
 	if (lhs.x == rhs.x)
