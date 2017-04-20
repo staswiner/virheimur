@@ -56,14 +56,14 @@ private:
 	OfflineDataObject(OfflineDataObject const&) = delete;
 	void operator=(OfflineDataObject const&) = delete;
 
-	static OfflineDataObject Instance;
+	static OfflineDataObject instance;
 
 public:
 	~OfflineDataObject() {}
-	static OfflineDataObject& GetInstance()
+	static OfflineDataObject& Instance()
 	{
-		static OfflineDataObject Instance;
-		return Instance;
+		static OfflineDataObject instance;
+		return instance;
 	}
 
 	Player player;

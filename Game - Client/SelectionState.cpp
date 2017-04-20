@@ -121,7 +121,7 @@ void SelectionState::PerformLogin()
 	string ReceiveContent = tcp.ReceivePacketsAsync();
 	if (ReceiveContent == "True")
 	{
-		Session::GetInstance().CharacterName = SelectedCharacterName;
+		Session::Instance().CharacterName = SelectedCharacterName;
 		*this->GameState = 2;
 	}
 	else
@@ -156,7 +156,7 @@ void SelectionState::ChangeCharacter(bool direction)
 void SelectionState::Reload()
 {
 	TCP tcp;
-	string Username = Session::GetInstance().Username;
+	string Username = Session::Instance().Username;
 	// Get characters based on login session from server
 	tcp.SendPacket("LoadCharacters " + Username + " <EOF>");
 	string ReceiveContent = tcp.ReceivePacketsAsync();

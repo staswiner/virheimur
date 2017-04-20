@@ -9,16 +9,16 @@ private:
 	Time();
 	Time(Time&) = delete;
 	void operator=(Time&) = delete;
-	static Time Instance;
+	static Time instance;
 	float FrameMS;
 	double NewFrameMS;
 	double PreviousFrameMS = 0;
 public:
 	~Time();
-	static Time& GetST()
+	static Time& Instance()
 	{
-		static Time Instance;
-		return Instance;
+		static Time instance;
+		return instance;
 	}
 	static double Now();
 	void CalculateFrame();

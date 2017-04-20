@@ -131,7 +131,7 @@ void GameLogic::ProcessDataOffline()
 	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
 	mat4 ViewMatrix = frameData.ViewMatrix;
 	// Calculate moving position
-	OfflineDataObject& OfflineData = OfflineDataObject::GetInstance();
+	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
 	Player& p = OfflineData.player;
 	// Controls movements if scripted or not
 
@@ -159,7 +159,7 @@ void GameLogic::ProcessPlayerMovement()
 	FrameData& frameData = FrameData::GetInstance();
 	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
 	mat4 ViewMatrix = frameData.ViewMatrix;
-	OfflineDataObject& OfflineData = OfflineDataObject::GetInstance();
+	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
 	Player& p = OfflineData.player;
 	Unit_Data& ud = p.GetUnitData();
 	// Calculate moving position

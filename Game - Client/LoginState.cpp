@@ -16,7 +16,7 @@ void LoginState::Initialize(char* State)
 {
 	UI.GenerateForm(this->GenerateForm());
 	this->GameState = State;
-	this->UI.root->GetUIElement("Username")->innerText = Cookies::GetInstance().GetCookie("Username");
+	this->UI.root->GetUIElement("Username")->innerText = Cookies::Instance().GetCookie("Username");
 }
 
 void LoginState::Input()
@@ -66,7 +66,7 @@ void LoginState::PerformLogin()
 	/// Set Username Cookie
 	if (this->SaveUsername == true)
 	{
-		Cookies::GetInstance().SetCookie("Username", username);
+		Cookies::Instance().SetCookie("Username", username);
 	}
 
 	/// add support when i get home & get a tcp server working
@@ -78,7 +78,7 @@ void LoginState::PerformLogin()
 //#define else }else
 	if (output is "valid")
 	{
-		Session& session = Session::GetInstance();
+		Session& session = Session::Instance();
 		session.Username = username;
 		*this->GameState = 1;
 	}

@@ -8,14 +8,14 @@ private:
 	Session();
 	Session(Session const&) = delete;
 	void operator=(Session const&) = delete;
-	static Session Instance;
+	static Session instance;
 public:
 	~Session();
-	static Session& GetInstance()
+	static Session& Instance()
 	{
 
-		static Session Instance;
-		return Instance;
+		static Session instance;
+		return instance;
 	}
 	string Username;
 	string UserID;

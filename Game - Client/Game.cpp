@@ -86,7 +86,7 @@ void Game::Loop()
 {
 #define is ==
 	// Frame Time
-	Time& time = Time::GetST();
+	Time& time = Time::Instance();
 	time.CalculateFrame();
 
 

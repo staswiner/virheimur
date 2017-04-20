@@ -8,7 +8,7 @@ private:
 	Cookies();
 	Cookies(Cookies const&) = delete;
 	void operator=(Cookies const&) = delete;
-	static Cookies Instance;
+	static Cookies instance;
 	static string Encrypt(string Text);
 
 	string Key;
@@ -16,10 +16,10 @@ private:
 	string GetCookieKey();
 public:
 	~Cookies();
-	static Cookies& GetInstance()
+	static Cookies& Instance()
 	{
-		static Cookies Instance;
-		return Instance;
+		static Cookies instance;
+		return instance;
 	}
 	string GetCookie(string Field);
 	void SetCookie(string Field, string Data);

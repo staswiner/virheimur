@@ -435,7 +435,7 @@ void Scene::DrawIndexColor()
 	Core& core = Core::GetInstance();
 	if (!core.Online)
 	{
-		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		OfflineDataObject& offlineData = OfflineDataObject::Instance();
 		WVM = ProjectionMatrix * ViewMatrix * offlineData.player.unit_Data.GetModelMatrix();
 		ShaderBuilder::LoadShader(Shader::At("Index"))->
 			Add_bool("indexType", false).
@@ -799,7 +799,7 @@ void Scene::DrawCollada()
 	}
 	else
 	{
-		effects = &OfflineDataObject::GetInstance().Effects;
+		effects = &OfflineDataObject::Instance().Effects;
 	}
 	for (auto e : *effects)
 	{
@@ -880,7 +880,7 @@ void Scene::DrawWater()
 		Add_float("Texelation", 10.0f).
 		Add_vec3("lightPos", NewLightPos).
 		Add_mat4("Model", landmat).
-		Add_float("time", fmod(GetTickCount(), 100000000)).
+		Add_float("time", float(fmod(GetTickCount(), 100000000))).
 		Add_vec3("cameraPos", -camera.GetCameraPosition()).
 		Add_Material("Water", Materials::GetInstance()["water"]).
 		Add_bool("clip", false).
@@ -913,12 +913,12 @@ void Scene::Outline()
 		// All Units get a base outline
 		for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
 		{
-			i->second->DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
+			i->second->DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9f));
 		}
 	}
 	else
 	{
-		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		OfflineDataObject& offlineData = OfflineDataObject::Instance();
 		//offlineData.player.DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
 	/*	if (InputToScene.Highlight)*/
 	}
@@ -947,7 +947,7 @@ void Scene::DrawOutlineObjects()
 	}
 	else
 	{
-		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		OfflineDataObject& offlineData = OfflineDataObject::Instance();
 		offlineData.player.Draw();
 	}
 }

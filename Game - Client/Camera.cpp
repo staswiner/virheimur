@@ -103,10 +103,6 @@ void Camera::WheelScroll()
 	if (WheelDelta != 0)
 	{
 		cameraStates.SetState("Wheel Move");
-	}
-
-	if (WheelDelta != 0 && cameraStates.IsInState("Wheel Move"))
-	{
 		//CameraDestination.z += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 6.0f;
 		CameraDestination.y += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 1.0f;
 	}

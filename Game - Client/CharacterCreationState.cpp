@@ -76,7 +76,7 @@ void CharacterCreationState::CreateNewCharacter()
 {
 	TCP tcp;
 	string CharacterName = this->UI.root->GetUIElement("CharacterName")->innerText;
-	string Username = Session::GetInstance().Username;
+	string Username = Session::Instance().Username;
 	json jCharacter;
 	jCharacter["Username"] = Username;
 	jCharacter["CharacterName"] = CharacterName;

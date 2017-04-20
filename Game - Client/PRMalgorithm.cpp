@@ -138,7 +138,7 @@ map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)>* PRMalgorithm::
 	GeneratePointsSelfFixing(Stas::MinimapData Map, vec3& Source, vec3& Destination)
 {
-	srand(time(NULL));
+	srand(uint(time(NULL)));
 	const int MapScale = 100;
 	const int MAX_DISTANCE = 5000;
 	const int MAX_POINTS = 40;
@@ -368,7 +368,7 @@ bool PRMalgorithm::IsPathAvailable(Stas::MinimapData Map,vec3 Start, vec3 End)
 	{
 		for (int x = 0; x < (End.x - Start.x); x++)
 		{
-			int Finalz = M * x + (int)Start.z;
+			int Finalz = (int)(M * x) + (int)Start.z;
 			int Finalx = x + (int)Start.x;
 			if (Finalz > 300 || Finalx > 300 || Finalx < 0 || Finalz < 0)
 			{

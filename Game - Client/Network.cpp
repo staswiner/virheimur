@@ -121,7 +121,7 @@ void Network::SendNewData(GlobalDataObject & NewData)
 		JPlayers.push_back(i->second->GetJson());
 	}
 	json JNewData(JPlayers);
-	string Jstring = "NewData " + Session::GetInstance().CharacterName + " " +
+	string Jstring = "NewData " + Session::Instance().CharacterName + " " +
 		to_string(TimeSinceEpoch.count()) + " " + JNewData.dump();
 	Send(Jstring);
 	int i = 0;

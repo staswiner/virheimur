@@ -63,7 +63,7 @@ void Input::GetMouseInput()
 	{
 		Camera& camera = Camera::GetCamera("Main");
 
-		Session& session = Session::GetInstance();
+		Session& session = Session::Instance();
 		//glNamedFramebufferReadBuffer(Index->PostProcessingFBO,GL_COLOR_ATTACHMENT0);
 		vec4 pixel = Index->GetPixel(mouse.GetMouseX(), (int)mouse.GetWindowSize().y - mouse.GetMouseY());
 
@@ -189,7 +189,7 @@ void Input::GetMouseInput()
 				int i = (int)pixel.r;
 				auto Shop = UI.root->GetUIElement("Shop");
 				Shop->GetUIElement("Shop-Gold")->innerText = to_string(Data->GetPlayerInformation()[
-					Session::GetInstance().CharacterName]->stats.Gold);
+					Session::Instance().CharacterName]->stats.Gold);
 				Shop->Show();
 			}
 			if (pixel.r == 0 && pixel.b == 0 && !LeftWasPressed)
@@ -251,7 +251,7 @@ void Input::GetMouseInputOffline()
 
 	if (mouse.RightIsPressed())
 	{
-		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		OfflineDataObject& offlineData = OfflineDataObject::Instance();
 		vec3 ClickOnMapCoord = GetMouseCoord_MapCoord();
 		
 		offlineData.Effects.push_back(Effect("Collada", milliseconds(500), ClickOnMapCoord));
@@ -439,7 +439,7 @@ void Input::GetKeyboardInput()
 		// end
 	}
 
-	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	
 	if (offlineData.player.control == Player::controls::Manual)
 	{
@@ -456,7 +456,7 @@ void Input::OnlineRightMouseClick()
 {
 	Camera& camera = Camera::GetCamera("Main");
 
-	Session& session = Session::GetInstance();
+	Session& session = Session::Instance();
 	//glNamedFramebufferReadBuffer(Index->PostProcessingFBO,GL_COLOR_ATTACHMENT0);
 #pragma region FBO Read Pixel
 
@@ -585,7 +585,7 @@ void Input::SetCircleScript()
 
 void Input::RunScript()
 {
-	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	offlineData.player.control = Player::controls::Script;
 	offlineData.player.LongPath = false;
 	STARTUPINFO siStartInfo;
@@ -677,7 +677,7 @@ void Input::OpenProfileUI()
 // TODO: create a class for script + all of its data for cleanup purposes
 void Input::SetCircleScriptIterative()
 {
-	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	offlineData.player.LongPath = false;
 	STARTUPINFO siStartInfo;
 	PROCESS_INFORMATION piProcessInfo;
@@ -715,20 +715,20 @@ void Input::SetCircleScriptIterative()
 
 void Input::SetPlayerControl(Player::controls control)
 {
-	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	offlineData.player.control = control;
 }
 
 void Input::ManualControl()
 {
-	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	Player& p = offlineData.player;
 	if (p.control != Player::controls::Manual)
 	{
 		return;
 	}
 	
-	float frameTime = Time::GetST().Frame();
+	float frameTime = Time::Instance().Frame();
 	float MovementSpeed = 15.0f * frameTime / 1000.0f;
 	float RotationSpeed = 5.0f * frameTime / 1000.0f;
 	float angle = -p.unit_Data.Rotation.y;
@@ -768,10 +768,10 @@ void Input::ManualControl()
 
 void Input::DirectControl()
 {
-	OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	Player& p = offlineData.player;
 
-	float frameTime = Time::GetST().Frame();
+	float frameTime = Time::Instance().Frame();
 	float MovementSpeed = 15.0f * frameTime / 1000.0f;
 	float RotationSpeed = 5.0f * frameTime / 1000.0f;
 	float angle = -p.unit_Data.Rotation.y;
@@ -836,7 +836,7 @@ void Input::ResetCharacterPosition()
 	Core& core = Core::GetInstance();
 	if (core.Online)
 	{
-		Session& session = Session::GetInstance();
+		Session& session = Session::Instance();
 		vec3 Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
 		Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
 		myPlayer->Username = ReceivedData.MyUsername;
@@ -848,7 +848,7 @@ void Input::ResetCharacterPosition()
 	}
 	else
 	{
-		OfflineDataObject& offlineData = OfflineDataObject::GetInstance();
+		OfflineDataObject& offlineData = OfflineDataObject::Instance();
 		offlineData.player.unit_Data.Position = vec3();
 		offlineData.player.unit_Data.Rotation = vec3();
 	}

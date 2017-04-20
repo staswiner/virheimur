@@ -129,7 +129,7 @@ void Minimap::DrawLine(vec3 Start, vec3 End, u8vec3 Color)
 	{
 		for (int x = 0; x < (End.x-Start.x); x++)
 		{
-			int Finalz = M * x + (int)Start.z;
+			int Finalz = int(M * x) + (int)Start.z;
 			int Finalx = x + (int)Start.x;
 			if (Finalz > 300 || Finalx > 300 || Finalx < 0 || Finalz < 0)
 			{
@@ -148,7 +148,7 @@ void Minimap::DrawLine(vec3 Start, vec3 End, u8vec3 Color)
 		for (int z = 0; z < (End.z-Start.z); z++)
 		{
 			int Finalz = z + (int)Start.z;
-			int Finalx = M * z + (int)Start.x;
+			int Finalx = int(M * z) + (int)Start.x;
 			if (Finalz > 300 || Finalx > 300 || Finalx < 0 || Finalz < 0)
 			{
 				return;
