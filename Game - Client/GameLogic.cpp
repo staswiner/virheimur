@@ -163,7 +163,7 @@ void GameLogic::ProcessPlayerMovement()
 	Player& p = OfflineData.player;
 	Unit_Data& ud = p.GetUnitData();
 	// Calculate moving position
-	if (p.script || p.control == Player::controls::Script) // even arguements
+	if (p.control == Player::controls::Script) // even arguements
 	{
 		p.script(p);
 	}
@@ -171,8 +171,12 @@ void GameLogic::ProcessPlayerMovement()
 	{
 
 	}
+	if (p.control == Player::controls::Direct)
+	{
+
+	}
 	// Rotation
-	else if (ud.Destination.xz() != ud.StartPoint.xz())
+	else if (ud.Destination.xz != ud.StartPoint.xz)
 	{
 		ud.Rotation.y = -acos(dot(glm::normalize(vec2(ud.Destination.x, ud.Destination.z)
 			- vec2(ud.StartPoint.x, ud.StartPoint.z)), vec2(1, 0)));

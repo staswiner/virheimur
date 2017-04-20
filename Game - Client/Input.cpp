@@ -47,7 +47,8 @@ GlobalDataObject& Input::TranslateInputOffline(GlobalDataObject& Data)
 
 Keyboard & Input::GetKeyboard()
 {
-	return this->keyboard;
+	Keyboard& keyboard = Keyboard::Instance();
+	return keyboard;
 }
 
 Mouse & Input::GetMouse()
@@ -431,7 +432,7 @@ void Input::GetKeyboardInput()
 		switch (input)
 		{
 		case ' ': ResetCharacterPosition(); ResetCameraPosition(); break;
-		case 's': RunScript(); break; // script
+		case 's': SetPlayerControl(Player::controls::Script); SetCircleScriptIterative(); break; // script
 		case 'm': SetPlayerControl(Player::controls::Manual); break; // manual
 		case 'd': SetPlayerControl(Player::controls::Direct); break; // direct
 		case 'p': OpenProfileUI(); break;
@@ -678,11 +679,11 @@ void Input::OpenProfileUI()
 void Input::SetCircleScriptIterative()
 {
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	offlineData.player.LongPath = false;
-	STARTUPINFO siStartInfo;
-	PROCESS_INFORMATION piProcessInfo;
-	auto Handle = CreateProcess(NULL, "", NULL, NULL, TRUE, 0, NULL, NULL, NULL,&piProcessInfo);
-	WaitForSingleObject(piProcessInfo.hProcess, INFINITE);
+	//offlineData.player.LongPath = false;
+	//STARTUPINFO siStartInfo;
+	//PROCESS_INFORMATION piProcessInfo;
+	//auto Handle = CreateProcess(NULL, "", NULL, NULL, TRUE, 0, NULL, NULL, NULL,&piProcessInfo);
+	//WaitForSingleObject(piProcessInfo.hProcess, INFINITE);
 
 
 	Player& p = offlineData.player;
@@ -709,7 +710,7 @@ void Input::SetCircleScriptIterative()
 		float speed= 0.5f;
 		ud.Position += vec3(sin(Angle),0,cos(Angle)) * speed;
 		ud.Rotation.y = Angle - radians(90.0f);
-		ud.Rotation.xz1;
+		ud.Rotation.xz;
 	};
 }
 
@@ -721,6 +722,7 @@ void Input::SetPlayerControl(Player::controls control)
 
 void Input::ManualControl()
 {
+	Keyboard& keyboard = Keyboard::Instance();
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	Player& p = offlineData.player;
 	if (p.control != Player::controls::Manual)
@@ -735,23 +737,23 @@ void Input::ManualControl()
 #define anglex(x) cos(x)
 #define angley(x) sin(x)
 
-	if (keyboard.isKeyPressed(UP)) // ↑
+	if (keyboard.isKeyPressed(Key::Up)) // ↑
 	{
 		p.unit_Data.Destination = p.unit_Data.StartPoint =
 			p.unit_Data.Position = p.unit_Data.Position + vec3(anglex(angle),0, angley(angle)) *
 			MovementSpeed;
 	}
-	if (keyboard.isKeyPressed(DOWN)) // ↓
+	if (keyboard.isKeyPressed(Key::Down)) // ↓
 	{
 		p.unit_Data.Destination = p.unit_Data.StartPoint =
 			p.unit_Data.Position = p.unit_Data.Position - vec3(anglex(angle), 0, angley(angle)) *
 			MovementSpeed;
 	}
-	if (keyboard.isKeyPressed(RIGHT)) // →
+	if (keyboard.isKeyPressed(Key::Right)) // →
 	{
 		p.unit_Data.Rotation.y -= RotationSpeed;
 	}
-	if (keyboard.isKeyPressed(LEFT)) // ←
+	if (keyboard.isKeyPressed(Key::Left)) // ←
 	{
 		p.unit_Data.Rotation.y += RotationSpeed;
 	}
@@ -768,6 +770,7 @@ void Input::ManualControl()
 
 void Input::DirectControl()
 {
+	Keyboard& keyboard = Keyboard::Instance();
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	Player& p = offlineData.player;
 
@@ -778,28 +781,28 @@ void Input::DirectControl()
 #define anglex(x) cos(x)
 #define angley(x) sin(x)
 
-	if (keyboard.isKeyPressed(UP)) // ↑
+	if (keyboard.isKeyPressed(Key::Up)) // ↑
 	{
 		p.unit_Data.Destination = p.unit_Data.StartPoint =
 			p.unit_Data.Position = p.unit_Data.Position + vec3(anglex(angle), 0, angley(angle)) *
 			MovementSpeed;
 		p.unit_Data.Rotation.y = radians(180.0f);
 	}
-	if (keyboard.isKeyPressed(DOWN)) // ↓
+	if (keyboard.isKeyPressed(Key::Down)) // ↓
 	{
 		p.unit_Data.Destination = p.unit_Data.StartPoint =
 			p.unit_Data.Position = p.unit_Data.Position + vec3(anglex(angle), 0, angley(angle)) *
 			MovementSpeed;
 		p.unit_Data.Rotation.y = radians(0.0f);
 	}
-	if (keyboard.isKeyPressed(RIGHT)) // →
+	if (keyboard.isKeyPressed(Key::Right)) // →
 	{
 		p.unit_Data.Destination = p.unit_Data.StartPoint =
 			p.unit_Data.Position = p.unit_Data.Position + vec3(anglex(angle), 0, angley(angle)) *
 			MovementSpeed;
 		p.unit_Data.Rotation.y = radians(90.0f);
 	}
-	if (keyboard.isKeyPressed(LEFT)) // ←
+	if (keyboard.isKeyPressed(Key::Left)) // ←
 	{
 		p.unit_Data.Destination = p.unit_Data.StartPoint =
 			p.unit_Data.Position = p.unit_Data.Position + vec3(anglex(angle), 0, angley(angle)) *

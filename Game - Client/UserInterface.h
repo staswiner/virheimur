@@ -37,7 +37,6 @@ public:
 	UIElement* Pressed;
 	list<GLchar> InWorldCommands;
 private:
-	Keyboard keyboard;
 	Mouse mouse;
 	struct tempW
 	{

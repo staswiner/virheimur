@@ -1,10 +1,8 @@
 #include "Keyboard.h"
 
 
-list<pair<int, time_t>> staticKeyboard::Commands;
-list<pair<int, time_t>> staticKeyboard::Letters;
 
-staticKeyboard::staticKeyboard()
+Keyboard::Keyboard()
 {
 	for (int i = 0; i < nKeys; i++)
 	{
@@ -14,16 +12,16 @@ staticKeyboard::staticKeyboard()
 }
 
 
-staticKeyboard::~staticKeyboard()
+Keyboard::~Keyboard()
 {
 }
 
-short staticKeyboard::isKeyPressed(VirtualKeys Key) const
+short Keyboard::isKeyPressed(Key Key) const
 {
-	return (keystates[Key]);
+	return (keystates[static_cast<char>(Key)]);
 }
 
-void staticKeyboard::OnKeyPressed(const byte keycode)
+void Keyboard::OnKeyPressed(const byte keycode)
 {
 	/*if (keystates[keycode] == false)
 		Commands.push_back(pair<int,time_t>(keycode,time(NULL)));*/
@@ -50,50 +48,29 @@ void staticKeyboard::OnKeyPressed(const byte keycode)
 //		PostMessage(GetWindow(NULL,NULL), WM_CLOSE, 0, 0); // TODO: add hwnd parameter to get that work
 	}
 }
-void staticKeyboard::OnKeyReleased(const byte keycode)
+void Keyboard::OnKeyReleased(const byte keycode)
 {
 	keystates[keycode] = false;
 }
 
-/***Keyboard Cover Class***/
-staticKeyboard Keyboard::sKeyboard;
-Keyboard::Keyboard()
-{
-}
-Keyboard::~Keyboard()
-{
 
-}
 
 list<pair<int, time_t>>& Keyboard::getCommands()
 {
-	return this->sKeyboard.Commands;
+	return this->Commands;
 }
 
 list<pair<int, time_t>>& Keyboard::getLetters()
 {
-	return this->sKeyboard.Letters;
+	return this->Letters;
 }
 
 void Keyboard::PushBackCommand(short wParam)
 {
-	sKeyboard.Commands.push_back(pair<int, time_t>(wParam, time(NULL)));
+	this->Commands.push_back(pair<int, time_t>(wParam, time(NULL)));
 }
 
 void Keyboard::PushBackLetter(short wParam)
 {
-	sKeyboard.Letters.push_back(pair<int, time_t>(wParam, time(NULL)));
-}
-
-short Keyboard::isKeyPressed(VirtualKeys Key) const
-{
-	return sKeyboard.isKeyPressed(Key);
-}
-void Keyboard::OnKeyPressed(const byte keycode)
-{
-	sKeyboard.OnKeyPressed(keycode);
-}
-void Keyboard::OnKeyReleased(const byte keycode)
-{
-	sKeyboard.OnKeyReleased(keycode);
+	this->Letters.push_back(pair<int, time_t>(wParam, time(NULL)));
 }

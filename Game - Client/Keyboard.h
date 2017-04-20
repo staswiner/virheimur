@@ -10,77 +10,72 @@
 #include <time.h>
 using namespace std;
 typedef unsigned char byte;
-enum VirtualKeys
+enum class Key
 {
-	A_Key = 0x41,
-	B_Key,
-	C_Key,
-	D_Key,
-	E_Key,
-	F_Key,
-	G_Key,
-	H_Key,
-	I_Key,
-	J_Key,
-	K_Key,
-	L_Key,
-	M_Key,
-	N_Key,
-	O_Key,
-	P_Key,
-	Q_Key,
-	R_Key,
-	S_Key,
-	T_Key,
-	U_Key,
-	V_Key,
-	W_Key,
-	X_Key,
-	Y_Key,
-	Z_Key,
-	DOWN = VK_DOWN,
-	UP = VK_UP,
-	RIGHT = VK_RIGHT,
-	LEFT = VK_LEFT,
-	ESC = VK_ESCAPE,
-	SPACE = VK_SPACE,
-	ENTER = VK_RETURN,
-	ALT = VK_MENU,
-	TAB = VK_TAB,
-	BACKSPACE = VK_BACK,
-	SHIFT = VK_SHIFT
+	A = 0x41,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+	I,
+	J,
+	K,
+	L,
+	M,
+	N,
+	O,
+	P,
+	Q,
+	R,
+	S,
+	T,
+	U,
+	V,
+	W,
+	X,
+	Y,
+	Z,
+	Down = VK_DOWN,
+	Up = VK_UP,
+	Right = VK_RIGHT,
+	Left = VK_LEFT,
+	Esc = VK_ESCAPE,
+	Space = VK_SPACE,
+	Enter = VK_RETURN,
+	Alt = VK_MENU,
+	Tab = VK_TAB,
+	Backspace = VK_BACK,
+	Shift = VK_SHIFT
 };
 
-class staticKeyboard
-{
-private:
-	static const int nKeys = 256;
-	bool keystates[nKeys];
-public:
-	staticKeyboard();
-	~staticKeyboard();
-
-	short isKeyPressed(VirtualKeys) const;
-	void OnKeyPressed(const byte);
-	void OnKeyReleased(const byte);
-	static list<pair<int, time_t>> Commands;
-	static list<pair<int, time_t>> Letters;
-
-};
 class Keyboard
 {
 private:
-	static staticKeyboard sKeyboard;
-public:
+	static Keyboard instance;
 	Keyboard();
-	~Keyboard();
+	Keyboard(Keyboard&) = delete;
+	Keyboard& operator=(Keyboard const & rhs) = delete;
 
+	static const int nKeys = 256;
+	bool keystates[nKeys];
+public:
+	static Keyboard& Instance()
+	{
+		static Keyboard instance;
+		return instance;
+	}
+	~Keyboard();
+	short isKeyPressed(Key) const;
+	void OnKeyPressed(const byte);
+	void OnKeyReleased(const byte);
 	list<pair<int, time_t>>& getCommands();
 	list<pair<int, time_t>>& getLetters();
 	void PushBackCommand(short wParam);
 	void PushBackLetter(short wParam);
-	short isKeyPressed(VirtualKeys) const;
-	void OnKeyPressed(const byte);
-	void OnKeyReleased(const byte);
+	list<pair<int, time_t>> Commands;
+	list<pair<int, time_t>> Letters;
 
 };

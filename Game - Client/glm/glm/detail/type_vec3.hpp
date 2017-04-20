@@ -103,11 +103,11 @@ namespace glm
 			GLM_FUNC_DECL GLM_CONSTEXPR length_type length() const;
 
 			// Stas
-			GLM_FUNC_DECL GLM_CONSTEXPR tvec2<T, P> xz()
+			GLM_FUNC_DECL GLM_CONSTEXPR tvec2<T, P> xz1()
 			{
 				return vec2(this->x, this->z);
 			}
-#define xz1 xz()
+#define xz xz1()
 
 			GLM_FUNC_DECL T & operator[](length_type i);
 			GLM_FUNC_DECL T const & operator[](length_type i) const;
@@ -324,12 +324,12 @@ namespace glm
 	template <typename T, precision P>
 	GLM_FUNC_DECL tvec3<T, P> operator/(T const & s, tvec3<T, P> const & v);
 
-	// Stas
-	template <typename T, precision P>
-	GLM_FUNC_DECL tvec2<T, P> xz(tvec3<T, P> const & s)
-	{
-		return vec2(s.x, s.z);
-	}
+	//// Stas
+	//template <typename T, precision P>
+	//GLM_FUNC_DECL tvec2<T, P> xz1(tvec3<T, P> const & s)
+	//{
+	//	return vec2(s.x, s.z);
+	//}
 
 	template <typename T, precision P>
 	GLM_FUNC_DECL tvec3<T, P> operator/(tvec1<T, P> const & s, tvec3<T, P> const & v);

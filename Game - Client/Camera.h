@@ -73,7 +73,6 @@ public:
 	/*static mat4 CameraRotation;
 	static mat4 CameraTranslation;*/
 	Mouse mouse;
-	Keyboard keyboard;
 
 	int Lock;
 	// Core functions

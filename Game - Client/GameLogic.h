@@ -28,7 +28,6 @@ public:
 	void BuildData();
 private:
 	void ProcessPlayerMovement();
-	Keyboard keyboard;
 	Mouse mouse;
 	//GameData Data;
 	GDO& Data;

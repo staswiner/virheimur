@@ -19,8 +19,9 @@ void UserInterface::GenerateForm(UIElement * root)
 
 void UserInterface::AcceptInput()
 {
+	Keyboard& keyboard = Keyboard::Instance();
 	CleanWindows();
-	list<pair<int,time_t>>& Letters = keyboard.getLetters();
+	list<pair<int,time_t>>& Letters = keyboard.Letters;
 	//Inputs[Commands.front().first];
 	if (Letters.size() > 0)
 	{

@@ -10,6 +10,7 @@
 #include <chrono>
 #include <functional>
 
+#include "Defines.h"
 #include "GL\glew.h"
 #include "glm\glm\vec2.hpp"
 #include "glm\glm\vec3.hpp"

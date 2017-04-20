@@ -42,7 +42,6 @@ private:
 	void ManualControl();
 	void DirectControl();
 	vec3 GetMouseCoord_MapCoord();
-	Keyboard keyboard;
 	Mouse mouse;
 	GlobalDataObject& ReceivedData;
 	GlobalDataObject& InputToScene;
@@ -57,10 +56,4 @@ private:
 	void ResetCharacterPosition();
 	void ResetCameraPosition();
 
-	enum class Key {
-		Up=24,
-		Down=25,
-		Right=26,
-		Left=27
-	};
 };

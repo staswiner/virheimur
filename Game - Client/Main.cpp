@@ -13,7 +13,6 @@
 
 
 
-static Keyboard keyboard;
 static Mouse mouse;
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static MainLoop Loop;
@@ -180,7 +179,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-
+	Keyboard& keyboard = Keyboard::Instance();
 	int width, height;
 	static HDC	hDC;	//device context
 	static HGLRC	hRC;	//rendering context
