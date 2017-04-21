@@ -4,10 +4,21 @@
 
 using namespace std;
 
-class staticMouse
+class Mouse
 {
+private:
+	Mouse();
+	Mouse(Mouse&) = delete;
+	Mouse& operator=(Mouse&) = delete;
+
+	static Mouse instance;
 public:
-	staticMouse();
+	static Mouse& Instanace()
+	{
+		static Mouse instance;
+		return instance;
+	}
+	~Mouse() {}
 	int GetMouseX() const;
 	int GetMouseY() const;
 	glm::vec2 GetMouseCoords() const;
@@ -41,31 +52,31 @@ private:
 	glm::vec2 WindowSize;
 	list<int> Commands;
 };
-class Mouse
-{
-public:
-	Mouse();
-	static staticMouse sMouse;
-	void OnMouseMove(int x, int y);
-	void OnWheelMove(int delta);
-	void OnLeftPressed();
-	void OnLeftReleased();
-	void OnRightPressed();
-	void OnRightReleased();
-	void SetInWindow(const bool);
-
-
-	int GetMouseX() const;
-	int GetMouseY() const;
-	glm::vec2 GetMouseCoords() const;
-	int GetWheelDelta() const;
-	bool LeftIsPressed() const;
-	bool RightIsPressed() const;
-	bool IsInWindow() const;
-	bool IsInRectangle(int Top, int Left, int Bot, int Right) const;
-	list<int>& GetCommands();
-	void PushCommand(int);
-
-	void SetWindowSize(const int x, const int y);
-	glm::vec2 GetWindowSize() const;
-};
+//class Mouse
+//{
+//public:
+//	Mouse();
+//	static staticMouse sMouse;
+//	void OnMouseMove(int x, int y);
+//	void OnWheelMove(int delta);
+//	void OnLeftPressed();
+//	void OnLeftReleased();
+//	void OnRightPressed();
+//	void OnRightReleased();
+//	void SetInWindow(const bool);
+//
+//
+//	int GetMouseX() const;
+//	int GetMouseY() const;
+//	glm::vec2 GetMouseCoords() const;
+//	int GetWheelDelta() const;
+//	bool LeftIsPressed() const;
+//	bool RightIsPressed() const;
+//	bool IsInWindow() const;
+//	bool IsInRectangle(int Top, int Left, int Bot, int Right) const;
+//	list<int>& GetCommands();
+//	void PushCommand(int);
+//
+//	void SetWindowSize(const int x, const int y);
+//	glm::vec2 GetWindowSize() const;
+//};

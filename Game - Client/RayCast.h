@@ -20,7 +20,7 @@ public:
 private:
 	//vec3 GetCameraPosition();
 	vec4 ClipToCoords();
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 	mat4 ProjectionMatrix;
 	mat4 CameraMatrix;
 };

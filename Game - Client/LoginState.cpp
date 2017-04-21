@@ -24,7 +24,8 @@ void LoginState::Input()
 #define is ==
 
 	using namespace Stas;
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	static bool LeftIsPressed = false;
 	if (mouse.LeftIsPressed())
 	{

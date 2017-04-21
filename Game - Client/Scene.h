@@ -78,7 +78,6 @@ private:
 
 	void DrawColladaDistance();
 	
-	Mouse mouse;
 	mat4 ProjectionMatrix;
 	mat4 ViewMatrix;
 	HDC m_HDC;

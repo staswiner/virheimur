@@ -63,7 +63,7 @@ void Sea::Initialize()
 
 	glGenFramebuffers(1, &ViewportFBO);
 	glGenFramebuffers(1, &ReflectionFBO);
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
 
 	// Viewport Texture
 	glGenTextures(1, &ViewportTexture);
@@ -211,7 +211,7 @@ void Sea::Load_World_Shaders()
 }
 void Sea::InitializeRefraction()
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
 	glBindFramebuffer(GL_FRAMEBUFFER, ViewportFBO);
 	GLuint test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	glViewport(0, 0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
@@ -221,7 +221,8 @@ void Sea::InitializeRefraction()
 }
 void Sea::InitializeReflection()
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, ReflectionFBO);
 	GLuint test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	glViewport(0, 0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);

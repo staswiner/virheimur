@@ -15,7 +15,7 @@ Inventory::~Inventory()
 void Inventory::Draw_Interface(int x, int y)
 {
 	InventoryGraphics.Draw(vec2(0,0),vec2(x,y));
-	/*Mouse mouse;
+	/* Mouse& mouse = Mouse::Instanace();
 	vec2 OpenGLCoords((x / mouse.GetWindowSize().x) * 2 - 1, -((y / mouse.GetWindowSize().y) * 2 - 1));
 	vec3 InventoryWindowSize(0.25f, 0.25f, 0.25f);
 	mat4 Model;

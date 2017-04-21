@@ -28,7 +28,6 @@ public:
 	void BuildData();
 private:
 	void ProcessPlayerMovement();
-	Mouse mouse;
 	//GameData Data;
 	GDO& Data;
 	InGameInteractions inGameInteractions;

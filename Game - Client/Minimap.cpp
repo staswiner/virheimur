@@ -46,7 +46,8 @@ void Minimap::UpdateMap()
 }
 void Minimap::DrawMinimap(GDO & Data)
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	Position = vec2(mouse.GetWindowSize().x - 300, 0);
 	/*for (auto &i : CharactersPositions)
 	{

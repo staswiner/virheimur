@@ -61,6 +61,5 @@ private:
 	int Resolution;
 	FT_Library library;
 	FT_Face face;
-	Mouse mouse;
 };
 

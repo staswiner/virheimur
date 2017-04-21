@@ -254,7 +254,7 @@ void Text::RenderTextReverse(std::string text, GLfloat x, GLfloat y, GLfloat xMa
 }
 void Text::LoadTextShader(vec3 color)
 {
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 	glm::mat4 projection = glm::ortho(0.0f, mouse.GetWindowSize().x,
 		mouse.GetWindowSize().y, 0.0f);
 	mat4 view, model;
@@ -366,7 +366,7 @@ void Text::LoadTextShader(vec3 color)
 //}
 //void Text::Draw_Character(FT_Bitmap& bitmap, vec2 Position)
 //{
-//	Mouse mouse;
+//	 Mouse& mouse = Mouse::Instanace();
 //	int right = Position.x + bitmap.width;
 //	int left = Position.x;
 //	int bot = Position.y + bitmap.rows;
@@ -401,7 +401,7 @@ void Text::LoadTextShader(vec3 color)
 //}
 //void Text::Draw_Interface(int top, int bot, int left, int right, vec2 offset)
 //{
-//	Mouse mouse;
+//	 Mouse& mouse = Mouse::Instanace();
 //	vec2 OpenGLCoords(((right - left) / mouse.GetWindowSize().x) * 2 - 1, -(((bot - top) / mouse.GetWindowSize().y) * 2 - 1));
 //	vec2 Offset((left / mouse.GetWindowSize().x) * 2, -(top / mouse.GetWindowSize().y) * 2);
 //	OpenGLCoords += Offset;

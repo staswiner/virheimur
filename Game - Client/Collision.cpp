@@ -31,6 +31,11 @@ vector<vec3> Collision::GetPlaneCoords(vec3)
 	return vector<vec3>();
 }
 
+vec3 Collision::GetNormalRotation(vec3)
+{
+	return vec3();
+}
+
 vector<Stas::Vertex>& Collision::GetVertices()
 {
 	return this->Vertices;

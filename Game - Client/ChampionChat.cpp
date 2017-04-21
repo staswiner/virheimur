@@ -21,7 +21,8 @@ void ChampionChat::CreateChatbox()
 void ChampionChat::Draw(string a_Text, mat4& projection, mat4& view, mat4& model)
 {
 	mat4 WorldPos;
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	vec3 color(0);
 	glm::mat4 projectionOrtho = glm::ortho(0.0f, mouse.GetWindowSize().x,
 		mouse.GetWindowSize().y, 0.0f);
@@ -40,7 +41,8 @@ void ChampionChat::Draw2D(string a_Text, mat4 & projection, mat4 & view, mat4 & 
 {
 
 	mat4 WorldPos;
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	vec3 color(0);
 	glm::mat4 projectionOrtho = glm::ortho(0.0f, mouse.GetWindowSize().x,
 		mouse.GetWindowSize().y, 0.0f);

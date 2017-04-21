@@ -72,7 +72,6 @@ public:
 	static unsigned int Delta;
 	/*static mat4 CameraRotation;
 	static mat4 CameraTranslation;*/
-	Mouse mouse;
 
 	int Lock;
 	// Core functions

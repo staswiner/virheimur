@@ -7,7 +7,7 @@ using namespace glm;
 class InGameInteractions
 {
 private:
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
 	vec3 Collision(vec3 WorldRay);
 	vec3 InGameInteractions::GetCameraPosition();
 	mat4 ProjectionMatrix;

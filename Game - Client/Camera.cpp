@@ -55,9 +55,11 @@ vec3 Camera::GetCameraRotation()
 }
 mat4 Camera::GetProjectionMatrix()
 {
+	Mouse& mouse = Mouse::Instanace();
+
 	this->ProjectionMatrix=glm::perspective(
 		glm::radians(70.0f), 
-		(GLfloat)this->mouse.GetWindowSize().x / (GLfloat)this->mouse.GetWindowSize().y, 
+		(GLfloat)mouse.GetWindowSize().x / (GLfloat)mouse.GetWindowSize().y, 
 		1.0f, 
 		1000.0f);
 
@@ -81,6 +83,8 @@ mat4 Camera::GetCameraMatrix()
 }
 void Camera::ZoomInto(vec3 CameraPos, vec3 TargetPos)
 {
+	Mouse& mouse = Mouse::Instanace();
+
 	if (mouse.GetCommands().size() > 0)
 	{
 		cameraStates.SetState("Zoom");
@@ -98,6 +102,8 @@ void Camera::ZoomInto(vec3 CameraPos, vec3 TargetPos)
 }
 void Camera::WheelScroll()
 {
+	Mouse& mouse = Mouse::Instanace();
+
 	int WheelDelta = mouse.GetWheelDelta() / 120;
 
 	if (WheelDelta != 0)
@@ -109,6 +115,7 @@ void Camera::WheelScroll()
 }
 void Camera::MouseDrag()
 {
+	Mouse& mouse = Mouse::Instanace();
 	if (mouse.LeftIsPressed())
 	{
 		if (LeftIsPressed == false)
@@ -140,6 +147,7 @@ void Camera::MouseDrag()
 }
 void Camera::MouseMove()
 {
+	Mouse& mouse = Mouse::Instanace();
 	if (mouse.GetMouseX() >= 0 && mouse.GetMouseY() >= 0 && mouse.IsInWindow())
 	{
 		cameraStates.SetState("Side Move");

@@ -22,7 +22,8 @@ void CharacterCreationState::Input()
 #define is ==
 
 	using namespace Stas;
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	static bool LeftIsPressed = false;
 	if (mouse.LeftIsPressed())
 	{
@@ -50,7 +51,8 @@ void CharacterCreationState::Draw(HDC hdc)
 	glEnable(GL_STENCIL_TEST);
 	glDepthMask(GL_TRUE);
 
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	glViewport(0, 0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
 
 

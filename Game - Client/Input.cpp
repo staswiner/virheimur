@@ -53,12 +53,13 @@ Keyboard & Input::GetKeyboard()
 
 Mouse & Input::GetMouse()
 {
-	return this->mouse;
+	return Mouse::Instanace();
 }
 
 void Input::GetMouseInput()
 {
 	/*Right Click Would point the place I want to go*/
+	Mouse& mouse = Mouse::Instanace();
 
 	if (mouse.RightIsPressed())
 	{
@@ -249,6 +250,7 @@ void Input::GetMouseInput()
 void Input::GetMouseInputOffline()
 {
 	/*Right Click Would point the place I want to go*/
+	Mouse& mouse = Mouse::Instanace();
 
 	if (mouse.RightIsPressed())
 	{
@@ -456,6 +458,7 @@ void Input::GetKeyboardInput()
 void Input::OnlineRightMouseClick()
 {
 	Camera& camera = Camera::GetCamera("Main");
+	Mouse& mouse = Mouse::Instanace();
 
 	Session& session = Session::Instance();
 	//glNamedFramebufferReadBuffer(Index->PostProcessingFBO,GL_COLOR_ATTACHMENT0);
@@ -814,6 +817,7 @@ void Input::DirectControl()
 vec3 Input::GetMouseCoord_MapCoord()
 {
 	Camera& camera = Camera::GetCamera("Main");
+	Mouse& mouse = Mouse::Instanace();
 
 	// FBO Read Pixel
 	vec4 pixel = Index->GetPixel(mouse.GetMouseX(), (int)mouse.GetWindowSize().y - mouse.GetMouseY());

@@ -83,6 +83,8 @@ void UserInterface::CleanWindows()
 void IsOver(int x, int y) {}
 void UserInterface::FocusControl()
 {
+	Mouse& mouse = Mouse::Instanace();
+
 	int x = mouse.GetMouseX();
 	int y = mouse.GetMouseY();
 	

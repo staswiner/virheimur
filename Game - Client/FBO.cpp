@@ -17,7 +17,8 @@ FBO::~FBO()
 
 bool FBO::Initialize(int Height, int Width, Shader& shader)
 {
-	Mouse mouse; // todo: make the buffer size maximum or dynamic
+	// todo: make the buffer size maximum or dynamic
+	Mouse& mouse = Mouse::Instanace();
 	this->Width = mouse.GetWindowSize().x / Width;
 	this->Height = mouse.GetWindowSize().y / Height;
 	glGenFramebuffers(1, &PostProcessingFBO);
@@ -50,7 +51,7 @@ bool FBO::Initialize(int Height, int Width, Shader& shader)
 
 	Load_Interface(shader);
 
-//	Mouse mouse;
+
 	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
 	test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	glViewport(0, 0, this->Width,
@@ -68,7 +69,8 @@ bool FBO::Initialize(int Height, int Width, Shader& shader)
 }
 bool FBO::InitializeBig(int Height, int Width, Shader& shader)
 {
-	Mouse mouse; // todo: make the buffer size maximum or dynamic
+	// todo: make the buffer size maximum or dynamic
+	Mouse& mouse = Mouse::Instanace();
 	this->Width = mouse.GetWindowSize().x / Width;
 	this->Height = mouse.GetWindowSize().y / Height;
 	glGenFramebuffers(1, &PostProcessingFBO);
@@ -101,7 +103,7 @@ bool FBO::InitializeBig(int Height, int Width, Shader& shader)
 
 	Load_Interface(shader);
 
-	//	Mouse mouse;
+	//	 Mouse& mouse = Mouse::Instanace();
 	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
 	test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	glViewport(0, 0, this->Width,
@@ -134,7 +136,8 @@ void FBO::BindFrameBuffer()
 }
 void FBO::UnbindFrameBuffer()
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, mouse.GetWindowSize().x, mouse.GetWindowSize().y);
 }
@@ -144,7 +147,8 @@ void FBO::DrawFrameBuffer()
 }
 void FBO::ChangeBuffersSize()
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	if (PostProcessingFBO == 0)
 		return;
 	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);

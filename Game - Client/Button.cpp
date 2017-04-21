@@ -29,7 +29,7 @@ void Button::SelectText()
 
 void Button::Draw()
 {
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 
 	vec2 CurrentStartP = vec2(StartP.x - 10.0f * m_isSelected, StartP.y - 10.0f * m_isSelected);
 	vec2 CurrentEndP = vec2(EndP.x + 10.0f * m_isSelected, EndP.y + 10.0f * m_isSelected);
@@ -52,7 +52,7 @@ void Button::Draw()
 
 bool Button::OnSelection()
 {
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 	if (mouse.GetMouseX() > this->StartP.x && mouse.GetMouseX() < this->EndP.x &&
 		mouse.GetMouseY() > this->StartP.y && mouse.GetMouseY() < this->EndP.y &&
 		mouse.LeftIsPressed())

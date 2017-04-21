@@ -37,7 +37,6 @@ public:
 	UIElement* Pressed;
 	list<GLchar> InWorldCommands;
 private:
-	Mouse mouse;
 	struct tempW
 	{
 		unique_ptr<ChampionChat> first;

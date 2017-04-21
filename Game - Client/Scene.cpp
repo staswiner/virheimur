@@ -232,6 +232,8 @@ void Scene::Draw_Scene()
 }
 void Scene::DrawScene_Depth()
 {
+	Mouse& mouse = Mouse::Instanace();
+
 	shadow->BindFrameBuffer();
 	//Shadow_DrawGround(shadow->shader);
 	//DrawColladaDistance();
@@ -368,6 +370,8 @@ void Scene::DrawScene_PostProcessing()
 }
 void Scene::Shadow_DrawGround(Shader& shader)
 {
+	Mouse& mouse = Mouse::Instanace();
+
 	mat4 l_ProjectionMatrix = glm::perspective(radians(120.0f),
 		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
 	mat4 l_ViewMatrix = glm::lookAt(LightPosition, vec3(0.0f), vec3(1.0f, 1.0f, 1.0f));
@@ -378,6 +382,7 @@ void Scene::Shadow_DrawGround(Shader& shader)
 void Scene::DrawGround(Shader& shader)
 {
 	Camera& camera = Camera::GetCamera("Main");
+	Mouse& mouse = Mouse::Instanace();
 
 	vec3 LightPos = vec3(0,10,10);
 	mat4 l_ProjectionMatrix = glm::perspective(radians(120.0f),
@@ -515,6 +520,8 @@ void Scene::SetCameraView()
 }
 void Scene::DrawUI()
 {
+	Mouse& mouse = Mouse::Instanace();
+
 	glm::mat4 projection = glm::ortho(0.0f, mouse.GetWindowSize().x,
 		mouse.GetWindowSize().y, 0.0f);
 	mat4 view, model;

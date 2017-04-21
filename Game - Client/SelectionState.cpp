@@ -29,7 +29,7 @@ void SelectionState::Input()
 #define is ==
 
 	using namespace Stas;
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
 	static bool LeftIsPressed = false;
 	if (mouse.LeftIsPressed())
 	{
@@ -57,7 +57,8 @@ void SelectionState::Draw(HDC hdc)
 	glEnable(GL_STENCIL_TEST);
 	glDepthMask(GL_TRUE);
 
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	glViewport(0,0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
 	
 
@@ -79,7 +80,8 @@ void SelectionState::Draw(HDC hdc)
 
 void SelectionState::Draw3D()
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	LeftBot = vec2(200, mouse.GetWindowSize().y - 500);
 	RightTop = vec2(300, 300);
 	glViewport((int)LeftBot.x, (int)LeftBot.y, (int)RightTop.x, (int)RightTop.y);

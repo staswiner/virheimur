@@ -17,7 +17,8 @@ bool MultiSampleFBO::InitializeMultiSample()
 
 	glGenTextures(1, &texture);
 
-	Mouse mouse; // todo: make the buffer size maximum or dynamic
+	Mouse& mouse = Mouse::Instanace();
+	// todo: make the buffer size maximum or dynamic
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture);
 	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y, GL_TRUE);
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
@@ -40,7 +41,7 @@ bool MultiSampleFBO::InitializeMultiSample()
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
-	//	Mouse mouse;
+	//	 Mouse& mouse = Mouse::Instanace();
 	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
 	test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	glViewport(0, 0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
@@ -67,7 +68,7 @@ void MultiSampleFBO::BindFrameBuffer()
 }
 void MultiSampleFBO::ChangeBuffersSize()
 {
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 	if (PostProcessingFBO == 0)
 		return;
 	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
@@ -78,7 +79,7 @@ void MultiSampleFBO::ChangeBuffersSize()
 
 void MultiSampleFBO::CopyBuffer(GLuint newFBO)
 {
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 	GLuint width = mouse.GetWindowSize().x, height = mouse.GetWindowSize().y;
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, PostProcessingFBO);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, newFBO);

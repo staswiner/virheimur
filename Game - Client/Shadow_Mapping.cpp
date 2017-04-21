@@ -15,7 +15,8 @@ Shadow_Mapping::~Shadow_Mapping()
 
 void Shadow_Mapping::BindFrameBuffer()
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	glViewport(0, 0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
 	//glViewport(0, 0, ci_ShadowWidth, ci_ShadowHeight);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMap_Framebuffer);
@@ -38,7 +39,8 @@ void Shadow_Mapping::Draw()
 
 void Shadow_Mapping::GenBuffers()
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	int width = (int)mouse.GetWindowSize().x;
 	int height = (int)mouse.GetWindowSize().y;
 	// generate a framebuffer to store the depth test values

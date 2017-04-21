@@ -194,7 +194,7 @@ void ImageLoader::ReloadTexture(string Filename)
 
 void ImageLoader::Draw(vec2 TopLeft, vec2 BotRight)
 {
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 	vec2 OpenGLCoords(((BotRight.x - TopLeft.x) / mouse.GetWindowSize().x) * 2 - 1,
 		-(((BotRight.y - TopLeft.y) / mouse.GetWindowSize().y) * 2 - 1));
 	vec2 Offset((TopLeft.x / mouse.GetWindowSize().x) * 2, -(TopLeft.y / mouse.GetWindowSize().y) * 2);
@@ -220,7 +220,7 @@ void ImageLoader::Draw(vec2 TopLeft, vec2 BotRight)
 }
 void ImageLoader::DrawImagePart(vec2 TopLeft, vec2 BotRight, vec2 ImageTrueSize, vec2 CropTopLeft, vec2 CropBotRight)
 {
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 	vec2 OpenGLCoords(((BotRight.x - TopLeft.x) / mouse.GetWindowSize().x) * 2 - 1,
 		-(((BotRight.y - TopLeft.y) / mouse.GetWindowSize().y) * 2 - 1));
 	vec2 Offset((TopLeft.x / mouse.GetWindowSize().x) * 2, -(TopLeft.y / mouse.GetWindowSize().y) * 2);

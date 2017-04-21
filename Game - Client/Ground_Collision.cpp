@@ -116,3 +116,34 @@ vector<vec3> Ground_Collision::GetPlaneCoords(vec3 Index)
 	}*/
 	return ReturnPlane;
 }
+
+vec3 Ground_Collision::GetNormalRotation(vec3 CurrentPosition)
+{
+	vec3 UnitPosition = CurrentPosition;
+	float Delta = 0.1f;// AlteredVertices.begin()->first.first - (++AlteredVertices.begin())->first.first;
+	vec3 RoundedValues(int(UnitPosition.x / 2) * 2, int(UnitPosition.y / 2) * 2, int(UnitPosition.z / 2) * 2);
+
+	vec3 TriangleCoord0 = RoundedValues;
+	vec3 TriangleCoord1 = RoundedValues + vec3(0, 0, 2);
+	vec3 TriangleCoord2 = RoundedValues + vec3(2, 0, 0);
+
+	if (auto it = AlteredVertices->find(vec2(TriangleCoord0.x, TriangleCoord0.z)) == AlteredVertices->end())
+	{
+		int i = 0;
+	}
+	//auto it = AlteredVertices->lower_bound(vec2(TriangleCoord0.x,TriangleCoord0.z));
+	TriangleCoord0.y = AlteredVertices->find(vec2(TriangleCoord0.x, TriangleCoord0.z)) != AlteredVertices->end()
+		? AlteredVertices->at(vec2(TriangleCoord0.x, TriangleCoord0.z)) : 0;
+	TriangleCoord1.y = AlteredVertices->find(vec2(TriangleCoord1.x, TriangleCoord1.z)) != AlteredVertices->end()
+		? AlteredVertices->at(vec2(TriangleCoord1.x, TriangleCoord1.z)) : 0;
+	TriangleCoord2.y = AlteredVertices->find(vec2(TriangleCoord2.x, TriangleCoord2.z)) != AlteredVertices->end()
+		? AlteredVertices->at(vec2(TriangleCoord2.x, TriangleCoord2.z)) : 0;
+
+	vec3 TriangleNormal = cross(TriangleCoord0 - TriangleCoord1, TriangleCoord0 - TriangleCoord2);
+	vec3 NormalAngle = vec3(
+		sqrt(TriangleNormal.x*TriangleNormal.x + TriangleNormal.y*TriangleNormal.y + TriangleNormal.z*TriangleNormal.z),
+		atan(TriangleNormal.y / TriangleNormal.x),
+		acos(TriangleNormal.z)
+	);
+	return NormalAngle;
+}

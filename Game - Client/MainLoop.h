@@ -174,7 +174,7 @@ public:
 //	int Channel = 0;
 //	vector<GrassObjects*> m_GrassObjects;
 //	/// static covered Classes
-//	Mouse mouse;
+//	 Mouse& mouse = Mouse::Instanace();
 //	Keyboard keyboard;
 //	Loaded_Models m_Loaded_Models;
 //	Model* Soldier;

@@ -18,7 +18,9 @@ bool PreEffect::Initialize()
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	Mouse mouse; // todo: make the buffer size maximum or dynamic
+	// todo: make the buffer size maximum or dynamic
+	Mouse& mouse = Mouse::Instanace();
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y, 0, GL_RGB, GL_FLOAT, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -40,7 +42,7 @@ bool PreEffect::Initialize()
 
 	Load_Interface();
 
-	//	Mouse mouse;
+	//	 Mouse& mouse = Mouse::Instanace();
 	glBindFramebuffer(GL_FRAMEBUFFER, PreEffectFBO);
 	test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	glViewport(0, 0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
@@ -66,14 +68,15 @@ void PreEffect::DrawFrameBuffer()
 //	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//Mouse mouse;
+	// Mouse& mouse = Mouse::Instanace();
 	//glViewport(0, 0, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
 	Draw_Interface();
 
 }
 void PreEffect::ChangeBuffersSize()
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	if (PreEffectFBO == 0)
 		return;
 	glBindFramebuffer(GL_FRAMEBUFFER, PreEffectFBO);

@@ -21,7 +21,7 @@ void Cursor::Initialize()
 
 void Cursor::Draw()
 {
-	Mouse mouse;
+	 Mouse& mouse = Mouse::Instanace();
 	CursorEl->TopLeft = vec2(mouse.GetMouseX(), mouse.GetMouseY());
 	CursorEl->SetByTrueSize(CursorEl->TopLeft);
 	CursorEl->Draw();

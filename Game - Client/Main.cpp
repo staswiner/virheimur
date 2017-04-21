@@ -13,7 +13,6 @@
 
 
 
-static Mouse mouse;
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 static MainLoop Loop;
 bool    done;                   //flag for completion of app
@@ -30,6 +29,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	DWORD   dwExStyle;              //window extended style
 	DWORD   dwStyle;                //window style
 	RECT    windowRect;
+	Mouse& mouse = Mouse::Instanace();
 
 	/*      Screen/display attributes*/
 	int width = 1024;
@@ -179,6 +179,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	Mouse& mouse = Mouse::Instanace();
 	Keyboard& keyboard = Keyboard::Instance();
 	int width, height;
 	static HDC	hDC;	//device context

@@ -36,7 +36,8 @@ void Player::Draw()
 	FrameData& frameData = FrameData::GetInstance();
 	mat4 l_ProjectionMatrix = frameData.ProjectionMatrix;
 	mat4 l_ViewMatrix = frameData.ViewMatrix;
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	// Model
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
@@ -56,7 +57,8 @@ void Player::Draw()
 }
 void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	// Model
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
@@ -77,7 +79,8 @@ void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 }
 void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
 {
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	// Model
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
@@ -99,7 +102,8 @@ void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
 void Player::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 {
 #pragma region Declarations
-	Mouse mouse;
+	Mouse& mouse = Mouse::Instanace();
+
 	mat4 ModelMatrix;
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;

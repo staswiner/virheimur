@@ -42,7 +42,6 @@ private:
 	void ManualControl();
 	void DirectControl();
 	vec3 GetMouseCoord_MapCoord();
-	Mouse mouse;
 	GlobalDataObject& ReceivedData;
 	GlobalDataObject& InputToScene;
 	GlobalDataObject* Data;
