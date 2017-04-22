@@ -414,14 +414,14 @@ Shader::Shader(string vertexShader, string geometryShader, string fragmentShader
 }
 void Shader::ConstructShader(MODEL)
 {
-	int numMaterials;
+	/*int numMaterials;
 	MODEL->Scene->Materials;
 	MODEL->Scene->Mesh->Indexes;
 	MODEL -> shader = the following :
 	
 	"uniform Material Material[20];";
 
-	"color = total * Material[index];";
+	"color = total * Material[index];";*/
 }
 void Shader::Use()
 {

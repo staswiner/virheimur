@@ -382,7 +382,7 @@ void Mesh::DrawInstanced(vector<mat4>& ModelMatrix)
 Material Mesh::GetMaterial()
 {
 	mesh->mMaterialIndex;
-	scene->HasMaterials;
+	//scene->HasMaterials;
 	scene->mMaterials[0];
 	scene->mNumMaterials;
 	aiMaterial a;
