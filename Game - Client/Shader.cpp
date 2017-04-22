@@ -425,7 +425,7 @@ void Shader::ConstructShader(MODEL)
 }
 void Shader::Use()
 {
-	glUseProgram(this->ProgramID);
+	glUseProgram(this->ProgramID);;
 }
 Shader & Shader::At(string ID)
 {
