@@ -414,7 +414,7 @@ Shader::Shader(string vertexShader, string geometryShader, string fragmentShader
 }
 void Shader::ConstructShader(MODEL)
 {
-/*	int numMaterials;
+	/*int numMaterials;
 	MODEL->Scene->Materials;
 	MODEL->Scene->Mesh->Indexes;
 	MODEL -> shader = the following :
@@ -425,7 +425,7 @@ void Shader::ConstructShader(MODEL)
 }
 void Shader::Use()
 {
-	glUseProgram(this->ProgramID);;
+	glUseProgram(this->ProgramID);
 }
 Shader & Shader::At(string ID)
 {

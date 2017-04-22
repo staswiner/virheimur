@@ -79,7 +79,11 @@ public:
 		unsigned int BaseIndex;
 		unsigned int MaterialIndex;
 	};
-
+	/*Boundry Box*/
+	struct BoundryBox
+	{
+		vec3 Edge[8];
+	};
 public:
 	/*  Mesh Data  */
 	vector<Stas::Vertex> vertices;
@@ -95,8 +99,25 @@ public:
 	//void LoadBones(uint MeshIndex, const aiMesh* pMesh, vector<Skeletal>& Bones);
 	void DrawModel();
 	void DrawInstanced(vector<mat4>& ModelMatrix);
-	Material GetMaterial();
-
+	/*TODO:
+	Functions which will make the model interactive
+	*/
+#define TODO_FUNCTION
+#define LOAD_FROM_FILE
+#define LOAD_TO_FILE
+#define TODO_VARIABLE
+	TODO_FUNCTION Material GetMaterial();
+	TODO_FUNCTION vec3 GetCentralMassPoint();
+	TODO_FUNCTION BoundryBox GetAABB();
+	TODO_FUNCTION BoundryBox GetBB();
+	TODO_FUNCTION LOAD_FROM_FILE void LoadModelProperties();
+	TODO_FUNCTION LOAD_TO_FILE void CalculateModelPropertiesAndSave();
+	TODO_VARIABLE vec3 CentralMassPoint();
+	TODO_VARIABLE BoundryBox AABB;
+	TODO_VARIABLE BoundryBox BB;
+	/*
+	Done
+	*/
 	void ReadNodeHeirarchy(double AnimationTime, const aiNode * pNode, const aiMatrix4x4 & ParentTransform);
 	uint FindPosition(double AnimationTime, const aiNodeAnim * pNodeAnim);
 	uint FindRotation(double AnimationTime, const aiNodeAnim * pNodeAnim);
