@@ -4,14 +4,10 @@
 #include "Graphics_Header.h"
 #include "assimp\Importer.hpp"
 #include "assimp\scene.h"
-#include "assimp\postprocess.h"  
+#include "assimp\postprocess.h"
+#include "Material.h"
 using namespace glm;
-struct Material {
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
-	float shininess;
-};
+
 class Materials {
 public:
 	static Materials& GetInstance();

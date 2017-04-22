@@ -159,6 +159,7 @@
     <ClInclude Include="Loading_Screen.h" />
     <ClInclude Include="LoginState.h" />
     <ClInclude Include="MainLoop.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="MathGrass.h" />
     <ClInclude Include="Maths.h" />
     <ClInclude Include="MenuPanel.h" />

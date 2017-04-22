@@ -1,10 +1,9 @@
 ﻿#include "Model.h"
 
-
-
 Model::Model()
 {
 }
+
 Model::Model(GLchar* Path, string CollisionType)
 {
 	this->CollisionType = CollisionType;
@@ -35,9 +34,10 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 }
 Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 {
-	vector<Stas::Vertex> vertices;
+	/*vector<Stas::Vertex> vertices;
 	vector<GLuint> indices;
-	vector<Mesh::Texture> textures;
+	vector<Mesh::Texture> textures;*/
+
 	return Mesh(mesh,scene, CollisionType);
 }
 void Model::loadModel(Mesh& mesh)
@@ -46,7 +46,6 @@ void Model::loadModel(Mesh& mesh)
 }
 void Model::loadModel(string Path)
 {
-	import;
 	scene = import.ReadFile(Path,
 		//aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |

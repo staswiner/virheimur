@@ -55,7 +55,6 @@ void Player::Draw()
 		Add_float("Texelation", 1.0f).
 		Add_textures(ModelsCollection::getInstance()["Collada"]->Textures);
 	ModelsCollection::getInstance()["Collada"]->Draw();
-
 }
 void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 {

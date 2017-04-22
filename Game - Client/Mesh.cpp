@@ -339,21 +339,24 @@ void Mesh::VertexBoneData::AddBoneData(uint BoneID, float Weight)
 	// should never get here - more bones than we have space for
 	assert(0);
 }
+
 void Mesh::DrawModel()
 {
 	vector<aiMatrix4x4> Transforms;
 	if (scene->HasAnimations())
 	{
 		BoneTransform(double(GetTickCount()) / 1000.0f, Transforms);
-		ShaderBuilder myshader = *ShaderBuilder::GetCurrentProgram();
+		unique_ptr<ShaderBuilder> myshader = ShaderBuilder::GetCurrentProgram();
 		int BoneNum = Transforms.size();
-		myshader.Add_int("BoneNum", BoneNum);
+
+		myshader->Add_int("BoneNum", BoneNum);
 		for (size_t i = 0; i < Transforms.size(); i++)
 		{
-			myshader.Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
+			myshader->Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
 		}
-	}
 
+		myshader->Add_Material("MeshMaterial", this->GetMaterial());
+	}
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
@@ -381,32 +384,27 @@ void Mesh::DrawInstanced(vector<mat4>& ModelMatrix)
 }
 Material Mesh::GetMaterial()
 {
-	mesh->mMaterialIndex;
-	scene->HasMaterials;
-	scene->mMaterials[0];
-	scene->mNumMaterials;
-	aiMaterial a;
 	auto ConvertAiToGLM = [](aiColor3D color)->vec3 {
 		return vec3(color.r,color.g,color.b);
 	};
+
 	Material material;
-	for (int i = 0; i < 10; i++)
-	{
-		aiColor3D color;
-		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_AMBIENT, color);
-		material.ambient = ConvertAiToGLM(color);
 
-		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-		material.diffuse = ConvertAiToGLM(color);
+	aiColor3D color;
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, color);
+	material.ambient = ConvertAiToGLM(color);
 
-		float shininess;
-		scene->mMaterials[i]->Get(AI_MATKEY_SHININESS, shininess);
-		material.shininess = shininess;
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+	material.diffuse = ConvertAiToGLM(color);
 
-		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_SPECULAR, color);
-		material.specular = ConvertAiToGLM(color);
-	}
-	return Material();
+	float shininess;
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_SHININESS, shininess);
+	material.shininess = shininess;
+
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_SPECULAR, color);
+	material.specular = ConvertAiToGLM(color);
+	
+	return material;
 }
 void Mesh::ReadNodeHeirarchy(double AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
 {
