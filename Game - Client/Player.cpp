@@ -44,12 +44,14 @@ void Player::Draw()
 #pragma region Mathematics
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, position);
+	//ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.x, vec3(1, 0, 0));
 	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
+	//ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.z, vec3(0, 0, 1));
 	mat4 WVM = l_ProjectionMatrix * l_ViewMatrix * ModelMatrix* Default::GetInstance().BlenderConversionCenter;
 #pragma endregion Mathematics
 	ShaderBuilder::LoadShader(Shader::At("Animation"))->
 		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", true).
+		Add_bool("isAnimated", false).
 		Add_float("Texelation", 1.0f).
 		Add_textures(ModelsCollection::getInstance()["Collada"]->Textures);
 	ModelsCollection::getInstance()["Collada"]->Draw();

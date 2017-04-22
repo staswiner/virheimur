@@ -13,6 +13,7 @@ Mesh::Mesh(aiMesh * mesh, const aiScene* scene, string CollisionType)
 	this->mesh = mesh;
 	this->scene = scene;
 	this->CollisionType = CollisionType;
+	
 	ProcessMesh();
 }
 void Mesh::LoadCustom(vector<Stas::Vertex>& Vertices)
@@ -377,6 +378,35 @@ void Mesh::DrawInstanced(vector<mat4>& ModelMatrix)
 		m_Entries[i].BaseVertex);*/
 	glDrawArraysInstanced(GL_POINTS , 0 , Vertices_Amount, ModelMatrix.size());
 	glBindVertexArray(0);
+}
+Material Mesh::GetMaterial()
+{
+	mesh->mMaterialIndex;
+	scene->HasMaterials;
+	scene->mMaterials[0];
+	scene->mNumMaterials;
+	aiMaterial a;
+	auto ConvertAiToGLM = [](aiColor3D color)->vec3 {
+		return vec3(color.r,color.g,color.b);
+	};
+	Material material;
+	for (int i = 0; i < 10; i++)
+	{
+		aiColor3D color;
+		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_AMBIENT, color);
+		material.ambient = ConvertAiToGLM(color);
+
+		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+		material.diffuse = ConvertAiToGLM(color);
+
+		float shininess;
+		scene->mMaterials[i]->Get(AI_MATKEY_SHININESS, shininess);
+		material.shininess = shininess;
+
+		scene->mMaterials[i]->Get(AI_MATKEY_COLOR_SPECULAR, color);
+		material.specular = ConvertAiToGLM(color);
+	}
+	return Material();
 }
 void Mesh::ReadNodeHeirarchy(double AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
 {

@@ -26,6 +26,7 @@ public:
 	static vector<vector<int>> LoadBufferFromImage(string Filename);
 	vector<Mesh> meshes;
 	map<string,GLuint> Textures;
+	vector<Materials> m_Materials;
 private:
 	/*  Model Data  */
 	//vector<Mesh> meshes;

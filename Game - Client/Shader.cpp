@@ -412,6 +412,17 @@ Shader::Shader(string vertexShader, string geometryShader, string fragmentShader
 	glDeleteShader(GeometryShaderID);
 	glDeleteShader(FragmentShaderID);
 }
+void Shader::ConstructShader(MODEL)
+{
+	int numMaterials;
+	MODEL->Scene->Materials;
+	MODEL->Scene->Mesh->Indexes;
+	MODEL -> shader = the following :
+	
+	"uniform Material Material[20];";
+
+	"color = total * Material[index];";
+}
 void Shader::Use()
 {
 	glUseProgram(this->ProgramID);

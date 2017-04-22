@@ -931,30 +931,31 @@ void Scene::Outline()
 	}
 	glDisable(GL_STENCIL_TEST);
 }
+#define ALAHU_AKBAR
 void Scene::DrawOutlineObjects()
 {
-	mat4 WVM;
-	for (auto npc : NPCs)
-	{
-		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
-		ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("WVM", WVM).
-			Add_bool("isAnimated", false).
-			Add_float("Texelation", 1.0f).
-			Add_textures(ModelsCollection::getInstance()[npc.Name]->Textures);
-		ModelsCollection::getInstance()[npc.Name]->Draw();
-	}
-	Core & core = Core::GetInstance();
-	if (core.Online)
-	{
-		for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-		{
-			i->second->Draw();
-		}
-	}
-	else
-	{
-		OfflineDataObject& offlineData = OfflineDataObject::Instance();
-		offlineData.player.Draw();
-	}
+	ALAHU_AKBAR mat4 WVM;
+	ALAHU_AKBAR for (auto npc : NPCs)
+	ALAHU_AKBAR {
+	ALAHU_AKBAR 	WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
+	ALAHU_AKBAR 	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	ALAHU_AKBAR 		Add_mat4("WVM", WVM).
+	ALAHU_AKBAR	Add_bool("isAnimated", false).
+	ALAHU_AKBAR	Add_float("Texelation", 1.0f).
+	ALAHU_AKBAR	Add_textures(ModelsCollection::getInstance()[npc.Name]->Textures);
+	ALAHU_AKBAR	ModelsCollection::getInstance()[npc.Name]->Draw();
+	ALAHU_AKBAR }
+	ALAHU_AKBAR Core & core = Core::GetInstance();
+	ALAHU_AKBAR if (core.Online)
+	ALAHU_AKBAR {
+	ALAHU_AKBAR 	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	ALAHU_AKBAR 	{
+	ALAHU_AKBAR 		i->second->Draw();
+	ALAHU_AKBAR 	}
+	ALAHU_AKBAR }
+	ALAHU_AKBAR else
+	ALAHU_AKBAR {
+	ALAHU_AKBAR 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
+	ALAHU_AKBAR 	offlineData.player.Draw();
+	ALAHU_AKBAR }
 }

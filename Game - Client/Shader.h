@@ -21,6 +21,8 @@ public:
 	Shader(string vertexPath,string fragmentPath);
 	Shader(string vertexPath, string geometryPath, string fragmentPath);
 	Shader(string vertexShader, string geometryShader, string fragmentShader, bool);
+#define MODEL
+	void ConstructShader(MODEL);
 	// Use the program
 	void Use();
 	static bool LoadShaders();
