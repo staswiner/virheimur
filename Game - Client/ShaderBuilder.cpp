@@ -93,7 +93,7 @@ ShaderBuilder & ShaderBuilder::Add_Material(string name, const Material & rhs)
 	this->Add_vec3(name+".ambient", rhs.ambient).
 	Add_vec3(name + ".diffuse", rhs.diffuse).
 	Add_vec3(name + ".specular", rhs.specular).
-	Add_float(name + "shininess", rhs.shininess);
+	Add_float(name + ".shininess", rhs.shininess);
 	return *this;
 }
 
