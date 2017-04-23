@@ -46,6 +46,8 @@ void Model::loadModel(Mesh& mesh)
 }
 void Model::loadModel(string Path)
 {
+	int pos = Path.find_last_of('/');
+	this->ModelName = Path.substr(pos + 1, Path.length());
 	scene = import.ReadFile(Path,
 		//aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |

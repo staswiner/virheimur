@@ -27,6 +27,9 @@ public:
 	vector<Mesh> meshes;
 	map<string,GLuint> Textures;
 	vector<Materials> m_Materials;
+
+	Mesh::BoundryBox boundryBox;
+
 private:
 	/*  Model Data  */
 	//vector<Mesh> meshes;
@@ -42,4 +45,6 @@ private:
 	string picture = "Collada/boy_10.JPG";
 	vector<GLuint> Texture;
 	string CollisionType;
+	string ModelName;
+	string LastDateOfChange;
 };

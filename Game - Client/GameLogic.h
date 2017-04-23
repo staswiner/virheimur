@@ -26,6 +26,8 @@ public:
 	void ProcessDataOffline();
 	void ChainCommands();
 	void BuildData();
+#define TODO_FUNCTION
+	TODO_FUNCTION void CalculateCollision();
 private:
 	void ProcessPlayerMovement();
 	//GameData Data;

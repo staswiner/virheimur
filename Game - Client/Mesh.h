@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <sstream>
+#include <fstream>
+#include <iostream>
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -25,7 +27,7 @@
 #include "Collision.h"
 #include "Ground_Collision.h"
 #include "Structures.h"
-
+#include "json.hpp"
 
 #define POSITION_LOCATION    0
 #define NORMAL_LOCATION      1
@@ -33,6 +35,12 @@
 #define BONE_ID_LOCATION     3
 #define BONE_WEIGHT_LOCATION 4
 #define MODEL_MAT_LOCATION	 5
+
+
+#define TODO_FUNCTION
+#define LOAD_FROM_FILE
+#define LOAD_TO_FILE
+#define TODO_VARIABLE
 
 using namespace glm;
 using namespace std;
@@ -79,10 +87,12 @@ public:
 		unsigned int BaseIndex;
 		unsigned int MaterialIndex;
 	};
-	/*Boundry Box*/
+/*Boundry Box*/
+#define TODO_VARIABLE
 	struct BoundryBox
 	{
-		vec3 Edge[8];
+		TODO_VARIABLE vec3 Edge[8];
+		TODO_VARIABLE vec3 CentralMassPoint;
 	};
 public:
 	/*  Mesh Data  */
@@ -102,17 +112,19 @@ public:
 	/*TODO:
 	Functions which will make the model interactive
 	*/
-#define TODO_FUNCTION
-#define LOAD_FROM_FILE
-#define LOAD_TO_FILE
-#define TODO_VARIABLE
+
 	TODO_FUNCTION Material GetMaterial();
 	TODO_FUNCTION vec3 GetCentralMassPoint();
 	TODO_FUNCTION BoundryBox GetAABB();
 	TODO_FUNCTION BoundryBox GetBB();
+	/*
+	middle of AABB
+	middle of BB
+	middle of all vertices <- not so good
+
+	*/
 	TODO_FUNCTION LOAD_FROM_FILE void LoadModelProperties();
 	TODO_FUNCTION LOAD_TO_FILE void CalculateModelPropertiesAndSave();
-	TODO_VARIABLE vec3 CentralMassPoint();
 	TODO_VARIABLE BoundryBox AABB;
 	TODO_VARIABLE BoundryBox BB;
 	/*
@@ -130,6 +142,10 @@ public:
 	int LoadTexture(string Filename);
 	/*  Render data  */
 	GLuint VAO, VBO[NUM_VBs], EBO;
+	string ModelName;
+	string LastDateOfChange;
+	int MeshCount;
+
 private:
 	/*  Functions    */
 	void setupMesh();

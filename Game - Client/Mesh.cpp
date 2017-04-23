@@ -406,6 +406,26 @@ Material Mesh::GetMaterial()
 	
 	return material;
 }
+TODO_FUNCTION LOAD_FROM_FILE void Mesh::LoadModelProperties()
+{
+	FILE* ImportFile;
+	nlohmann::json Properties;
+	this->BB = Properties["BB"];
+	this->AABB = Properties["AABB"];
+	this->CentralMassPoint = Properties["CentralMassPoint"];
+}
+TODO_FUNCTION LOAD_TO_FILE void Mesh::CalculateModelPropertiesAndSave()
+{	
+	CreateDirectory("/Misc/ModelProperties", NULL);
+	ofstream ExportFile;
+	ExportFile.open("/Misc/ModelProperties/" + this->ModelName + to_string(this->MeshCount) + ".data");
+	this->BB = GetBB();
+	this->AABB = GetAABB();
+	this->CentralMassPoint = GetCentralMassPoint();
+	nlohmann::json Properties;
+	ExportFile << Properties.dump(1);
+	ExportFile.close();
+}
 void Mesh::ReadNodeHeirarchy(double AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
 {
 	string NodeName(pNode->mName.data);

@@ -153,6 +153,27 @@ void GameLogic::ProcessDataOffline()
 	}
 }
 
+TODO_FUNCTION void GameLogic::CalculateCollision()
+{
+#define Is_In_Area_Of_Object true
+	#define GameObject int
+	vector<int> GameObjects;
+	for each (GameObject object in GameObjects)
+	{
+		if (Is_In_Area_Of_Object)
+		{
+			Model model;
+			model.boundryBox; // homogenic mass distribution; momentum is calculated lineary to position
+			model.boundryBox::area of collision::points of collision;
+			extreme far points of boundry box;
+			apply physics towards each one of vertices here ^ as dot;
+			vector * mass for each dot;
+			combine all vectors in that object to the center of the object;
+		}
+	}
+	return TODO_FUNCTION void();
+}
+
 void GameLogic::ProcessPlayerMovement()
 {
 	// Declarations
