@@ -31,8 +31,21 @@ namespace Stas
 	class Maths
 	{
 	public:
-		Maths();
-		~Maths();
+		class Vectors {
+		private:
+			Vectors() = delete;
+			~Vectors() = delete;
+		private:
+			static void IntercectionTwoLines();
+			static void IntercectionPlaneLine();
+			static void IntercectionTwoPlanes();
+			static void IntercectionCirclePlane();
+			static void IntercectionCircleLine();
+			static void IntercectionTwoCircles();
+			static void Intercection();
+
+		};
+	public:
 		static float barryCentric(vec3, vec3, vec3, vec2);
 		static float Mod(float, float);
 		//static vector<vec3> Dijekstra(map<vec3,pair<vec3, float>> Nodes,vec3 Start,vec3 Destination);
@@ -71,6 +84,8 @@ namespace Stas
 		static vector<vec3> AstarB(
 			std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
 			& graph, vec3 source, vec3 target);
+		Maths() = delete;
+		~Maths() = delete;
 		
 	};
 

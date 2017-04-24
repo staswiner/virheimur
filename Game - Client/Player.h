@@ -39,10 +39,14 @@ public:
 	public:
 		vec3 StartPoint;
 		vec3 Position;
+		vec3 Velocity; // Direction * Value
+		vec3 Acceleration; // Direction * Value
+
 		vec3 Rotation;
 
 		bool HasPhysics;
 		vec3 ForceVector;
+
 		
 		vector<vec3> Path;
 		vec3 Destination;

@@ -177,6 +177,9 @@ TODO_FUNCTION void GameLogic::CalculateCollision()
 			//	check for interception
 			//	if interception occured, calculate force by speed of the object.
 
+			// momentum = velocity * mass = F
+			// to calculate the velocity on the applied object( object2 ) by the applying object1,( v1 * m1 )/ m2
+
 		}
 	}
 }
