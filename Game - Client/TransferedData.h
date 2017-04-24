@@ -18,8 +18,8 @@ public:
 	~TransferedData();	
 	bool UpdateData(string, int);
 	bool TranslatedData();
-	vector<Player::Unit_Data*> GetUnitData();
-	vector<Player::Unit_Data*> Unit;
+	vector<GameObject::Unit_Data*> GetUnitData();
+	vector<GameObject::Unit_Data*> Unit;
 	unsigned int ClientID = 0;
 
 	void ConvertData(string);

@@ -66,7 +66,7 @@ public:
 		return instance;
 	}
 
-	Player player;
+	GameObject player;
 	vector<Effect> Effects;
 	vector<vec3>* Path;
 	bool RouteChanged = false;

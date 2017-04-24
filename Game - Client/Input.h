@@ -38,7 +38,7 @@ private:
 	void RunScript();
 	void OpenProfileUI();
 	void SetCircleScriptIterative();
-	void SetPlayerControl(Player::controls control);
+	void SetPlayerControl(GameObject::controls control);
 	void ManualControl();
 	void DirectControl();
 	vec3 GetMouseCoord_MapCoord();

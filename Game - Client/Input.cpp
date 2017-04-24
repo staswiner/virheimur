@@ -80,7 +80,7 @@ void Input::GetMouseInput()
 		vec3 Destination = ray.PlaneIntersection(PlaneCoord[0], PlaneCoord[1], PlaneCoord[2],
 			ray.GetWorldRay(),camera.GetCameraPosition());
 		// Set Destination to player
-		Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName];
+		GameObject* myPlayer = NewData.GetPlayerInformation()[session.CharacterName];
 		myPlayer->Username = session.Username;
 		// Other variables
 		myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[session.CharacterName]->unit_Data.Position;
@@ -262,7 +262,7 @@ void Input::GetMouseInputOffline()
 		vec3 CurrentPosition = offlineData.player.GetUnitData().Position;
 
 		// Set Destination to player
-		Player& myPlayer = offlineData.player;
+		GameObject& myPlayer = offlineData.player;
 		// Other variables
 		myPlayer.unit_Data.StartPoint = offlineData.player.unit_Data.Position;
 		myPlayer.unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
@@ -434,9 +434,9 @@ void Input::GetKeyboardInput()
 		switch (input)
 		{
 		case ' ': ResetCharacterPosition(); ResetCameraPosition(); break;
-		case 's': SetPlayerControl(Player::controls::Script); SetCircleScriptIterative(); break; // script
-		case 'm': SetPlayerControl(Player::controls::Manual); break; // manual
-		case 'd': SetPlayerControl(Player::controls::Direct); break; // direct
+		case 's': SetPlayerControl(GameObject::controls::Script); SetCircleScriptIterative(); break; // script
+		case 'm': SetPlayerControl(GameObject::controls::Manual); break; // manual
+		case 'd': SetPlayerControl(GameObject::controls::Direct); break; // direct
 		case 'p': OpenProfileUI(); break;
 		}
 		// end
@@ -444,12 +444,12 @@ void Input::GetKeyboardInput()
 
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	
-	if (offlineData.player.control == Player::controls::Manual)
+	if (offlineData.player.control == GameObject::controls::Manual)
 	{
 		ManualControl();
 	}
 
-	if (offlineData.player.control == Player::controls::Direct)
+	if (offlineData.player.control == GameObject::controls::Direct)
 	{
 		DirectControl();
 	}
@@ -487,7 +487,7 @@ void Input::OnlineRightMouseClick()
 	vec3 Destination = ray.PlaneIntersection(PlaneCoord[0], PlaneCoord[1], PlaneCoord[2],
 		ray.GetWorldRay(), camera.GetCameraPosition());
 	// Set Destination to player
-	Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName];
+	GameObject* myPlayer = NewData.GetPlayerInformation()[session.CharacterName];
 	myPlayer->Username = session.Username;
 	// Other variables
 	myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[session.CharacterName]->unit_Data.Position;
@@ -590,7 +590,7 @@ void Input::SetCircleScript()
 void Input::RunScript()
 {
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	offlineData.player.control = Player::controls::Script;
+	offlineData.player.control = GameObject::controls::Script;
 	offlineData.player.LongPath = false;
 	STARTUPINFO siStartInfo;
 	PROCESS_INFORMATION piProcessInfo;
@@ -689,9 +689,9 @@ void Input::SetCircleScriptIterative()
 	//WaitForSingleObject(piProcessInfo.hProcess, INFINITE);
 
 
-	Player& p = offlineData.player;
+	GameObject& p = offlineData.player;
 	Unit_Data& ud = offlineData.player.unit_Data;
-	offlineData.player.script = [&](Player& p) mutable-> void {
+	offlineData.player.script = [&](GameObject& p) mutable-> void {
 		
 		float Angle = 0.0f;
 		if (p.GetMemoryData("Angle") != nullptr)
@@ -717,7 +717,7 @@ void Input::SetCircleScriptIterative()
 	};
 }
 
-void Input::SetPlayerControl(Player::controls control)
+void Input::SetPlayerControl(GameObject::controls control)
 {
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
 	offlineData.player.control = control;
@@ -727,8 +727,8 @@ void Input::ManualControl()
 {
 	Keyboard& keyboard = Keyboard::Instance();
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	Player& p = offlineData.player;
-	if (p.control != Player::controls::Manual)
+	GameObject& p = offlineData.player;
+	if (p.control != GameObject::controls::Manual)
 	{
 		return;
 	}
@@ -775,7 +775,7 @@ void Input::DirectControl()
 {
 	Keyboard& keyboard = Keyboard::Instance();
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	Player& p = offlineData.player;
+	GameObject& p = offlineData.player;
 
 	float frameTime = Time::Instance().Frame();
 	float MovementSpeed = 15.0f * frameTime / 1000.0f;
@@ -845,7 +845,7 @@ void Input::ResetCharacterPosition()
 	{
 		Session& session = Session::Instance();
 		vec3 Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
-		Player* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
+		GameObject* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
 		myPlayer->Username = ReceivedData.MyUsername;
 		myPlayer->unit_Data.Path.clear();
 		myPlayer->unit_Data.Path.push_back(Position);

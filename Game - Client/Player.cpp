@@ -1,7 +1,7 @@
 #include "Player.h"
 
 
-Player::Player()
+GameObject::GameObject()
 {
 	this->stats.MovementSpeed = 100;
 	this->stats.Hp = 500;
@@ -9,7 +9,7 @@ Player::Player()
 	LoadInterface(); 
 }
 
-Player::Player(Unit_Data unit_Data,string Username)
+GameObject::GameObject(Unit_Data unit_Data,string Username)
 {
 	this->unit_Data = unit_Data;
 	this->Username = Username;
@@ -20,18 +20,18 @@ Player::Player(Unit_Data unit_Data,string Username)
 }
 
 
-Player::~Player()
+GameObject::~GameObject()
 {
 	UIroot->Destroy();
 }
 
-Player::Unit_Data& Player::GetUnitData()
+GameObject::Unit_Data& GameObject::GetUnitData()
 {
 	return this->unit_Data;
 }
 
 // TODO : remove projection matrix and view matrix
-void Player::Draw()
+void GameObject::Draw()
 {
 	FrameData& frameData = FrameData::GetInstance();
 	mat4 l_ProjectionMatrix = frameData.ProjectionMatrix;
@@ -56,7 +56,7 @@ void Player::Draw()
 		Add_textures(ModelsCollection::getInstance()["Collada"]->Textures);
 	ModelsCollection::getInstance()["Collada"]->Draw();
 }
-void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
+void GameObject::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 {
 	Mouse& mouse = Mouse::Instanace();
 
@@ -78,7 +78,7 @@ void Player::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 	ModelsCollection::getInstance()["Collada"]->Draw();
 
 }
-void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
+void GameObject::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
 {
 	Mouse& mouse = Mouse::Instanace();
 
@@ -100,7 +100,7 @@ void Player::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Color)
 
 }
 
-void Player::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
+void GameObject::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 {
 #pragma region Declarations
 	Mouse& mouse = Mouse::Instanace();
@@ -131,7 +131,7 @@ void Player::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 
 }
 
-void Player::LoadInterface()
+void GameObject::LoadInterface()
 {
 	vec2 Position;
 	UIroot = new UIElement("Root", "");
@@ -151,12 +151,12 @@ void Player::LoadInterface()
 
 }
 
-void Player::UpdateUnitData(Unit_Data uData)
+void GameObject::UpdateUnitData(Unit_Data uData)
 {
 	this->unit_Data.Destination = uData.Position;
 }
 
-json Player::GetJson()
+json GameObject::GetJson()
 {
 	json JPlayer;
 	JPlayer["x"] = this->unit_Data.StartPoint.x;
@@ -180,7 +180,7 @@ json Player::GetJson()
 	return JPlayer;
 }
 
-int Player::GetType()
+int GameObject::GetType()
 {
 	return this->Type;
 }
@@ -190,7 +190,7 @@ int Player::GetType()
 //map<string, void*> MemoryBlock;
 //map<string, string> MemoryTypeTable;
 #define StringToType(string) ()
-void * Player::GetMemoryData(string VarName)
+void * GameObject::GetMemoryData(string VarName)
 {
 	// TODO:
 	if (MemoryBlock.find(VarName) == MemoryBlock.end())
@@ -204,7 +204,7 @@ void * Player::GetMemoryData(string VarName)
 	}
 }
 
-void Player::SetMemoryData(string VarName, void * data, size_t s)
+void GameObject::SetMemoryData(string VarName, void * data, size_t s)
 {
 	//TODO:	
 	
@@ -222,11 +222,11 @@ void Player::SetMemoryData(string VarName, void * data, size_t s)
 	MemoryBlock[VarName] = AllocationData;
 }
 
-Player *& PlayerRepository::operator[](string Key)
+GameObject *& PlayerRepository::operator[](string Key)
 {
 	if (this->Players.find(Key) == this->Players.end())
 	{
-		this->Players[Key] = new Player();
+		this->Players[Key] = new GameObject();
 		return this->Players[Key];
 	}
 	else
@@ -235,11 +235,11 @@ Player *& PlayerRepository::operator[](string Key)
 	}
 }
 
-Player * PlayerRepository::operator[](string Key) const
+GameObject * PlayerRepository::operator[](string Key) const
 {
 	if (this->Players.find(Key) == this->Players.end())
 	{
-		this->Players[Key] = new Player();
+		this->Players[Key] = new GameObject();
 		return this->Players[Key];
 	}
 	else
@@ -253,12 +253,12 @@ void PlayerRepository::Erase(string Key)
 	this->Players.erase(Key);
 }
 
-map<string, Player*>::iterator PlayerRepository::begin()
+map<string, GameObject*>::iterator PlayerRepository::begin()
 {
 	return this->Players.begin();
 }
 
-map<string, Player*>::iterator PlayerRepository::end()
+map<string, GameObject*>::iterator PlayerRepository::end()
 {
 	return this->Players.end();
 }
@@ -272,11 +272,11 @@ void PlayerRepository::clear()
 	Players.clear();
 }
 
-Player::Unit_Data::Unit_Data()
+GameObject::Unit_Data::Unit_Data()
 {
 }
 
-Player::Unit_Data::~Unit_Data()
+GameObject::Unit_Data::~Unit_Data()
 {
 	Path.clear();
 	if (Model_Data)
@@ -284,7 +284,7 @@ Player::Unit_Data::~Unit_Data()
 		delete Model_Data;
 	}
 }
-mat4 Player::Unit_Data::GetModelMatrix()
+mat4 GameObject::Unit_Data::GetModelMatrix()
 {
 	mat4 ModelMatrix;
 	ModelMatrix = glm::translate(ModelMatrix, this->Position);

@@ -28,6 +28,7 @@ public:
 	void BuildData();
 #define TODO_FUNCTION
 	TODO_FUNCTION void CalculateCollision();
+	TODO_FUNCTION void ProcessForces();
 private:
 	void ProcessPlayerMovement();
 	//GameData Data;

@@ -1,21 +1,20 @@
 #pragma once
+#include <functional>
+#include <chrono>
 #include "json.hpp"
 #include "UIElement.h"
 #include "FrameData.h"
-#include <functional>
 #include "glm\glm\vec3.hpp"
 #include "Model.h"
 #include "Loaded_Models.h"
 #include "Default.h"
-#include <chrono>
 
+using namespace nlohmann;
 using namespace chrono;
 using namespace glm;
-
 using namespace std;
-using namespace nlohmann;
 
-class Player
+class GameObject
 {
 public:
 	struct Stats{
@@ -41,6 +40,10 @@ public:
 		vec3 StartPoint;
 		vec3 Position;
 		vec3 Rotation;
+
+		bool HasPhysics;
+		vec3 ForceVector;
+		
 		vector<vec3> Path;
 		vec3 Destination;
 		bool PathChanged = false;
@@ -49,9 +52,9 @@ public:
 		unsigned int action;
 	};
 
-	Player();
-	Player(Unit_Data, string Username);
-	~Player();
+	GameObject();
+	GameObject(Unit_Data, string Username);
+	~GameObject();
 	Unit_Data& GetUnitData();
 	void Draw();
 	void DrawShadow(mat4 & ProjectionMatrix, mat4 & ViewMatrix);
@@ -62,13 +65,8 @@ public:
 	json GetJson();
 	json GetStructureJson();
 	int GetType();
-	string GetIP() { return this->IpAddress; }
-	string GetUsername() { return this->Username; }
 	string Username;
 	string CharacterName;
-	struct Coordinations {
-	};
-
 	Stats stats;
 	milliseconds TimeDelta;
 	Unit_Data unit_Data;
@@ -88,8 +86,9 @@ public:
 	};
 	movements movement = movements::Ground;
 	controls control = controls::Manual;
+	
 	// AI preparations
-	function<void(Player&)> script;
+	function<void(GameObject&)> script;
 	void* GetMemoryData(string VarName);
 	void SetMemoryData(string VarName, void* data, size_t);
 	bool disablePathing = false;
@@ -105,20 +104,20 @@ private:
 	int Type;
 };
 
-typedef Player::Unit_Data Unit_Data;
+typedef GameObject::Unit_Data Unit_Data;
 
 class PlayerRepository
 {
 public:
 	PlayerRepository() {}
 	~PlayerRepository() { Players.clear(); }
-	Player*& operator[](string Key);
-	Player* operator[](string Key) const;
+	GameObject*& operator[](string Key);
+	GameObject* operator[](string Key) const;
 	void Erase(string Key);
-	map<string, Player*>::iterator begin();
-	map<string, Player*>::iterator end();
+	map<string, GameObject*>::iterator begin();
+	map<string, GameObject*>::iterator end();
 	void clear();
 
 private:
-	mutable map<string, Player*> Players;
+	mutable map<string, GameObject*> Players;
 };

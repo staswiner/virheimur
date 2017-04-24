@@ -96,7 +96,7 @@ private:
 	UserInterface& UI;
 	Cursor cursor;
 	ChampionChat* championChat;
-	vector<Player> Players[2];
+	vector<GameObject> Players[2];
 	Minimap minimap;
 	vector<vec3> Obstacles;
 	Grass grass;

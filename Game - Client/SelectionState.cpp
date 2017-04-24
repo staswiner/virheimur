@@ -167,7 +167,7 @@ void SelectionState::Reload()
 	// Fill characters with retrieved data
 	for (size_t i = 0; i < jCharacters.size(); i++)
 	{
-		Characters.push_back(new Player());
+		Characters.push_back(new GameObject());
 		Characters[i]->stats.Exp = 100;
 		string Name = jCharacters[i]["CharacterName"];
 		Characters[i]->CharacterName = Name;

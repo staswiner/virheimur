@@ -29,8 +29,8 @@ private:
 	vec2 LeftBot;
 	vec2 RightTop;
 	MultiSampleFBO mAntiAliasing;
-	vector<Player*> Characters;
-	vector<Player*>::iterator SelectedPlayer;
+	vector<GameObject*> Characters;
+	vector<GameObject*>::iterator SelectedPlayer;
 	char* GameState;
 };
 
