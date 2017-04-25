@@ -7,6 +7,12 @@
 
 using namespace std;
 class Layers;
+enum class LayerType
+{
+	Outline,
+	FinalObject,
+	Transparent
+};
 class Layer
 {
 public:
@@ -16,9 +22,9 @@ public:
 	void AddGameObject();
 private:
 	void Draw();
-	void OrderObjects(function<bool(GameObject)> orderer);
+	//void OrderObjects(function<bool(GameObject&, GameObject&)> orderer);
 	vector<GameObject*> Objects;
-	Layers::LayerType type;
+	LayerType type;
 };
 
 
@@ -26,12 +32,7 @@ private:
 class Layers
 {
 public:
-	enum class LayerType
-	{
-		Outline,
-		FinalObject,
-		Transparent
-	};
+
 	Layers();
 	~Layers();	
 	void Draw();

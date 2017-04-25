@@ -29,10 +29,10 @@ void Layer::Draw()
 	}
 }
 
-void Layer::OrderObjects(function<bool(GameObject)> orderer)
-{
-	sort(this->Objects.begin(), this->Objects.end(), orderer);
-}
+//void Layer::OrderObjects(function<bool(GameObject&, GameObject&)> orderer)
+//{
+//	sort(this->Objects.begin(), this->Objects.end(), orderer);
+//}
 
 Layers::Layers()
 {
