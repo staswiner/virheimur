@@ -355,7 +355,7 @@ void Mesh::DrawModel()
 			myshader->Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
 		}
 
-		myshader->Add_Material("MeshMaterial", this->GetMaterial());
+		myshader->Add_Material("Wood", this->GetMaterial());
 	}
 
 	glBindVertexArray(VAO);

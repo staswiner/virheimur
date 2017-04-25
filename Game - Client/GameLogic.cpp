@@ -52,8 +52,6 @@ void GameLogic::Proceed(GDO& FinalData)
 				}
 			}
 		}
-		
-
 		catch (exception ex)
 		{
 			int i = 0;
@@ -157,22 +155,23 @@ TODO_FUNCTION void GameLogic::CalculateCollision()
 {
 #define Is_In_Area_Of_Object true
 	vector<GameObject> GameObjects;
-	for each (GameObject object in GameObjects)
+
+	for (auto& object : GameObjects)
 	{
 		if (Is_In_Area_Of_Object)
 		{
-			//Model model;
-			//model.boundryBox; // homogenic mass distribution; momentum is calculated lineary to position
-			//model.boundryBox::area of collision::points of collision;
-			//extreme far points of boundry box;
-			//apply physics towards each one of vertices here ^ as dot;
-			//vector * mass for each dot;
-			//combine all vectors in that object to the center of the object;
+			// Model model;
+			// model.boundryBox; // homogenic mass distribution; momentum is calculated lineary to position
+			// model.boundryBox::area of collision::points of collision;
+			// extreme far points of boundry box;
+			// apply physics towards each one of vertices here ^ as dot;
+			// vector * mass for each dot;
+			// combine all vectors in that object to the center of the object;
+			   
 
 
-
-			//to find collision points : 
-			//collision of 2 cubes :
+			// to find collision points : 
+			// collision of 2 cubes :
 			//	find 3 of the nearest planes towards each other; all have 1 closest vertex in common, for each cube 8 steps, 16 total
 			//	check for interception
 			//	if interception occured, calculate force by speed of the object.
@@ -180,22 +179,24 @@ TODO_FUNCTION void GameLogic::CalculateCollision()
 			// momentum = velocity * mass = F
 			// to calculate the velocity on the applied object( object2 ) by the applying object1,( v1 * m1 )/ m2
 
+			Model* objModel = object.unit_Data.Model_Data;
 		}
 	}
 }
 
 TODO_FUNCTION void GameLogic::ProcessForces()
 {
-	//vector<GameObject> GameObjects;
-	//for each (GameObject& object in GameObjects)
-	//{
-	//	if (object.unit_Data.HasPhysics)
-	//	{
-	//		object.unit_Data.ForceVector;
-	//		object.unit_Data.PositionAcceleration += ForceVector * time_frame_delta;
-	//		object.unit_Data.Position += PositionAcceleration;
-	//	}
-	//}
+	vector<GameObject> GameObjects;
+
+	for (auto& object : GameObjects)
+	{
+		if (object.unit_Data.HasPhysics)
+		{
+			object.unit_Data.ForceVector;
+			object.unit_Data.Acceleration += object.unit_Data.ForceVector * Time::Instance().Frame();
+			object.unit_Data.Position += object.unit_Data.Velocity;
+		}
+	}
 }
 
 void GameLogic::ProcessPlayerMovement()
@@ -207,16 +208,17 @@ void GameLogic::ProcessPlayerMovement()
 	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
 	GameObject& p = OfflineData.player;
 	Unit_Data& ud = p.GetUnitData();
+
 	// Calculate moving position
 	if (p.control == GameObject::controls::Script) // even arguements
 	{
 		p.script(p);
 	}
-	if (p.control == GameObject::controls::Manual)
+	else if (p.control == GameObject::controls::Manual)
 	{
 
 	}
-	if (p.control == GameObject::controls::Direct)
+	else if (p.control == GameObject::controls::Direct)
 	{
 
 	}
@@ -229,6 +231,7 @@ void GameLogic::ProcessPlayerMovement()
 		(ud.Destination.z - ud.StartPoint.z < 0) ?
 			ud.Rotation.y = radians(360.0f) - ud.Rotation.y : ud.Rotation.y;
 	}
+
 	if (p.movement == GameObject::movements::Ground) {
 		ud.Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
 		vec3 rotation = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position);

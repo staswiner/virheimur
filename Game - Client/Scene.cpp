@@ -615,12 +615,14 @@ void Scene::DrawColladaShadow()
 	// light source
 	mat4 LightModel = translate(mat4(), NewLightPos + vec3(0, -10, 0));
 	WVM = ProjectionMatrix * ViewMatrix * LightModel;
+
 	ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", true).
 		Add_float("Texelation", 1.0f).
 		Add_textures(ModelsCollection::getInstance()["Collada"]->Textures);
 	ModelsCollection::getInstance()["Collada"]->Draw();
+
 	WVM = ProjectionMatrix * ViewMatrix;
 	//
 	/*uniform vec3 lightPos;
@@ -680,15 +682,24 @@ void Scene::DrawCollada()
 	//ModelMatrix = glm::translate(ModelMatrix, position);
 	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
 	//	Add_mat4("model", ModelMatrix);
+
+	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+		Add_mat4("WVM", WVM).
+		Add_bool("isAnimated", false).
+		Add_textures(ModelsCollection::getInstance()["Mine"]->Textures);
+	ModelsCollection::getInstance()["Mine"]->Draw();
+
 	float time = float(GetTickCount());
 	float SlowTime = time / 40.0f;
 	mat4 landmat;
+
 	WVM = ProjectionMatrix * ViewMatrix * landmat;
 	/*LightPosition = vec3(rand()%50-25, rand() % 50 - 25, rand() % 50 - 25);
 	LightPosition = -camera.GetCameraPosition();
 	LightPosition = vec3(30, 50, 30);*/
 	//LightPosition.y *= -1;
 	//LightPosition.y *= -1;
+
 	ShaderBuilder::LoadShader(Shader::At("Ground"))->
 		Add_mat4("WVM", WVM).
 		Add_mat4("Model", landmat).
@@ -808,6 +819,7 @@ void Scene::DrawCollada()
 	{
 		effects = &OfflineDataObject::Instance().Effects;
 	}
+
 	for (auto e : *effects)
 	{
 		WVM = ProjectionMatrix * ViewMatrix * e.ModelMatrix;
@@ -818,6 +830,7 @@ void Scene::DrawCollada()
 			Add_textures(e.EffectModel->Textures);
 		e.Draw();
 	}
+
 	for (auto npc : NPCs)
 	{
 		WVM = ProjectionMatrix * ViewMatrix * Default::GetInstance().BlenderConversion;
