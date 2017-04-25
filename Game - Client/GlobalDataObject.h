@@ -1,6 +1,6 @@
 #pragma once
 #include "json.hpp"
-#include "Player.h"
+#include "GameObject.h"
 #include "Effect.h"
 #include "AIObjects.h"
 #include <string>

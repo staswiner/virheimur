@@ -466,7 +466,7 @@ namespace Stas
 	}
 	Maths::Vectors::Point Maths::Vectors::IntersectionTwoLines(Line line1, Line line2)
 	{
-
+		return Point();
 	}
 	void Maths::Vectors::IntersectionPlaneLine(Plane plane1, Line line2)
 	{
@@ -499,13 +499,13 @@ namespace Stas
 			circle.valid = true;
 			circle.Center = (sphere1.Center + sphere2.Center) / 2.0f;
 			//circle.radius = ;
-			return;
+			return circle;
 		}
 		else
 		{
 			Circle circle;
 			circle.valid = false;
-			return;
+			return circle;
 		}
 	}
 }

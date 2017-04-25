@@ -133,6 +133,7 @@
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Default.h" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="DrawObjectCollection.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="ExistingMesh.h" />
     <ClInclude Include="FPS.h" />
@@ -172,7 +173,7 @@
     <ClInclude Include="FBO.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="NPC.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="PreEffect.h" />
     <ClInclude Include="PRMalgorithm.h" />
     <ClInclude Include="Projectile.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="Cookies.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Default.cpp" />
+    <ClCompile Include="DrawObjectCollection.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="ExistingMesh.cpp" />
     <ClCompile Include="FPS.cpp" />
@@ -251,7 +253,7 @@
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="NPC.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="PreEffect.cpp" />
     <ClCompile Include="PRMalgorithm.cpp" />
     <ClCompile Include="Projectile.cpp" />
@@ -282,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cursor1.cur" />
+    <None Include="ripcode.rip" />
     <None Include="Shaders\3D Text Vertex Shader.glsl" />
     <None Include="Shaders\Animation Fragment Shader.glsl" />
     <None Include="Shaders\Animation Vertex Shader.glsl" />

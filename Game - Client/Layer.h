@@ -1,5 +1,6 @@
 #pragma once
-#include "Model.h"
+#include "GameObject.h"
+#include "FrameData.h"
 #include <vector>
 #include <stack>
 #include <map>
@@ -12,26 +13,31 @@ public:
 	Layer();
 	~Layer();
 	friend Layers;
+	void AddGameObject();
 private:
 	void Draw();
-	vector<Model*> Objects;
+	void OrderObjects(function<bool(GameObject)> orderer);
+	vector<GameObject*> Objects;
+	Layers::LayerType type;
 };
 
 
-enum class LayerType
-{
-	Outline,
-	FinalObject
-};
 
 class Layers
 {
 public:
+	enum class LayerType
+	{
+		Outline,
+		FinalObject,
+		Transparent
+	};
 	Layers();
 	~Layers();	
 	void Draw();
+	void Add(Layer*, LayerType);
 
 	
 private: 
-	map<int, Layer> Repository;
+	map<LayerType, Layer*> layers;
 };

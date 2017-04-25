@@ -33,7 +33,6 @@ public:
 		Unit_Data();
 		~Unit_Data();
 		mat4 GetModelMatrix();
-		Model* GetModelData() const;
 		// When destination is chosen, StartPointTime is updated with the action time. 
 		// Later Calculates the route based on this factor and walking speed
 	public:

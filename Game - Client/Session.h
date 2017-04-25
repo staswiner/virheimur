@@ -28,13 +28,13 @@ private:
 	Core() {}
 	Core(Core const&) = delete;
 	void operator=(Core const&) = delete;
-	static Core Instance;
+	static Core instance;
 public:
 	~Core() {}
-	static Core& GetInstance()
+	static Core& Instance()
 	{
-		static Core Instance;
-		return Instance;
+		static Core instance;
+		return instance;
 	}
 	bool Online;
 };

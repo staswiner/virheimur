@@ -4,7 +4,7 @@
 #include <iostream>
 #include "glm\glm\vec3.hpp"
 #include "json.hpp"
-#include "Player.h"
+#include "GameObject.h"
 
 using namespace glm;
 using namespace std;

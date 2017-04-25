@@ -1,0 +1,32 @@
+#pragma once
+#pragma region Grass
+	/*{
+		vector<vec4> ModelMatrixs;
+		mat4 Animation;
+		ShaderBuilder shader = *ShaderBuilder::LoadShader(Shader::At("Instanced"));
+		for (int i = 0; i < 25; i++)
+		{
+			Animation = glm::rotate(mat4(),
+				radians(
+					cos(
+						radians(
+							fmod(SlowTime, 360.0f) + i * 10.0f
+						)
+					)
+					*80.0f)
+				, vec3(1, 0, 1));
+			shader.Add_mat4("Animation[" + to_string(i) + "]", Animation);
+		}
+
+		mat4 WVM = ProjectionMatrix * ViewMatrix;
+		vec3 cameraPos = camera.GetCameraPosition();
+		ShaderBuilder::LoadShader(Shader::At("Instanced"))->
+			Add_mat4("WVM", WVM).
+			Add_float("time", 0).
+			Add_vec3("cameraPos", camera.GetCameraPosition()).
+			Add_vec2("mousePos", mouse.GetMouseCoords()).
+			Add_textures(grass.model.Textures).
+			Add_bool("isAnimated", false);
+		grass.Draw(grass.ObstaclesMat);
+	}*/
+#pragma endregion Grass

@@ -9,13 +9,13 @@ private:
 	FrameData();
 	FrameData(FrameData const&) = delete;
 	void operator=(FrameData const&) = delete;
-	static FrameData Instance;
+	static FrameData instance;
 public:
 	~FrameData();
-	static FrameData& GetInstance()
+	static FrameData& Instance()
 	{
-		static FrameData Instance;
-		return Instance;
+		static FrameData instance;
+		return instance;
 	}
 	mat4 ViewMatrix;
 	mat4 ProjectionMatrix;

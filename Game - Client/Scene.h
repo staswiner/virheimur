@@ -6,7 +6,7 @@
 #include "ShaderBuilder.h"
 #include "Camera.h"
 #include "Sea.h"
-#include "Player.h"
+#include "GameObject.h"
 #include "Shadow_Mapping.h"
 #include "MultiSampleFBO.h"
 #include "Ground_Collision.h"

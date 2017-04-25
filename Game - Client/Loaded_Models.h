@@ -9,24 +9,23 @@ using namespace std;
 
 class ModelsCollection
 {
-public:
-	static ModelsCollection& getInstance()
-	{
-		static ModelsCollection Instance;
-		return Instance;
-	}
+private:
+	ModelsCollection();
 	ModelsCollection(ModelsCollection const&) = delete;
 	void operator=(ModelsCollection const&) = delete;
+
+	map<string, Model*> Models;
+	static ModelsCollection instance;
+
+public:
+	static ModelsCollection& Instance()
+	{
+		static ModelsCollection instance;
+		return instance;
+	}
 	~ModelsCollection(){}
 
 	Model* operator[](string i);
-private:
-	ModelsCollection();
-	//Loader* getModelData(const string Model_Code);
-	map<string, Model*> Models;
-
-public:
-	static ModelsCollection Instance;
 
 
 };

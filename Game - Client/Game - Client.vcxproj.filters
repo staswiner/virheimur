@@ -260,9 +260,6 @@
     <ClInclude Include="UdpClient.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>GameHeirarchy</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>GameHeirarchy</Filter>
     </ClInclude>
@@ -370,6 +367,12 @@
     </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Graphics\Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>GameHeirarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawObjectCollection.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -493,9 +496,6 @@
     <ClCompile Include="Input.cpp">
       <Filter>GameHeirarchy</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>GameHeirarchy</Filter>
-    </ClCompile>
     <ClCompile Include="Network.cpp">
       <Filter>Network</Filter>
     </ClCompile>
@@ -583,6 +583,10 @@
     <ClCompile Include="LoginState.cpp">
       <Filter>GameStates</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>GameHeirarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObjectCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">
@@ -804,6 +808,7 @@
     <None Include="Shaders\Water Fragment Shader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="ripcode.rip" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc">

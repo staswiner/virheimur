@@ -7,13 +7,13 @@ private:
 	Default();
 	Default(Default const&) = delete;
 	void operator=(Default const&) = delete;
-	static Default Instance;
+	static Default instance;
 public:
 	~Default();
-	static Default& GetInstance()
+	static Default& Instance()
 	{
-		static Default Instance;
-		return Instance;
+		static Default instance;
+		return instance;
 	}
 
 	mat4 BlenderConversion;

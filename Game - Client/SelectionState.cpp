@@ -99,7 +99,7 @@ void SelectionState::Draw3D()
 		Time
 		, vec3(0,1,0));
 	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
-	ModelsCollection& modelsCollection = ModelsCollection::getInstance();
+	ModelsCollection& modelsCollection = ModelsCollection::Instance();
 	ShaderBuilder::LoadShader(Shader::At("Animation"))->
 		Add_mat4("WVM", WVM).
 		Add_mat4("Model", ModelMatrix).
@@ -109,7 +109,7 @@ void SelectionState::Draw3D()
 		Add_vec3("cameraPos", -CameraPos).
 		Add_Material("Wood", Materials::GetInstance()["chrome"]).
 		Add_textures(modelsCollection["Collada"]->Textures);
-	ModelsCollection::getInstance()["Collada"]->Draw();
+	ModelsCollection::Instance()["Collada"]->Draw();
 
 }
 

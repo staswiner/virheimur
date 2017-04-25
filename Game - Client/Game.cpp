@@ -18,7 +18,7 @@ Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
 	logic(logic)
 {
 	Online = false;
-	Core & core = Core::GetInstance();
+	Core & core = Core::Instance();
 	core.Online = false;
 	State = Online?0:2;
 
@@ -281,7 +281,7 @@ void Game::UserInput()
 	NewData = ( Online? input.TranslateInput(Data) : input.TranslateInputOffline(Data));
 	// Camera
 	Camera& camera = Camera::GetCamera("Main");
-	FrameData& frameData = FrameData::GetInstance();
+	FrameData& frameData = FrameData::Instance();
 	frameData.ProjectionMatrix = camera.GetProjectionMatrix();
 	frameData.ViewMatrix = camera.GetCameraMatrix();
 }
@@ -294,7 +294,7 @@ void Game::UserInputOffline()
 void Game::ApplyGameLogic()
 {
 	// Alters Data object 
-	Core& core = Core::GetInstance();
+	Core& core = Core::Instance();
 	if (core.Online)
 	{
 		logic.Proceed(Data);

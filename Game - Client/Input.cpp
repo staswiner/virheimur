@@ -73,7 +73,7 @@ void Input::GetMouseInput()
 		// unused, just for reference
 		vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().Position;
 		// Get Fragment Plane
-		PlaneCoord = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r,pixel.g,pixel.b));
+		PlaneCoord = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r,pixel.g,pixel.b));
 		// Get Ray Cast
 		RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
 		// Intersect Raycast with the plane
@@ -480,7 +480,7 @@ void Input::OnlineRightMouseClick()
 										  // unused, just for reference
 	vec3 CurrentPosition = Data->GetPlayerInformation()[session.CharacterName]->GetUnitData().Position;
 	// Get Fragment Plane
-	PlaneCoord = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
+	PlaneCoord = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
 	// Get Ray Cast
 	RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
 	// Intersect Raycast with the plane
@@ -837,7 +837,7 @@ vec3 Input::GetMouseCoord_MapCoord()
 	PlaneCoord.push_back(vec3(0, 50, 0)); // point on the plane
 										  // unused, just for reference
 	// Get Fragment Plane
-	PlaneCoord = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
+	PlaneCoord = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetPlaneCoords(vec3(pixel.r, pixel.g, pixel.b));
 	// Get Ray Cast
 	RayCast ray(camera.GetProjectionMatrix(), camera.GetCameraMatrix());
 	// Intersect Raycast with the plane
@@ -849,11 +849,11 @@ vec3 Input::GetMouseCoord_MapCoord()
 
 void Input::ResetCharacterPosition()
 {
-	Core& core = Core::GetInstance();
+	Core& core = Core::Instance();
 	if (core.Online)
 	{
 		Session& session = Session::Instance();
-		vec3 Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
+		vec3 Position = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
 		GameObject* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
 		myPlayer->Username = ReceivedData.MyUsername;
 		myPlayer->unit_Data.Path.clear();

@@ -14,7 +14,7 @@ GameLogic::~GameLogic()
 
 void GameLogic::Proceed(GDO& FinalData)
 {
-	FrameData& frameData = FrameData::GetInstance();
+	FrameData& frameData = FrameData::Instance();
 	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
 	mat4 ViewMatrix = frameData.ViewMatrix;
 	// Calculate moving position
@@ -86,7 +86,7 @@ void GameLogic::Proceed(GDO& FinalData)
 				;
 		}
 
-		unit.Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
+		unit.Position = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(unit.Position);
 		
 	}
 #pragma endregion bug
@@ -125,7 +125,7 @@ void GameLogic::Proceed(GDO& FinalData)
 
 void GameLogic::ProcessDataOffline()
 {
-	FrameData& frameData = FrameData::GetInstance();
+	FrameData& frameData = FrameData::Instance();
 	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
 	mat4 ViewMatrix = frameData.ViewMatrix;
 	// Calculate moving position
@@ -202,7 +202,7 @@ TODO_FUNCTION void GameLogic::ProcessForces()
 void GameLogic::ProcessPlayerMovement()
 {
 	// Declarations
-	FrameData& frameData = FrameData::GetInstance();
+	FrameData& frameData = FrameData::Instance();
 	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
 	mat4 ViewMatrix = frameData.ViewMatrix;
 	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
@@ -233,8 +233,8 @@ void GameLogic::ProcessPlayerMovement()
 	}
 
 	if (p.movement == GameObject::movements::Ground) {
-		ud.Position = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
-		vec3 rotation = ModelsCollection::getInstance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position);
+		ud.Position = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
+		vec3 rotation = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position);
 		ud.Rotation.x = rotation.x;
 		ud.Rotation.z = rotation.z;
 	}
