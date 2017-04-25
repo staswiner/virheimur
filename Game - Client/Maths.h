@@ -9,7 +9,6 @@
 #include <set>
 #include <chrono>
 #include <functional>
-
 #include "Defines.h"
 #include "GL\glew.h"
 #include "glm\glm\vec2.hpp"
@@ -17,8 +16,10 @@
 #include "glm\glm\vec4.hpp"
 #include "glm\glm\mat4x4.hpp"
 #include "glm\glm\gtc\matrix_transform.hpp"
+
 using namespace glm;
 using namespace std;
+
 //#define (A) isInstanceOf(B) (dynamic_cast<A*>(B))
 namespace Stas
 {

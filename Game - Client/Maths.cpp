@@ -2,15 +2,6 @@
 
 namespace Stas
 {
-	Maths::Maths()
-	{
-	}
-
-
-	Maths::~Maths()
-	{
-	}
-
 	float Maths::barryCentric(vec3 p1, vec3 p2, vec3 p3, vec2 pos)
 	{
 		float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);

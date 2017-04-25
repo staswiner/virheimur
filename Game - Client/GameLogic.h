@@ -1,15 +1,17 @@
 #pragma once
+#include <chrono>
+//#include "tinyxml2.h"
+//#include <msxml.h>
 #include "Ground_Collision.h"
 #include "Camera.h"
 #include "Graphics_Header.h"
-//#include "tinyxml2.h"
-//#include <msxml.h>
 #include "RayCast.h"
 #include "GameData.h"
 #include "GlobalDataObject.h"
 #include "InGameInteractions.h"
 #include "FrameData.h"
-#include <chrono>
+#include "Time.h"
+
 __declspec(align(16)) class GameLogic
 {
 public:

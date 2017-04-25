@@ -26,8 +26,6 @@ ModelsCollection::ModelsCollection()
 	Models["Water"]->AddTexture("Texture1", "Map/Water/waterNormals.jpg");
 	Models["Water"]->AddTexture("Texture2", "Map/Default Normal Map.jpg");
 
-
-
 	Models["Collada"] = new Model("Collada/MineSweaper.dae", "");
 	Models["Collada"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
 	Models["Collada"]->AddTexture("NormalMap[0]", "Katarina/katarina_base_normal.png");
@@ -56,6 +54,11 @@ ModelsCollection::ModelsCollection()
 	Models["Grass"] = new Model("Map/3DGrass.dae", "");
 	Models["Grass"]->AddTexture("Texture[0]", "Map/3DGrass.png");
 	Models["Grass"]->AddTexture("NormalMap[0]", "Textures/basicNormal.jpg");
+
+	Models["Mine"] = new Model("Collada/Mine.dae", "");
+	Models["Mine"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
+	Models["Mine"]->AddTexture("NormalMap[0]", "Katarina/katarina_base_normal.png");
+
 
 	//	Models["cursor"] = new Model("Map/cursor.dae","");
 	//Models2["Lara"]->LoadMesh("Collada/Lara_Croft.dae");
