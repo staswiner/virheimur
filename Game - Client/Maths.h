@@ -35,14 +35,45 @@ namespace Stas
 		private:
 			Vectors() = delete;
 			~Vectors() = delete;
-		private:
-			static void IntercectionTwoLines();
-			static void IntercectionPlaneLine();
-			static void IntercectionTwoPlanes();
-			static void IntercectionCirclePlane();
-			static void IntercectionCircleLine();
-			static void IntercectionTwoCircles();
-			static void Intercection();
+		public:
+			struct Point {
+				vec3 point;
+				bool valid;
+			};
+			struct Line {
+				vec3 Start;
+				vec3 End;
+				bool valid;
+			};
+			struct Plane {
+				vec3 v1;
+				vec3 v2;
+				bool valid;
+			};
+			struct Circle {
+				vec3 Center;
+				float radius;
+				bool valid;
+			};
+			struct Sphere {
+				vec3 Center;
+				float radius;
+				bool valid;
+			};
+			struct BoundryBox {
+				vec3 Vertices[8];
+				bool valid;
+			};
+			static Point IntersectionTwoLines(Line line1, Line line2);
+			static void IntersectionPlaneLine(Plane plane1, Line line2);
+			static void IntersectionTwoPlanes(Plane plane1, Plane plane2);
+			static void IntersectionSpherePlane(Sphere circle1, Plane plane2);
+			static void IntersectionSphereLine(Sphere circle1, Line line2);
+			static Circle IntersectionTwoSpheres(Sphere circle1, Sphere circle2);
+			static void IntersectionTwoBB(BoundryBox bb1, BoundryBox bb2);
+			static float DistanceIntersectionTwoBB(BoundryBox bb1, BoundryBox bb2);
+	/*		static void IntersectionBBSphere(Circle circle1, Circle circle2);
+			static void IntersectionTwoSpheres(Circle circle1, Circle circle2);*/
 
 		};
 	public:

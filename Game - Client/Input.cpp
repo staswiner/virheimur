@@ -715,6 +715,15 @@ void Input::SetCircleScriptIterative()
 		ud.Rotation.y = Angle - radians(90.0f);
 		ud.Rotation.xz;
 	};
+	offlineData.player.script = [&](GameObject& p) mutable-> void {
+		// find first mine
+		// find second mine
+		// find 3rd mine
+		// form potential pattern
+		// test pattern, if does not follow pattern, construct new pattern
+
+		// when a pattern is matched, calculate many possible mines ahead, create TSP algorithm between them
+	};
 }
 
 void Input::SetPlayerControl(GameObject::controls control)

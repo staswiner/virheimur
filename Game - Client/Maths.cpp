@@ -2,14 +2,6 @@
 
 namespace Stas
 {
-	Maths::Maths()
-	{
-	}
-
-
-	Maths::~Maths()
-	{
-	}
 
 	float Maths::barryCentric(vec3 p1, vec3 p2, vec3 p3, vec2 pos)
 	{
@@ -471,6 +463,50 @@ namespace Stas
 		}
 
 		return r & 0xFFFFFFFFFFFFFFFFULL;
+	}
+	Maths::Vectors::Point Maths::Vectors::IntersectionTwoLines(Line line1, Line line2)
+	{
+
+	}
+	void Maths::Vectors::IntersectionPlaneLine(Plane plane1, Line line2)
+	{
+	}
+	void Maths::Vectors::IntersectionTwoPlanes(Plane plane1, Plane plane2)
+	{
+	}
+	void Maths::Vectors::IntersectionTwoBB(BoundryBox bb1, BoundryBox bb2)
+	{
+	}
+	float Maths::Vectors::DistanceIntersectionTwoBB(BoundryBox bb1, BoundryBox bb2)
+	{
+	/*
+	find nearest vertex to the nearest plane;
+	calculate vertex from that plane distance in the direction of the velocity vector
+	*/
+		return 0.0f;
+	}
+	void Maths::Vectors::IntersectionSpherePlane(Sphere sphere1, Plane plane2)
+	{
+	}
+	void Maths::Vectors::IntersectionSphereLine(Sphere sphere1, Line line2)
+	{
+	}
+	Maths::Vectors::Circle Maths::Vectors::IntersectionTwoSpheres(Sphere sphere1, Sphere sphere2)
+	{
+		if (glm::distance(sphere1.Center, sphere2.Center) < sphere1.radius + sphere2.radius)
+		{
+			Circle circle;
+			circle.valid = true;
+			circle.Center = (sphere1.Center + sphere2.Center) / 2.0f;
+			//circle.radius = ;
+			return;
+		}
+		else
+		{
+			Circle circle;
+			circle.valid = false;
+			return;
+		}
 	}
 }
 struct Node
