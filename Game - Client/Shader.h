@@ -22,12 +22,28 @@ public:
 	Shader(string vertexPath, string geometryPath, string fragmentPath);
 	Shader(string vertexShader, string geometryShader, string fragmentShader, bool);
 #define MODEL
-	void ConstructShader(MODEL);
+	struct ShaderInfo {
+		int NumDiffuse = 0;
+		int NumNormalMap = 0;
+		int NumSpecular = 0;
+		int NumDisplacement = 0;
+		bool HasMaterial = false;
+	};
+	static Shader* ConstructShader(ShaderInfo shaderInfo);
 	// Use the program
 	void Use();
 	static bool LoadShaders();
 	static Shader& At(string ID);
 private:
+	Shader* ConstructShaderNS(ShaderInfo shaderInfo);
+	GLuint CompileVertexShader();
+	GLuint CompileGeometryShader();
+	GLuint CompileFragmentShader();
+
+	string ConstructVertexShader();
+	string ConstructGeometryShader();
+	string ConstructFragmentShader();
+	ShaderInfo shaderInfo;
 	void InitializeShaderProgram(string Path, GLuint shaderID);
 	static map<string, Shader*> mapShader;
 

@@ -54,12 +54,18 @@ public:
 		Model* Model_Data;
 		unsigned int action;
 	};
-
+	struct SceneData {
+		mat4 ProjectionMatrix;
+		mat4 ViewMatrix;
+		vec3 CameraPos;
+		mat4 Light_Matrix;
+		vec3 Light_Pos;
+	};
 	GameObject();
 	GameObject(Unit_Data, string Username);
 	~GameObject();
 	Unit_Data& GetUnitData();
-	void Draw();
+	void Draw(SceneData& sceneData);
 	void DrawShadow(mat4 & ProjectionMatrix, mat4 & ViewMatrix);
 	void DrawOutline(mat4 & ProjectionMatrix, mat4 & ViewMatrix, vec3 Color);
 	void DrawUI(mat4& Projection, mat4& View);

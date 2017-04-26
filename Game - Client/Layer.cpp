@@ -11,21 +11,29 @@ Layer::~Layer()
 {
 }
 
+void Layer::AddGameObject(GameObject* gameObject)
+{
+	this->Objects.push_back(gameObject);
+}
+
 void Layer::Draw()
 {
 	FrameData& frameData = FrameData::Instance();
-	mat4 WVM;
-	mat4 ModelMatrix;
-	mat4 ViewMatrix = frameData.ViewMatrix;
-	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
+	Camera& camera = Camera::GetCamera("Main");
+	GameObject::SceneData sceneData;
 
-	for (auto i : Objects)
+	vec3 Light_Pos = frameData.Light_Pos;
+	mat4 Light_Matrix = glm::lookAt(Light_Pos+vec3(1,1,1), vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
+	Light_Matrix = frameData.ProjectionMatrix * Light_Matrix;
+
+	sceneData.ProjectionMatrix = frameData.ProjectionMatrix;
+	sceneData.ViewMatrix = frameData.ViewMatrix;
+	sceneData.CameraPos = camera.GetCameraPosition();
+	sceneData.Light_Matrix = Light_Matrix;
+	sceneData.Light_Pos = Light_Pos;
+	for (auto& object : Objects)
 	{
-		ModelMatrix = i->unit_Data.GetModelMatrix();
-		WVM = ProjectionMatrix * ViewMatrix *  Default::Instance().BlenderConversion;
-		ShaderBuilder::LoadShader(Shader::At(""))->
-			Add_mat4("WVM", WVM);
-		i->Draw();
+		object->Draw(sceneData);
 	}
 }
 

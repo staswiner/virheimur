@@ -114,6 +114,7 @@ public:
 	*/
 
 	TODO_FUNCTION Material GetMaterial();
+	TODO_FUNCTION void GetTextures();
 	TODO_FUNCTION vec3 GetCentralMassPoint();
 	TODO_FUNCTION BoundryBox GetAABB();
 	TODO_FUNCTION BoundryBox GetBB();

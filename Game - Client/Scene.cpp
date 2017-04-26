@@ -91,6 +91,11 @@ void Scene::Initialize()
 	//		seaAnim.ObstaclesMat.push_back(ModelMat);
 	//	}
 	//}
+	Layer* layer = new Layer();
+	GameObject* gameObject = new GameObject();
+	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["Mine"];
+	layer->AddGameObject(gameObject);
+	layers.Add(layer, LayerType::FinalObject);
 }
 
 void Scene::Frame()
@@ -115,9 +120,9 @@ void Scene::Frame()
 	ViewMatrix = camera.GetCameraMatrix();
 	SetProjectionMatrix(camera.GetProjectionMatrix());
 
-	DrawIndexColor();
-	//Draw_Scene();
-	Draw_Units();
+	//DrawIndexColor();
+	Draw_Scene();
+	//Draw_Units();
 
 	glFlush();
 	SwapBuffers(m_HDC);
@@ -228,7 +233,8 @@ void Scene::Draw_Units()
 }
 void Scene::Draw_Scene()
 {
-	DrawGround(Shader::At("Ground"));
+	FBO::UnbindFrameBuffer();
+	layers.Draw();
 }
 void Scene::DrawScene_Depth()
 {
@@ -446,7 +452,7 @@ void Scene::DrawIndexColor()
 			Add_bool("indexType", false).
 			Add_float("Index", 5).
 			Add_mat4("WVM", WVM);
-		offlineData.player.Draw();
+		offlineData.player.unit_Data.Model_Data->Draw();
 	}
 }
 void Scene::DrawColladaDistance()
@@ -817,31 +823,30 @@ void Scene::Outline()
 	}
 	glDisable(GL_STENCIL_TEST);
 }
-#define ALAHU_AKBAR
 void Scene::DrawOutlineObjects()
 {
-	ALAHU_AKBAR mat4 WVM;
-	ALAHU_AKBAR for (auto npc : NPCs)
-	ALAHU_AKBAR {
-	ALAHU_AKBAR 	WVM = ProjectionMatrix * ViewMatrix * Default::Instance().BlenderConversion;
-	ALAHU_AKBAR 	ShaderBuilder::LoadShader(Shader::At("Animation"))->
-	ALAHU_AKBAR 		Add_mat4("WVM", WVM).
-	ALAHU_AKBAR	Add_bool("isAnimated", false).
-	ALAHU_AKBAR	Add_float("Texelation", 1.0f).
-	ALAHU_AKBAR	Add_textures(ModelsCollection::Instance()[npc.Name]->Textures);
-	ALAHU_AKBAR	ModelsCollection::Instance()[npc.Name]->Draw();
-	ALAHU_AKBAR }
-	ALAHU_AKBAR Core & core = Core::Instance();
-	ALAHU_AKBAR if (core.Online)
-	ALAHU_AKBAR {
-	ALAHU_AKBAR 	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-	ALAHU_AKBAR 	{
-	ALAHU_AKBAR 		i->second->Draw();
-	ALAHU_AKBAR 	}
-	ALAHU_AKBAR }
-	ALAHU_AKBAR else
-	ALAHU_AKBAR {
-	ALAHU_AKBAR 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	ALAHU_AKBAR 	offlineData.player.Draw();
-	ALAHU_AKBAR }
+	/*mat4 WVM;
+	for (auto npc : NPCs)
+	{
+		WVM = ProjectionMatrix * ViewMatrix * Default::Instance().BlenderConversion;
+		ShaderBuilder::LoadShader(Shader::At("Animation"))->
+			Add_mat4("WVM", WVM).
+	Add_bool("isAnimated", false).
+	Add_float("Texelation", 1.0f).
+	Add_textures(ModelsCollection::Instance()[npc.Name]->Textures);
+	ModelsCollection::Instance()[npc.Name]->Draw();
+	}
+	Core & core = Core::Instance();
+	if (core.Online)
+	{
+		for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+		{
+			i->second->Draw();
+		}
+	}
+	else
+	{
+		OfflineDataObject& offlineData = OfflineDataObject::Instance();
+		offlineData.player.Draw();
+	}*/
 }

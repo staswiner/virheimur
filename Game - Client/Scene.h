@@ -23,6 +23,7 @@
 #include "NPC.h"
 #include "Default.h"
 #include "FrameData.h"
+#include "Layer.h"
 using namespace glm;
 class Scene
 {
@@ -97,13 +98,14 @@ private:
 	Cursor cursor;
 	ChampionChat* championChat;
 	vector<GameObject> Players[2];
+	vector<GameObject> GameObjects;
 	Minimap minimap;
 	vector<vec3> Obstacles;
 	Grass grass;
 	SeaAnimated seaAnim;
 	vector<NPC> NPCs;
 	vector<string> OutlineObjects;
-
+	Layers layers;
 	int counter = 0;
 	//static GlobalDataObject Data;
 	// develop this please

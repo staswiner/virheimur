@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "FrameData.h"
+#include "Camera.h"
 #include <vector>
 #include <stack>
 #include <map>
@@ -19,7 +20,7 @@ public:
 	Layer();
 	~Layer();
 	friend Layers;
-	void AddGameObject();
+	void AddGameObject(GameObject*);
 private:
 	void Draw();
 	//void OrderObjects(function<bool(GameObject&, GameObject&)> orderer);

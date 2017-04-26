@@ -29,6 +29,13 @@ public:
 	vector<Materials> m_Materials;
 
 	Mesh::BoundryBox boundryBox;
+	struct ShaderParams
+	{
+		Shader* MainShader;
+		bool isAnimated;
+		int numTextures;
+	};
+	ShaderParams shaderParams;
 
 private:
 	/*  Model Data  */
@@ -38,6 +45,7 @@ private:
 	void loadModel(string path);
 	void processNode(aiNode* node, const aiScene* scene);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+	void CreateShader();
 	void loadModel(Mesh& mesh);
 	vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 	Assimp::Importer import;

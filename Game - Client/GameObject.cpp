@@ -31,30 +31,24 @@ GameObject::Unit_Data& GameObject::GetUnitData()
 }
 
 // TODO : remove projection matrix and view matrix
-void GameObject::Draw()
+void GameObject::Draw(SceneData& sceneData)
 {
-	FrameData& frameData = FrameData::Instance();
-	mat4 l_ProjectionMatrix = frameData.ProjectionMatrix;
-	mat4 l_ViewMatrix = frameData.ViewMatrix;
 	Mouse& mouse = Mouse::Instanace();
 
 	// Model
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
-#pragma region Mathematics
-	mat4 ModelMatrix;
-	ModelMatrix = glm::translate(ModelMatrix, position);
-	//ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.x, vec3(1, 0, 0));
-	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
-	//ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.z, vec3(0, 0, 1));
-	mat4 WVM = l_ProjectionMatrix * l_ViewMatrix * ModelMatrix * Default::Instance().BlenderConversionCenter;
-#pragma endregion Mathematics
-	ShaderBuilder::LoadShader(Shader::At("Animation"))->
+	mat4 ModelMatrix = this->unit_Data.GetModelMatrix();
+	mat4 WVM = sceneData.ProjectionMatrix * sceneData.ViewMatrix * ModelMatrix * Default::Instance().BlenderConversionCenter;
+	
+	ShaderBuilder::LoadShader(*this->unit_Data.Model_Data->shaderParams.MainShader)->
 		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", false).
-		Add_float("Texelation", 1.0f).
-		Add_textures(ModelsCollection::Instance()["Collada"]->Textures);
-	ModelsCollection::Instance()["Collada"]->Draw();
+		Add_bool("isAnimated", this->unit_Data.Model_Data->shaderParams.isAnimated).
+		Add_mat4("Model", ModelMatrix).
+		Add_vec3("lightPos", sceneData.Light_Pos).
+		Add_vec3("cameraPos", -sceneData.CameraPos).
+		Add_mat4("LightMatrix", sceneData.Light_Matrix);
+	this->unit_Data.Model_Data->Draw();
 }
 void GameObject::DrawShadow(mat4& ProjectionMatrix, mat4& ViewMatrix)
 {

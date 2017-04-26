@@ -342,6 +342,12 @@ void Mesh::VertexBoneData::AddBoneData(uint BoneID, float Weight)
 
 void Mesh::DrawModel()
 {
+	if (this->scene->HasMaterials())
+	{
+		Material material = this->GetMaterial();
+		ShaderBuilder::GetCurrentProgram()->
+			Add_Material("material", material);
+	}
 	vector<aiMatrix4x4> Transforms;
 	if (scene->HasAnimations())
 	{
@@ -354,8 +360,6 @@ void Mesh::DrawModel()
 		{
 			myshader->Add_aimat4(string("Bones[") + to_string(i) + string("]"), Transforms[i]);
 		}
-
-		myshader->Add_Material("Wood", this->GetMaterial());
 	}
 
 	glBindVertexArray(VAO);
@@ -405,6 +409,20 @@ Material Mesh::GetMaterial()
 	material.specular = ConvertAiToGLM(color);
 	
 	return material;
+}
+TODO_FUNCTION void Mesh::GetTextures()
+{
+	aiString aiPath;
+	int index;
+	int count;
+	count = this->scene->mMaterials[0]->GetTextureCount(aiTextureType_DIFFUSE);
+	for (int i = 0; i < count; i++)
+	{
+		this->scene->mMaterials[0]->GetTexture(aiTextureType_DIFFUSE, i, &aiPath);
+		string path = aiPath.C_Str();
+		LoadTexture(path);
+	}
+	return TODO_FUNCTION void();
 }
 TODO_FUNCTION LOAD_FROM_FILE void Mesh::LoadModelProperties()
 {

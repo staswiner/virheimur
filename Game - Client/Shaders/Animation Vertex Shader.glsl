@@ -22,12 +22,10 @@ uniform bool isAnimated;
 uniform mat4 WVM;
 uniform mat4 LightViewMatrix;
 uniform mat4 Model;
-uniform bool clip;
 
 uniform int BoneNum;
 uniform mat4 Bones[100];
 
-const vec4 plane = vec4(0,1,0,10);
 void main()
 {
 	vec4 objectpos = vec4(position, 1.0);
@@ -49,7 +47,7 @@ void main()
 	//}
 	vs_out.FragPos = vec3(Model * objectpos);
 //	if (clip)
-	//gl_ClipDistance[0] = dot(plane, vec4(vs_out.FragPos,1.0));
+
 
 	vs_out.clipSpace = WVM * objectpos;
 
@@ -59,6 +57,6 @@ void main()
 	vec4 lFragPos = LightViewMatrix * vec4(vs_out.FragPos,1);
 	vs_out.LightFragPos = vec3(lFragPos.xyz)/lFragPos.w; 
 
-//	gl_ClipDistance[0] = dot(plane, vs_out.clipSpace);
+
 
 }

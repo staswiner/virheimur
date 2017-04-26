@@ -19,5 +19,7 @@ public:
 	}
 	mat4 ViewMatrix;
 	mat4 ProjectionMatrix;
+	mat4 Light_Matrix;
+	vec3 Light_Pos;
 };
 
