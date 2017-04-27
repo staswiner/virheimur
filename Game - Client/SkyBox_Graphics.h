@@ -1,24 +1,28 @@
-//#pragma once
-//#include "Loader.h"
-//#include "Shader.h"
-//class SkyBox : public Loader
-//{
-//public:
-//	SkyBox();
-//	~SkyBox();
-//	void DrawModel(mat4&, mat4&, mat4&, GLuint, mat4&, Shader*, uint);
-//	void DrawModel(mat4&, mat4&, mat4&, GLuint) {}
-//	virtual void InitTexture();
-//private:
-//	void LoadFaces(vector<string>);
-//	static void CalculateDelta();
-//	void LoadVAO();
-//	vector<GLfloat> skyboxVertices;
-//	vector<GLuint> skyboxIndices;
-//	//vector<GLuint> VBO;
-//	GLuint vbo;
-//	Shader skyboxShader;
-//	static unsigned int TimePassed;
-//	float find_height_at(float x, float z) { return 0; };
-//	void DrawModel(mat4&, mat4&, mat4&, Shader&) {}
-//};
+#pragma once
+#include "Shader.h"
+#include "ShaderBuilder.h"
+#include "Graphics_Header.h"
+#include "FrameData.h"
+
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+using namespace glm;
+class SkyBox_Graphics
+{
+public:
+	SkyBox_Graphics();
+	~SkyBox_Graphics();
+	void DrawModel();
+	virtual void InitTexture();
+private:
+	void LoadFaces(vector<string>);
+	void LoadVAO();
+	vector<GLfloat> skyboxVertices;
+	vector<GLuint> skyboxIndices;
+	//vector<GLuint> VBO;
+	GLuint vbo;
+	GLuint VBO;
+	GLuint VAO;
+	Shader shader;
+	GLuint texture;
+};

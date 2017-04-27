@@ -777,7 +777,7 @@ string Shader::ConstructFragmentShader()
 			//	float shadow = ShadowCalculation(fs_in.LightFragPos,LightDir, textnorm);    "
 			// Enable Shadows
 			//	shadow = 0;
-			vec3 Light = (diffuse + (1.0) * (4.0 * specular + ambient));
+			vec3 Light = (diffuse + (1.0) * (1.0 * specular + ambient));
 			return Light;
 		})";
 	string mainfunc1 =

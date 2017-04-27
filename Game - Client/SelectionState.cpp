@@ -117,9 +117,9 @@ void SelectionState::PerformLogin()
 {
 	TCP tcp;
 	// Login Character for others to see
-	string SelectedCharacterName = (*SelectedPlayer)->CharacterName;
-	string SendContent = "GetOnline " + SelectedCharacterName + " <EOF>";
-	tcp.SendPacket(SendContent);
+	//string SelectedCharacterName = (*SelectedPlayer)->CharacterName;
+	//string SendContent = "GetOnline " + SelectedCharacterName + " <EOF>";
+	/*tcp.SendPacket(SendContent);
 	string ReceiveContent = tcp.ReceivePacketsAsync();
 	if (ReceiveContent == "True")
 	{
@@ -129,7 +129,7 @@ void SelectionState::PerformLogin()
 	else
 	{
 
-	}
+	}*/
 }
 
 void SelectionState::CreateNewCharacter()
@@ -152,7 +152,7 @@ void SelectionState::ChangeCharacter(bool direction)
 		SelectedPlayer--;
 	}
 	this->UI.root->GetUIElement("Exp")->innerText = "Exp: " + to_string((*SelectedPlayer)->stats.Exp);
-	this->UI.root->GetUIElement("Name")->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
+	//this->UI.root->GetUIElement("Name")->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
 }
 
 void SelectionState::Reload()
@@ -170,13 +170,13 @@ void SelectionState::Reload()
 		Characters.push_back(new GameObject());
 		Characters[i]->stats.Exp = 100;
 		string Name = jCharacters[i]["CharacterName"];
-		Characters[i]->CharacterName = Name;
+		//Characters[i]->CharacterName = Name;
 	}
 	// Initialize first selected character
 	SelectedPlayer = Characters.begin();
 	// Initialize UI Values
 	this->UI.root->GetUIElement("Exp")->innerText = "Exp: " + to_string((*SelectedPlayer)->stats.Exp);
-	this->UI.root->GetUIElement("Name")->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
+	//this->UI.root->GetUIElement("Name")->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
 }
 
 UIElement * SelectionState::GenerateForm()

@@ -58,7 +58,7 @@ mat4 Camera::GetProjectionMatrix()
 	Mouse& mouse = Mouse::Instanace();
 
 	this->ProjectionMatrix=glm::perspective(
-		glm::radians(70.0f), 
+		glm::radians(50.0f), 
 		(GLfloat)mouse.GetWindowSize().x / (GLfloat)mouse.GetWindowSize().y, 
 		1.0f, 
 		1000.0f);
@@ -110,7 +110,7 @@ void Camera::WheelScroll()
 	{
 		cameraStates.SetState("Wheel Move");
 		//CameraDestination.z += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 6.0f;
-		CameraDestination.y += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 1.0f;
+		CameraDestination.y += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 2.0f;
 	}
 }
 void Camera::MouseDrag()

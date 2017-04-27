@@ -156,6 +156,7 @@
     <ClInclude Include="Item_Base_Class.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="Loaded_Models.h" />
     <ClInclude Include="Loading_Screen.h" />
     <ClInclude Include="LoginState.h" />
@@ -188,7 +189,6 @@
     <ClInclude Include="ShaderBuilder.h" />
     <ClInclude Include="ShaderGenerator.h" />
     <ClInclude Include="Shadow_Mapping.h" />
-    <ClInclude Include="SkyBox_Data.h" />
     <ClInclude Include="SkyBox_Graphics.h" />
     <ClInclude Include="StatsWindow.h" />
     <ClInclude Include="Structures.h" />
@@ -236,6 +236,7 @@
     <ClCompile Include="Item_Base_Class.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="Loaded_Models.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Loading_Screen.cpp" />
@@ -267,7 +268,6 @@
     <ClCompile Include="ShaderBuilder.cpp" />
     <ClCompile Include="ShaderGenerator.cpp" />
     <ClCompile Include="Shadow_Mapping.cpp" />
-    <ClCompile Include="SkyBox_Data.cpp" />
     <ClCompile Include="SkyBox_Graphics.cpp" />
     <ClCompile Include="StatsWindow.cpp" />
     <ClCompile Include="TCP.cpp" />

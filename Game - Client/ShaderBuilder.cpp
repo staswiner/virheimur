@@ -60,7 +60,7 @@ ShaderBuilder & ShaderBuilder::Add_bool(string name, const bool & rhs)
 	return *this;
 }
 
-ShaderBuilder & ShaderBuilder::Add_int(string name, int & rhs)
+ShaderBuilder & ShaderBuilder::Add_int(string name,const int & rhs)
 {
 	// TODO: insert return statement here
 	glUniform1i(glGetUniformLocation(shaderID, name.c_str()), rhs);

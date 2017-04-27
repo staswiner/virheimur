@@ -57,6 +57,8 @@ ModelsCollection::ModelsCollection()
 	//Models["Grass"]->AddTexture("Texture[0]", "Map/3DGrass.png");
 	//Models["Grass"]->AddTexture("NormalMap[0]", "Textures/basicNormal.jpg");
 
+	Models["MineSweaper"] = new Model("Collada/MineSweaper.dae", "");
+
 	Models["Mine"] = new Model("Collada/Mine.dae", "");
 	//Models["Mine"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");
 	//Models["Mine"]->AddTexture("NormalMap[0]", "Katarina/katarina_base_normal.png");

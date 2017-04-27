@@ -97,9 +97,17 @@ void Scene::Initialize()
 	layer->AddGameObject(gameObject);
 
 	gameObject = new GameObject();
-	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["Land"];
-
+	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["MineSweaper"];
 	layer->AddGameObject(gameObject);
+
+	gameObject = new GameObject();
+	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["Land"];
+	layer->AddGameObject(gameObject);
+
+	gameObject = new SkyBox();
+	dynamic_cast<SkyBox*>(gameObject)->Initialize();
+	layer->AddGameObject(gameObject);
+
 	layers.Add(layer, LayerType::FinalObject);
 }
 
@@ -239,7 +247,37 @@ void Scene::Draw_Units()
 void Scene::Draw_Scene()
 {
 	FBO::UnbindFrameBuffer();
+	mAntiAliasing.BindFrameBuffer();
+
+	glEnable(GL_CLIP_DISTANCE0);
+
 	layers.Draw();
+
+
+	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
+	mFBO["HBlurS"].BindFrameBuffer();//1
+	mFBO["Post Processing"].DrawFrameBuffer();//0
+	mFBO["VBlurS"].BindFrameBuffer();//2 b
+	mFBO["HBlurS"].DrawFrameBuffer();//1 d 
+	mFBO["HBlur"].BindFrameBuffer();//3 b
+	mFBO["VBlurS"].DrawFrameBuffer();//2 d
+	mFBO["VBlur"].BindFrameBuffer();//4 b 
+	mFBO["HBlur"].DrawFrameBuffer();//3 d
+	mFBO["HBlurS"].BindFrameBuffer();//1 b
+	mFBO["VBlur"].DrawFrameBuffer();//4 d
+	mFBO["VBlurS"].BindFrameBuffer();//2 b
+	mFBO["HBlurS"].DrawFrameBuffer();//1 d
+	mFBO["Basic"].BindFrameBuffer();//5 b
+	mFBO["VBlurS"].DrawFrameBuffer();//2 d
+
+	// uniform textures
+	FBO::UnbindFrameBuffer();
+
+	vector<GLuint> Textures = { mFBO["Basic"].texture,mFBO["Post Processing"].texture };
+	vector<string> ShaderNames = { "ourShine","ourTexture" };
+	mFBO["Combine"].DrawDirectly(Textures, ShaderNames);
+
+	mFBO["Combine"].DrawFrameBuffer();
 }
 void Scene::DrawScene_Depth()
 {
@@ -550,7 +588,7 @@ void Scene::DrawUI()
 		vec3 pos = p.second->GetUnitData().Position;
 		mat4 ModelMatrix;
 		ModelMatrix = translate(ModelMatrix, pos);
-		championChat->Draw2D(p.second->CharacterName, ProjectionMatrix, ViewMatrix, ModelMatrix);
+		//championChat->Draw2D(p.second->CharacterName, ProjectionMatrix, ViewMatrix, ModelMatrix);
 	}
 	championChat->Draw("OpenGL", ProjectionMatrix, ViewMatrix, mat4());
 	/*else

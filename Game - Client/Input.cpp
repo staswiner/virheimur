@@ -81,7 +81,7 @@ void Input::GetMouseInput()
 			ray.GetWorldRay(),camera.GetCameraPosition());
 		// Set Destination to player
 		GameObject* myPlayer = NewData.GetPlayerInformation()[session.CharacterName];
-		myPlayer->Username = session.Username;
+		//myPlayer->Username = session.Username;
 		// Other variables
 		myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[session.CharacterName]->unit_Data.Position;
 		myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
@@ -488,7 +488,7 @@ void Input::OnlineRightMouseClick()
 		ray.GetWorldRay(), camera.GetCameraPosition());
 	// Set Destination to player
 	GameObject* myPlayer = NewData.GetPlayerInformation()[session.CharacterName];
-	myPlayer->Username = session.Username;
+	//myPlayer->Username = session.Username;
 	// Other variables
 	myPlayer->unit_Data.StartPoint = Data->GetPlayerInformation()[session.CharacterName]->unit_Data.Position;
 	myPlayer->unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
@@ -855,7 +855,7 @@ void Input::ResetCharacterPosition()
 		Session& session = Session::Instance();
 		vec3 Position = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(vec3(0));
 		GameObject* myPlayer = NewData.GetPlayerInformation()[session.CharacterName]; // also creates the character
-		myPlayer->Username = ReceivedData.MyUsername;
+		//myPlayer->Username = ReceivedData.MyUsername;
 		myPlayer->unit_Data.Path.clear();
 		myPlayer->unit_Data.Path.push_back(Position);
 		myPlayer->unit_Data.Destination = myPlayer->GetUnitData().Path.front();

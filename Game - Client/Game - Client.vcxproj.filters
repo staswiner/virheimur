@@ -131,9 +131,6 @@
     <ClInclude Include="SkyBox_Graphics.h">
       <Filter>Graphics\Scene\SkyBox</Filter>
     </ClInclude>
-    <ClInclude Include="SkyBox_Data.h">
-      <Filter>Graphics\Scene\SkyBox</Filter>
-    </ClInclude>
     <ClInclude Include="MainLoop.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -374,11 +371,11 @@
     <ClInclude Include="DrawObjectCollection.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SkyBox_Data.cpp">
-      <Filter>Graphics\Scene\SkyBox</Filter>
-    </ClCompile>
     <ClCompile Include="SkyBox_Graphics.cpp">
       <Filter>Graphics\Scene\SkyBox</Filter>
     </ClCompile>
@@ -587,6 +584,7 @@
       <Filter>GameHeirarchy</Filter>
     </ClCompile>
     <ClCompile Include="DrawObjectCollection.cpp" />
+    <ClCompile Include="Level.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">

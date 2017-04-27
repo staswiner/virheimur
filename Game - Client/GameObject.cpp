@@ -12,7 +12,6 @@ GameObject::GameObject()
 GameObject::GameObject(Unit_Data unit_Data,string Username)
 {
 	this->unit_Data = unit_Data;
-	this->Username = Username;
 	this->stats.MovementSpeed = 100;
 	this->stats.Hp = 500;
 	this->stats.MaxHp = 1000;
@@ -170,14 +169,10 @@ json GameObject::GetJson()
 	//JPlayer["MaxHp"] = this->stats.MaxHp;
 	JPlayer["StartTime"] = this->unit_Data.StartPointTime.count();
 	JPlayer["IpAddress"] = this->IpAddress;
-	JPlayer["Username"] = this->Username;
+	//JPlayer["Username"] = this->Username;
 	return JPlayer;
 }
 
-int GameObject::GetType()
-{
-	return this->Type;
-}
 //	void* SetMemoryData(string VarName);
 //void SetMemoryData(string VarName, string VarType, void* data);
 //

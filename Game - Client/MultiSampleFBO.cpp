@@ -79,7 +79,7 @@ void MultiSampleFBO::ChangeBuffersSize()
 
 void MultiSampleFBO::CopyBuffer(GLuint newFBO)
 {
-	 Mouse& mouse = Mouse::Instanace();
+	Mouse& mouse = Mouse::Instanace();
 	GLuint width = mouse.GetWindowSize().x, height = mouse.GetWindowSize().y;
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, PostProcessingFBO);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, newFBO);

@@ -65,7 +65,7 @@ public:
 	GameObject(Unit_Data, string Username);
 	~GameObject();
 	Unit_Data& GetUnitData();
-	void Draw(SceneData& sceneData);
+	virtual void Draw(SceneData& sceneData);
 	void DrawShadow(mat4 & ProjectionMatrix, mat4 & ViewMatrix);
 	void DrawOutline(mat4 & ProjectionMatrix, mat4 & ViewMatrix, vec3 Color);
 	void DrawUI(mat4& Projection, mat4& View);
@@ -73,9 +73,6 @@ public:
 	void UpdateUnitData(Unit_Data uData);
 	json GetJson();
 	json GetStructureJson();
-	int GetType();
-	string Username;
-	string CharacterName;
 	Stats stats;
 	milliseconds TimeDelta;
 	Unit_Data unit_Data;
@@ -139,4 +136,20 @@ class Player : public GameObject
 class Ground : public GameObject
 {
 
+};
+
+class SkyBox : public GameObject
+{
+public:
+	SkyBox() {}
+	~SkyBox() {}
+
+	void Initialize() {
+		this->DrawObject.InitTexture();
+	}
+	void Draw(SceneData& sceneData) {
+		this->DrawObject.DrawModel();
+	}
+private:
+	SkyBox_Graphics DrawObject;
 };
