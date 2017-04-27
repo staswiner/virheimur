@@ -151,6 +151,7 @@ void Mesh::ProcessMesh()
 	{
 		Animations.push_back(scene->mAnimations[i]);
 	}
+	this->LoadMaterial();
 	this->setupMesh();
 	vertices.clear();
 	indices.clear();
@@ -344,9 +345,12 @@ void Mesh::DrawModel()
 {
 	if (this->scene->HasMaterials())
 	{
-		Material material = this->GetMaterial();
-		ShaderBuilder::GetCurrentProgram()->
-			Add_Material("material", material);
+		unique_ptr<ShaderBuilder> shader = ShaderBuilder::GetCurrentProgram(); 
+		shader->Add_Material("material", material);
+		for (int i = 0; i < material.NumDiffuse; i++)
+		{
+			shader->Add_texture("Texture[" + to_string(i) + "]", material.DiffuseTextures[i]);
+		}
 	}
 	vector<aiMatrix4x4> Transforms;
 	if (scene->HasAnimations())
@@ -386,13 +390,51 @@ void Mesh::DrawInstanced(vector<mat4>& ModelMatrix)
 	glDrawArraysInstanced(GL_POINTS , 0 , Vertices_Amount, ModelMatrix.size());
 	glBindVertexArray(0);
 }
-Material Mesh::GetMaterial()
+TODO_FUNCTION Mesh::Material Mesh::LoadMaterial()
+{
+	auto ConvertAiToGLM = [](aiColor3D color)->vec3 {
+		return vec3(color.r, color.g, color.b);
+	};
+
+	Mesh::Material material;
+
+	aiColor3D color;
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, color);
+	material.ambient = ConvertAiToGLM(color);
+
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+	material.diffuse = ConvertAiToGLM(color);
+
+	float shininess;
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_SHININESS, shininess);
+	material.shininess = shininess;
+
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_SPECULAR, color);
+	material.specular = ConvertAiToGLM(color);
+
+	material.NumDiffuse = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
+	material.NumDisplacement = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DISPLACEMENT);
+	material.NumNormalMap = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_NORMALS);
+	material.NumSpecular = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_SPECULAR);
+	for (int i = 0; i < material.NumDiffuse; i++)
+	{
+		aiString path;
+		string dir = "Collada/";
+		this->scene->mMaterials[0]->GetTexture(aiTextureType::aiTextureType_DIFFUSE, i, &path);
+		string Path = dir + path.C_Str();
+		int textureID = LoadTexture(Path.c_str());
+		material.DiffuseTextures.push_back(textureID);
+	}
+	this->material = material;
+	return material;
+}
+::Material Mesh::GetMaterial()
 {
 	auto ConvertAiToGLM = [](aiColor3D color)->vec3 {
 		return vec3(color.r,color.g,color.b);
 	};
 
-	Material material;
+	::Material material;
 
 	aiColor3D color;
 	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, color);

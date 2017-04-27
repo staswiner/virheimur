@@ -130,3 +130,13 @@ public:
 private:
 	mutable map<string, GameObject*> Players;
 };
+
+class Player : public GameObject
+{
+
+};
+
+class Ground : public GameObject
+{
+
+};

@@ -28,6 +28,7 @@ public:
 		int NumSpecular = 0;
 		int NumDisplacement = 0;
 		bool HasMaterial = false;
+		vector<GLuint> DiffuseTextures;
 	};
 	static Shader* ConstructShader(ShaderInfo shaderInfo);
 	// Use the program

@@ -40,7 +40,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 	return Mesh(mesh,scene, CollisionType);
 }
-void Model::CreateShader()
+void Model::CreateShader() // TODO : should be moved to mesh
 {
 	Shader::ShaderInfo shaderInfo;
 	shaderInfo.HasMaterial = this->scene->HasMaterials();
@@ -48,6 +48,12 @@ void Model::CreateShader()
 	shaderInfo.NumDisplacement = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DISPLACEMENT);
 	shaderInfo.NumNormalMap = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_NORMALS);
 	shaderInfo.NumSpecular = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_SPECULAR);
+	//for (int i = 0; i < shaderInfo.NumDiffuse; i++)
+	//{
+	//	aiString path;
+	//	LoadTexture(this->scene->mMaterials[0]->GetTexture(aiTextureType::aiTextureType_DIFFUSE,i,))
+	//	shaderInfo.DiffuseTextures.push_back(Load)
+	//}
 	this->shaderParams.MainShader = Shader::ConstructShader(shaderInfo);
 }
 void Model::loadModel(Mesh& mesh)

@@ -95,6 +95,11 @@ void Scene::Initialize()
 	GameObject* gameObject = new GameObject();
 	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["Mine"];
 	layer->AddGameObject(gameObject);
+
+	gameObject = new GameObject();
+	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["Land"];
+
+	layer->AddGameObject(gameObject);
 	layers.Add(layer, LayerType::FinalObject);
 }
 

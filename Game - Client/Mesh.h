@@ -87,6 +87,28 @@ public:
 		unsigned int BaseIndex;
 		unsigned int MaterialIndex;
 	};
+	struct Material {
+		vec3 ambient;
+		vec3 diffuse;
+		vec3 specular;
+		float shininess;
+
+		int NumDiffuse = 0;
+		int NumNormalMap = 0;
+		int NumSpecular = 0;
+		int NumDisplacement = 0;
+
+		vector<int> DiffuseTextures;
+		operator ::Material() const 
+		{
+			::Material material;
+			material.ambient = this->ambient;
+			material.diffuse = this->diffuse;
+			material.specular = this->specular;
+			material.shininess = this->shininess;
+			return material;
+		}
+	};
 /*Boundry Box*/
 #define TODO_VARIABLE
 	struct BoundryBox
@@ -112,8 +134,9 @@ public:
 	/*TODO:
 	Functions which will make the model interactive
 	*/
-
-	TODO_FUNCTION Material GetMaterial();
+	TODO_FUNCTION Mesh::Material LoadMaterial();
+	TODO_VARIABLE Mesh::Material material;
+	TODO_FUNCTION ::Material GetMaterial();
 	TODO_FUNCTION void GetTextures();
 	TODO_FUNCTION vec3 GetCentralMassPoint();
 	TODO_FUNCTION BoundryBox GetAABB();

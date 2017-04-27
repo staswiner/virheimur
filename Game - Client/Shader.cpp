@@ -786,8 +786,8 @@ string Shader::ConstructFragmentShader()
 			vec3 LightColor = vec3(1.0, 0.9, 0.7);
 			vec3 lightDir = normalize(lightPos - fs_in.FragPos);)";
 	string mainfunc1Diffuse =
-		R"(	vec4 color0 = texture2D(Texture[0], fs_in.UVs * Texelation);
-			vec3 TotalColor = vec3(color0) * AddLight(Wood, LightColor, lightDir)";
+		R"(	vec4 color0 = texture2D(Texture[0], fs_in.UVs);
+			vec3 TotalColor = vec3(color0) * AddLight(material, LightColor, lightDir)";
 	string mainfunc1NoDiffuse =
 		"vec3 TotalColor = AddLight(material, LightColor, lightDir";
 	string mainfunc1NormalMap =

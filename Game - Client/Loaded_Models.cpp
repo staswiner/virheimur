@@ -9,17 +9,19 @@ ModelsCollection::ModelsCollection()
 	////Models_Collection["Grass"] = new Grass(5);
 
 	////Models["Lara"] = new Model("Collada/CartoonTree.dae");
-	Models["Land"] = new Model("Map/Land2.dae", "Ground");
-	Models["Land"]->AddTexture("Texture0", "Map/Grass/grass01_converted.jpg");
-	Models["Land"]->AddTexture("Texture1", "Map/Brick/Mountain Tile.jpg");
-	Models["Land"]->AddTexture("Texture2", "Map/MapPath.jpg");
-	Models["Land"]->AddTexture("Texture3", "Map/Brick/brickwork-texture_converted.jpg");
+	//Models["Land"] = new Model("Map/Land2.dae", "Ground");
+	//Models["Land"]->AddTexture("Texture0", "Map/Grass/grass01_converted.jpg");
+	//Models["Land"]->AddTexture("Texture1", "Map/Brick/Mountain Tile.jpg");
+	//Models["Land"]->AddTexture("Texture2", "Map/MapPath.jpg");
+	//Models["Land"]->AddTexture("Texture3", "Map/Brick/brickwork-texture_converted.jpg");
 
-	Models["Land"]->AddTexture("Texture4", "Map/Brick/brickwork_normal-map_converted.jpg");
-	Models["Land"]->AddTexture("Texture5", "Map/Brick/brickwork-bump-water.jpg");
-	Models["Land"]->AddTexture("Texture6", "Map/Brick/brickwork-bump-map_converted.jpg");
-	Models["Land"]->AddTexture("Texture7", "Map/Grass/grass01_n_converted.jpg");
-	Models["Land"]->AddTexture("Texture8", "Map/Grass/grass01_h_converted.jpg");
+	//Models["Land"]->AddTexture("Texture4", "Map/Brick/brickwork_normal-map_converted.jpg");
+	//Models["Land"]->AddTexture("Texture5", "Map/Brick/brickwork-bump-water.jpg");
+	//Models["Land"]->AddTexture("Texture6", "Map/Brick/brickwork-bump-map_converted.jpg");
+	//Models["Land"]->AddTexture("Texture7", "Map/Grass/grass01_n_converted.jpg");
+	//Models["Land"]->AddTexture("Texture8", "Map/Grass/grass01_h_converted.jpg");
+
+	Models["Land"] = new Model("Collada/Terrain.dae","Ground");
 
 	//Models["Water"] = new Model("Map/Sea.dae", "");
 	//Models["Water"]->AddTexture("Texture0", "Map/Water/waterDUDV.jpg");
