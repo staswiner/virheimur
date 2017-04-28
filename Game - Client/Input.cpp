@@ -668,7 +668,8 @@ void Input::ManualControl()
 	}
 	
 	float frameTime = Time::Instance().Frame();
-	float MovementSpeed = 15.0f * frameTime / 1000.0f;
+	float scale = 0.1f;
+	float MovementSpeed = 15.0f * frameTime / 1000.0f * scale;
 	float RotationSpeed = 5.0f * frameTime / 1000.0f;
 	float angle = -Player.unit_Data.Rotation.y;
 #define anglex(x) cos(x)

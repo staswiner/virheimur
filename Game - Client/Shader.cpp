@@ -694,7 +694,7 @@ string Shader::ConstructGeometryShader()
 string Shader::ConstructFragmentShader()
 {
 
-	string header = 
+	string header =
 		R"(	#version 400 compatibility
 			in GS_OUT{
 			vec2 UVs;
@@ -709,6 +709,7 @@ string Shader::ConstructFragmentShader()
 				vec3 ambient;
 				vec3 diffuse;
 				vec3 specular;
+				vec3 emissive;
 				float shininess;
 			};
 			uniform sampler2D Texture[5];
@@ -777,7 +778,8 @@ string Shader::ConstructFragmentShader()
 			//	float shadow = ShadowCalculation(fs_in.LightFragPos,LightDir, textnorm);    "
 			// Enable Shadows
 			//	shadow = 0;
-			vec3 Light = (diffuse + (1.0) * (1.0 * specular + ambient));
+			vec3 emissive = material.emissive;
+			vec3 Light = (diffuse + (1.0) * (1.0 * specular + ambient)) + emissive;
 			return Light;
 		})";
 	string mainfunc1 =

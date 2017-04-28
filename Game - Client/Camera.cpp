@@ -110,7 +110,7 @@ void Camera::WheelScroll()
 	{
 		cameraStates.SetState("Wheel Move");
 		//CameraDestination.z += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 6.0f;
-		CameraDestination.y += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 2.0f;
+		CameraDestination.y += (int)(WheelDelta * (int)Camera::Delta) / 16.67f * 2.0f * scale;
 	}
 }
 void Camera::MouseDrag()
@@ -161,7 +161,8 @@ void Camera::MouseMove()
 		const int PI = 3.1415926535897f;
 		float CameraMovementSpeed = Camera::Delta / 16.67f / 2.0f 
 			//* (-CameraPosition.z / 40.0f);
-			* 1.0f;
+			* 1.0f * 
+			scale;
 		if (mouse.GetMouseY() > mouse.GetWindowSize().y - SceenOffset && mouse.GetMouseY() < mouse.GetWindowSize().y - EndOffset ) //&& CameraPosition.y < 900) // up
 		{
 			CameraDestination.z -= CameraMovementSpeed * cos((MouseCameraAngle.y) / 180 * PI);

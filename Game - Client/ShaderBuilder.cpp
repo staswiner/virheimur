@@ -93,6 +93,7 @@ ShaderBuilder & ShaderBuilder::Add_Material(string name, const Material & rhs)
 	this->Add_vec3(name+".ambient", rhs.ambient).
 	Add_vec3(name + ".diffuse", rhs.diffuse).
 	Add_vec3(name + ".specular", rhs.specular).
+	Add_vec3(name + ".emissive", rhs.emissive).
 	Add_float(name + ".shininess", rhs.shininess);
 	return *this;
 }
@@ -127,8 +128,8 @@ Material & Materials::operator[](string s)
 
 Materials::Materials()
 {
-	MaterialMap["chrome"] = { vec3(0.25f),vec3(0.4f),vec3(0.774597f),0.6f };
+	/*MaterialMap["chrome"] = { vec3(0.25f),vec3(0.4f),vec3(0.774597f),0.6f };
 	MaterialMap["shiny"] = {vec3(1),vec3(1),vec3(1),0.2f };
 	MaterialMap["emerald"] = { vec3(0.0215,0.1745,0.0215),vec3(0.07568,0.61424,0.07568),vec3(0.633,0.727811,0.633),0.6f };
-	MaterialMap["water"] = { vec3(0.2,0.25,0.4),vec3(0.4f),vec3(0.633,0.727811,0.633),0.6f };
+	MaterialMap["water"] = { vec3(0.2,0.25,0.4),vec3(0.4f),vec3(0.633,0.727811,0.633),0.6f };*/
 }

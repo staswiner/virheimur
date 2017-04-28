@@ -412,6 +412,9 @@ TODO_FUNCTION Mesh::Material Mesh::LoadMaterial()
 	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_SPECULAR, color);
 	material.specular = ConvertAiToGLM(color);
 
+	scene->mMaterials[this->mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_EMISSIVE, color);
+	material.emissive = ConvertAiToGLM(color);
+
 	material.NumDiffuse = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
 	material.NumDisplacement = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DISPLACEMENT);
 	material.NumNormalMap = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_NORMALS);

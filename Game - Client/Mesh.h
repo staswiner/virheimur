@@ -91,6 +91,7 @@ public:
 		vec3 ambient;
 		vec3 diffuse;
 		vec3 specular;
+		vec3 emissive;
 		float shininess;
 
 		int NumDiffuse = 0;
@@ -106,6 +107,7 @@ public:
 			material.diffuse = this->diffuse;
 			material.specular = this->specular;
 			material.shininess = this->shininess;
+			material.emissive = this->emissive;
 			return material;
 		}
 	};
