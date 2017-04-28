@@ -694,117 +694,38 @@ string Shader::ConstructGeometryShader()
 string Shader::ConstructFragmentShader()
 {
 
-	string header =
-		R"(	#version 400 compatibility
-			in GS_OUT{
-			vec2 UVs;
-			vec3 Normals;
-			vec3 FragPos;
-			vec4 clipSpace;
-			vec3 LightFragPos;
-			vec3 T;
-			vec3 B;
-			}fs_in;
-			struct Material {
-				vec3 ambient;
-				vec3 diffuse;
-				vec3 specular;
-				vec3 emissive;
-				float shininess;
-			};
-			uniform sampler2D Texture[5];
-			uniform sampler2D NormalMap[5];
-			uniform sampler2D Dispose;
-			uniform vec3 lightPos;
-			uniform vec3 cameraPos;
-			uniform Material material;
-			out vec4 color;)";
-	string Normalfunc =
-		R"(vec3 CalcNormal()
-		{
-			vec3 Normal = normalize(fs_in.Normals);
-			return Normal;
-		})";
-	string NormalMapfunc =
-		R"(vec3 CalcBumpedNormal(sampler2D normalTexture)
-		{
-		vec3 Normal = CalcNormal();
-		vec3 T = fs_in.T;
-		T = normalize(T - dot(T, Normal) * Normal);
-		vec3 B = cross(T, Normal);
-		//B = fs_in.B;
+	string header = FileToText("ShaderBuilder/Fragment-header.glsl");
+		
+	string Normalfunc = FileToText("ShaderBuilder/Fragment-Normalfunc.glsl");
 
-		vec4 TexturedNormal = texture2D(normalTexture, fs_in.UVs * Texelation);
-		TexturedNormal = (TexturedNormal*2.0 - vec4(1.0));
-		vec3 BumpMapNormal = vec3(TexturedNormal.xyz);// vec3(TexturedNormal.x, TexturedNormal.z, TexturedNormal.y);
+	string NormalMapfunc = FileToText("ShaderBuilder/Fragment-NormalMapfunc.glsl");
+		
+	string materialfunc1 = FileToText("ShaderBuilder/Fragment-materialfunc1.glsl");
+	
+	string materialfunc1NormalMap = FileToText("ShaderBuilder/Fragment-materialfunc1NormalMap.glsl");
+	
+	string materialfunc1NoNormalMap = FileToText("ShaderBuilder/Fragment-materialfunc1NoNormalMap.glsl");
+	
+	string materialfunc2 = FileToText("ShaderBuilder/Fragment-materialfunc2.glsl");
+		
+	string materialfunc2NormalMap = FileToText("ShaderBuilder/Fragment-materialfunc2NormalMap.glsl");
 
-		vec3 NewNormal;
-		//mat3 TBN = mat3(vec3(1, 0, 0), vec3(0, 0, 1), Normal);
-		mat3 TBN = mat3(T, B, Normal);
-		NewNormal = TBN * BumpMapNormal;
-		//NewNormal.x *= -1.0;
-		//NewNormal.z *= -1.0;
-		NewNormal = normalize(NewNormal);
-		return NewNormal;
-		})";
-	string materialfunc1 =
-		"vec3 AddLight(Material material, vec3 LightColor, vec3 LightDir";
-	string materialfunc1NormalMap =
-		", sampler2D normalTexture)";
-	string materialfunc1NoNormalMap =
-		")";
-	string materialfunc2 =
-		R"({
-			// Mathematics
-			vec3 toCameraVector = normalize(fs_in.FragPos - cameraPos);
-
-			// Light
-			vec3 ambient = LightColor * material.ambient;)";
-	string materialfunc2NormalMap =
-		"	vec3 norm = CalcBumpedNormal(normalTexture);";
-	string materialfunc2NoNormalMap =
-		"	vec3 norm = CalcNormal();";
-	string materialfunc3 =
-		R"(	vec3 textnorm = normalize(norm);
-			float diff = max(dot(textnorm, LightDir), 0.0);
-			vec3 diffuse = diff * material.diffuse * LightColor;
-
-			//  specular
-			////vec3 reflectedLight = reflect(normalize(lightDir), norm);//phong
-			vec3 reflectedLight = normalize(LightDir - normalize(toCameraVector));//blinn-phong
-			////float spec = pow(max(dot(normalize(toCameraVector.xz), reflectedLight.xz), 0.0), shineDamper);//phong
-			float spec = pow(max(dot(norm, reflectedLight), 0.0), int(material.specular * 128.0));//blinn-phong
-			vec3 specular = spec * LightColor;
-			//	float shadow = ShadowCalculation(fs_in.LightFragPos,LightDir, textnorm);    "
-			// Enable Shadows
-			//	shadow = 0;
-			vec3 emissive = material.emissive;
-			vec3 Light = (diffuse + (1.0) * (1.0 * specular + ambient)) + emissive;
-			return Light;
-		})";
-	string mainfunc1 =
-		R"(void main()
-		{
-			vec3 LightColor = vec3(1.0, 0.9, 0.7);
-			vec3 lightDir = normalize(lightPos - fs_in.FragPos);)";
-	string mainfunc1Diffuse =
-		R"(	vec4 color0 = texture2D(Texture[0], fs_in.UVs);
-			vec3 TotalColor = vec3(color0) * AddLight(material, LightColor, lightDir)";
-	string mainfunc1NoDiffuse =
-		"vec3 TotalColor = AddLight(material, LightColor, lightDir";
-	string mainfunc1NormalMap =
-		", NormalMap[0]);"; 
-	string mainfunc1NoNormalMap =
-		");";
-	string mainfunc2 =
-		R"(	float near = 0.1f;
-			float far = 1000.0f;
-			float depth = gl_FragCoord.z;
-			float Distance = 2.0 * near * far / (far + near - (2.0 * depth - 1.0) * (far - near));
-
-			color = vec4(TotalColor, 1);
-		})";
-
+	string materialfunc2NoNormalMap = FileToText("ShaderBuilder/Fragment-materialfunc2NoNormalMap.glsl");
+	
+	string materialfunc3 = FileToText("ShaderBuilder/Fragment-materialfunc3.glsl");
+		
+	string mainfunc1 = FileToText("ShaderBuilder/Fragment-mainfunc1.glsl");
+		
+	string mainfunc1Diffuse = FileToText("ShaderBuilder/Fragment-mainfunc1Diffuse.glsl");
+		
+	string mainfunc1NoDiffuse = FileToText("ShaderBuilder/Fragment-mainfunc1NoDiffuse.glsl");
+	
+	string mainfunc1NormalMap = FileToText("ShaderBuilder/Fragment-mainfunc1NormalMap.glsl");
+	
+	string mainfunc1NoNormalMap = FileToText("ShaderBuilder/Fragment-mainfunc1NoNormalMap.glsl");
+	
+	string mainfunc2 = FileToText("ShaderBuilder/Fragment-mainfunc2.glsl");
+	
 	
 	string FragmentShader = header + Normalfunc;
 	FragmentShader += (this->shaderInfo.NumNormalMap) ? NormalMapfunc : "";
@@ -821,6 +742,25 @@ string Shader::ConstructFragmentShader()
 	FragmentShader += mainfunc2;
 
 	return FragmentShader;
+}
+string Shader::FileToText(string Path)
+{
+	string line;
+	string Text;
+	ifstream myfile(Path);
+	if (myfile.is_open())
+	{
+		while (getline(myfile, line))
+		{
+			Text += line + '\n';
+		}
+		myfile.close();
+	}
+	else
+	{
+		throw exception("unable to open file");
+	}
+	return Text;
 }
 void Shader::Use()
 {

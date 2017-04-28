@@ -360,6 +360,7 @@ void Input::GetKeyboardInput()
 		case 'm': SetPlayerControl(GameObject::controls::Manual); break; // manual
 		case 'd': SetPlayerControl(GameObject::controls::Direct); break; // direct
 		case 'p': OpenProfileUI(); break;
+		case 'r': ReloadShaders(); break;
 		}
 		// end
 	}
@@ -375,6 +376,11 @@ void Input::GetKeyboardInput()
 	{
 		DirectControl();
 	}
+}
+
+void Input::ReloadShaders()
+{
+	OfflineDataObject::Instance().level.ReloadShaders();
 }
 
 void Input::OnlineRightMouseClick()

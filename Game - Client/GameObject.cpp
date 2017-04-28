@@ -149,6 +149,14 @@ void GameObject::UpdateUnitData(Unit_Data uData)
 	this->unit_Data.Destination = uData.Position;
 }
 
+void GameObject::ReloadShader()
+{
+	if (this->unit_Data.Model_Data)
+	{
+		this->unit_Data.Model_Data->ReloadShader();
+	}
+}
+
 json GameObject::GetJson()
 {
 	json JPlayer;

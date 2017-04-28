@@ -16,6 +16,14 @@ void Layer::AddGameObject(GameObject* gameObject)
 	this->Objects.push_back(gameObject);
 }
 
+void Layer::ReloadShaders()
+{
+	for (auto& o : this->Objects)
+	{
+		o->ReloadShader();
+	}
+}
+
 void Layer::Draw()
 {
 	FrameData& frameData = FrameData::Instance();
@@ -61,4 +69,12 @@ void Layers::Draw()
 void Layers::Add(Layer * layer, LayerType type)
 {
 	this->layers[type] = layer;
+}
+
+void Layers::ReloadShaders()
+{
+	for (auto& l : layers)
+	{
+		l.second->ReloadShaders();
+	}
 }

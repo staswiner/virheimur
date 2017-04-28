@@ -24,6 +24,7 @@ public:
 	int LoadTexture(string Filename);
 	void AddTexture(string TextureName,string Filename);
 	static vector<vector<int>> LoadBufferFromImage(string Filename);
+	void ReloadShader();
 	vector<Mesh> meshes;
 	map<string,GLuint> Textures;
 	vector<Materials> m_Materials;

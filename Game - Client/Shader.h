@@ -44,6 +44,8 @@ private:
 	string ConstructVertexShader();
 	string ConstructGeometryShader();
 	string ConstructFragmentShader();
+
+	string FileToText(string Path);
 	ShaderInfo shaderInfo;
 	void InitializeShaderProgram(string Path, GLuint shaderID);
 	static map<string, Shader*> mapShader;

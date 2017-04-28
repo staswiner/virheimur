@@ -21,6 +21,7 @@ public:
 	~Layer();
 	friend Layers;
 	void AddGameObject(GameObject*);
+	void ReloadShaders();
 private:
 	void Draw();
 	//void OrderObjects(function<bool(GameObject&, GameObject&)> orderer);
@@ -38,7 +39,7 @@ public:
 	~Layers();	
 	void Draw();
 	void Add(Layer*, LayerType);
-
+	void ReloadShaders();
 	
 private: 
 	map<LayerType, Layer*> layers;

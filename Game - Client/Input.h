@@ -32,6 +32,7 @@ private:
 	void GetMouseInput();
 	void GetMouseInputOffline();
 	void GetKeyboardInput();
+	void ReloadShaders();
 	void OnlineRightMouseClick();
 	void OfflineRightMouseClick();
 	void SetCircleScript();

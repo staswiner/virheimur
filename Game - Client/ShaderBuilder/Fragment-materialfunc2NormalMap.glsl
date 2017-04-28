@@ -1,0 +1,1 @@
+	vec3 norm = CalcBumpedNormal(normalTexture);

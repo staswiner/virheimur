@@ -12,7 +12,9 @@ public:
 	Level();
 	~Level();
 	void LoadLevel();
+	void ReloadShaders();
 	void Draw();
+
 	vector<GameObject*> Grounds;
 	vector<GameObject*> ActivePlayers;
 	vector<GameObject*> PassivePlayers;

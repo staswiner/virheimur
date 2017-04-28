@@ -28,6 +28,11 @@ void Level::LoadLevel()
 	layers.Add(layer, LayerType::FinalObject);
 }
 
+void Level::ReloadShaders()
+{
+	layers.ReloadShaders();
+}
+
 void Level::Draw()
 {
 	layers.Draw();

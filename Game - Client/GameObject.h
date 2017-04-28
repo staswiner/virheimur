@@ -71,6 +71,7 @@ public:
 	void DrawUI(mat4& Projection, mat4& View);
 	void LoadInterface();
 	void UpdateUnitData(Unit_Data uData);
+	void ReloadShader();
 	json GetJson();
 	json GetStructureJson();
 	Stats stats;

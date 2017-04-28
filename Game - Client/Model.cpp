@@ -40,22 +40,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 	return Mesh(mesh,scene, CollisionType);
 }
-void Model::CreateShader() // TODO : should be moved to mesh
-{
-	Shader::ShaderInfo shaderInfo;
-	shaderInfo.HasMaterial = this->scene->HasMaterials();
-	shaderInfo.NumDiffuse = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
-	shaderInfo.NumDisplacement = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DISPLACEMENT);
-	shaderInfo.NumNormalMap = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_NORMALS);
-	shaderInfo.NumSpecular = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_SPECULAR);
-	//for (int i = 0; i < shaderInfo.NumDiffuse; i++)
-	//{
-	//	aiString path;
-	//	LoadTexture(this->scene->mMaterials[0]->GetTexture(aiTextureType::aiTextureType_DIFFUSE,i,))
-	//	shaderInfo.DiffuseTextures.push_back(Load)
-	//}
-	this->shaderParams.MainShader = Shader::ConstructShader(shaderInfo);
-}
+
 void Model::loadModel(Mesh& mesh)
 {
 	this->meshes.push_back(mesh);
@@ -201,4 +186,28 @@ vector<vector<int>> Model::LoadBufferFromImage(string Filename)
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return Data;
+}
+void Model::CreateShader() // TODO : should be moved to mesh
+{
+	Shader::ShaderInfo shaderInfo;
+	shaderInfo.HasMaterial = this->scene->HasMaterials();
+	shaderInfo.NumDiffuse = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
+	shaderInfo.NumDisplacement = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DISPLACEMENT);
+	shaderInfo.NumNormalMap = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_NORMALS);
+	shaderInfo.NumSpecular = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_SPECULAR);
+	//for (int i = 0; i < shaderInfo.NumDiffuse; i++)
+	//{
+	//	aiString path;
+	//	LoadTexture(this->scene->mMaterials[0]->GetTexture(aiTextureType::aiTextureType_DIFFUSE,i,))
+	//	shaderInfo.DiffuseTextures.push_back(Load)
+	//}
+	this->shaderParams.MainShader = Shader::ConstructShader(shaderInfo);
+}
+void Model::ReloadShader()
+{
+	if (this->shaderParams.MainShader)
+	{
+		delete this->shaderParams.MainShader;
+		this->CreateShader();
+	}
 }
