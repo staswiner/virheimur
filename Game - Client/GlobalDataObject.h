@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Effect.h"
 #include "AIObjects.h"
+#include "Level.h"
 #include <string>
 #include <vector>
 
@@ -66,8 +67,9 @@ public:
 		return instance;
 	}
 
-	GameObject player;
 	vector<Effect> Effects;
 	vector<vec3>* Path;
+	Level level;
+
 	bool RouteChanged = false;
 };

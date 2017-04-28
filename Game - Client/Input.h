@@ -55,4 +55,7 @@ private:
 	void ResetCharacterPosition();
 	void ResetCameraPosition();
 
+private:
+	// service functions
+	void RightClickPathAlgorithm(vec3 ClickOnMapCoord);
 };

@@ -63,6 +63,7 @@ private:
 	char State; // 0 Login, 1 Selection, 2 game
 	bool StateChanged;
 	bool Online = true;
+
 	// process running variables
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;

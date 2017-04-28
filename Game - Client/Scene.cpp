@@ -91,24 +91,8 @@ void Scene::Initialize()
 	//		seaAnim.ObstaclesMat.push_back(ModelMat);
 	//	}
 	//}
-	Layer* layer = new Layer();
-	GameObject* gameObject = new GameObject();
-	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["Mine"];
-	layer->AddGameObject(gameObject);
-
-	gameObject = new GameObject();
-	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["MineSweaper"];
-	layer->AddGameObject(gameObject);
-
-	gameObject = new GameObject();
-	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()["Land"];
-	layer->AddGameObject(gameObject);
-
-	gameObject = new SkyBox();
-	dynamic_cast<SkyBox*>(gameObject)->Initialize();
-	layer->AddGameObject(gameObject);
-
-	layers.Add(layer, LayerType::FinalObject);
+	OfflineDataObject::Instance().level.LoadLevel();
+	
 }
 
 void Scene::Frame()
@@ -251,7 +235,7 @@ void Scene::Draw_Scene()
 
 	glEnable(GL_CLIP_DISTANCE0);
 
-	layers.Draw();
+	OfflineDataObject::Instance().level.Draw();
 
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
@@ -462,41 +446,41 @@ void Scene::DrawGround(Shader& shader)
 
 void Scene::DrawIndexColor()
 {
-	// Draws All Entities with Color
-	IndexFBO->BindFrameBuffer();
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
-	mat4 WVM = ProjectionMatrix*ViewMatrix;
-	/*ShaderBuilder::LoadShader(Shader::At("Index"))->
-		Add_mat4("WVM",WVM);
-	loaded_Models["Land"]->Draw();
-*/	
-	ShaderBuilder::LoadShader(Shader::At("Index"))->
-		Add_bool("indexType",true).
-		Add_mat4("WVM", WVM);
-	ModelsCollection::Instance()["Land"]->Draw();
-	for(auto npc : NPCs)
-	{
-		WVM = ProjectionMatrix * ViewMatrix * Default::Instance().BlenderConversion;
-		ShaderBuilder::LoadShader(Shader::At("Index"))->
-			Add_bool("indexType", false).
-			Add_float("Index", (float)npc.npcID).
-			Add_mat4("WVM", WVM);
-		ModelsCollection::Instance()[npc.Name]->Draw();
-	}
-	Core& core = Core::Instance();
-	if (!core.Online)
-	{
-		OfflineDataObject& offlineData = OfflineDataObject::Instance();
-		WVM = ProjectionMatrix * ViewMatrix * offlineData.player.unit_Data.GetModelMatrix();
-		ShaderBuilder::LoadShader(Shader::At("Index"))->
-			Add_bool("indexType", false).
-			Add_float("Index", 5).
-			Add_mat4("WVM", WVM);
-		offlineData.player.unit_Data.Model_Data->Draw();
-	}
+	//// Draws All Entities with Color
+	//IndexFBO->BindFrameBuffer();
+	////glEnable(GL_BLEND);
+	////glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//
+	//
+	//mat4 WVM = ProjectionMatrix*ViewMatrix;
+	///*ShaderBuilder::LoadShader(Shader::At("Index"))->
+	//	Add_mat4("WVM",WVM);
+	//loaded_Models["Land"]->Draw();
+	//*/
+	//ShaderBuilder::LoadShader(Shader::At("Index"))->
+	//	Add_bool("indexType",true).
+	//	Add_mat4("WVM", WVM);
+	//ModelsCollection::Instance()["Land"]->Draw();
+	//for(auto npc : NPCs)
+	//{
+	//	WVM = ProjectionMatrix * ViewMatrix * Default::Instance().BlenderConversion;
+	//	ShaderBuilder::LoadShader(Shader::At("Index"))->
+	//		Add_bool("indexType", false).
+	//		Add_float("Index", (float)npc.npcID).
+	//		Add_mat4("WVM", WVM);
+	//	ModelsCollection::Instance()[npc.Name]->Draw();
+	//}
+	//Core& core = Core::Instance();
+	//if (!core.Online)
+	//{
+	//	OfflineDataObject& offlineData = OfflineDataObject::Instance();
+	//	WVM = ProjectionMatrix * ViewMatrix * offlineData.player.unit_Data.GetModelMatrix();
+	//	ShaderBuilder::LoadShader(Shader::At("Index"))->
+	//		Add_bool("indexType", false).
+	//		Add_float("Index", 5).
+	//		Add_mat4("WVM", WVM);
+	//	offlineData.player.unit_Data.Model_Data->Draw();
+	//}
 }
 void Scene::DrawColladaDistance()
 {

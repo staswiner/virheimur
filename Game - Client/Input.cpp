@@ -256,15 +256,15 @@ void Input::GetMouseInputOffline()
 	{
 		OfflineDataObject& offlineData = OfflineDataObject::Instance();
 		vec3 ClickOnMapCoord = GetMouseCoord_MapCoord();
-		
+
 		offlineData.Effects.push_back(Effect("Collada", milliseconds(500), ClickOnMapCoord));
 
-		vec3 CurrentPosition = offlineData.player.GetUnitData().Position;
+		GameObject& myPlayer = *offlineData.level.ActivePlayers[0];
 
+		vec3 CurrentPosition = myPlayer.GetUnitData().Position;
 		// Set Destination to player
-		GameObject& myPlayer = offlineData.player;
 		// Other variables
-		myPlayer.unit_Data.StartPoint = offlineData.player.unit_Data.Position;
+		myPlayer.unit_Data.StartPoint = myPlayer.unit_Data.Position;
 		myPlayer.unit_Data.StartPointTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		// Set Path
 		myPlayer.unit_Data.Path.clear();
@@ -274,87 +274,9 @@ void Input::GetMouseInputOffline()
 		//	myPlayer.GetUnitData().Position = Destination;
 
 		//{
-#define ASTAR 0
-#define PRM 1
-		int AlgorithmType = PRM;
-		if (AlgorithmType == ASTAR)
-		{
-			vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
-			for (int i = BacktrackPath.size() - 1; i >= 0; i--)
-			{
-				myPlayer.unit_Data.Path.push_back(BacktrackPath[i]);
-				ReceivedData.RouteChanged = true;
-			}
-			ReceivedData.Path = &myPlayer.unit_Data.Path;
-		}
-		else if (AlgorithmType == PRM)
-		{
-			PRMalgorithm prm;
-			auto startTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-
-			if (ReceivedData.Graph)
-			{
-				delete ReceivedData.Graph;
-			}
-
-			vector<vec3> BacktrackPath;
-
-			milliseconds FastestRun(100000);
-			milliseconds SlowestRun(0);
-			float averageDistance = 0;
-			int FindingChance = 0;
-
-			for (int i = 0; i < 1; i++)
-			{
-				//	auto startTimeSingle = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-
-				try
-				{
-					ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
-					ReceivedData.RouteChanged = true;
-				}
-				catch (exception ex)
-				{
-					int i = 0;
-				}
-
-				BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
-				//BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
-
-				//auto endTimeSingle = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-				//auto deltaSingle = endTimeSingle - startTimeSingle;
-				//if (deltaSingle > SlowestRun)
-				//	SlowestRun = deltaSingle;
-
-				//if (deltaSingle < FastestRun)
-				//	FastestRun = deltaSingle;
-
-				//float TotalDistance = 0;
-				//for (int i = 0; i < BacktrackPath.size()-1; i++)
-				//{
-				//	TotalDistance += glm::distance(BacktrackPath[i], BacktrackPath[i + 1]);
-				//}
-				//averageDistance += TotalDistance;
-				//if (BacktrackPath.size() > 0)
-				//	FindingChance++;
-			}
-			/*auto endTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-			auto deltaTime = endTime - startTime;*/
-			for (int i = BacktrackPath.size() - 1; i >= 0; i--)
-			{
-				myPlayer.unit_Data.Path.push_back(BacktrackPath[i]);
-			}
-
-			if (myPlayer.unit_Data.Path.size() == 0)
-			{
-				int i = 0;
-			}
-
-			ReceivedData.Path = &myPlayer.unit_Data.Path;
-		}
-	}
+		RightClickPathAlgorithm(ClickOnMapCoord);
 	/*Left Click would change focus of User Interface Windows*/
-
+	}
 	if (mouse.LeftIsPressed())
 	{
 		UI.LeftPress();
@@ -443,13 +365,13 @@ void Input::GetKeyboardInput()
 	}
 
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	
-	if (offlineData.player.control == GameObject::controls::Manual)
+	GameObject& Player = *offlineData.level.ActivePlayers[0];
+	if (Player.control == GameObject::controls::Manual)
 	{
 		ManualControl();
 	}
 
-	if (offlineData.player.control == GameObject::controls::Direct)
+	if (Player.control == GameObject::controls::Direct)
 	{
 		DirectControl();
 	}
@@ -590,8 +512,10 @@ void Input::SetCircleScript()
 void Input::RunScript()
 {
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	offlineData.player.control = GameObject::controls::Script;
-	offlineData.player.LongPath = false;
+	GameObject& Player = *offlineData.level.ActivePlayers[0];
+
+	Player.control = GameObject::controls::Script;
+	Player.LongPath = false;
 	STARTUPINFO siStartInfo;
 	PROCESS_INFORMATION piProcessInfo;
 	ZeroMemory(&siStartInfo, sizeof(siStartInfo));
@@ -689,9 +613,9 @@ void Input::SetCircleScriptIterative()
 	//WaitForSingleObject(piProcessInfo.hProcess, INFINITE);
 
 
-	GameObject& p = offlineData.player;
-	Unit_Data& ud = offlineData.player.unit_Data;
-	offlineData.player.script = [&](GameObject& p) mutable-> void {
+	GameObject& Player = *offlineData.level.ActivePlayers[0];
+	Unit_Data& ud = Player.unit_Data;
+	Player.script = [&](GameObject& p) mutable-> void {
 		
 		float Angle = 0.0f;
 		if (p.GetMemoryData("Angle") != nullptr)
@@ -715,7 +639,7 @@ void Input::SetCircleScriptIterative()
 		ud.Rotation.y = Angle - radians(90.0f);
 		ud.Rotation.xz;
 	};
-	offlineData.player.script = [&](GameObject& p) mutable-> void {
+	Player.script = [&](GameObject& p) mutable-> void {
 		// find first mine
 		// find second mine
 		// find 3rd mine
@@ -729,15 +653,16 @@ void Input::SetCircleScriptIterative()
 void Input::SetPlayerControl(GameObject::controls control)
 {
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	offlineData.player.control = control;
+	GameObject& Player = *offlineData.level.ActivePlayers[0];
+	Player.control = control;
 }
 
 void Input::ManualControl()
 {
 	Keyboard& keyboard = Keyboard::Instance();
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	GameObject& p = offlineData.player;
-	if (p.control != GameObject::controls::Manual)
+	GameObject& Player = *offlineData.level.ActivePlayers[0];
+	if (Player.control != GameObject::controls::Manual)
 	{
 		return;
 	}
@@ -745,38 +670,38 @@ void Input::ManualControl()
 	float frameTime = Time::Instance().Frame();
 	float MovementSpeed = 15.0f * frameTime / 1000.0f;
 	float RotationSpeed = 5.0f * frameTime / 1000.0f;
-	float angle = -p.unit_Data.Rotation.y;
+	float angle = -Player.unit_Data.Rotation.y;
 #define anglex(x) cos(x)
 #define angley(x) sin(x)
 
 	if (keyboard.isKeyPressed(Key::Up)) // ↑
 	{
-		p.unit_Data.Destination = p.unit_Data.StartPoint =
-			p.unit_Data.Position = p.unit_Data.Position + vec3(anglex(angle),0, angley(angle)) *
+		Player.unit_Data.Destination = Player.unit_Data.StartPoint =
+			Player.unit_Data.Position = Player.unit_Data.Position + vec3(anglex(angle),0, angley(angle)) *
 			MovementSpeed;
 	}
 	if (keyboard.isKeyPressed(Key::Down)) // ↓
 	{
-		p.unit_Data.Destination = p.unit_Data.StartPoint =
-			p.unit_Data.Position = p.unit_Data.Position - vec3(anglex(angle), 0, angley(angle)) *
+		Player.unit_Data.Destination = Player.unit_Data.StartPoint =
+			Player.unit_Data.Position = Player.unit_Data.Position - vec3(anglex(angle), 0, angley(angle)) *
 			MovementSpeed;
 	}
 	if (keyboard.isKeyPressed(Key::Right)) // →
 	{
-		p.unit_Data.Rotation.y -= RotationSpeed;
+		Player.unit_Data.Rotation.y -= RotationSpeed;
 	}
 	if (keyboard.isKeyPressed(Key::Left)) // ←
 	{
-		p.unit_Data.Rotation.y += RotationSpeed;
+		Player.unit_Data.Rotation.y += RotationSpeed;
 	}
 	// fix values
-	if (p.unit_Data.Rotation.y > radians(360.0f))
+	if (Player.unit_Data.Rotation.y > radians(360.0f))
 	{
-		p.unit_Data.Rotation.y -= radians(360.0f);
+		Player.unit_Data.Rotation.y -= radians(360.0f);
 	}
-	if (p.unit_Data.Rotation.y < 0.0f)
+	if (Player.unit_Data.Rotation.y < 0.0f)
 	{
-		p.unit_Data.Rotation.y += radians(360.0f);
+		Player.unit_Data.Rotation.y += radians(360.0f);
 	}
 }
 
@@ -784,7 +709,8 @@ void Input::DirectControl()
 {
 	Keyboard& keyboard = Keyboard::Instance();
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	GameObject& p = offlineData.player;
+	GameObject& p = *offlineData.level.ActivePlayers[0];
+
 
 	float frameTime = Time::Instance().Frame();
 	float MovementSpeed = 15.0f * frameTime / 1000.0f;
@@ -865,8 +791,10 @@ void Input::ResetCharacterPosition()
 	else
 	{
 		OfflineDataObject& offlineData = OfflineDataObject::Instance();
-		offlineData.player.unit_Data.Position = vec3();
-		offlineData.player.unit_Data.Rotation = vec3();
+		GameObject& Player = *offlineData.level.ActivePlayers[0];
+
+		Player.unit_Data.Position = vec3();
+		Player.unit_Data.Rotation = vec3();
 	}
 }
 
@@ -875,4 +803,89 @@ void Input::ResetCameraPosition()
 	Camera& camera = Camera::GetCamera("Main");
 
 	camera.ResetCamera();
+}
+
+void Input::RightClickPathAlgorithm(vec3 ClickOnMapCoord)
+{
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
+	GameObject& myPlayer = *offlineData.level.ActivePlayers[0];
+
+#define ASTAR 0
+#define PRM 1
+	int AlgorithmType = PRM;
+	if (AlgorithmType == ASTAR)
+	{
+		vector<vec3> BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
+		for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+		{
+			myPlayer.unit_Data.Path.push_back(BacktrackPath[i]);
+			ReceivedData.RouteChanged = true;
+		}
+		ReceivedData.Path = &myPlayer.unit_Data.Path;
+	}
+	else if (AlgorithmType == PRM)
+	{
+		PRMalgorithm prm;
+		auto startTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+
+		if (ReceivedData.Graph)
+		{
+			delete ReceivedData.Graph;
+		}
+
+		vector<vec3> BacktrackPath;
+
+		milliseconds FastestRun(100000);
+		milliseconds SlowestRun(0);
+		float averageDistance = 0;
+		int FindingChance = 0;
+
+		for (int i = 0; i < 1; i++)
+		{
+			//	auto startTimeSingle = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+
+			try
+			{
+				ReceivedData.Graph = prm.GeneratePoints(Data->Map, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
+				ReceivedData.RouteChanged = true;
+			}
+			catch (exception ex)
+			{
+				int i = 0;
+			}
+
+			BacktrackPath = prm.FoundPath(ReceivedData.Graph, myPlayer.unit_Data.StartPoint, ClickOnMapCoord);
+			//BacktrackPath = Stas::Maths::AstarGridB(Data->Map, myPlayer->unit_Data.StartPoint, Destination);
+
+			//auto endTimeSingle = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+			//auto deltaSingle = endTimeSingle - startTimeSingle;
+			//if (deltaSingle > SlowestRun)
+			//	SlowestRun = deltaSingle;
+
+			//if (deltaSingle < FastestRun)
+			//	FastestRun = deltaSingle;
+
+			//float TotalDistance = 0;
+			//for (int i = 0; i < BacktrackPath.size()-1; i++)
+			//{
+			//	TotalDistance += glm::distance(BacktrackPath[i], BacktrackPath[i + 1]);
+			//}
+			//averageDistance += TotalDistance;
+			//if (BacktrackPath.size() > 0)
+			//	FindingChance++;
+		}
+		/*auto endTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		auto deltaTime = endTime - startTime;*/
+		for (int i = BacktrackPath.size() - 1; i >= 0; i--)
+		{
+			myPlayer.unit_Data.Path.push_back(BacktrackPath[i]);
+		}
+
+		if (myPlayer.unit_Data.Path.size() == 0)
+		{
+			int i = 0;
+		}
+
+		ReceivedData.Path = &myPlayer.unit_Data.Path;
+	}
 }

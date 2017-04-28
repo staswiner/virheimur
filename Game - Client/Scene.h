@@ -23,7 +23,7 @@
 #include "NPC.h"
 #include "Default.h"
 #include "FrameData.h"
-#include "Layer.h"
+#include "Level.h"
 using namespace glm;
 class Scene
 {
@@ -105,7 +105,6 @@ private:
 	SeaAnimated seaAnim;
 	vector<NPC> NPCs;
 	vector<string> OutlineObjects;
-	Layers layers;
 	int counter = 0;
 	//static GlobalDataObject Data;
 	// develop this please

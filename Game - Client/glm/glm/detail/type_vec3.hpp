@@ -103,11 +103,16 @@ namespace glm
 			GLM_FUNC_DECL GLM_CONSTEXPR length_type length() const;
 
 			// Stas
-			GLM_FUNC_DECL GLM_CONSTEXPR tvec2<T, P> xz1()
+			GLM_FUNC_DECL GLM_CONSTEXPR tvec2<T, P> xz_func()
 			{
 				return vec2(this->x, this->z);
 			}
-#define xz xz1()
+			GLM_FUNC_DECL GLM_CONSTEXPR tvec2<T, P> xy_func()
+			{
+				return vec2(this->x, this->y);
+			}
+#define xz xz_func()
+#define xy xy_func()
 
 			GLM_FUNC_DECL T & operator[](length_type i);
 			GLM_FUNC_DECL T const & operator[](length_type i) const;
