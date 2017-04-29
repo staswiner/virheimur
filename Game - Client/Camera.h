@@ -74,7 +74,8 @@ public:
 	static mat4 CameraTranslation;*/
 
 	int Lock;
-	const float scale = 1.0f;
+	float scale = 1.0f;
+
 	// Core functions
 	void* operator new(size_t size)
 	{

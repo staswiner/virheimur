@@ -91,6 +91,8 @@ void Scene::Initialize()
 	//		seaAnim.ObstaclesMat.push_back(ModelMat);
 	//	}
 	//}
+	FrameData::Instance().Light_Pos = vec3(50, 50, 50);
+
 	OfflineDataObject::Instance().level.LoadLevel();
 	
 }
@@ -179,6 +181,7 @@ void Scene::GenerateForm()
 	Element = new UIElement("Shop-X", "Interface/X.png");
 	Position = vec2(485, 165); // 5 padding
 	Element->TopLeft = Position;
+	Element->Hide();
 	Element->SetByTrueSize(Position);
 	Element->AddClickEvent([]
 	(UIElement* Element)mutable-> void { Element->Parent->Hide(); });
@@ -187,8 +190,42 @@ void Scene::GenerateForm()
 	Element = new UIElement("Shop-Gold", "Interface/Textbox.png");
 	Position = vec2(300, 110); // 5 padding
 	Element->TopLeft = Position;
+	Element->Hide();
 	Element->SetByTrueSize(Position);
 	UI.root->GetUIElement("Shop")->AppendChild(Element);
+
+	Element = new UIElement("Command Line", "Interface/Textbox.png");
+	Position = vec2(210, 480);
+	Element->writable = true;
+	Element->TopLeft = Position;
+	Element->SetByTrueSize(Position);
+	Element->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	Element->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddClickEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+	Element->AddTextChangedEvent([&]
+	(UIElement* Element)mutable-> void {
+		if (Element->innerText.back() == '\r')
+		{
+			Element->innerText.pop_back();
+			if (Element->innerText == "Wire")
+			{
+				OfflineDataObject& offlineData = OfflineDataObject::Instance();
+				offlineData.level.ReloadShaders(Shader::ImageType::Wire);
+			}
+			if (Element->innerText == "Triangle")
+			{
+				OfflineDataObject& offlineData = OfflineDataObject::Instance();
+				offlineData.level.ReloadShaders(Shader::ImageType::Triangle);
+			}
+			Element->innerText.clear();
+		}
+	});
+	UI.root->AppendChild(Element);
 
 	//UIElement* StatsWindow = new UIElement("StatsWindow", "Interface/StatsWindow.png");
 	//Position = vec2(710, 300);
@@ -230,12 +267,14 @@ void Scene::Draw_Units()
 }
 void Scene::Draw_Scene()
 {
+
 	FBO::UnbindFrameBuffer();
 	mAntiAliasing.BindFrameBuffer();
 
 	glEnable(GL_CLIP_DISTANCE0);
 
 	OfflineDataObject::Instance().level.Draw();
+	DrawUI();
 
 
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
@@ -262,6 +301,9 @@ void Scene::Draw_Scene()
 	mFBO["Combine"].DrawDirectly(Textures, ShaderNames);
 
 	mFBO["Combine"].DrawFrameBuffer();
+
+	DrawUI();
+
 }
 void Scene::DrawScene_Depth()
 {
@@ -563,41 +605,45 @@ void Scene::DrawUI()
 	// Official UI
 	UI.root->Draw();
 	//minimap.Change();
-	minimap.DrawMinimap(Data);
-	//minimap.Draw(vec2(100, 100), vec2(400, 400));
+	
+	
+	
+	
+	//minimap.DrawMinimap(Data);
+	////minimap.Draw(vec2(100, 100), vec2(400, 400));
 
-	for (auto p : Data.GetPlayerInformation())
-	{
-		p.second->DrawUI(ProjectionMatrix, ViewMatrix);
-		vec3 pos = p.second->GetUnitData().Position;
-		mat4 ModelMatrix;
-		ModelMatrix = translate(ModelMatrix, pos);
-		//championChat->Draw2D(p.second->CharacterName, ProjectionMatrix, ViewMatrix, ModelMatrix);
-	}
-	championChat->Draw("OpenGL", ProjectionMatrix, ViewMatrix, mat4());
-	/*else
-	{
+	//for (auto p : Data.GetPlayerInformation())
+	//{
+	//	p.second->DrawUI(ProjectionMatrix, ViewMatrix);
+	//	vec3 pos = p.second->GetUnitData().Position;
+	//	mat4 ModelMatrix;
+	//	ModelMatrix = translate(ModelMatrix, pos);
+	//	//championChat->Draw2D(p.second->CharacterName, ProjectionMatrix, ViewMatrix, ModelMatrix);
+	//}
+	//championChat->Draw("OpenGL", ProjectionMatrix, ViewMatrix, mat4());
+	///*else
+	//{
 
-		ShaderBuilder::LoadShader(Shader::At("2D Text"))->Add_mat4("projection", projection).
-			Add_mat4("view", view).Add_mat4("model", model).
-			Add_vec3("textColor", color).Add_texture("text", 0);
-		text.RenderText("Loading . . .", 350.0f, 200.0f, 500.0f, 40.0f);
-		UI.AcceptInput();
-	}*/
+	//	ShaderBuilder::LoadShader(Shader::At("2D Text"))->Add_mat4("projection", projection).
+	//		Add_mat4("view", view).Add_mat4("model", model).
+	//		Add_vec3("textColor", color).Add_texture("text", 0);
+	//	text.RenderText("Loading . . .", 350.0f, 200.0f, 500.0f, 40.0f);
+	//	UI.AcceptInput();
+	//}*/
 
-	ShaderBuilder::LoadShader(Shader::At("2D Text"))->Add_mat4("projection", projection).
-		Add_mat4("view", view).Add_mat4("model", model).
-		Add_vec3("textColor", color).Add_texture("text", 0);
-	Text& text = Text::getInstance();
-	text.RenderText(UI.Chat, 100.0f, 200.0f, 200.0f, 40.0f);
+	//ShaderBuilder::LoadShader(Shader::At("2D Text"))->Add_mat4("projection", projection).
+	//	Add_mat4("view", view).Add_mat4("model", model).
+	//	Add_vec3("textColor", color).Add_texture("text", 0);
+	//Text& text = Text::getInstance();
+	//text.RenderText(UI.Chat, 100.0f, 200.0f, 200.0f, 40.0f);
 
-	color = vec3(1, 0, 0);
-	SetCameraView();
-	mat4 projectionMatrix = glm::perspective(radians(120.0f),
-		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
+	//color = vec3(1, 0, 0);
+	//SetCameraView();
+	//mat4 projectionMatrix = glm::perspective(radians(120.0f),
+	//	float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
 	ShaderBuilder::LoadShader(Shader::At("2D Text"))->Add_vec3("textColor", color);
 	fps.CountFrame(Shader::At("2D Text"));
-	cursor.Draw();
+	//cursor.Draw();
 }
 
 void Scene::DrawThreaded()

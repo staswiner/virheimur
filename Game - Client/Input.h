@@ -42,6 +42,7 @@ private:
 	void SetPlayerControl(GameObject::controls control);
 	void ManualControl();
 	void DirectControl();
+	void LockCamera();
 	vec3 GetMouseCoord_MapCoord();
 	GlobalDataObject& ReceivedData;
 	GlobalDataObject& InputToScene;
@@ -56,6 +57,7 @@ private:
 	void ResetCharacterPosition();
 	void ResetCameraPosition();
 
+	bool lockCamera = false;
 private:
 	// service functions
 	void RightClickPathAlgorithm(vec3 ClickOnMapCoord);

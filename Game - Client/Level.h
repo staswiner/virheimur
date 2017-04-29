@@ -13,6 +13,7 @@ public:
 	~Level();
 	void LoadLevel();
 	void ReloadShaders();
+	void ReloadShaders(Shader::ImageType);
 	void Draw();
 
 	vector<GameObject*> Grounds;

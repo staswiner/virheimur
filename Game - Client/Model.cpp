@@ -45,6 +45,10 @@ void Model::loadModel(Mesh& mesh)
 {
 	this->meshes.push_back(mesh);
 }
+vector<Mesh::Texture> Model::loadMaterialTextures(aiMaterial * mat, aiTextureType type, string typeName)
+{
+	return vector<Mesh::Texture>();
+}
 void Model::loadModel(string Path)
 {
 	int pos = Path.find_last_of('/');
@@ -203,6 +207,23 @@ void Model::CreateShader() // TODO : should be moved to mesh
 	//}
 	this->shaderParams.MainShader = Shader::ConstructShader(shaderInfo);
 }
+void Model::CreateShader(Shader::ImageType imageType)
+{
+	Shader::ShaderInfo shaderInfo;
+	shaderInfo.HasMaterial = this->scene->HasMaterials();
+	shaderInfo.NumDiffuse = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DIFFUSE);
+	shaderInfo.NumDisplacement = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_DISPLACEMENT);
+	shaderInfo.NumNormalMap = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_NORMALS);
+	shaderInfo.NumSpecular = this->scene->mMaterials[0]->GetTextureCount(aiTextureType::aiTextureType_SPECULAR);
+	shaderInfo.imageType = imageType;
+	//for (int i = 0; i < shaderInfo.NumDiffuse; i++)
+	//{
+	//	aiString path;
+	//	LoadTexture(this->scene->mMaterials[0]->GetTexture(aiTextureType::aiTextureType_DIFFUSE,i,))
+	//	shaderInfo.DiffuseTextures.push_back(Load)
+	//}
+	this->shaderParams.MainShader = Shader::ConstructShader(shaderInfo);
+}
 void Model::ReloadShader()
 {
 	if (this->shaderParams.MainShader)
@@ -210,4 +231,69 @@ void Model::ReloadShader()
 		delete this->shaderParams.MainShader;
 		this->CreateShader();
 	}
+}
+
+void Model::ReloadShader(Shader::ImageType imageType)
+{
+	if (this->shaderParams.MainShader)
+	{
+		delete this->shaderParams.MainShader;
+		this->CreateShader(imageType);
+	}
+}
+
+Models2D::Models2D()
+{
+}
+
+Models2D::~Models2D()
+{
+}
+
+Models2D::Models2D(GLchar * path)
+{
+	this->LoadTexture(path);
+}
+
+void Models2D::Draw3DFacingCamera(vec3 WorldSpace)
+{
+	mat4 WorldPos = glm::translate(mat4(), WorldSpace);
+	mat4& ViewMatrix = FrameData::Instance().ViewMatrix;
+	mat4& ProjectionMatrix = FrameData::Instance().ProjectionMatrix;
+	Mouse& mouse = Mouse::Instanace();
+
+	glm::mat4 projectionOrtho = glm::ortho(0.0f, mouse.GetWindowSize().x,
+		mouse.GetWindowSize().y, 0.0f);
+	vec4 ClipPosition = ProjectionMatrix * ViewMatrix * WorldPos * vec4(0, 0, 0, 1);
+	ClipPosition /= ClipPosition.w;
+	if (ClipPosition.z > 1) return;
+	float x = mouse.GetWindowSize().x / 2.0f;
+	float y = mouse.GetWindowSize().y / 2.0f;
+
+	vec2 ClipCoords = vec2(ClipPosition.x * x + x, -ClipPosition.y * y + y);
+	//ShaderBuilder::LoadShader(shader)->Add_mat4("projection", projection).
+	//	Add_mat4("view", view);// .Add_mat4("model", model);// .Add_mat4("worldPos", WorldPos);
+
+	/*Frame*/
+	// TODO
+	//
+	//
+	//ChatFrames[0]->DrawImagePart(vec2(0, 0), vec2(300, 300), vec2(300, 300),
+	//	vec2(0, 0), vec2(300, 300));
+
+	/*Text*/
+	ShaderBuilder::LoadShader(Shader::At("3D Image"))->
+		Add_mat4("projection", projectionOrtho).
+		Add_mat4("view", mat4()).
+		Add_mat4("model", mat4()).
+		Add_texture("ourTexture", 0);
+	//this->image->Draw();
+}
+
+int Models2D::LoadTexture(string Filename)
+{
+	image = new ImageLoader();
+	image->Initialize(Filename);
+	this->TrueSize = image->GetTrueSize(); 
+	return 0;
 }

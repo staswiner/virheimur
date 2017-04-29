@@ -351,6 +351,10 @@ void Mesh::DrawModel()
 		{
 			shader->Add_texture("Texture[" + to_string(i) + "]", material.DiffuseTextures[i]);
 		}
+		for (int i = 0; i < material.NumDiffuse; i++)
+		{
+			shader->Add_texture("NormalMap[" + to_string(i) + "]", material.NormalMaps[i]);
+		}
 	}
 	vector<aiMatrix4x4> Transforms;
 	if (scene->HasAnimations())
@@ -427,6 +431,15 @@ TODO_FUNCTION Mesh::Material Mesh::LoadMaterial()
 		string Path = dir + path.C_Str();
 		int textureID = LoadTexture(Path.c_str());
 		material.DiffuseTextures.push_back(textureID);
+	}
+	for (int i = 0; i < material.NumNormalMap; i++)
+	{
+		aiString path;
+		string dir = "Collada/";
+		this->scene->mMaterials[0]->GetTexture(aiTextureType::aiTextureType_NORMALS, i, &path);
+		string Path = dir + path.C_Str();
+		int textureID = LoadTexture(Path.c_str());
+		material.NormalMaps.push_back(textureID);
 	}
 	this->material = material;
 	return material;
@@ -710,6 +723,10 @@ int Mesh::LoadTexture(string Filename)
 	unsigned char* image;
 	// "Loading Screen/UI.jpg"
 	image = SOIL_load_image(Filename.c_str(), &Width, &Height, 0, SOIL_LOAD_AUTO);
+	if (!image)
+	{
+		string error = SOIL_last_result();
+	}
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Width, Height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	//	SOIL_free_image_data(image);
 	//}

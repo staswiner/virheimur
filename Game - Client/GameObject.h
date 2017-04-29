@@ -72,6 +72,7 @@ public:
 	void LoadInterface();
 	void UpdateUnitData(Unit_Data uData);
 	void ReloadShader();
+	void ReloadShader(Shader::ImageType);
 	json GetJson();
 	json GetStructureJson();
 	Stats stats;
@@ -153,4 +154,12 @@ public:
 	}
 private:
 	SkyBox_Graphics DrawObject;
+};
+
+class Effect2D : public GameObject {
+public:
+	Effect2D();
+	~Effect2D();
+
+	void Draw(SceneData& sceneData);
 };

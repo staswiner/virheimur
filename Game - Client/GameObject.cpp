@@ -38,12 +38,13 @@ void GameObject::Draw(SceneData& sceneData)
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
 	mat4 ModelMatrix = this->unit_Data.GetModelMatrix();
-	mat4 WVM = sceneData.ProjectionMatrix * sceneData.ViewMatrix * ModelMatrix * Default::Instance().BlenderConversionCenter;
+	mat4 BlenderModelMatrix = ModelMatrix * Default::Instance().BlenderConversion;
+	mat4 WVM = sceneData.ProjectionMatrix * sceneData.ViewMatrix * BlenderModelMatrix;
 	
 	ShaderBuilder::LoadShader(*this->unit_Data.Model_Data->shaderParams.MainShader)->
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", this->unit_Data.Model_Data->shaderParams.isAnimated).
-		Add_mat4("Model", ModelMatrix).
+		Add_mat4("Model", BlenderModelMatrix).
 		Add_vec3("lightPos", sceneData.Light_Pos).
 		Add_vec3("cameraPos", -sceneData.CameraPos).
 		Add_mat4("LightMatrix", sceneData.Light_Matrix);
@@ -154,6 +155,14 @@ void GameObject::ReloadShader()
 	if (this->unit_Data.Model_Data)
 	{
 		this->unit_Data.Model_Data->ReloadShader();
+	}
+}
+
+void GameObject::ReloadShader(Shader::ImageType imageType)
+{
+	if (this->unit_Data.Model_Data)
+	{
+		this->unit_Data.Model_Data->ReloadShader(imageType);
 	}
 }
 
@@ -287,4 +296,8 @@ mat4 GameObject::Unit_Data::GetModelMatrix()
 	ModelMatrix = glm::translate(ModelMatrix, this->Position);
 	ModelMatrix = glm::rotate(ModelMatrix, this->Rotation.y, vec3(0, 1, 0));
 	return ModelMatrix;
+}
+
+void Effect2D::Draw(SceneData & sceneData)
+{
 }

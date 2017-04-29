@@ -24,6 +24,14 @@ void Layer::ReloadShaders()
 	}
 }
 
+void Layer::ReloadShaders(Shader::ImageType imageType)
+{
+	for (auto& o : this->Objects)
+	{
+		o->ReloadShader(imageType);
+	}
+}
+
 void Layer::Draw()
 {
 	FrameData& frameData = FrameData::Instance();
@@ -76,5 +84,13 @@ void Layers::ReloadShaders()
 	for (auto& l : layers)
 	{
 		l.second->ReloadShaders();
+	}
+}
+
+void Layers::ReloadShaders(Shader::ImageType imageType)
+{
+	for (auto& l : layers)
+	{
+		l.second->ReloadShaders(imageType);
 	}
 }

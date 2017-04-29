@@ -8,7 +8,7 @@ Ground_Collision::Ground_Collision()
 Ground_Collision::Ground_Collision(vector<Stas::Vertex> Vertices)
 {
 	AlteredVertices = map<vec2, float, bool(*)(const vec2&, const vec2&)>([](const vec2& lhs, const vec2& rhs)->bool {
-		if (lhs.x == rhs.x)
+		if (lhs.x >= (rhs.x - 0.001f) && lhs.x <= (rhs.x + 0.001f))
 		{
 			return lhs.y < rhs.y;
 		}
@@ -147,11 +147,13 @@ vec3 Ground_Collision::GetNormalRotation(vec3 CurrentPosition)
 float Ground_Collision::FindCorrectTriangle(vec2 Position) // fix to 1 triangle back
 {
 	float unitDifference = abs(AlteredVertices.begin()->first.y - (++AlteredVertices.begin())->first.y);
+	Position = vec2(Position.x,-Position.y);
+	vec2 PositionLow = Position - vec2(unitDifference);
 
-	vec2 PositionDownRight = Position + vec2(unitDifference);
-	vec2 PositionDownLeft = Position + vec2(0,unitDifference);
-	vec2 PositionUpRight = Position + vec2(unitDifference,0);
-	vec2 PositionUpLeft = Position;
+	vec2 PositionDownRight = PositionLow + vec2(unitDifference);
+	vec2 PositionDownLeft = PositionLow + vec2(0,unitDifference);
+	vec2 PositionUpRight = PositionLow + vec2(unitDifference,0);
+	vec2 PositionUpLeft = PositionLow;
 	
 	vec2 xPositionDownRight = AlteredVertices.lower_bound(PositionDownRight)->first;
 	vec2 xPositionDownLeft = AlteredVertices.lower_bound(PositionDownLeft)->first;
@@ -173,7 +175,7 @@ float Ground_Collision::FindCorrectTriangle(vec2 Position) // fix to 1 triangle 
 	vec3 PositionUpRight3	(yPositionUpRight.x,	yRightUp,		yPositionUpRight.y);
 	vec3 PositionUpLeft3	(yPositionUpLeft.x,		yLeftUp,		yPositionUpLeft.y);
 
-	vec2 DifferenceFromStart = Position - yPositionDownLeft;
+	vec2 DifferenceFromStart = Position - yPositionUpLeft;
 	float Height;
 	if (DifferenceFromStart.x + DifferenceFromStart.y < unitDifference)
 	{
@@ -185,6 +187,7 @@ float Ground_Collision::FindCorrectTriangle(vec2 Position) // fix to 1 triangle 
 		// right down
 		Height = Stas::Maths::barryCentric(PositionDownLeft3, PositionDownRight3, PositionUpRight3, Position);
 	}
+	// if Nan
 	return Height;
 }
 

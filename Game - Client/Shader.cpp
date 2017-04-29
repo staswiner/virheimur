@@ -10,6 +10,7 @@ bool Shader::LoadShaders()
 	mapShader["Grass"]			= new Shader("Grass Vertex Shader.glsl", "Champion Geometry Shader.glsl", "Grass Fragment Shader.glsl");
 	mapShader["Gaussic"]		= new Shader("Gaussic Vertex Shader.glsl", "Gaussic Geometry Shader.glsl", "Gaussic Fragment Shader.glsl");
 	mapShader["2D Text"]		= new Shader("Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
+	mapShader["3D Image"]		= new Shader("3D Text Vertex Shader.glsl", "Interface Fragment Shader.glsl");
 	mapShader["Champion Chat"]  = new Shader("3D Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
 	mapShader["HBlur"]			= new Shader("HBlur Vertex Shader.glsl", "HBlur Fragment Shader.glsl");
 	mapShader["VBlur"]			= new Shader("VBlur Vertex Shader.glsl", "VBlur Fragment Shader.glsl");
@@ -558,161 +559,50 @@ GLuint Shader::CompileFragmentShader()
 }
 string Shader::ConstructVertexShader()
 {
-	string s1 =
-		R"(#version 400 compatibility 
-		layout(location = 0) in vec3 position;
-		layout(location = 1) in vec3 normals;
-		layout(location = 2) in vec2 uvs;
-		layout(location = 3) in ivec4 bonesID;
-		layout(location = 4) in vec4 Weights;
-		
-		out float gl_ClipDistance[1];
-		out VS_OUT{
-		vec2 UVs;
-		vec3 Normals;
-		vec3 FragPos;
-		vec3 LightFragPos;
-		vec4 clipSpace;
-		}vs_out;
-		
-		uniform bool isAnimated;
-		uniform mat4 WVM;
-		uniform mat4 LightMatrix;
-		uniform mat4 Model;
-		
-		uniform int BoneNum;
-		uniform mat4 Bones[100];
-		
-	
-		void main()
-		{
-			vec4 objectpos = vec4(position, 1.0);
-			if (isAnimated == true)
-			{
-				mat4 BoneTransform = mat4(0);
-				//BoneTransform += Bones[bonesID[0]] * Weights[0];
-				for (int i = 0; i < 4; i++)
-				{
-					BoneTransform += Bones[bonesID[i]] * Weights[i];
-				}
-		
-				objectpos = BoneTransform * vec4(position, 1.0);
-			}
-			vs_out.FragPos = vec3(Model * objectpos);
-		
-			vs_out.clipSpace = WVM * objectpos;
-		
-			gl_Position = vs_out.clipSpace;
-			vs_out.UVs = vec2(uvs.x, 1.0 - uvs.y);
-			vs_out.Normals = normals;
-			vec4 lFragPos = LightMatrix * vec4(vs_out.FragPos, 1);
-			vs_out.LightFragPos = vec3(lFragPos.xyz) / lFragPos.w;
-		
+	string s1 = FileToText("ShaderBuilder/Vertex-vertex1.glsl");
 
-		})";
+	OutputFinalShader(s1, "ShaderBuilder/Vertex-FULL.glsl");
+
 	return s1;
 }
 string Shader::ConstructGeometryShader()
 {
-	string s1 =
-		R"(#version 400 compatibility
-		layout(triangles) in;
-		layout(triangle_strip, max_vertices = 3) out;
 
-		in VS_OUT{
-		vec2 UVs;
-		vec3 Normals;
-		vec3 FragPos;
-		vec3 LightFragPos;
-		vec4 clipSpace;
-		}vs_in[];
+	string Triangle = FileToText("ShaderBuilder/Geometry1-triangles.glsl");
+	string Wire = FileToText("ShaderBuilder/Geometry1-wire.glsl");
+	string Body = FileToText("ShaderBuilder/Geometry2-geometry1.glsl");
+	
+	string GeometryShader;
+	GeometryShader += (shaderInfo.imageType == Shader::ImageType::Wire) ? Wire : Triangle;
+	GeometryShader += Body;
 
-		out GS_OUT{
-		vec2 UVs;
-		vec3 Normals;
-		vec3 FragPos;
-		vec4 clipSpace;
-		vec3 LightFragPos;
-		vec3 T;
-		vec3 B;
-		}gs_out;
-		//varying out vec3 a;
-		uniform mat4 WVM;
-		//varying in vec3 varNormal[];
-		//varying vec3 varNormalf;
+	OutputFinalShader(GeometryShader, "ShaderBuilder/Geometry-FULL.glsl");
 
-		void TransferData(in int i)
-		{
-			gl_Position = gl_in[i].gl_Position;
-			//gl_ClipDistance[0] = gl_in[i].gl_ClipDistance[0];
-			gs_out.UVs = vs_in[i].UVs;
-			gs_out.Normals = vs_in[i].Normals;
-			gs_out.FragPos = vs_in[i].FragPos;
-			gs_out.LightFragPos = vs_in[i].LightFragPos;
-			gs_out.clipSpace = vs_in[i].clipSpace;
-			//varNormalf = varNormal[i];
-		}
-		void CalculateTangent()
-		{
-			// MBT::
-			vec3 Edge1 = vs_in[1].FragPos - vs_in[0].FragPos;
-			vec3 Edge2 = vs_in[2].FragPos - vs_in[0].FragPos;
-
-			vec2 DeltaUV1 = vs_in[1].UVs - vs_in[0].UVs;
-			vec2 DeltaUV2 = vs_in[2].UVs - vs_in[0].UVs;
-
-			float f = 1.0f / (DeltaUV1.x * DeltaUV2.y - DeltaUV2.x * DeltaUV1.y);
-
-			vec3 Tangent, Bitangent;
-
-			Tangent.x = f * (DeltaUV2.y * Edge1.x - DeltaUV1.y * Edge2.x);
-			Tangent.y = f * (DeltaUV2.y * Edge1.y - DeltaUV1.y * Edge2.y);
-			Tangent.z = f * (DeltaUV2.y * Edge1.z - DeltaUV1.y * Edge2.z);
-
-			Bitangent.x = f * (-DeltaUV2.x * Edge1.x - DeltaUV1.x * Edge2.x);
-			Bitangent.y = f * (-DeltaUV2.x * Edge1.y - DeltaUV1.x * Edge2.y);
-			Bitangent.z = f * (-DeltaUV2.x * Edge1.z - DeltaUV1.x * Edge2.z);
-
-			Tangent = normalize(Tangent);
-			Bitangent = normalize(Bitangent);
-			gs_out.T = Tangent; // WVM * vector
-			gs_out.B = Bitangent;
-
-		}
-		void main()
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				TransferData(i);
-				CalculateTangent();
-				EmitVertex();
-			}
-			EndPrimitive();
-		})";
-	return s1;
+	 
+	return GeometryShader;
 }
 string Shader::ConstructFragmentShader()
 {
 
-	string header = FileToText("ShaderBuilder/Fragment-header.glsl");
+	string header = FileToText("ShaderBuilder/Fragment1-header.glsl");
 		
-	string Normalfunc = FileToText("ShaderBuilder/Fragment-Normalfunc.glsl");
+	string Normalfunc = FileToText("ShaderBuilder/Fragment2-Normalfunc.glsl");
 
-	string NormalMapfunc = FileToText("ShaderBuilder/Fragment-NormalMapfunc.glsl");
+	string NormalMapfunc = FileToText("ShaderBuilder/Fragment2-NormalMapfunc.glsl");
 		
-	string materialfunc1 = FileToText("ShaderBuilder/Fragment-materialfunc1.glsl");
+	string materialfunc1 = FileToText("ShaderBuilder/Fragment3-materialfunc1.glsl");
 	
-	string materialfunc1NormalMap = FileToText("ShaderBuilder/Fragment-materialfunc1NormalMap.glsl");
+	string materialfunc1NormalMap = FileToText("ShaderBuilder/Fragment3-materialfunc1NormalMap.glsl");
 	
-	string materialfunc1NoNormalMap = FileToText("ShaderBuilder/Fragment-materialfunc1NoNormalMap.glsl");
+	string materialfunc1NoNormalMap = FileToText("ShaderBuilder/Fragment3-materialfunc1NoNormalMap.glsl");
 	
-	string materialfunc2 = FileToText("ShaderBuilder/Fragment-materialfunc2.glsl");
+	string materialfunc2 = FileToText("ShaderBuilder/Fragment3-materialfunc2.glsl");
 		
-	string materialfunc2NormalMap = FileToText("ShaderBuilder/Fragment-materialfunc2NormalMap.glsl");
+	string materialfunc2NormalMap = FileToText("ShaderBuilder/Fragment3-materialfunc2NormalMap.glsl");
 
-	string materialfunc2NoNormalMap = FileToText("ShaderBuilder/Fragment-materialfunc2NoNormalMap.glsl");
+	string materialfunc2NoNormalMap = FileToText("ShaderBuilder/Fragment3-materialfunc2NoNormalMap.glsl");
 	
-	string materialfunc3 = FileToText("ShaderBuilder/Fragment-materialfunc3.glsl");
+	string materialfunc3 = FileToText("ShaderBuilder/Fragment3-materialfunc3.glsl");
 		
 	string mainfunc1 = FileToText("ShaderBuilder/Fragment-mainfunc1.glsl");
 		
@@ -727,8 +617,8 @@ string Shader::ConstructFragmentShader()
 	string mainfunc2 = FileToText("ShaderBuilder/Fragment-mainfunc2.glsl");
 	
 	
-	string FragmentShader = header + Normalfunc;
-	FragmentShader += (this->shaderInfo.NumNormalMap) ? NormalMapfunc : "";
+	string FragmentShader = header;
+	FragmentShader += (this->shaderInfo.NumNormalMap) ? NormalMapfunc : Normalfunc;
 
 	FragmentShader += materialfunc1;
 	FragmentShader += (this->shaderInfo.NumNormalMap) ? materialfunc1NormalMap : materialfunc1NoNormalMap;
@@ -740,6 +630,8 @@ string Shader::ConstructFragmentShader()
 	FragmentShader += (this->shaderInfo.NumDiffuse) ? mainfunc1Diffuse : mainfunc1NoDiffuse;
 	FragmentShader += (this->shaderInfo.NumNormalMap) ? mainfunc1NormalMap : mainfunc1NoNormalMap;
 	FragmentShader += mainfunc2;
+
+	OutputFinalShader(FragmentShader,"ShaderBuilder/Fragment-FULL.glsl");
 
 	return FragmentShader;
 }
@@ -761,6 +653,24 @@ string Shader::FileToText(string Path)
 		throw exception("unable to open file");
 	}
 	return Text;
+}
+void Shader::TextToFile(string Text, string Path)
+{
+	string line;
+	ofstream myfile(Path);
+	if (myfile.is_open())
+	{
+		myfile << Text;
+		myfile.close();
+	}
+	else
+	{
+		throw exception("unable to open file");
+	}
+}
+void Shader::OutputFinalShader(string Text, string Path)
+{
+	TextToFile(Text, Path);
 }
 void Shader::Use()
 {

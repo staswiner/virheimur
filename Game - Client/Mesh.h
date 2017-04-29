@@ -100,6 +100,7 @@ public:
 		int NumDisplacement = 0;
 
 		vector<int> DiffuseTextures;
+		vector<int> NormalMaps;
 		operator ::Material() const 
 		{
 			::Material material;
@@ -184,7 +185,7 @@ private:
 	vector<BoneInfo> m_BoneInfo;
 	mat4 m_GlobalInverseTransform;
 	vector<aiAnimation*> Animations;
-	map<string, float> m_BoneMapping;
+	map<string, int> m_BoneMapping;
 
 	vector<MeshEntry> m_Entries;
 	int MeshIndex = 0;

@@ -23,7 +23,8 @@ void Level::LoadLevel()
 	this->AddEntity(layer, "Mine", EntityType::Entity);
 	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer);
 	this->AddEntity(layer, "Land", EntityType::Ground);
-	this->AddEntity(layer, "Mine", EntityType::Entity);
+	gameObject = this->AddEntity(layer, "Mine", EntityType::Entity);
+	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
 
 	layers.Add(layer, LayerType::FinalObject);
 }
@@ -31,6 +32,11 @@ void Level::LoadLevel()
 void Level::ReloadShaders()
 {
 	layers.ReloadShaders();
+}
+
+void Level::ReloadShaders(Shader::ImageType imageType)
+{
+	layers.ReloadShaders(imageType);
 }
 
 void Level::Draw()

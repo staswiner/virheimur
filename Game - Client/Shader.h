@@ -21,15 +21,22 @@ public:
 	Shader(string vertexPath,string fragmentPath);
 	Shader(string vertexPath, string geometryPath, string fragmentPath);
 	Shader(string vertexShader, string geometryShader, string fragmentShader, bool);
-#define MODEL
+	enum class ImageType {
+		Wire,
+		Triangle
+	};
 	struct ShaderInfo {
 		int NumDiffuse = 0;
 		int NumNormalMap = 0;
 		int NumSpecular = 0;
 		int NumDisplacement = 0;
 		bool HasMaterial = false;
+		Shader::ImageType imageType = Shader::ImageType::Triangle;
+
 		vector<GLuint> DiffuseTextures;
+		vector<GLuint> NormalMaps;
 	};
+
 	static Shader* ConstructShader(ShaderInfo shaderInfo);
 	// Use the program
 	void Use();
@@ -46,6 +53,8 @@ private:
 	string ConstructFragmentShader();
 
 	string FileToText(string Path);
+	void TextToFile(string Text,string Path);
+	void OutputFinalShader(string Text, string Path);
 	ShaderInfo shaderInfo;
 	void InitializeShaderProgram(string Path, GLuint shaderID);
 	static map<string, Shader*> mapShader;

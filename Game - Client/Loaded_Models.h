@@ -29,3 +29,24 @@ public:
 
 
 };
+
+class Effects2DCollection {
+private:
+	Effects2DCollection();
+	Effects2DCollection(Effects2DCollection const&) = delete;
+	void operator=(Effects2DCollection const&) = delete;
+
+	map<string, Model*> Models;
+	static Effects2DCollection instance;
+
+public:
+	static Effects2DCollection& Instance()
+	{
+		static Effects2DCollection instance;
+		return instance;
+	}
+	~Effects2DCollection() {}
+
+	Model* operator[](string i);
+
+};

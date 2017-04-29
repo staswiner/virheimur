@@ -1,1 +1,0 @@
-vec3 AddLight(Material material, vec3 LightColor, vec3 LightDir

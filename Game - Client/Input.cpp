@@ -325,7 +325,8 @@ void Input::GetMouseInputOffline()
 		Camera& camera = Camera::GetCamera("Main");
 
 		// Allow camera, and game interactions
-		camera.GetUpdatedCamera();
+		if (lockCamera == false)
+			camera.GetUpdatedCamera();
 		// Locked camera
 		/*	Player* myPlayer = Data->GetPlayerInformation()[ReceivedData.MyUsername];
 		Unit_Data& unit = myPlayer->unit_Data;
@@ -361,6 +362,7 @@ void Input::GetKeyboardInput()
 		case 'd': SetPlayerControl(GameObject::controls::Direct); break; // direct
 		case 'p': OpenProfileUI(); break;
 		case 'r': ReloadShaders(); break;
+		case 'l': LockCamera(); break;
 		}
 		// end
 	}
@@ -674,7 +676,7 @@ void Input::ManualControl()
 	}
 	
 	float frameTime = Time::Instance().Frame();
-	float scale = 0.1f;
+	float scale = 1.0f;
 	float MovementSpeed = 15.0f * frameTime / 1000.0f * scale;
 	float RotationSpeed = 5.0f * frameTime / 1000.0f;
 	float angle = -Player.unit_Data.Rotation.y;
@@ -753,6 +755,18 @@ void Input::DirectControl()
 			p.unit_Data.Position = p.unit_Data.Position + vec3(anglex(angle), 0, angley(angle)) *
 			MovementSpeed;
 		p.unit_Data.Rotation.y = radians(270.0f);
+	}
+}
+
+void Input::LockCamera()
+{
+	if (lockCamera == false)
+	{
+		this->lockCamera = true;
+	}
+	else
+	{
+		this->lockCamera = false;
 	}
 }
 

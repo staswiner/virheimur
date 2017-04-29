@@ -22,6 +22,8 @@ public:
 	friend Layers;
 	void AddGameObject(GameObject*);
 	void ReloadShaders();
+	void ReloadShaders(Shader::ImageType);
+
 private:
 	void Draw();
 	//void OrderObjects(function<bool(GameObject&, GameObject&)> orderer);
@@ -40,6 +42,7 @@ public:
 	void Draw();
 	void Add(Layer*, LayerType);
 	void ReloadShaders();
+	void ReloadShaders(Shader::ImageType);
 	
 private: 
 	map<LayerType, Layer*> layers;

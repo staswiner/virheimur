@@ -7,14 +7,14 @@
 4. implement server sided AI monsters
 5. switch to binary instead of json
 6. fix website 
-7. Shader Generator
-8. optimize drawing objects into a single collectible
 9. Deffered shading
 10. shadow mapping
 11. order transparent objects
 12. construct DLLs
-13. create offline version that uses server subprogram without a database.
-
+14. shader condition file format
+15. shader condition view and edit application
+16. physical collision
+17. implement algorithms, and pseudo sensors
 
 */
 //#version 400 core
