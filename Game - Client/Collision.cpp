@@ -31,7 +31,7 @@ vector<vec3> Collision::GetPlaneCoords(vec3)
 	return vector<vec3>();
 }
 
-vec3 Collision::GetNormalRotation(vec3)
+vec3 Collision::GetNormalRotation(vec2)
 {
 	return vec3();
 }

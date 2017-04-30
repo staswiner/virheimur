@@ -264,10 +264,9 @@ void GameLogic::ProcessPlayerMovement()
 
 	if (p.movement == GameObject::movements::Ground) {
 		ud.Position = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
-		vec3 rotation = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position);
+		vec3 rotation = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position.xz);
 		
-		ud.Rotation.x = rotation.x;
-		ud.Rotation.z = rotation.z;
+		ud.RotateByNormal(rotation);
 	}
 }
 // old moving script

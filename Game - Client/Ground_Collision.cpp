@@ -44,47 +44,6 @@ vec3 Ground_Collision::OnCollision(vec3 CurrentPosition)
 	vec3 UnitPosition = CurrentPosition;
 	float Height = FindCorrectTriangleHeight(CurrentPosition.xz);
 	UnitPosition.y = Height;
-	//if (auto it = AlteredVertices->find(vec2(TriangleCoord0.x, TriangleCoord0.z)) == AlteredVertices->end())
-	//{
-	//	int i = 0;
-	//}
-	//TriangleCoord0.y = AlteredVertices->lower_bound(vec2(TriangleCoord0.x, TriangleCoord0.z))->second;
-	////auto it = AlteredVertices->lower_bound(vec2(TriangleCoord0.x,TriangleCoord0.z));
-	//TriangleCoord0.y = AlteredVertices->find(vec2(TriangleCoord0.x, TriangleCoord0.z)) != AlteredVertices->end() 
-	//	? AlteredVertices->at(vec2(TriangleCoord0.x, TriangleCoord0.z)) : 0;
-	//TriangleCoord1.y = AlteredVertices->find(vec2(TriangleCoord1.x, TriangleCoord1.z)) != AlteredVertices->end()
-	//	? AlteredVertices->at(vec2(TriangleCoord1.x, TriangleCoord1.z)) : 0;
-	//TriangleCoord2.y = AlteredVertices->find(vec2(TriangleCoord2.x, TriangleCoord2.z)) != AlteredVertices->end()
-	//	? AlteredVertices->at(vec2(TriangleCoord2.x, TriangleCoord2.z)) : 0;
-
-	//if (InTriangle.x > 1.0 - InTriangle.z)
-	//	TriangleCoord1.x += Delta;
-	//else
-	//	TriangleCoord1.z += Delta;
-	//if ()
-	/*auto top = AlteredVertices->lower_bound(vec2(TriangleCoord0.x, TriangleCoord0.z));
-	auto bottom = AlteredVertices->upper_bound(vec2(TriangleCoord0.x-5, TriangleCoord0.z));
-	map<vec2,float,bool (*)(const vec2&, const vec2&)> vRange(bottom, top,
-		[](const vec2& lhs, const vec2& rhs)->bool
-	{return lhs.y < rhs.y; });
-	if (vRange.size() != 0)
-	{
-		auto it = vRange.lower_bound(vec2(TriangleCoord0.x, TriangleCoord0.z));
-		TriangleCoord0.y = it->second;
-	}
-	else
-	{
-		TriangleCoord0.y = top->second;
-	}*/
-	//auto it = range.upper_bound(vec2(TriangleCoord0.x, TriangleCoord0.z));
-	//TriangleCoord0.y = it->second;
-	//TriangleCoord1.y = AlteredVertices.lower_bound(vec2(TriangleCoord1.x, TriangleCoord1.z))->second;
-	//TriangleCoord2.y = AlteredVertices.lower_bound(vec2(TriangleCoord2.x, TriangleCoord2.z))->second;
-	//TriangleCoord1.y = AlteredVertices.lower_bound(vec2(UnitPosition.x+ Delta, UnitPosition.z))->second;
-	//TriangleCoord2.y = AlteredVertices.lower_bound(vec2(UnitPosition.x, UnitPosition.z + Delta))->second;
-
-	//UnitPosition.y = Stas::Maths::barryCentric(TriangleCoord0, TriangleCoord1, TriangleCoord2, vec2(UnitPosition.x, UnitPosition.z));
-
 
 	return UnitPosition;
 }
@@ -112,35 +71,17 @@ vector<vec3> Ground_Collision::GetPlaneCoords(vec3 Index)
 	return ReturnPlane;
 }
 
-vec3 Ground_Collision::GetNormalRotation(vec3 CurrentPosition)
+vec3 Ground_Collision::GetNormalRotation(vec2 Position)
 {
-	vec3 UnitPosition = CurrentPosition;
-	float Delta = 0.1f;// AlteredVertices.begin()->first.first - (++AlteredVertices.begin())->first.first;
-	vec3 RoundedValues(int(UnitPosition.x / 2) * 2, int(UnitPosition.y / 2) * 2, int(UnitPosition.z / 2) * 2);
+	Position = vec2(Position.x, -Position.y);
+	vector<vec3> Triangle = FindCorrectTriangle(Position);
 
-	vec3 TriangleCoord0 = RoundedValues;
-	vec3 TriangleCoord1 = RoundedValues + vec3(0, 0, 2);
-	vec3 TriangleCoord2 = RoundedValues + vec3(2, 0, 0);
-
-	//if (auto it = AlteredVertices->find(vec2(TriangleCoord0.x, TriangleCoord0.z)) == AlteredVertices->end())
-	//{
-	//	int i = 0;
-	//}
-	////auto it = AlteredVertices->lower_bound(vec2(TriangleCoord0.x,TriangleCoord0.z));
-	//TriangleCoord0.y = AlteredVertices->find(vec2(TriangleCoord0.x, TriangleCoord0.z)) != AlteredVertices->end()
-	//	? AlteredVertices->at(vec2(TriangleCoord0.x, TriangleCoord0.z)) : 0;
-	//TriangleCoord1.y = AlteredVertices->find(vec2(TriangleCoord1.x, TriangleCoord1.z)) != AlteredVertices->end()
-	//	? AlteredVertices->at(vec2(TriangleCoord1.x, TriangleCoord1.z)) : 0;
-	//TriangleCoord2.y = AlteredVertices->find(vec2(TriangleCoord2.x, TriangleCoord2.z)) != AlteredVertices->end()
-	//	? AlteredVertices->at(vec2(TriangleCoord2.x, TriangleCoord2.z)) : 0;
-
-	//vec3 TriangleNormal = cross(TriangleCoord0 - TriangleCoord1, TriangleCoord0 - TriangleCoord2);
-	//vec3 NormalAngle = vec3(
-	//	sqrt(TriangleNormal.x*TriangleNormal.x + TriangleNormal.y*TriangleNormal.y + TriangleNormal.z*TriangleNormal.z),
-	//	atan(TriangleNormal.y / TriangleNormal.x),
-	//	acos(TriangleNormal.z)
-	//);
-	vec3 NormalAngle; // delete
+	vec3 TriangleNormal = cross(Triangle[0] - Triangle[1], Triangle[0] - Triangle[2]);
+	TriangleNormal = Triangle[0] - Triangle[1];
+	float x = sqrt(TriangleNormal.x*TriangleNormal.x + TriangleNormal.y*TriangleNormal.y + TriangleNormal.z*TriangleNormal.z);
+	float y = atan(TriangleNormal.y / TriangleNormal.x);
+	float z = acos(TriangleNormal.z / x);
+	vec3 NormalAngle = vec3(x,y,z);
 	return NormalAngle;
 }
 

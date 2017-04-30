@@ -315,9 +315,22 @@ GameObject::Unit_Data::~Unit_Data()
 mat4 GameObject::Unit_Data::GetModelMatrix()
 {
 	mat4 ModelMatrix;
+	quat Quaternion(this->Rotation);
 	ModelMatrix = glm::translate(ModelMatrix, this->Position);
-	ModelMatrix = glm::rotate(ModelMatrix, this->Rotation.y, vec3(0, 1, 0));
+	mat4 RotationMat = (mat4)Quaternion;
+	ModelMatrix = ModelMatrix * (mat4)Quaternion;
+	
 	return ModelMatrix;
+}
+
+void GameObject::Unit_Data::RotateByNormal(vec3 NormalAngles)
+{
+	//mat4 ModelMatrix;
+	//quat Quaternion(this->Rotation);
+	//ModelMatrix = glm::translate(ModelMatrix, this->Position);
+	//mat4 RotationMat = (mat4)Quaternion;
+	//ModelMatrix = ModelMatrix * (mat4)Quaternion;
+	this->SurfaceNormal = NormalAngles;
 }
 
 void Effect2D::Draw(SceneData & sceneData)

@@ -18,7 +18,7 @@ public:
 	virtual vec3 OnCollision(vec3 Position);
 	virtual vector<vec3> GetPlaneCoords(vec3);
 
-	virtual vec3 GetNormalRotation(vec3);
+	virtual vec3 GetNormalRotation(vec2);
 
 	vector<Stas::Vertex>& GetVertices();
 

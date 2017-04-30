@@ -8,7 +8,7 @@
 #include "Model.h"
 #include "Loaded_Models.h"
 #include "Default.h"
-
+#include "glm/glm/gtc/quaternion.hpp"
 using namespace nlohmann;
 using namespace chrono;
 using namespace glm;
@@ -33,6 +33,7 @@ public:
 		Unit_Data();
 		~Unit_Data();
 		mat4 GetModelMatrix();
+		void RotateByNormal(vec3 NormalAngles);
 		// When destination is chosen, StartPointTime is updated with the action time. 
 		// Later Calculates the route based on this factor and walking speed
 	public:
@@ -41,6 +42,7 @@ public:
 		vec3 Velocity; // Direction * Value
 		vec3 Acceleration; // Direction * Value
 
+		vec3 SurfaceNormal = vec3(0,1,0);
 		vec3 Rotation;
 
 		bool HasPhysics;

@@ -212,12 +212,14 @@ void Scene::GenerateForm()
 		if (Element->innerText.back() == '\r')
 		{
 			Element->innerText.pop_back();
-			if (Element->innerText == "Wire")
+			std::transform(Element->innerText.begin(),
+				Element->innerText.end(), Element->innerText.begin(), ::tolower);
+			if (Element->innerText == "wire")
 			{
 				OfflineDataObject& offlineData = OfflineDataObject::Instance();
 				offlineData.level.ReloadShaders(Shader::ImageType::Wire);
 			}
-			if (Element->innerText == "Triangle")
+			if (Element->innerText == "triangle")
 			{
 				OfflineDataObject& offlineData = OfflineDataObject::Instance();
 				offlineData.level.ReloadShaders(Shader::ImageType::Triangle);
