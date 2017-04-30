@@ -24,5 +24,6 @@ public:
 	vec3 GetNormalRotation(vec3);
 private:
 	map<vec2, float, bool(*)(const vec2&, const vec2&)> AlteredVertices;
-	float FindCorrectTriangle(vec2 Position);
+	float FindCorrectTriangleHeight(vec2 Position);
+	vector<vec3> FindCorrectTriangle(vec2 Position);
 };

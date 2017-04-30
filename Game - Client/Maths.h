@@ -16,7 +16,7 @@
 #include "glm\glm\vec4.hpp"
 #include "glm\glm\mat4x4.hpp"
 #include "glm\glm\gtc\matrix_transform.hpp"
-#include "Physics\reactphysics3d.h"
+#include "reactphysics3d.h"
 
 using namespace glm;
 using namespace std;

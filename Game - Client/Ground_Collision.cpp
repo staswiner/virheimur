@@ -42,7 +42,7 @@ Ground_Collision::~Ground_Collision()
 vec3 Ground_Collision::OnCollision(vec3 CurrentPosition)
 {
 	vec3 UnitPosition = CurrentPosition;
-	float Height = FindCorrectTriangle(CurrentPosition.xz);
+	float Height = FindCorrectTriangleHeight(CurrentPosition.xz);
 	UnitPosition.y = Height;
 	//if (auto it = AlteredVertices->find(vec2(TriangleCoord0.x, TriangleCoord0.z)) == AlteredVertices->end())
 	//{
@@ -144,17 +144,29 @@ vec3 Ground_Collision::GetNormalRotation(vec3 CurrentPosition)
 	return NormalAngle;
 }
 
-float Ground_Collision::FindCorrectTriangle(vec2 Position) // fix to 1 triangle back
+float Ground_Collision::FindCorrectTriangleHeight(vec2 Position) // fix to 1 triangle back
+{
+	Position = vec2(Position.x, -Position.y);
+
+	vector<vec3> CorrectTriangle = FindCorrectTriangle(Position);
+	float Height;
+
+	Height = Stas::Maths::barryCentric(CorrectTriangle[0], CorrectTriangle[1],
+		CorrectTriangle[2], Position);
+	// if Nan
+	return Height;
+}
+
+vector<vec3> Ground_Collision::FindCorrectTriangle(vec2 Position)
 {
 	float unitDifference = abs(AlteredVertices.begin()->first.y - (++AlteredVertices.begin())->first.y);
-	Position = vec2(Position.x,-Position.y);
 	vec2 PositionLow = Position - vec2(unitDifference);
 
 	vec2 PositionDownRight = PositionLow + vec2(unitDifference);
-	vec2 PositionDownLeft = PositionLow + vec2(0,unitDifference);
-	vec2 PositionUpRight = PositionLow + vec2(unitDifference,0);
+	vec2 PositionDownLeft = PositionLow + vec2(0, unitDifference);
+	vec2 PositionUpRight = PositionLow + vec2(unitDifference, 0);
 	vec2 PositionUpLeft = PositionLow;
-	
+
 	vec2 xPositionDownRight = AlteredVertices.lower_bound(PositionDownRight)->first;
 	vec2 xPositionDownLeft = AlteredVertices.lower_bound(PositionDownLeft)->first;
 	vec2 xPositionUpRight = AlteredVertices.lower_bound(PositionUpRight)->first;
@@ -165,30 +177,29 @@ float Ground_Collision::FindCorrectTriangle(vec2 Position) // fix to 1 triangle 
 	vec2 yPositionUpRight = AlteredVertices.lower_bound(vec2(xPositionUpRight.x, PositionUpRight.y))->first;
 	vec2 yPositionUpLeft = AlteredVertices.lower_bound(vec2(xPositionUpLeft.x, PositionUpLeft.y))->first;
 
-	float yRightDown	= AlteredVertices.lower_bound(yPositionDownRight)->second;
-	float yLeftDown		= AlteredVertices.lower_bound(yPositionDownLeft)->second;
-	float yRightUp		= AlteredVertices.lower_bound(yPositionUpRight)->second;
-	float yLeftUp		= AlteredVertices.lower_bound(yPositionUpLeft)->second;
+	float yRightDown = AlteredVertices.lower_bound(yPositionDownRight)->second;
+	float yLeftDown = AlteredVertices.lower_bound(yPositionDownLeft)->second;
+	float yRightUp = AlteredVertices.lower_bound(yPositionUpRight)->second;
+	float yLeftUp = AlteredVertices.lower_bound(yPositionUpLeft)->second;
 
-	vec3 PositionDownRight3	(yPositionDownRight.x,	yRightDown,		yPositionDownRight.y);
-	vec3 PositionDownLeft3	(yPositionDownLeft.x,	yLeftDown,		yPositionDownLeft.y);
-	vec3 PositionUpRight3	(yPositionUpRight.x,	yRightUp,		yPositionUpRight.y);
-	vec3 PositionUpLeft3	(yPositionUpLeft.x,		yLeftUp,		yPositionUpLeft.y);
+	vec3 PositionDownRight3(yPositionDownRight.x, yRightDown, yPositionDownRight.y);
+	vec3 PositionDownLeft3(yPositionDownLeft.x, yLeftDown, yPositionDownLeft.y);
+	vec3 PositionUpRight3(yPositionUpRight.x, yRightUp, yPositionUpRight.y);
+	vec3 PositionUpLeft3(yPositionUpLeft.x, yLeftUp, yPositionUpLeft.y);
 
 	vec2 DifferenceFromStart = Position - yPositionUpLeft;
-	float Height;
+	vector<vec3> ReturnTriangle;
 	if (DifferenceFromStart.x + DifferenceFromStart.y < unitDifference)
 	{
 		// left top
-		Height = Stas::Maths::barryCentric(PositionUpLeft3, PositionUpRight3, PositionDownLeft3, Position);
+		ReturnTriangle = { PositionUpLeft3, PositionUpRight3, PositionDownLeft3 };
 	}
 	else
 	{
 		// right down
-		Height = Stas::Maths::barryCentric(PositionDownLeft3, PositionDownRight3, PositionUpRight3, Position);
+		ReturnTriangle = { PositionDownLeft3, PositionDownRight3, PositionUpRight3 };
 	}
-	// if Nan
-	return Height;
+	return ReturnTriangle;
 }
 
 /*

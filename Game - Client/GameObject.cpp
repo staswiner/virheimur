@@ -230,7 +230,10 @@ void GameObject::SetMemoryData(string VarName, void * data, size_t s)
 
 void GameObject::CreateCollisionBody(rp3d::CollisionWorld& world)
 {
-	rp3d::Vector3 position = this->unit_Data.Position;
+	rp3d::Vector3 position;
+	position.x = this->unit_Data.Position.x;
+	position.y = this->unit_Data.Position.y;
+	position.z = this->unit_Data.Position.z;
 	rp3d::Quaternion orientation = rp3d::Quaternion::identity();
 	rp3d::Transform transform(position, orientation);
 	this->collisionBody = world.createCollisionBody(transform);
@@ -238,7 +241,10 @@ void GameObject::CreateCollisionBody(rp3d::CollisionWorld& world)
 
 void GameObject::UpdateCollisionBody(rp3d::CollisionWorld& world)
 {
-	rp3d::Vector3 position = this->unit_Data.Position;
+	rp3d::Vector3 position;
+	position.x = this->unit_Data.Position.x;
+	position.y = this->unit_Data.Position.y;
+	position.z = this->unit_Data.Position.z;
 	rp3d::Quaternion orientation = rp3d::Quaternion::identity();
 	rp3d::Transform transform(position, orientation);
 	this->collisionBody->setTransform(transform);

@@ -42,7 +42,6 @@
 #	endif
 #endif //GLM_SWIZZLE
 #include <cstddef>
-#include "Physics\reactphysics3d.h"
 
 namespace glm
 {
@@ -56,13 +55,7 @@ namespace glm
 		typedef tvec3<bool, P> bool_type;
 		typedef T value_type;
 
-		operator rp3d::Vector3() {
-			rp3d::Vector3 vector3;
-			vector3.x = this->x;
-			vector3.y = this->y;
-			vector3.z = this->z;
-			return vector3;
-		}
+	
 		//////////////////////////////////////
 		// Data
 
