@@ -103,6 +103,10 @@ public:
 	// TO remove variable
 	bool PathingStarted = false;
 	bool LongPath = true;
+	// Collision library
+	rp3d::CollisionBody* collisionBody;
+	void CreateCollisionBody(rp3d::CollisionWorld& world);
+	void UpdateCollisionBody(rp3d::CollisionWorld& world);
 
 private:
 	map<string, void*> MemoryBlock;

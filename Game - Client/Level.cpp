@@ -66,6 +66,7 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType)
 	default:
 		break;
 	}
+	this->GameObjects.push_back(gameObject);
 	return gameObject;
 
 

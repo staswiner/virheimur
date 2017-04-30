@@ -26,4 +26,3 @@ private:
 	map<vec2, float, bool(*)(const vec2&, const vec2&)> AlteredVertices;
 	float FindCorrectTriangle(vec2 Position);
 };
-

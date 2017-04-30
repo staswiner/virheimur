@@ -228,6 +228,22 @@ void GameObject::SetMemoryData(string VarName, void * data, size_t s)
 	MemoryBlock[VarName] = AllocationData;
 }
 
+void GameObject::CreateCollisionBody(rp3d::CollisionWorld& world)
+{
+	rp3d::Vector3 position = this->unit_Data.Position;
+	rp3d::Quaternion orientation = rp3d::Quaternion::identity();
+	rp3d::Transform transform(position, orientation);
+	this->collisionBody = world.createCollisionBody(transform);
+}
+
+void GameObject::UpdateCollisionBody(rp3d::CollisionWorld& world)
+{
+	rp3d::Vector3 position = this->unit_Data.Position;
+	rp3d::Quaternion orientation = rp3d::Quaternion::identity();
+	rp3d::Transform transform(position, orientation);
+	this->collisionBody->setTransform(transform);
+}
+
 GameObject *& PlayerRepository::operator[](string Key)
 {
 	if (this->Players.find(Key) == this->Players.end())

@@ -20,6 +20,7 @@ public:
 	vector<GameObject*> ActivePlayers;
 	vector<GameObject*> PassivePlayers;
 	vector<GameObject*> Entities;
+	vector<GameObject*> GameObjects;
 private:
 	GameObject* AddEntity(Layer* layer, string Model, EntityType);
 	Layers layers;

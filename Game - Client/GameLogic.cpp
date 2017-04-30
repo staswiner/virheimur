@@ -199,6 +199,36 @@ TODO_FUNCTION void GameLogic::ProcessForces()
 	}
 }
 
+void GameLogic::RegisterCollisionBodies()
+{
+	for (auto object : OfflineDataObject::Instance().level.GameObjects)
+	{
+		object->CreateCollisionBody(this->world);
+	}
+}
+
+void GameLogic::UpdateCollisionBodies()
+{
+	for (auto object : OfflineDataObject::Instance().level.GameObjects)
+	{
+		object->UpdateCollisionBody(this->world);
+	}
+}
+
+void GameLogic::CheckCollision()
+{
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
+	for (auto object1 = offlineData.level.GameObjects.begin();
+		object1+1 != offlineData.level.GameObjects.end(); object1++)
+	{
+		for (auto object2 = object1+1;
+			object2 != offlineData.level.GameObjects.end(); object2++)
+		{
+			this->world.testAABBOverlap((*object1)->collisionBody, (*object2)->collisionBody);
+		}
+	}
+}
+
 void GameLogic::ProcessPlayerMovement()
 {
 	// Declarations

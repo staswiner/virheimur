@@ -31,6 +31,12 @@ public:
 #define TODO_FUNCTION
 	TODO_FUNCTION void CalculateCollision();
 	TODO_FUNCTION void ProcessForces();
+
+	// World Physics
+	rp3d::CollisionWorld world;
+	void RegisterCollisionBodies();
+	void UpdateCollisionBodies();
+	void CheckCollision();
 private:
 	void ProcessPlayerMovement();
 	//GameData Data;

@@ -272,9 +272,6 @@
     <ClInclude Include="StatsWindow.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="LoginState.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="UIElement.h">
       <Filter>User Interface\Base</Filter>
     </ClInclude>
@@ -373,6 +370,9 @@
     </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginState.h">
+      <Filter>GameStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
