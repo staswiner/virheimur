@@ -482,6 +482,24 @@ TODO_FUNCTION void Mesh::GetTextures()
 	}
 	return TODO_FUNCTION void();
 }
+TODO_FUNCTION void Mesh::GetModelProperties()
+{
+	/*
+	check if file exists
+	if date modified newer than model's date, then ok
+	else, calculate properties again and write into the file
+	*/
+	//string Filename = string("/Misc/ModelProperties/") + string("");
+	//OFSTRUCT ofstruct;
+	//HFILE file = OpenFile("/Misc/ModelProperties/", &ofstruct,0);
+	//if (file == 0)
+	//FILETIME creationTime,
+	//	lpLastAccessTime,
+	//	lastWriteTime;
+	//bool err = GetFileTime(h, &creationTime, &lpLastAccessTime, &lastWriteTime);
+	//if (!err) error
+	//return TODO_FUNCTION void();
+}
 TODO_FUNCTION LOAD_FROM_FILE void Mesh::LoadModelProperties()
 {
 	FILE* ImportFile;
@@ -492,15 +510,14 @@ TODO_FUNCTION LOAD_FROM_FILE void Mesh::LoadModelProperties()
 }
 TODO_FUNCTION LOAD_TO_FILE void Mesh::CalculateModelPropertiesAndSave()
 {	
-	/*CreateDirectory("/Misc/ModelProperties", NULL);
+	CreateDirectory("/Misc/ModelProperties", NULL);
 	ofstream ExportFile;
 	ExportFile.open("/Misc/ModelProperties/" + this->ModelName + to_string(this->MeshCount) + ".data");
-	this->BB = GetBB();
-	this->AABB = GetAABB();
-	this->BB.CentralMassPoint = GetCentralMassPoint();
+	/*this->BB = GetBB();
+	this->AABB = GetAABB();*/
 	nlohmann::json Properties;
 	ExportFile << Properties.dump(1);
-	ExportFile.close();*/
+	ExportFile.close();
 }
 void Mesh::ReadNodeHeirarchy(double AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
 {

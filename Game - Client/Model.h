@@ -61,6 +61,7 @@ private:
 	string CollisionType;
 	string ModelName;
 	string LastDateOfChange;
+	string path;
 };
 
 class Models2D

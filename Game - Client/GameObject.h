@@ -46,8 +46,8 @@ public:
 		vec3 Rotation;
 
 		bool HasPhysics;
-		vec3 ForceVector;
-
+		vec3 TotalForceVector;
+		vector<vec3> ForceVectors;
 		
 		vector<vec3> Path;
 		vec3 Destination;

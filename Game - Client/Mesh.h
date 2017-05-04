@@ -116,8 +116,15 @@ public:
 #define TODO_VARIABLE
 	struct BoundryBox
 	{
-		TODO_VARIABLE vec3 Edge[8];
-		TODO_VARIABLE vec3 CentralMassPoint;
+		enum {
+			Top = 0,
+			Bottom,
+			Left,
+			Right,
+			Front,
+			Back
+		};
+		TODO_VARIABLE vec3 Edge[6];
 	};
 public:
 	/*  Mesh Data  */
@@ -141,7 +148,6 @@ public:
 	TODO_VARIABLE Mesh::Material material;
 	TODO_FUNCTION ::Material GetMaterial();
 	TODO_FUNCTION void GetTextures();
-	TODO_FUNCTION vec3 GetCentralMassPoint();
 	TODO_FUNCTION BoundryBox GetAABB();
 	TODO_FUNCTION BoundryBox GetBB();
 	/*
@@ -149,7 +155,9 @@ public:
 	middle of BB
 	middle of all vertices <- not so good
 
-	*/
+
+TOD	*/
+	TODO_FUNCTION void GetModelProperties();
 	TODO_FUNCTION LOAD_FROM_FILE void LoadModelProperties();
 	TODO_FUNCTION LOAD_TO_FILE void CalculateModelPropertiesAndSave();
 	TODO_VARIABLE BoundryBox AABB;
@@ -187,6 +195,7 @@ private:
 	vector<aiAnimation*> Animations;
 	map<string, int> m_BoneMapping;
 
+	string path;
 	vector<MeshEntry> m_Entries;
 	int MeshIndex = 0;
 public:

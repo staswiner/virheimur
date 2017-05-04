@@ -807,10 +807,14 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="ripcode.rip" />
+    <None Include="LevelBuilder.exe" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Concept.txt" />
   </ItemGroup>
 </Project>

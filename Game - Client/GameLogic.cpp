@@ -184,17 +184,27 @@ TODO_FUNCTION void GameLogic::CalculateCollision()
 	}
 }
 
-TODO_FUNCTION void GameLogic::ProcessForces()
+void GameLogic::ProcessForces()
 {
-	vector<GameObject> GameObjects;
-
-	for (auto& object : GameObjects)
+	OfflineDataObject& offlineData = OfflineDataObject::Instance();
+	for (auto object : offlineData.level.GameObjects)
 	{
-		if (object.unit_Data.HasPhysics)
+		if (object->unit_Data.HasPhysics)
 		{
-			object.unit_Data.ForceVector;
-			object.unit_Data.Acceleration += object.unit_Data.ForceVector * Time::Instance().Frame();
-			object.unit_Data.Position += object.unit_Data.Velocity;
+			object->unit_Data.TotalForceVector = vec3(0);
+			for (auto f : object->unit_Data.ForceVectors)
+			{
+				object->unit_Data.TotalForceVector += f;
+			}
+			object->unit_Data.Acceleration = object->unit_Data.TotalForceVector * 10.0f;
+			auto t = Time::Instance().Frame();
+			if (object->unit_Data.Acceleration != vec3(0))
+			{
+				int i = 0;
+			}
+			object->unit_Data.Velocity += object->unit_Data.Acceleration * (Time::Instance().Frame() / 1000.0f) / 10.0f;
+			object->unit_Data.Position += object->unit_Data.Velocity;
+			int j = 0;
 		}
 	}
 }
@@ -238,7 +248,7 @@ void GameLogic::ProcessPlayerMovement()
 	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
 	GameObject& p = *OfflineData.level.ActivePlayers[0];
 	Unit_Data& ud = p.GetUnitData();
-
+	ud.ForceVectors.clear();
 	// Calculate moving position
 	if (p.control == GameObject::controls::Script) // even arguements
 	{
@@ -263,11 +273,21 @@ void GameLogic::ProcessPlayerMovement()
 	}
 
 	if (p.movement == GameObject::movements::Ground) {
-		ud.Position = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
-		vec3 rotation = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position.xz);
+		vec3 CollisionPoint	= ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
 		
-		ud.RotateByNormal(rotation);
+		ud.ForceVectors.push_back(vec3(0,-1,0)); // gravity
+
+		if (ud.Position.y <= CollisionPoint.y) // collision occured
+		{
+			ud.ForceVectors.push_back(glm::normalize(CollisionPoint - ud.Position));
+			ud.ForceVectors.push_back(-0.5f * (ud.Velocity));
+			ud.Position.y = CollisionPoint.y;
+		}
+		//vec3 rotation = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position.xz);
+		
+		//ud.RotateByNormal(rotation);
 	}
+	ProcessForces();
 }
 // old moving script
 /*

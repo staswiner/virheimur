@@ -125,10 +125,14 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	// Load non-GL Model Data
 	//Loop.LoadModels = std::async(&MainLoop::LoadGame, &Loop);
+
 	// Initialize Loop
 	Loop.Initialize();
 	done = false;   //initialize loop condition variable
 
+	// Initialize FrameTime
+	Time& time = Time::Instance();
+	time.CalculateFrame();
 	//future<void> LoadModels = std::async(&MainLoop::LoadGame, &Loop);
 					/*      Main message loop*/
 	//CreateAcceleratorTable()

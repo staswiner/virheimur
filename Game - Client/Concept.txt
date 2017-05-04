@@ -1,0 +1,8 @@
+Every player may have a resting point
+it shall be considered his house, his private place, with previledge system
+a house may be in the town, or in rural area around the town
+
+
+there shall be floors of the world
+on each floor there is a town
+floors unlock similar to how it did in SAO

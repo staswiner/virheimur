@@ -55,12 +55,15 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType)
 		Grounds.push_back(gameObject);
 		break;
 	case Level::EntityType::ActivePlayer:
+		gameObject->unit_Data.HasPhysics = true;
+		gameObject->unit_Data.Position = vec3(0,100,0);
 		ActivePlayers.push_back(gameObject);
 		break;
 	case Level::EntityType::PassivePlayer:
 		PassivePlayers.push_back(gameObject);
 		break;
 	case Level::EntityType::Entity:
+		gameObject->unit_Data.HasPhysics = true;
 		Entities.push_back(gameObject);
 		break;
 	default:
