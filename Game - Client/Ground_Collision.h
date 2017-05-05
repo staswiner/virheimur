@@ -22,6 +22,7 @@ public:
 	vector<vec3> GetPlaneCoords(vec3 Index);
 
 	vec3 GetNormalRotation(vec2);
+	vec3 GetNormal(vec3);
 private:
 	map<vec2, float, bool(*)(const vec2&, const vec2&)> AlteredVertices;
 	float FindCorrectTriangleHeight(vec2 Position);

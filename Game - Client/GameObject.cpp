@@ -336,3 +336,8 @@ void GameObject::Unit_Data::RotateByNormal(vec3 NormalAngles)
 void Effect2D::Draw(SceneData & sceneData)
 {
 }
+
+void SkyBox::ReloadShader()
+{
+	this->DrawObject.ReloadTexture();
+}

@@ -75,6 +75,10 @@ void SkyBox_Graphics::InitTexture()
 	LoadVAO();
 	shader = Shader::At("Skybox");
 }
+void SkyBox_Graphics::ReloadTexture()
+{
+	shader.Reload();
+}
 void SkyBox_Graphics::LoadFaces(vector<string> faces)
 {
 	glGenTextures(1, &texture);

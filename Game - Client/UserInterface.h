@@ -3,7 +3,6 @@
 #include "Mouse.h"
 #include "Text.h"
 #include "UIElement.h"
-#include "UIWindow.h"
 #include <map>
 #include <utility>
 #include "ChampionChat.h"

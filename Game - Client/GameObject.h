@@ -47,6 +47,7 @@ public:
 
 		bool HasPhysics;
 		vec3 TotalForceVector;
+		vec3 MomentumVelocity;
 		vector<vec3> ForceVectors;
 		
 		vector<vec3> Path;
@@ -73,8 +74,8 @@ public:
 	void DrawUI(mat4& Projection, mat4& View);
 	void LoadInterface();
 	void UpdateUnitData(Unit_Data uData);
-	void ReloadShader();
-	void ReloadShader(Shader::ImageType);
+	virtual void ReloadShader();
+	virtual void ReloadShader(Shader::ImageType);
 	json GetJson();
 	json GetStructureJson();
 	Stats stats;
@@ -158,6 +159,7 @@ public:
 	void Draw(SceneData& sceneData) {
 		this->DrawObject.DrawModel();
 	}
+	void ReloadShader();
 private:
 	SkyBox_Graphics DrawObject;
 };

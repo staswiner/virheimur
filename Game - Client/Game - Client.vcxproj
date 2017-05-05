@@ -196,12 +196,10 @@
     <ClInclude Include="Structures.h" />
     <ClInclude Include="TCP.h" />
     <ClInclude Include="Text.h" />
-    <ClInclude Include="Textbox.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TransferedData.h" />
     <ClInclude Include="UdpClient.h" />
     <ClInclude Include="UIElement.h" />
-    <ClInclude Include="UIWindow.h" />
     <ClInclude Include="UserInterface.h" />
     <ClInclude Include="XMLBuilder.h" />
   </ItemGroup>
@@ -274,13 +272,11 @@
     <ClCompile Include="StatsWindow.cpp" />
     <ClCompile Include="TCP.cpp" />
     <ClCompile Include="Text.cpp" />
-    <ClCompile Include="Textbox.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TODO list.cpp" />
     <ClCompile Include="TransferedData.cpp" />
     <ClCompile Include="UdpClient.cpp" />
     <ClCompile Include="UIElement.cpp" />
-    <ClCompile Include="UIWindow.cpp" />
     <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="XMLBuilder.cpp" />
   </ItemGroup>

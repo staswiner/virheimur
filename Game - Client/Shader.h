@@ -41,6 +41,7 @@ public:
 	// Use the program
 	void Use();
 	static bool LoadShaders();
+	void Reload();
 	static Shader& At(string ID);
 private:
 	Shader* ConstructShaderNS(ShaderInfo shaderInfo);
@@ -58,5 +59,6 @@ private:
 	ShaderInfo shaderInfo;
 	void InitializeShaderProgram(string Path, GLuint shaderID);
 	static map<string, Shader*> mapShader;
+	string VertexShaderPath, GeometryShaderPath, FragmentShaderPath;
 
 };

@@ -85,6 +85,14 @@ vec3 Ground_Collision::GetNormalRotation(vec2 Position)
 	return NormalAngle;
 }
 
+vec3 Ground_Collision::GetNormal(vec3 Position)
+{
+	vector<vec3> Triangle = FindCorrectTriangle(vec2(Position.x, -Position.y));
+
+	vec3 TriangleNormal = normalize(cross(Triangle[0] - Triangle[1], Triangle[0] - Triangle[2]));
+	return TriangleNormal;
+}
+
 float Ground_Collision::FindCorrectTriangleHeight(vec2 Position) // fix to 1 triangle back
 {
 	Position = vec2(Position.x, -Position.y);

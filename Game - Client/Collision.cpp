@@ -36,6 +36,11 @@ vec3 Collision::GetNormalRotation(vec2)
 	return vec3();
 }
 
+vec3 Collision::GetNormal(vec3)
+{
+	return vec3();
+}
+
 vector<Stas::Vertex>& Collision::GetVertices()
 {
 	return this->Vertices;

@@ -202,9 +202,30 @@ void GameLogic::ProcessForces()
 			{
 				int i = 0;
 			}
-			object->unit_Data.Velocity += object->unit_Data.Acceleration * (Time::Instance().Frame() / 1000.0f) / 10.0f;
+			object->unit_Data.Velocity += object->unit_Data.Acceleration * (Time::Instance().Frame() / 1000.0f) / 100.0f;
 			object->unit_Data.Position += object->unit_Data.Velocity;
 			int j = 0;
+			if (object->unit_Data.Position.x > 98)
+			{
+				object->unit_Data.Velocity = glm::cross(object->unit_Data.Velocity,vec3(-1,0,0));
+				object->unit_Data.Position.x = 98;
+			}
+			if (object->unit_Data.Position.x < -98)
+			{
+				object->unit_Data.Velocity = glm::cross(object->unit_Data.Velocity, vec3(1, 0, 0));
+				object->unit_Data.Position.x = -98;
+			}
+			if (object->unit_Data.Position.z > 98)
+			{
+				object->unit_Data.Velocity = glm::cross(object->unit_Data.Velocity, vec3(0, 0, -1));
+				object->unit_Data.Position.z = 98;
+			}
+			if (object->unit_Data.Position.z < -98)
+			{
+				object->unit_Data.Velocity = glm::cross(object->unit_Data.Velocity, vec3(0, 0, 1));
+				object->unit_Data.Position.z = -98;
+			}
+
 		}
 	}
 }
@@ -274,13 +295,14 @@ void GameLogic::ProcessPlayerMovement()
 
 	if (p.movement == GameObject::movements::Ground) {
 		vec3 CollisionPoint	= ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
-		
+		vec3 SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormal(ud.Position);
+
 		ud.ForceVectors.push_back(vec3(0,-1,0)); // gravity
 
 		if (ud.Position.y <= CollisionPoint.y) // collision occured
 		{
 			ud.ForceVectors.push_back(glm::normalize(CollisionPoint - ud.Position));
-			ud.ForceVectors.push_back(-0.5f * (ud.Velocity));
+			ud.Velocity = glm::cross(ud.Velocity, SurfaceNormal) * 2.0f;
 			ud.Position.y = CollisionPoint.y;
 		}
 		//vec3 rotation = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position.xz);

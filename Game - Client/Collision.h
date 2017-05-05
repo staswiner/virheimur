@@ -19,6 +19,7 @@ public:
 	virtual vector<vec3> GetPlaneCoords(vec3);
 
 	virtual vec3 GetNormalRotation(vec2);
+	virtual vec3 GetNormal(vec3);
 
 	vector<Stas::Vertex>& GetVertices();
 

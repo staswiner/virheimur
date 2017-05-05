@@ -194,9 +194,6 @@
     <ClInclude Include="Item_Base_Class.h">
       <Filter>User Interface\Items</Filter>
     </ClInclude>
-    <ClInclude Include="Textbox.h">
-      <Filter>User Interface</Filter>
-    </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>Graphics\Text</Filter>
     </ClInclude>
@@ -259,9 +256,6 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>GameHeirarchy</Filter>
-    </ClInclude>
-    <ClInclude Include="UIWindow.h">
-      <Filter>User Interface</Filter>
     </ClInclude>
     <ClInclude Include="ImageLoader.h">
       <Filter>User Interface\Base</Filter>
@@ -445,9 +439,6 @@
     <ClCompile Include="Item_Base_Class.cpp">
       <Filter>User Interface\Items</Filter>
     </ClCompile>
-    <ClCompile Include="Textbox.cpp">
-      <Filter>User Interface</Filter>
-    </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>Graphics\Text</Filter>
     </ClCompile>
@@ -506,9 +497,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Minimap.cpp">
-      <Filter>User Interface</Filter>
-    </ClCompile>
-    <ClCompile Include="UIWindow.cpp">
       <Filter>User Interface</Filter>
     </ClCompile>
     <ClCompile Include="ImageLoader.cpp">

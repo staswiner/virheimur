@@ -58,7 +58,7 @@ mat4 Camera::GetProjectionMatrix()
 	Mouse& mouse = Mouse::Instanace();
 
 	this->ProjectionMatrix=glm::perspective(
-		glm::radians(50.0f), 
+		glm::radians(70.0f), 
 		(GLfloat)mouse.GetWindowSize().x / (GLfloat)mouse.GetWindowSize().y, 
 		1.0f, 
 		1000.0f);

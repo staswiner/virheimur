@@ -36,6 +36,14 @@ bool Shader::LoadShaders()
 	//	new Shader("Index Vertex Shader.glsl", "Index Geometry Shader.glsl", "Index Fragment Shader.glsl");
 	return true;
 }
+void Shader::Reload()
+{
+	glDeleteProgram(ProgramID);
+	if (GeometryShaderPath == "")
+		*this = *new Shader(VertexShaderPath,FragmentShaderPath);
+	else
+		*this = *new Shader(VertexShaderPath,GeometryShaderPath ,FragmentShaderPath);
+}
 Shader::~Shader()
 {
 	glDeleteProgram(ProgramID);
@@ -83,6 +91,8 @@ void Shader::InitializeShaderProgram(string Path, GLuint shaderID)
 Shader::Shader(string vertexPath, string fragmentPath)
 {
 	string Folder = "Shaders/";
+	this->VertexShaderPath = vertexPath;
+	this->FragmentShaderPath = fragmentPath;
 	vertexPath = Folder + vertexPath;
 	fragmentPath = Folder + fragmentPath;
 	// Create the shaders
@@ -187,6 +197,9 @@ Shader::Shader(string vertexPath, string fragmentPath)
 Shader::Shader(string vertexPath, string geometryPath, string fragmentPath)
 {
 	string Folder = "Shaders/";
+	this->VertexShaderPath = vertexPath;
+	this->GeometryShaderPath = geometryPath;
+	this->FragmentShaderPath = fragmentPath;
 	vertexPath = Folder + vertexPath;
 	geometryPath = Folder + geometryPath;
 	fragmentPath = Folder + fragmentPath;

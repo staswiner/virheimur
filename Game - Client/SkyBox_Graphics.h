@@ -14,6 +14,7 @@ public:
 	~SkyBox_Graphics();
 	void DrawModel();
 	virtual void InitTexture();
+	void ReloadTexture();
 private:
 	void LoadFaces(vector<string>);
 	void LoadVAO();
