@@ -281,6 +281,8 @@
     <ClCompile Include="XMLBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="2D Effect Fragment Shader.glsl" />
+    <None Include="2D Effect Vertex Shader.glsl" />
     <None Include="cursor1.cur" />
     <None Include="LevelBuilder.exe" />
     <None Include="ripcode.rip" />

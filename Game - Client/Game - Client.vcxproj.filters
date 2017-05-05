@@ -796,6 +796,8 @@
     </None>
     <None Include="ripcode.rip" />
     <None Include="LevelBuilder.exe" />
+    <None Include="2D Effect Vertex Shader.glsl" />
+    <None Include="2D Effect Fragment Shader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc">

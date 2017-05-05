@@ -28,7 +28,7 @@ public:
 	map<GLchar,GLuint> Inputs;
 	//vector<pair<unique_ptr<ChampionChat>, GLuint>> tempWindows;
 	vector<tempW> tempWindows;
-	vector<UIWindow> vUIWindows;
+	//vector<UIWindow> vUIWindows;
 	UIElement* root;
 
 	string Chat;	

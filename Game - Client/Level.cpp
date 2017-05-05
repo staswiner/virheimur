@@ -23,7 +23,7 @@ void Level::LoadLevel()
 	this->AddEntity(layer, "Mine", EntityType::Entity);
 	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer);
 	this->AddEntity(layer, "Land", EntityType::Ground);
-	gameObject = this->AddEntity(layer, "Mine", EntityType::Entity);
+	gameObject = new Effect2D("Interface/3D Effects/Sun.png"); /*this->AddEntity(layer, "Mine", EntityType::Entity);*/
 	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
 
 	layers.Add(layer, LayerType::FinalObject);

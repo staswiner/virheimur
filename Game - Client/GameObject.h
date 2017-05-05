@@ -166,8 +166,18 @@ private:
 
 class Effect2D : public GameObject {
 public:
+	enum class ModelType
+	{
+		Square,
+		Cylinder,
+		Cone
+	};
+	Effect2D(string ImagePath);
 	Effect2D();
 	~Effect2D();
 
 	void Draw(SceneData& sceneData);
+private:
+	ImageLoader* image;
+	Shader* shader;
 };

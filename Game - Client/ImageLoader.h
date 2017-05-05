@@ -28,8 +28,8 @@ public:
 	void DrawImagePart(vec2 TopLeft, vec2 BotRight, vec2 ImageTrueSize,
 		vec2 CropTopLeft, vec2 CropBotRight);
 	vec2 GetTrueSize() { return this->TrueSize; }
-private:
 	GLuint VAO, VBO, MyTexture;
+private:
 	struct Vertices {
 		vec2 vertices;
 		vec2 uvs;

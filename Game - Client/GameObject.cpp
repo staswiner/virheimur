@@ -333,8 +333,33 @@ void GameObject::Unit_Data::RotateByNormal(vec3 NormalAngles)
 	this->SurfaceNormal = NormalAngles;
 }
 
+Effect2D::Effect2D(string ImagePath)
+{
+	this->image = new ImageLoader();
+	this->image->Initialize(ImagePath);
+	this->unit_Data.Model_Data = new Model("Collada/EffectSquare.dae","");
+	this->shader = new Shader("2D Effect Vertex Shader.glsl","2D Effect Fragment Shader.glsl");
+}
+
+Effect2D::Effect2D()
+{
+}
+
 void Effect2D::Draw(SceneData & sceneData)
 {
+	Mouse& mouse = Mouse::Instanace();
+
+	// Model
+	Unit_Data& ud = this->unit_Data;
+	vec3 position = ud.Position;
+	mat4 ModelMatrix = this->unit_Data.GetModelMatrix();
+	mat4 BlenderModelMatrix = ModelMatrix * Default::Instance().BlenderConversion;
+	mat4 WVM = sceneData.ProjectionMatrix * sceneData.ViewMatrix * BlenderModelMatrix;
+
+	ShaderBuilder::LoadShader(*this->shader)->
+		Add_mat4("WVM", WVM).
+		Add_texture("effectTexture",this->image->MyTexture);
+		this->unit_Data.Model_Data->Draw();
 }
 
 void SkyBox::ReloadShader()
