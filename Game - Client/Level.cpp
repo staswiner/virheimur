@@ -20,11 +20,12 @@ void Level::LoadLevel()
 	dynamic_cast<SkyBox*>(gameObject)->Initialize();
 	layer->AddGameObject(gameObject);
 
-	this->AddEntity(layer, "Mine", EntityType::Entity);
+	//this->AddEntity(layer, "Mine", EntityType::Entity);
 	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer);
 	this->AddEntity(layer, "Land", EntityType::Ground);
 	gameObject = new Effect2D("Interface/3D Effects/Sun.png"); /*this->AddEntity(layer, "Mine", EntityType::Entity);*/
 	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
+	layer->AddGameObject(gameObject);
 
 	layers.Add(layer, LayerType::FinalObject);
 }
@@ -44,6 +45,12 @@ void Level::Draw()
 	layers.Draw();
 }
 
+void Level::Reset()
+{
+	this->ClearLevel();
+	this->LoadLevel();
+}
+
 GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType)
 {
 	GameObject* gameObject = new GameObject();
@@ -56,7 +63,7 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType)
 		break;
 	case Level::EntityType::ActivePlayer:
 		gameObject->unit_Data.HasPhysics = true;
-		gameObject->unit_Data.Position = vec3(0,100,0);
+		gameObject->unit_Data.Position = vec3(0,10,0);
 		ActivePlayers.push_back(gameObject);
 		break;
 	case Level::EntityType::PassivePlayer:
@@ -73,4 +80,16 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType)
 	return gameObject;
 
 
+}
+
+void Level::ClearLevel()
+{
+	this->layers.Clear();
+	for (auto g : GameObjects) delete g;
+
+	Grounds.clear();
+	ActivePlayers.clear();
+	PassivePlayers.clear();
+	Entities.clear();
+	GameObjects.clear();
 }

@@ -32,6 +32,11 @@ void Layer::ReloadShaders(Shader::ImageType imageType)
 	}
 }
 
+void Layer::ClearLayer()
+{
+	Objects.clear();
+}
+
 void Layer::Draw()
 {
 	FrameData& frameData = FrameData::Instance();
@@ -92,5 +97,13 @@ void Layers::ReloadShaders(Shader::ImageType imageType)
 	for (auto& l : layers)
 	{
 		l.second->ReloadShaders(imageType);
+	}
+}
+
+void Layers::Clear()
+{
+	for (auto layer : layers)
+	{
+		layer.second->ClearLayer();
 	}
 }

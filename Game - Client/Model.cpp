@@ -61,8 +61,6 @@ void Model::loadModel(string Path)
 		//aiProcess_ImproveCacheLocality
 		);
 
-	if (Path == "Collada/ArmyPilot.dae")
-		int i = 0;
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		string Error = "ERROR::ASSIMP::";

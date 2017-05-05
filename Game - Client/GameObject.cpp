@@ -307,10 +307,10 @@ GameObject::Unit_Data::Unit_Data()
 GameObject::Unit_Data::~Unit_Data()
 {
 	Path.clear();
-	if (Model_Data)
+	/*if (Model_Data)
 	{
 		delete Model_Data;
-	}
+	}*/
 }
 mat4 GameObject::Unit_Data::GetModelMatrix()
 {
@@ -347,19 +347,40 @@ Effect2D::Effect2D()
 
 void Effect2D::Draw(SceneData & sceneData)
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	Mouse& mouse = Mouse::Instanace();
 
 	// Model
 	Unit_Data& ud = this->unit_Data;
 	vec3 position = ud.Position;
 	mat4 ModelMatrix = this->unit_Data.GetModelMatrix();
-	mat4 BlenderModelMatrix = ModelMatrix * Default::Instance().BlenderConversion;
+	mat4 BlenderModelMatrix = ModelMatrix * inverse(mat4(mat3(sceneData.ViewMatrix)))  // disable rotation
+		* Default::Instance().BlenderConversion;
 	mat4 WVM = sceneData.ProjectionMatrix * sceneData.ViewMatrix * BlenderModelMatrix;
+//	vec4 
+
+	/*Mouse& mouse = Mouse::Instanace();
+	vec2 OpenGLCoords(((BotRight.x - TopLeft.x) / mouse.GetWindowSize().x) * 2 - 1,
+		-(((BotRight.y - TopLeft.y) / mouse.GetWindowSize().y) * 2 - 1));
+	vec2 Offset((TopLeft.x / mouse.GetWindowSize().x) * 2, -(TopLeft.y / mouse.GetWindowSize().y) * 2);
+	OpenGLCoords += Offset;
+	vec3 InterfaceWindowSize((BotRight.x - TopLeft.x) / (mouse.GetWindowSize().x / 2),
+		(BotRight.y - TopLeft.y) / (mouse.GetWindowSize().y / 2), 1.0f);
+	mat4 Model;
+	Model = translate(Model, vec3(OpenGLCoords, 0.0f));
+	Model = scale(Model, InterfaceWindowSize);*/
 
 	ShaderBuilder::LoadShader(*this->shader)->
 		Add_mat4("WVM", WVM).
 		Add_texture("effectTexture",this->image->MyTexture);
-		this->unit_Data.Model_Data->Draw();
+	this->unit_Data.Model_Data->Draw();
+	glDisable(GL_BLEND);
+}
+
+void Effect2D::ReloadShader()
+{
+	this->shader->Reload();
 }
 
 void SkyBox::ReloadShader()

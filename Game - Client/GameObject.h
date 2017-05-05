@@ -177,6 +177,7 @@ public:
 	~Effect2D();
 
 	void Draw(SceneData& sceneData);
+	void ReloadShader();
 private:
 	ImageLoader* image;
 	Shader* shader;

@@ -186,7 +186,6 @@ Shader::Shader(string vertexPath, string fragmentPath)
 		//MessageBoxA(0, error.c_str(), "", MB_OK);
 	}
 
-
 	glDetachShader(ProgramID, VertexShaderID);
 	glDetachShader(ProgramID, FragmentShaderID);
 

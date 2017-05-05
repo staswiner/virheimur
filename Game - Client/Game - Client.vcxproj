@@ -281,11 +281,11 @@
     <ClCompile Include="XMLBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="2D Effect Fragment Shader.glsl" />
-    <None Include="2D Effect Vertex Shader.glsl" />
     <None Include="cursor1.cur" />
     <None Include="LevelBuilder.exe" />
     <None Include="ripcode.rip" />
+    <None Include="Shaders\2D Effect Fragment Shader.glsl" />
+    <None Include="Shaders\2D Effect Vertex Shader.glsl" />
     <None Include="Shaders\3D Text Vertex Shader.glsl" />
     <None Include="Shaders\Animation Fragment Shader.glsl" />
     <None Include="Shaders\Animation Vertex Shader.glsl" />

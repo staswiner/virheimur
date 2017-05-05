@@ -356,7 +356,7 @@ void Input::GetKeyboardInput()
 		/*TAGS: #KeyboardInput #CommandsInWorld*/
 		switch (input)
 		{
-		case ' ': ResetCharacterPosition(); ResetCameraPosition(); break;
+		case ' ': ResetCharacterPosition(); /*ResetCameraPosition(); */break;
 		case 's': SetPlayerControl(GameObject::controls::Script); SetCircleScriptIterative(); break; // script
 		case 'm': SetPlayerControl(GameObject::controls::Manual); break; // manual
 		case 'd': SetPlayerControl(GameObject::controls::Direct); break; // direct
@@ -812,10 +812,7 @@ void Input::ResetCharacterPosition()
 	else
 	{
 		OfflineDataObject& offlineData = OfflineDataObject::Instance();
-		GameObject& Player = *offlineData.level.ActivePlayers[0];
-
-		Player.unit_Data.Position = vec3();
-		Player.unit_Data.Rotation = vec3();
+		offlineData.level.Reset();
 	}
 }
 

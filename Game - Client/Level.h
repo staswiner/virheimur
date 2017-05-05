@@ -15,6 +15,7 @@ public:
 	void ReloadShaders();
 	void ReloadShaders(Shader::ImageType);
 	void Draw();
+	void Reset();
 
 	vector<GameObject*> Grounds;
 	vector<GameObject*> ActivePlayers;
@@ -24,6 +25,7 @@ public:
 private:
 	GameObject* AddEntity(Layer* layer, string Model, EntityType);
 	Layers layers;
+	void ClearLevel();
 
 };
 

@@ -471,7 +471,7 @@ TODO_FUNCTION Mesh::Material Mesh::LoadMaterial()
 TODO_FUNCTION void Mesh::GetTextures()
 {
 	aiString aiPath;
-	int index;
+	//int index;
 	int count;
 	count = this->scene->mMaterials[0]->GetTextureCount(aiTextureType_DIFFUSE);
 	for (int i = 0; i < count; i++)

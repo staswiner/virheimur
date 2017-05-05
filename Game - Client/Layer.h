@@ -23,6 +23,7 @@ public:
 	void AddGameObject(GameObject*);
 	void ReloadShaders();
 	void ReloadShaders(Shader::ImageType);
+	void ClearLayer();
 
 private:
 	void Draw();
@@ -43,7 +44,7 @@ public:
 	void Add(Layer*, LayerType);
 	void ReloadShaders();
 	void ReloadShaders(Shader::ImageType);
-	
+	void Clear();
 private: 
 	map<LayerType, Layer*> layers;
 };
