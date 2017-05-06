@@ -23,7 +23,7 @@ public:
 	vector<GameObject*> Entities;
 	vector<GameObject*> GameObjects;
 private:
-	GameObject* AddEntity(Layer* layer, string Model, EntityType);
+	GameObject* AddEntity(Layer* layer, string Model, EntityType, vec3 Position = vec3());
 	Layers layers;
 	void ClearLevel();
 

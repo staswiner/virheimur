@@ -21,7 +21,14 @@ void Level::LoadLevel()
 	layer->AddGameObject(gameObject);
 
 	//this->AddEntity(layer, "Mine", EntityType::Entity);
-	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer);
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
+		}
+	}
+	
 	this->AddEntity(layer, "Land", EntityType::Ground);
 	gameObject = new Effect2D("Interface/3D Effects/Sun.png"); /*this->AddEntity(layer, "Mine", EntityType::Entity);*/
 	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
@@ -51,7 +58,7 @@ void Level::Reset()
 	this->LoadLevel();
 }
 
-GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType)
+GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType, vec3 Position)
 {
 	GameObject* gameObject = new GameObject();
 	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()[Model];
@@ -63,7 +70,7 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType)
 		break;
 	case Level::EntityType::ActivePlayer:
 		gameObject->unit_Data.HasPhysics = true;
-		gameObject->unit_Data.Position = vec3(0,10,0);
+		gameObject->unit_Data.Position = Position;
 		ActivePlayers.push_back(gameObject);
 		break;
 	case Level::EntityType::PassivePlayer:

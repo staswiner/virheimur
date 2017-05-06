@@ -191,16 +191,18 @@ void GameLogic::ProcessForces()
 	{
 		if (object->unit_Data.HasPhysics)
 		{
-			object->unit_Data.TotalForceVector = vec3(0);
-			for (auto f : object->unit_Data.ForceVectors)
-			{
-				object->unit_Data.TotalForceVector += f;
-			}
+			
 			object->unit_Data.Acceleration = object->unit_Data.TotalForceVector * 10.0f;
-			auto t = Time::Instance().Frame();
-			if (object->unit_Data.Acceleration != vec3(0))
+			auto t = Time::Instance().Frame();	
+			object->unit_Data.Velocity += object->unit_Data.Acceleration * (Time::Instance().Frame() / 1000.0f) / 100.0f;
+			//if (glm::length(object->unit_Data.TotalForceVector) < 0.1)
+			//	object->unit_Data.Velocity = vec3(0);
+			float Dot;
+			if (object->unit_Data.FrictionVector!=vec3() &&
+				(Dot = dot(normalize(object->unit_Data.TotalForceVector), normalize(object->unit_Data.FrictionVector))) > 0)
 			{
-				int i = 0;
+				if (dot(normalize(object->unit_Data.Velocity),normalize(object->unit_Data.TotalForceVector)) > 0)
+					object->unit_Data.Acceleration = vec3(0);
 			}
 			
 			object->unit_Data.Position += object->unit_Data.Velocity;
@@ -225,11 +227,95 @@ void GameLogic::ProcessForces()
 				object->unit_Data.Velocity = glm::cross(object->unit_Data.Velocity, vec3(0, 0, 1));
 				object->unit_Data.Position.z = -98;
 			}
-			object->unit_Data.Velocity += object->unit_Data.Acceleration * (Time::Instance().Frame() / 1000.0f) / 100.0f;
+
 		}
 	}
 }
 
+
+void GameLogic::ProcessPlayerMovement()
+{
+	// Declarations
+	FrameData& frameData = FrameData::Instance();
+	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
+	mat4 ViewMatrix = frameData.ViewMatrix;
+	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
+	for (auto pp : OfflineData.level.ActivePlayers)
+	{
+		auto &p = *pp;
+		Unit_Data& ud = p.GetUnitData();
+		ud.ForceVectors.clear();
+		ud.FrictionVector = vec3();
+		// Calculate moving position
+		if (p.control == GameObject::controls::Script) // even arguements
+		{
+			p.script(p);
+		}
+		else if (p.control == GameObject::controls::Manual)
+		{
+
+		}
+		else if (p.control == GameObject::controls::Direct)
+		{
+
+		}
+		// Rotation
+		else if (ud.Destination.xz != ud.StartPoint.xz)
+		{
+			ud.Rotation.y = -acos(dot(glm::normalize(vec2(ud.Destination.x, ud.Destination.z)
+				- vec2(ud.StartPoint.x, ud.StartPoint.z)), vec2(1, 0)));
+			// fix Rotation to 360°
+			(ud.Destination.z - ud.StartPoint.z < 0) ?
+				ud.Rotation.y = radians(360.0f) - ud.Rotation.y : ud.Rotation.y;
+		}
+
+		if (p.movement == GameObject::movements::Ground) {
+			vec3 CollisionPoint = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
+			vec3 SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormal(ud.Position);
+			if (SurfaceNormal.y < 0) SurfaceNormal *= -1.0f;
+			vec3 Gravity(0, -10, 0);
+			ud.ForceVectors.push_back(Gravity); // gravity
+
+			if (ud.Position.y <= CollisionPoint.y) // collision occured
+			{
+				ud.Velocity = (-2 * glm::dot(ud.Velocity, SurfaceNormal) * SurfaceNormal + ud.Velocity) * ud.bounceFactor;
+				//-2 * (V dot N)*N + V
+				//Normal
+				vec3 NormalForce = SurfaceNormal * glm::length(Gravity);
+				ud.ForceVectors.push_back(NormalForce);
+				//Friction
+				//vec3 Friction = glm::normalize(-ud.Velocity) * glm::length(NormalForce);
+				//ud.FrictionVector = Friction;
+				ud.Position.y = CollisionPoint.y;
+			}
+
+			ud.TotalForceVector = vec3(0);
+			for (auto f : p.unit_Data.ForceVectors)
+			{
+				ud.TotalForceVector += f;
+			}
+			if (ud.Position.y <= CollisionPoint.y) // collision occured
+			{
+				float test;
+				float FrictionCoefficient = 0.3f;
+				ud.TotalForceVector;
+				
+				vec3 Friction = glm::normalize(-ud.TotalForceVector) * glm::length(Gravity * dot(SurfaceNormal,normalize(Gravity))) * FrictionCoefficient;
+				test = dot(normalize(Friction), normalize(ud.TotalForceVector));
+				ud.FrictionVector = Friction;
+				ud.TotalForceVector += Friction;
+				test = dot(normalize(Friction), normalize(ud.TotalForceVector));
+				int i = 0;
+
+			}
+
+			//vec3 rotation = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position.xz);
+
+			//ud.RotateByNormal(rotation);
+		}
+	}
+	ProcessForces();
+}
 void GameLogic::RegisterCollisionBodies()
 {
 	for (auto object : OfflineDataObject::Instance().level.GameObjects)
@@ -258,64 +344,6 @@ void GameLogic::CheckCollision()
 			this->world.testAABBOverlap((*object1)->collisionBody, (*object2)->collisionBody);
 		}
 	}
-}
-
-void GameLogic::ProcessPlayerMovement()
-{
-	// Declarations
-	FrameData& frameData = FrameData::Instance();
-	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
-	mat4 ViewMatrix = frameData.ViewMatrix;
-	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
-	GameObject& p = *OfflineData.level.ActivePlayers[0];
-	Unit_Data& ud = p.GetUnitData();
-	ud.ForceVectors.clear();
-	// Calculate moving position
-	if (p.control == GameObject::controls::Script) // even arguements
-	{
-		p.script(p);
-	}
-	else if (p.control == GameObject::controls::Manual)
-	{
-
-	}
-	else if (p.control == GameObject::controls::Direct)
-	{
-
-	}
-	// Rotation
-	else if (ud.Destination.xz != ud.StartPoint.xz)
-	{
-		ud.Rotation.y = -acos(dot(glm::normalize(vec2(ud.Destination.x, ud.Destination.z)
-			- vec2(ud.StartPoint.x, ud.StartPoint.z)), vec2(1, 0)));
-		// fix Rotation to 360°
-		(ud.Destination.z - ud.StartPoint.z < 0) ?
-			ud.Rotation.y = radians(360.0f) - ud.Rotation.y : ud.Rotation.y;
-	}
-
-	if (p.movement == GameObject::movements::Ground) {
-		vec3 CollisionPoint	= ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
-		vec3 SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormal(ud.Position);
-
-		ud.ForceVectors.push_back(vec3(0,-10,0)); // gravity
-
-		if (ud.Position.y <= CollisionPoint.y) // collision occured
-		{
-	//		ud.ForceVectors.push_back(glm::normalize(CollisionPoint - ud.Position));
-			ud.Velocity = (-2 * glm::dot(ud.Velocity, SurfaceNormal) * SurfaceNormal + ud.Velocity ) * 0.9f;
-			if (glm::length(ud.Velocity) < 0.1)
-				ud.Velocity = vec3(0);
-			//ud.Velocity = SurfaceNormal * glm::length(ud.Velocity) *;
-			//-2 * (V dot N)*N + V
-
-			//ud.Velocity = glm::cross(ud.Velocity, SurfaceNormal);
-			ud.Position.y = CollisionPoint.y;
-		}
-		//vec3 rotation = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormalRotation(ud.Position.xz);
-		
-		//ud.RotateByNormal(rotation);
-	}
-	ProcessForces();
 }
 // old moving script
 /*

@@ -9,6 +9,7 @@
 #include "Loaded_Models.h"
 #include "Default.h"
 #include "glm/glm/gtc/quaternion.hpp"
+#include "Camera.h"
 using namespace nlohmann;
 using namespace chrono;
 using namespace glm;
@@ -47,9 +48,10 @@ public:
 
 		bool HasPhysics;
 		vec3 TotalForceVector;
+		vec3 FrictionVector;
 		vec3 MomentumVelocity;
 		vector<vec3> ForceVectors;
-		
+		float bounceFactor = 0.9f;
 		vector<vec3> Path;
 		vec3 Destination;
 		bool PathChanged = false;

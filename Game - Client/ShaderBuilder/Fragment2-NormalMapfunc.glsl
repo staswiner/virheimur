@@ -20,7 +20,7 @@ vec3 CalcNormal(sampler2D normalTexture)
 	NewNormal = normalize(NewNormal);
 //NewNormal = pow(NewNormal ,vec3(1.0f));
 //return TexturedNormal ;
-	float factor = 0.5f;	
+	float factor = 1.0f;	
 	NewNormal = NewNormal * (1.0-factor)  + Normal  * factor;
 	return NewNormal;
 }
