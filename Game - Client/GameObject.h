@@ -66,6 +66,20 @@ public:
 		mat4 Light_Matrix;
 		vec3 Light_Pos;
 	};
+	// Controls
+	enum class controls
+	{
+		Manual,
+		Direct,
+		Script,
+		Mouse
+	};
+	enum class movements
+	{
+		Ground,
+		Plane,
+		Aero
+	};
 	GameObject();
 	GameObject(Unit_Data, string Username);
 	~GameObject();
@@ -83,20 +97,7 @@ public:
 	Stats stats;
 	milliseconds TimeDelta;
 	Unit_Data unit_Data;
-	// Controls
-	enum class controls
-	{
-		Manual,
-		Direct,
-		Script,
-		Mouse
-	}; 
-	enum class movements
-	{
-		Ground,
-		Plane, 
-		Aero
-	};
+
 	movements movement = movements::Ground;
 	controls control = controls::Manual;
 	

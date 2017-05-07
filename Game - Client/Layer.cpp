@@ -105,5 +105,6 @@ void Layers::Clear()
 	for (auto layer : layers)
 	{
 		layer.second->ClearLayer();
+		delete layer.second;
 	}
 }

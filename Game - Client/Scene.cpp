@@ -94,6 +94,7 @@ void Scene::Initialize()
 	FrameData::Instance().Light_Pos = vec3(50, 50, 50);
 
 	OfflineDataObject::Instance().level.LoadLevel();
+	music.Initialize();
 	
 }
 
@@ -114,7 +115,7 @@ void Scene::Frame()
 	glDepthMask(GL_TRUE);
 	glEnable(GL_CLIP_DISTANCE0);
 
-
+	//music.Play();
 	Camera& camera = Camera::GetCamera("Main");
 	ViewMatrix = camera.GetCameraMatrix();
 	SetProjectionMatrix(camera.GetProjectionMatrix());

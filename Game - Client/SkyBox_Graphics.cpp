@@ -102,7 +102,9 @@ void SkyBox_Graphics::LoadFaces(vector<string> faces)
 }
 SkyBox_Graphics::~SkyBox_Graphics()
 {
-
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteTextures(1, &texture);
 }
 void SkyBox_Graphics::LoadVAO()
 {

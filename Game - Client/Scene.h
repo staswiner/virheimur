@@ -24,6 +24,7 @@
 #include "Default.h"
 #include "FrameData.h"
 #include "Level.h"
+#include "Music.h"
 using namespace glm;
 class Scene
 {
@@ -105,6 +106,7 @@ private:
 	SeaAnimated seaAnim;
 	vector<NPC> NPCs;
 	vector<string> OutlineObjects;
+	Music music;
 	int counter = 0;
 	//static GlobalDataObject Data;
 	// develop this please

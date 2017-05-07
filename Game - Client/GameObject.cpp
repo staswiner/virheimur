@@ -345,6 +345,13 @@ Effect2D::Effect2D()
 {
 }
 
+Effect2D::~Effect2D()
+{
+	delete this->unit_Data.Model_Data;
+	delete this->shader;
+
+}
+
 void Effect2D::Draw(SceneData & sceneData)
 {
 	glEnable(GL_BLEND);

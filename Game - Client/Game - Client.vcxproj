@@ -76,12 +76,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\GL Files\reactphysics3d-master\src;D:\GL Files\freetype-2.6.2\include;D:\assimp-3.1.1-win-binaries\include;D:\GL Files\freeglut\include;D:\GL Files\GL Files\include\GL;D:\GL Files\glew-1.11.0\include;D:\GL Files\glm\glm;D:\GL Files\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;D:\GL Files\reactphysics3d-master\src;D:\GL Files\alut\include;D:\GL Files\freetype-2.6.2\include;D:\assimp-3.1.1-win-binaries\include;D:\GL Files\freeglut\include;D:\GL Files\GL Files\include\GL;D:\GL Files\glew-1.11.0\include;D:\GL Files\glm\glm;D:\GL Files\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>D:\XML library\Debug;D:\GL Files\GL Files\lib;D:\GL Files\freeglut\lib;D:\GL Files\glew-1.11.0\lib;D:\assimp-3.1.1-win-binaries\lib32;D:\GL Files\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetyped.lib;opengl32.lib;glu32.lib;glaux.lib;freeglut.lib;glew32.lib;legacy_stdio_definitions.lib;assimpd.lib;SOIL.lib;tinyxml2.lib;reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\GL Files\alut\include\libs;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win32;D:\XML library\Debug;D:\GL Files\GL Files\lib;D:\GL Files\freeglut\lib;D:\GL Files\glew-1.11.0\lib;D:\assimp-3.1.1-win-binaries\lib32;D:\GL Files\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetyped.lib;opengl32.lib;OpenAL32.lib;glu32.lib;glaux.lib;freeglut.lib;glew32.lib;legacy_stdio_definitions.lib;assimpd.lib;SOIL.lib;tinyxml2.lib;reactphysics3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,6 +174,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MultiSampleFBO.h" />
     <ClInclude Include="FBO.h" />
+    <ClInclude Include="Music.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="GameObject.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="MultiSampleFBO.cpp" />
     <ClCompile Include="FBO.cpp" />
+    <ClCompile Include="Music.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="GameObject.cpp" />

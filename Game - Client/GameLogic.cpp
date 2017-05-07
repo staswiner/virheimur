@@ -192,9 +192,9 @@ void GameLogic::ProcessForces()
 		if (object->unit_Data.HasPhysics)
 		{
 			
-			object->unit_Data.Acceleration = object->unit_Data.TotalForceVector * 10.0f;
+			object->unit_Data.Acceleration = object->unit_Data.TotalForceVector;
 			auto t = Time::Instance().Frame();	
-			object->unit_Data.Velocity += object->unit_Data.Acceleration * (Time::Instance().Frame() / 1000.0f) / 100.0f;
+			object->unit_Data.Velocity += object->unit_Data.Acceleration * (Time::Instance().Frame() / 1000.0f);
 			//if (glm::length(object->unit_Data.TotalForceVector) < 0.1)
 			//	object->unit_Data.Velocity = vec3(0);
 			float Dot;
@@ -205,7 +205,7 @@ void GameLogic::ProcessForces()
 					object->unit_Data.Acceleration = vec3(0);
 			}
 			
-			object->unit_Data.Position += object->unit_Data.Velocity;
+			object->unit_Data.Position += object->unit_Data.Velocity * (Time::Instance().Frame() / 1000.0f);
 			int j = 0;
 			if (object->unit_Data.Position.x > 98)
 			{
@@ -278,6 +278,8 @@ void GameLogic::ProcessPlayerMovement()
 
 			if (ud.Position.y <= CollisionPoint.y) // collision occured
 			{
+				ud.Position += normalize(-ud.Velocity) * ((ud.Position.y - CollisionPoint.y) / ud.Velocity.y);;
+
 				ud.Velocity = (-2 * glm::dot(ud.Velocity, SurfaceNormal) * SurfaceNormal + ud.Velocity) * ud.bounceFactor;
 				//-2 * (V dot N)*N + V
 				//Normal
@@ -286,7 +288,7 @@ void GameLogic::ProcessPlayerMovement()
 				//Friction
 				//vec3 Friction = glm::normalize(-ud.Velocity) * glm::length(NormalForce);
 				//ud.FrictionVector = Friction;
-				ud.Position.y = CollisionPoint.y;
+				
 			}
 
 			ud.TotalForceVector = vec3(0);
@@ -300,6 +302,10 @@ void GameLogic::ProcessPlayerMovement()
 				float FrictionCoefficient = 0.3f;
 				ud.TotalForceVector;
 				
+				vec3 CollisiionPoint;
+				vec3 MirrorVector;
+				vec3 BouncePoint;
+
 				vec3 Friction = glm::normalize(-ud.TotalForceVector) * glm::length(Gravity * dot(SurfaceNormal,normalize(Gravity))) * FrictionCoefficient;
 				test = dot(normalize(Friction), normalize(ud.TotalForceVector));
 				ud.FrictionVector = Friction;

@@ -368,6 +368,9 @@
     <ClInclude Include="LoginState.h">
       <Filter>GameStates</Filter>
     </ClInclude>
+    <ClInclude Include="Music.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Graphics.cpp">
@@ -573,6 +576,7 @@
     </ClCompile>
     <ClCompile Include="DrawObjectCollection.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Music.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">
