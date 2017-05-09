@@ -365,7 +365,7 @@ void Effect2D::Draw(SceneData & sceneData)
 	mat4 ModelMatrix = this->unit_Data.GetModelMatrix();
 	mat4 BlenderModelMatrix = ModelMatrix * inverse(mat4(mat3(sceneData.ViewMatrix)))  // disable rotation
 		* Default::Instance().BlenderConversion;
-	mat4 ViewMatScaler = translate(mat4(),-camera.GetCameraPosition()/2.0f);
+	mat4 ViewMatScaler = translate(mat4(),-camera.GetCameraPosition()/8.0f);
 	//mat4(mat3(sceneData.ViewMatrix))
 	mat4 WVM = sceneData.ProjectionMatrix * sceneData.ViewMatrix * ViewMatScaler * BlenderModelMatrix;
 //	vec4 

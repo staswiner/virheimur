@@ -43,7 +43,7 @@ vec3 Collision::GetNormal(vec3)
 
 vector<vec3> Collision::GetCollisionPath(vec3, vec3)
 {
-	return vec3();
+	return vector<vec3>();
 }
 
 vector<Stas::Vertex>& Collision::GetVertices()
