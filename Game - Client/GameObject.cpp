@@ -397,3 +397,43 @@ void SkyBox::ReloadShader()
 {
 	this->DrawObject.ReloadTexture();
 }
+
+Normals::Normals()
+{
+	this->Vertices.resize(2);
+	glGenVertexArrays(1, &this->VAO);
+	glGenBuffers(sizeof(VBO) / sizeof(VBO[0]), this->VBO);
+	glBindVertexArray(this->VAO);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices[0]) * Vertices.size(), NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(POSITION_LOCATION);
+	glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, sizeof(vec3),
+		(GLvoid*)0);
+
+	glBindVertexArray(0);
+
+}
+
+void Normals::Draw()
+{
+	glBindVertexArray(VAO);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertices[0]) * Vertices.size(), &(Vertices[0]));
+
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_LINES, 0, 4);
+	glBindVertexArray(0);
+}
+
+void Normals::ReloadShader()
+{
+	Shader::At("Normals").Reload();
+}
+
+Normals::~Normals()
+{
+}

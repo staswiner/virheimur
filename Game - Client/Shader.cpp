@@ -32,7 +32,8 @@ bool Shader::LoadShaders()
 	mapShader["SeaAnimated"]	= new Shader("SeaAnimated Vertex Shader.glsl","SeaAnimated Geometry Shader.glsl","SeaAnimated Fragment Shader.glsl");
 	mapShader["Index"]			= new Shader("Index1 Vertex Shader.glsl","Index1 Geometry Shader.glsl", "Index1 Fragment Shader.glsl");
 	mapShader["Text"] = new Shader("Text Vertex Shader.glsl", "Text Fragment Shader.glsl");
-	mapShader["Color"]			= new Shader("Color Vertex Shader.glsl", "Color Fragment Shader.glsl");
+	mapShader["Color"] = new Shader("Color Vertex Shader.glsl", "Color Fragment Shader.glsl");
+	mapShader["Normals"]			= new Shader("NormalsV.glsl","NormalsF.glsl");
 	//	new Shader("Index Vertex Shader.glsl", "Index Geometry Shader.glsl", "Index Fragment Shader.glsl");
 	return true;
 }
@@ -134,11 +135,12 @@ Shader::Shader(string vertexPath, string fragmentPath)
 	// Check Vertex Shader
 	glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
 	glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	string error;
+
 	if (InfoLogLength > 0)
 	{
 		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-		string error;
 		for (unsigned int i = 0; i < VertexShaderErrorMessage.size(); ++i)
 		{
 			error += VertexShaderErrorMessage[i];
@@ -154,11 +156,11 @@ Shader::Shader(string vertexPath, string fragmentPath)
 	// Check Fragment Shader
 	glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
 	glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	error.clear();
 	if (InfoLogLength > 0)
 	{
 		std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
 		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-		string error;
 		for (unsigned int i = 0; i < FragmentShaderErrorMessage.size(); ++i)
 		{
 			error += FragmentShaderErrorMessage[i];
@@ -691,6 +693,13 @@ void Shader::Use()
 Shader & Shader::At(string ID)
 {
 	return *Shader::mapShader[ID];
+}
+void Shader::ReloadAll()
+{
+	for (auto s : mapShader)
+	{
+		s.second->Reload();
+	}
 }
 Shader::Shader()
 {

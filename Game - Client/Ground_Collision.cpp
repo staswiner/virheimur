@@ -38,7 +38,7 @@ Ground_Collision::Ground_Collision(vector<Stas::Vertex> Vertices)
 Ground_Collision::~Ground_Collision()
 {
 }
-
+// Returns Height between Current Position.xz
 vec3 Ground_Collision::OnCollision(vec3 CurrentPosition)
 {
 	vec3 UnitPosition = CurrentPosition;
@@ -87,10 +87,22 @@ vec3 Ground_Collision::GetNormalRotation(vec2 Position)
 
 vec3 Ground_Collision::GetNormal(vec3 Position)
 {
-	vector<vec3> Triangle = FindCorrectTriangle(vec2(Position.x, -Position.y));
+	vector<vec3> Triangle = FindCorrectTriangle(vec2(Position.x, -Position.z));
 
 	vec3 TriangleNormal = normalize(cross(Triangle[0] - Triangle[1], Triangle[0] - Triangle[2]));
 	return TriangleNormal;
+}
+
+vector<vec3> Ground_Collision::GetCollisionPath(vec3 Position, vec3 PreviousPosition)
+{
+	float unitDifference = abs(AlteredVertices.begin()->first.y - (++AlteredVertices.begin())->first.y);
+	vec3 Direction = Position - PreviousPosition; // Direction towards Position
+	vector<vec3> CollisionPath;
+	for (vec3 pos = PreviousPosition; dot(pos-Position,pos-PreviousPosition) > 0; pos+=(unitDifference * normalize(Direction)))
+	{
+		CollisionPath.push_back(OnCollision(pos));
+	}
+	return CollisionPath;
 }
 
 float Ground_Collision::FindCorrectTriangleHeight(vec2 Position) // fix to 1 triangle back

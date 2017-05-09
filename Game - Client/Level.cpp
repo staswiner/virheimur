@@ -20,16 +20,17 @@ void Level::LoadLevel()
 	dynamic_cast<SkyBox*>(gameObject)->Initialize();
 	layer->AddGameObject(gameObject);
 
-	//this->AddEntity(layer, "Mine", EntityType::Entity);
-	/*for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
-		}
-	}*/
-	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0,0,0));
-	this->AddEntity(layer, "Land", EntityType::Ground);
+//	this->LoadJsonData("Level1.ld");
+	////this->AddEntity(layer, "Mine", EntityType::Entity);
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	for (int j = 0; j < 10; j++)
+	//	{
+	//		this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
+	//	}
+	//}
+	//this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0,0,0));
+	//this->AddEntity(layer, "Land", EntityType::Ground);
 	gameObject = new Effect2D("Interface/3D Effects/Sun.png"); /*this->AddEntity(layer, "Mine", EntityType::Entity);*/
 	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
 	layer->AddGameObject(gameObject);
@@ -87,6 +88,20 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType, 
 	return gameObject;
 
 
+}
+
+void Level::LoadJsonData(string path)
+{
+	/*string sData = Stas::File::Read(path);
+	json jData = sData;
+	for (int i = 0; i < jData.size(); i++)
+	{
+		jData[i]["Name"];
+		jData[i]["Type"];
+		jData[i]["CollisionType"];
+		jData[i]["Position"];
+		jData[i]["Model"];
+	}*/
 }
 
 void Level::ClearLevel()

@@ -38,18 +38,51 @@ namespace Stas
 			Vectors() = delete;
 			~Vectors() = delete;
 		public:
-			struct Point {
+			struct Point
+			{
+				Point()
+				{
+					this->point = vec3(0); this->valid = false;
+				}
+				Point(vec3 Point, bool Valid)
+				{
+					this->point = Point;
+					this->valid = Valid;
+				}
 				vec3 point;
 				bool valid;
+				operator vec3() {
+					return this->point;
+				}
 			};
 			struct Line {
-				vec3 Start;
-				vec3 End;
+				Line(vec3 Start, vec3 End, bool)
+				{
+					this->Direction = End - Start;
+					this->Point = Start;
+				}
+				Line(vec3 Direction, vec3 Point)
+				{
+					this->Direction = Direction;
+					this->Point = Point;
+				}
+				vec3 Direction;
+				vec3 Point;
 				bool valid;
 			};
 			struct Plane {
-				vec3 v1;
-				vec3 v2;
+				Plane(vec3 Normal, vec3 Point)
+				{
+					this->normal = Normal;
+					this->Point = Point;
+				}
+				Plane(vec3 v1, vec3 v2, vec3 Point)
+				{
+					this->normal = cross(v1, v2);
+					this->Point = Point;
+				}
+				vec3 normal;
+				vec3 Point;
 				bool valid;
 			};
 			struct Circle {
@@ -67,7 +100,7 @@ namespace Stas
 				bool valid;
 			};
 			static Point IntersectionTwoLines(Line line1, Line line2);
-			static void IntersectionPlaneLine(Plane plane1, Line line2);
+			static Maths::Vectors::Point IntersectionPlaneLine(Plane plane1, Line line2);
 			static void IntersectionTwoPlanes(Plane plane1, Plane plane2);
 			static void IntersectionSpherePlane(Sphere circle1, Plane plane2);
 			static void IntersectionSphereLine(Sphere circle1, Line line2);

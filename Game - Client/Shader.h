@@ -43,6 +43,7 @@ public:
 	static bool LoadShaders();
 	void Reload();
 	static Shader& At(string ID);
+	static void ReloadAll();
 private:
 	Shader* ConstructShaderNS(ShaderInfo shaderInfo);
 	GLuint CompileVertexShader();

@@ -15,6 +15,7 @@ void Music::Initialize()
 {
 	// READ FILE
 	//alutInit(0, NULL);
+	
 	FILE * file;
 	fopen_s(&file, R"(D:\Users\stasw\Documents\virheimur\Game - Client\Soundtracks\Perion.wav)", "rb");
 	char type[4];

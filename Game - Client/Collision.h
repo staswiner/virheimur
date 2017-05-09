@@ -20,6 +20,7 @@ public:
 
 	virtual vec3 GetNormalRotation(vec2);
 	virtual vec3 GetNormal(vec3);
+	virtual vector<vec3> GetCollisionPath(vec3, vec3);
 
 	vector<Stas::Vertex>& GetVertices();
 

@@ -21,7 +21,7 @@ ModelsCollection::ModelsCollection()
 	//Models["Land"]->AddTexture("Texture7", "Map/Grass/grass01_n_converted.jpg");
 	//Models["Land"]->AddTexture("Texture8", "Map/Grass/grass01_h_converted.jpg");
 
-	//Models["Land"] = new Model("Collada/TiltedGround.dae","Ground");
+	//Models["Land"] = new Model("Collada/FlatGround.dae","Ground");
 	Models["Land"] = new Model("Collada/TerrainUnrefined.dae", "Ground");
 
 	//Models["Water"] = new Model("Map/Sea.dae", "");

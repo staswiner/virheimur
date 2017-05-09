@@ -43,6 +43,8 @@ private:
 	GDO& Data;
 	InGameInteractions inGameInteractions;
 
+	void DrawNormals();
+	vector<vec2> Normals;
 
 };
 

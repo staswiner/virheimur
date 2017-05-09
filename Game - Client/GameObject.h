@@ -39,7 +39,7 @@ public:
 		// Later Calculates the route based on this factor and walking speed
 	public:
 		vec3 StartPoint;
-		vec3 Position;
+		vec3 Position, PrevPosition;
 		vec3 Velocity; // Direction * Value
 		vec3 Acceleration; // Direction * Value
 
@@ -184,4 +184,24 @@ public:
 private:
 	ImageLoader* image;
 	Shader* shader;
+};
+
+class Normals : public GameObject
+{
+public:
+	static Normals& Instance()
+	{
+		static Normals instance;
+		return instance;
+	}
+	void Draw();
+	void ReloadShader();
+	vector<vec3> Vertices;
+	~Normals();
+private:
+	static Normals instance;
+	Normals();
+	GLuint VAO;
+	GLuint VBO[5];
+		
 };

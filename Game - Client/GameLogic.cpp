@@ -194,7 +194,7 @@ void GameLogic::ProcessForces()
 			
 			object->unit_Data.Acceleration = object->unit_Data.TotalForceVector;
 			auto t = Time::Instance().Frame();	
-			object->unit_Data.Velocity += object->unit_Data.Acceleration * (Time::Instance().Frame() / 1000.0f);
+			object->unit_Data.Velocity += object->unit_Data.Acceleration *( /*Time::Instance().Frame() */(1000.0f/15.0f)/ 1000.0f);
 			//if (glm::length(object->unit_Data.TotalForceVector) < 0.1)
 			//	object->unit_Data.Velocity = vec3(0);
 			float Dot;
@@ -205,7 +205,8 @@ void GameLogic::ProcessForces()
 					object->unit_Data.Acceleration = vec3(0);
 			}
 			
-			object->unit_Data.Position += object->unit_Data.Velocity * (Time::Instance().Frame() / 1000.0f);
+			object->unit_Data.PrevPosition = object->unit_Data.Position;
+			object->unit_Data.Position += object->unit_Data.Velocity * (/*Time::Instance().Frame() */(1000.0f / 15.0f) / 1000.0f);
 			int j = 0;
 			if (object->unit_Data.Position.x > 98)
 			{
@@ -272,19 +273,50 @@ void GameLogic::ProcessPlayerMovement()
 		if (p.movement == GameObject::movements::Ground) {
 			vec3 CollisionPoint = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
 			vec3 SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormal(ud.Position);
+			vector<vec3> SurfacePathCollision = ModelsCollection::Instance()
+				["Land"]->meshes[0].mCollision->GetCollisionPath(ud.Position, ud.PrevPosition);
 			if (SurfaceNormal.y < 0) SurfaceNormal *= -1.0f;
 			vec3 Gravity(0, -10, 0);
 			ud.ForceVectors.push_back(Gravity); // gravity
 
 			if (ud.Position.y <= CollisionPoint.y) // collision occured
 			{
-				ud.Position += normalize(-ud.Velocity) * ((ud.Position.y - CollisionPoint.y) / ud.Velocity.y);;
+				vec3 firstOccuranceCollision;
+				vec3 firstOccurancePosition;
+				for (auto Col : SurfacePathCollision)
+				{
+					// Calculate Position at Col.y and compare
+					if (ud.Position.y <= Col.y)
+					{
+						firstOccuranceCollision = Col;
+						//firstOccurancePosition;
+						break;
+					}
+				}
 
+
+				vec3 oldPos = ud.Position;
+				//PlaneLineIntersection
+				vec3 Intersection = Stas::Maths::Vectors::IntersectionPlaneLine(
+					Stas::Maths::Vectors::Plane(SurfaceNormal, CollisionPoint),
+					Stas::Maths::Vectors::Line(ud.Velocity,ud.Position));
+				float RemainingDistance = distance(ud.Position, Intersection);
+				// Apply mirror to velocity
+				
+				vec3 OldVelocity = ud.Velocity;
 				ud.Velocity = (-2 * glm::dot(ud.Velocity, SurfaceNormal) * SurfaceNormal + ud.Velocity) * ud.bounceFactor;
-				//-2 * (V dot N)*N + V
+				// Calculate New Position
+				ud.Position = Intersection + normalize(ud.Velocity) * RemainingDistance;
+				
+				if (ud.Position.y < Intersection.y)
+				{
+					int i = 0;
+				}
+			
+				int i = 0;
 				//Normal
-				vec3 NormalForce = SurfaceNormal * glm::length(Gravity);
-				ud.ForceVectors.push_back(NormalForce);
+				//vec3 NormalForce = SurfaceNormal * glm::length(Gravity);
+				//ud.ForceVectors.push_back(NormalForce);
 				//Friction
 				//vec3 Friction = glm::normalize(-ud.Velocity) * glm::length(NormalForce);
 				//ud.FrictionVector = Friction;
@@ -302,9 +334,7 @@ void GameLogic::ProcessPlayerMovement()
 				float FrictionCoefficient = 0.3f;
 				ud.TotalForceVector;
 				
-				vec3 CollisiionPoint;
-				vec3 MirrorVector;
-				vec3 BouncePoint;
+			
 
 				vec3 Friction = glm::normalize(-ud.TotalForceVector) * glm::length(Gravity * dot(SurfaceNormal,normalize(Gravity))) * FrictionCoefficient;
 				test = dot(normalize(Friction), normalize(ud.TotalForceVector));
@@ -321,6 +351,12 @@ void GameLogic::ProcessPlayerMovement()
 		}
 	}
 	ProcessForces();
+}
+void GameLogic::DrawNormals()
+{
+	mat4 WVM = FrameData::Instance().ProjectionMatrix * FrameData::Instance().ViewMatrix;
+	ShaderBuilder::LoadShader(Shader::At("Normals"))->
+		Add_mat4("WVM", WVM);
 }
 void GameLogic::RegisterCollisionBodies()
 {

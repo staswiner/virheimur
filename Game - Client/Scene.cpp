@@ -94,7 +94,7 @@ void Scene::Initialize()
 	FrameData::Instance().Light_Pos = vec3(50, 50, 50);
 
 	OfflineDataObject::Instance().level.LoadLevel();
-	music.Initialize();
+	//music.Initialize();
 	
 }
 
@@ -277,6 +277,29 @@ void Scene::Draw_Scene()
 	glEnable(GL_CLIP_DISTANCE0);
 
 	OfflineDataObject::Instance().level.Draw();
+
+
+	Normals& normals = Normals::Instance();
+	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
+	/*for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			vec3 SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormal(vec3(i, 0, j));
+			vec3 CollisionPoint = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(vec3(i, 0, j));
+
+			if (SurfaceNormal.y < 0) SurfaceNormal *= -1.0f;
+			vector<vec3> Vertices = { CollisionPoint, CollisionPoint + SurfaceNormal };
+
+			mat4 WVM = FrameData::Instance().ProjectionMatrix * FrameData::Instance().ViewMatrix;
+			ShaderBuilder::LoadShader(Shader::At("Normals"))->
+				Add_mat4("WVM", WVM);
+
+			normals.Vertices = Vertices;
+			normals.Draw();
+		}
+	}*/
+
 	DrawUI();
 
 

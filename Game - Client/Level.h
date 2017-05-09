@@ -1,5 +1,8 @@
 #pragma once
 #include "Layer.h"
+#include "File.h"
+#include "json.hpp"
+using namespace nlohmann;
 class Level
 {
 public:
@@ -25,6 +28,7 @@ public:
 private:
 	GameObject* AddEntity(Layer* layer, string Model, EntityType, vec3 Position = vec3());
 	Layers layers;
+	void LoadJsonData(string path);
 	void ClearLevel();
 
 };

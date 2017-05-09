@@ -371,6 +371,9 @@
     <ClInclude Include="Music.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Graphics.cpp">
@@ -577,6 +580,7 @@
     <ClCompile Include="DrawObjectCollection.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Music.cpp" />
+    <ClCompile Include="File.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\3D Text Vertex Shader.glsl">

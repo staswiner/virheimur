@@ -470,8 +470,12 @@ namespace Stas
 	{
 		return Point();
 	}
-	void Maths::Vectors::IntersectionPlaneLine(Plane plane1, Line line2)
+	Maths::Vectors::Point Maths::Vectors::IntersectionPlaneLine(Plane plane, Line line)
 	{
+		float D = (glm::dot(plane.Point - line.Point, plane.normal) / (glm::dot(line.Direction, plane.normal)));
+		vec3 Intersection = D*line.Direction + line.Point;
+		Point ReturnPoint(Intersection,true);
+		return ReturnPoint;
 	}
 	void Maths::Vectors::IntersectionTwoPlanes(Plane plane1, Plane plane2)
 	{

@@ -1,0 +1,1 @@
+[{"Name":"Ball","Type":"Entity","CollisionType":"Sphere","Postion":"{\"x\": 0.0,\"y\": 0.0,\"z\": 0.0}","Model":"Sphere.dae"},{"Name":"Land","Type":"Ground","CollisionType":"Ground","Postion":"{\"x\": 0.0,\"y\": 0.0,\"z\": 0.0}","Model":"TerrainUnrefined.dae"}]

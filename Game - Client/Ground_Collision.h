@@ -23,6 +23,8 @@ public:
 
 	vec3 GetNormalRotation(vec2);
 	vec3 GetNormal(vec3);
+	vector<vec3> GetCollisionPath(vec3 Position, vec3 PreviousPosition);
+
 private:
 	map<vec2, float, bool(*)(const vec2&, const vec2&)> AlteredVertices;
 	float FindCorrectTriangleHeight(vec2 Position);

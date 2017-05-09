@@ -383,6 +383,7 @@ void Input::GetKeyboardInput()
 void Input::ReloadShaders()
 {
 	OfflineDataObject::Instance().level.ReloadShaders();
+	Shader::ReloadAll();
 }
 
 void Input::OnlineRightMouseClick()
