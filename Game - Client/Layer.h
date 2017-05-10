@@ -27,6 +27,7 @@ public:
 
 private:
 	void Draw();
+	void Update();
 	//void OrderObjects(function<bool(GameObject&, GameObject&)> orderer);
 	vector<GameObject*> Objects;
 	LayerType type;
@@ -41,6 +42,7 @@ public:
 	Layers();
 	~Layers();	
 	void Draw();
+	void Update();
 	void Add(Layer*, LayerType);
 	void ReloadShaders();
 	void ReloadShaders(Shader::ImageType);

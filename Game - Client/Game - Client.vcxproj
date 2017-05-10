@@ -77,7 +77,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;D:\GL Files\reactphysics3d-master\src;D:\GL Files\alut\include;D:\GL Files\freetype-2.6.2\include;D:\assimp-3.1.1-win-binaries\include;D:\GL Files\freeglut\include;D:\GL Files\GL Files\include\GL;D:\GL Files\glew-1.11.0\include;D:\GL Files\glm\glm;D:\GL Files\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4819;4455;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4455;4244;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>

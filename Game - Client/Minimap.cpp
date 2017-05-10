@@ -44,44 +44,44 @@ void Minimap::UpdateMap()
 	memcpy(NewImageData, MinimapFrameData, Width*Height * sizeof(u8vec4));
 
 }
-void Minimap::DrawMinimap(GDO & Data)
+void Minimap::DrawMinimap()
 {
-	Mouse& mouse = Mouse::Instanace();
+	//Mouse& mouse = Mouse::Instanace();
 
-	Position = vec2(mouse.GetWindowSize().x - 300, 0);
-	/*for (auto &i : CharactersPositions)
-	{
-		Character.Draw(Position + i, Position+vec2(i.x + 20, i.y + 20));
-	}*/
-	
-	if (Data.RouteChanged)
-	{
-		memcpy(NewImageData, MinimapFrameData, Width*Height * sizeof(u8vec4));
-		Data.RouteChanged = false;
-		if (Data.Graph)
-		{
-			for (auto i : *Data.Graph)
-			{
-				for (auto j : i.second)
-				{
-					DrawLine(j.first, i.first, u8vec3(255, 255, 255));
-				}
-			}
-			for (auto i : *Data.Graph)
-			{		
-				DrawDotEdge(i.first, u8vec3(0, 0, 1));
-			}
-		}
-		if (Data.Path && Data.Path->size() > 0)
-		{
-			for (auto i = (*Data.Path).begin(); i != Data.Path->end() - 1; i++)
-			{
-				DrawLine(*i, *(i + 1), u8vec3(255, 0, 0));
-			}
-		}
-	}
-	MinimapFrame.ReloadTexture(NewImageData, Width, Height);
-	MinimapFrame.Draw(Position, Position + vec2(300, 300));
+	//Position = vec2(mouse.GetWindowSize().x - 300, 0);
+	///*for (auto &i : CharactersPositions)
+	//{
+	//	Character.Draw(Position + i, Position+vec2(i.x + 20, i.y + 20));
+	//}*/
+	//
+	//if (Data.RouteChanged)
+	//{
+	//	memcpy(NewImageData, MinimapFrameData, Width*Height * sizeof(u8vec4));
+	//	Data.RouteChanged = false;
+	//	if (Data.Graph)
+	//	{
+	//		for (auto i : *Data.Graph)
+	//		{
+	//			for (auto j : i.second)
+	//			{
+	//				DrawLine(j.first, i.first, u8vec3(255, 255, 255));
+	//			}
+	//		}
+	//		for (auto i : *Data.Graph)
+	//		{		
+	//			DrawDotEdge(i.first, u8vec3(0, 0, 1));
+	//		}
+	//	}
+	//	if (Data.Path && Data.Path->size() > 0)
+	//	{
+	//		for (auto i = (*Data.Path).begin(); i != Data.Path->end() - 1; i++)
+	//		{
+	//			DrawLine(*i, *(i + 1), u8vec3(255, 0, 0));
+	//		}
+	//	}
+	//}
+	//MinimapFrame.ReloadTexture(NewImageData, Width, Height);
+	//MinimapFrame.Draw(Position, Position + vec2(300, 300));
 
 }
 

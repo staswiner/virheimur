@@ -20,11 +20,9 @@ using namespace std::chrono;
 class Input
 {
 public:
-	Input(GlobalDataObject&, UserInterface&, FBO* Index, GlobalDataObject&);
+	Input(UserInterface&, FBO* Index);
 	~Input();
-	void SetInitialCharacterData(GDO);
-	GlobalDataObject& TranslateInput(GlobalDataObject& Data);
-	GlobalDataObject & TranslateInputOffline(GlobalDataObject & Data);
+	void TranslateInputOffline();
 	Keyboard& GetKeyboard();
 	Mouse& GetMouse();
 
@@ -44,10 +42,6 @@ private:
 	void DirectControl();
 	void LockCamera();
 	vec3 GetMouseCoord_MapCoord();
-	GlobalDataObject& ReceivedData;
-	GlobalDataObject& InputToScene;
-	GlobalDataObject* Data;
-	GlobalDataObject NewData;
 	// the Interface object in focus 
 	int Focus;
 	int HoverFocus;

@@ -58,6 +58,17 @@ void Layer::Draw()
 	}
 }
 
+void Layer::Update()
+{
+	for (auto it = Objects.begin(); it != Objects.end(); it++)
+	{
+		if ((*it)->Disabled)
+		{
+			it = Objects.erase(it);
+		}
+	}
+}
+
 //void Layer::OrderObjects(function<bool(GameObject&, GameObject&)> orderer)
 //{
 //	sort(this->Objects.begin(), this->Objects.end(), orderer);
@@ -76,6 +87,14 @@ void Layers::Draw()
 	for (auto i : layers)
 	{
 		i.second->Draw();
+	}
+}
+
+void Layers::Update()
+{
+	for (auto i : layers)
+	{
+		i.second->Update();
 	}
 }
 

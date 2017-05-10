@@ -20,6 +20,8 @@ public:
 	void ReloadShaders();
 	void ReloadShaders(Shader::ImageType);
 	void Draw();
+	/*removes all entities marked as 'Disabled'*/
+	void Update();
 	void Reset();
 
 	vector<GameObject*> Grounds;

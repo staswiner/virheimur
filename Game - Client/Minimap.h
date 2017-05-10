@@ -10,7 +10,7 @@ public:
 	~Minimap();
 	void Initialize();
 	void UpdateMap();
-	void DrawMinimap(GDO&);
+	void DrawMinimap();
 	u8vec4* GetMinimapData(int& Width, int& Height);
 private:
 	void DrawCharacter() {}

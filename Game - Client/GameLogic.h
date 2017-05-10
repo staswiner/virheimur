@@ -15,7 +15,7 @@
 __declspec(align(16)) class GameLogic
 {
 public:
-	GameLogic(GDO& Data);
+	GameLogic();
 	~GameLogic();
 	void* operator new(size_t size) {
 		return _mm_malloc(size, 16);
@@ -24,7 +24,7 @@ public:
 		_mm_free(p);
 	}
 
-	void Proceed(GDO& NewData);
+	void Proceed();
 	void ProcessDataOffline();
 	void ChainCommands();
 	void BuildData();
@@ -41,7 +41,6 @@ private:
 	void ProcessPlayerMovement();
 	
 	//GameData Data;
-	GDO& Data;
 	InGameInteractions inGameInteractions;
 
 	union MyUnion

@@ -1,19 +1,11 @@
 #include "Game.h"
 
-PlayerRepository Game::Players;
-PlayerRepository Game::NewPlayers;
-PlayerRepository Game::ReceivedPlayers;
-GlobalDataObject Game::NewData;
-GlobalDataObject Game::ReceivedData(ReceivedPlayers);
-GlobalDataObject Game::InputToScene;
-GlobalDataObject Game::Data(Players);
 FBO Game::Index;
 
 UserInterface Game::UI;
 
-Game::Game(Scene& scene, Network& network, Input& input, GameLogic& logic)
+Game::Game(Scene& scene, Input& input, GameLogic& logic)
 	: scene(scene),
-	network(network),
 	input(input),
 	logic(logic)
 {
@@ -47,11 +39,11 @@ void Game::Initialize()
 #pragma region Network
 	if (Online)
 	{
-		network.InitializeConnection();
+		//network.InitializeConnection();
 		// Authentication
 		/*ReadAuthentication();
 		Data.MyUsername = Username;*/
-		Receiver = std::thread(&Network::BeginReceive, &network);
+		//Receiver = std::thread(&Network::BeginReceive, &network);
 	}
 #pragma endregion Network
 #pragma region Offline Network Simulator
@@ -158,24 +150,9 @@ void Game::GameScreen()
 	int i = 0;
 	}*/
 	// Sends 'NewData' object to the server
-	try {
-
-		UpdateNetwork();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
 
 	// Creates 'Data' object as a combination of NewData and ReceivedData
-	try {
-
-		CombineData();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
+	
 	// proceeds logic of the final 'Data' object
 	try {
 
@@ -201,16 +178,6 @@ void Game::GameScreenOffline()
 	try {
 
 		UserInput();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
-
-	// Creates 'Data' object as a combination of NewData and ReceivedData
-	try {
-
-		CombineData();
 	}
 	catch (exception ex)
 	{
@@ -254,24 +221,11 @@ void Game::CharacterCreationScreen()
 void Game::LoginUserInput()
 {
 }
-void Game::AddToNewData()
-{
-	for (auto p : Data.GetPlayerInformation())
-	{
-		Unit_Data& uData = p.second->unit_Data;
-		/*if (uData.PathChanged)
-		{
-			NewData.GetPlayerInformation()[p.first].unit_Data.StartPointTime = uData.StartPointTime;
-			NewData.GetPlayerInformation()[p.first].unit_Data.StartPoint = uData.StartPoint;
-			NewData.GetPlayerInformation()[p.first].unit_Data.Destination = uData.Destination;
-			uData.PathChanged = false;
-		}*/
-	}
-}
 
 void Game::UserInput()
 {
-	NewData = ( Online? input.TranslateInput(Data) : input.TranslateInputOffline(Data));
+	//NewData = ( Online? input.TranslateInput() : input.TranslateInputOffline());
+	input.TranslateInputOffline();
 	// Camera
 	Camera& camera = Camera::GetCamera("Main");
 	FrameData& frameData = FrameData::Instance();
@@ -280,8 +234,8 @@ void Game::UserInput()
 }
 void Game::UserInputOffline()
 {
-	GlobalDataObject Data;
-	Data.GetPlayerInformation();
+	/*GlobalDataObject Data;
+	Data.GetPlayerInformation();*/
 }
 
 void Game::ApplyGameLogic()
@@ -290,7 +244,7 @@ void Game::ApplyGameLogic()
 	Core& core = Core::Instance();
 	if (core.Online)
 	{
-		logic.Proceed(Data);
+		logic.Proceed();
 	}
 	else
 	{
@@ -298,44 +252,7 @@ void Game::ApplyGameLogic()
 	}
 }
 
-void Game::GetGameOnlineGameState()
-{
-	string Data = network.Receive();
-	//string Data = network->Receive();
-	//logic.BuildData();
-}
-
 void Game::DrawScene()
 {
 	scene.Frame();
-}
-
-void Game::UpdateNetwork()
-{
-	//network.SetNewData( this->NewData );
-	network.SendNewData(this->NewData);
-}
-
-void Game::CombineData()
-{
-	// NewData
-	//	MyChampion : Destination
-	// ReceivedData
-	//	AllChampions : Destination, StartTime`
-	// =
-	// Data
-	// Received Data
-//	Data.GetPlayerInformation() = ReceivedData.GetPlayerInformation();
-	// New Data
-//	Data.GetPlayerInformation() = NewData.GetPlayerInformation();
-	//for(auto p : NewData.GetPlayerInformation())
-	//{
-	//	Data.GetPlayerInformation()[p.first] = p.second;
-	//}
-	// Received Data
-	for (auto p : ReceivedData.GetPlayerInformation())
-	{
-		Data.GetPlayerInformation()[p.first] = p.second;
-	}
-
 }

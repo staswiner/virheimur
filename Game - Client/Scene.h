@@ -30,10 +30,8 @@ class Scene
 {
 public:
 	//Scene() {}
-	Scene(GlobalDataObject&,UserInterface&,FBO* Index,GlobalDataObject&);
+	Scene(UserInterface&,FBO* Index);
 	~Scene();
-	GlobalDataObject& Data;
-	GlobalDataObject& InputToScene;
 	void* operator new(size_t size){
 		return _mm_malloc(size, 16);
 	}

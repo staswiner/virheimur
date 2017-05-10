@@ -84,20 +84,20 @@ public:
 	GameObject(Unit_Data, string Username);
 	~GameObject();
 	Unit_Data& GetUnitData();
-	virtual void Draw(SceneData& sceneData);
+	virtual void Draw(SceneData& sceneData) = 0;
+	virtual void ReloadShader() = 0;
+	virtual void ReloadShader(Shader::ImageType) = 0;
 	void DrawShadow(mat4 & ProjectionMatrix, mat4 & ViewMatrix);
 	void DrawOutline(mat4 & ProjectionMatrix, mat4 & ViewMatrix, vec3 Color);
 	void DrawUI(mat4& Projection, mat4& View);
 	void LoadInterface();
 	void UpdateUnitData(Unit_Data uData);
-	virtual void ReloadShader();
-	virtual void ReloadShader(Shader::ImageType);
 	json GetJson();
 	json GetStructureJson();
 	Stats stats;
 	milliseconds TimeDelta;
-	Unit_Data unit_Data;
-
+	Unit_Data unit_Data; 
+	bool Disabled = false;
 	movements movement = movements::Ground;
 	controls control = controls::Manual;
 	
@@ -109,6 +109,7 @@ public:
 	// TO remove variable
 	bool PathingStarted = false;
 	bool LongPath = true;
+
 	// Collision library
 	rp3d::CollisionBody* collisionBody;
 	void CreateCollisionBody(rp3d::CollisionWorld& world);
@@ -117,27 +118,28 @@ public:
 private:
 	map<string, void*> MemoryBlock;
 	map<string, string> MemoryTypeTable;
-	string IpAddress;
 	UIElement* UIroot;
 	int Type;
 };
 
 typedef GameObject::Unit_Data Unit_Data;
 
-class PlayerRepository
+class SimpleObject : public GameObject
 {
 public:
-	PlayerRepository() {}
-	~PlayerRepository() { Players.clear(); }
-	GameObject*& operator[](string Key);
-	GameObject* operator[](string Key) const;
-	void Erase(string Key);
-	map<string, GameObject*>::iterator begin();
-	map<string, GameObject*>::iterator end();
-	void clear();
+	SimpleObject()
+	{
+	}
+	~SimpleObject()
+	{
+	}
+
+	void Draw(SceneData& sceneData);
+	void ReloadShader();
+	void ReloadShader(Shader::ImageType);
 
 private:
-	mutable map<string, GameObject*> Players;
+
 };
 
 class Player : public GameObject
@@ -163,6 +165,7 @@ public:
 		this->DrawObject.DrawModel();
 	}
 	void ReloadShader();
+	void ReloadShader(Shader::ImageType) { exception("Illegal function use"); }
 private:
 	SkyBox_Graphics DrawObject;
 };
@@ -179,8 +182,11 @@ public:
 	Effect2D();
 	~Effect2D();
 
+
+
 	void Draw(SceneData& sceneData);
 	void ReloadShader();
+	void ReloadShader(Shader::ImageType) { exception("Illegal function use"); }
 private:
 	ImageLoader* image;
 	Shader* shader;
@@ -195,7 +201,9 @@ public:
 		return instance;
 	}
 	void Draw();
+	void Draw(SceneData&) {}
 	void ReloadShader();
+	void ReloadShader(Shader::ImageType) { exception("Illegal function use"); }
 	vector<vec3> Vertices;
 	~Normals();
 private:

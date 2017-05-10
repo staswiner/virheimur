@@ -53,6 +53,11 @@ void Level::Draw()
 	layers.Draw();
 }
 
+void Level::Update()
+{
+	layers.Update();
+}
+
 void Level::Reset()
 {
 	this->ClearLevel();
@@ -61,7 +66,7 @@ void Level::Reset()
 
 GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType, vec3 Position)
 {
-	GameObject* gameObject = new GameObject();
+	GameObject* gameObject = new SimpleObject();
 	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()[Model];
 	layer->AddGameObject(gameObject);
 	switch (entityType)

@@ -2,8 +2,8 @@
 
 
 
-Scene::Scene(GlobalDataObject& Data,UserInterface& UI,FBO* Index, GlobalDataObject& InputToScene)
-	:Data(Data), UI(UI), InputToScene(InputToScene)
+Scene::Scene(UserInterface& UI,FBO* Index)
+	:UI(UI)
 {
 	IndexFBO = Index;
 	int i = 0;
@@ -60,7 +60,7 @@ void Scene::Initialize()
 
 	minimap.UpdateMap();
 //	Data.Map = &minimap;
-	Data.Map.Map = minimap.GetMinimapData(Data.Map.Width, Data.Map.Height);
+	//Data.Map.Map = minimap.GetMinimapData(Data.Map.Width, Data.Map.Height);
 	grass.Initialize();
 	//Players[Channel].push_back(Player(Unit_Data(vec3(0, 10, 0), "Katarina", 0, 0, 1),1));
 	// remove next line
@@ -718,10 +718,10 @@ void Scene::DrawColladaShadow()
 		ModelsCollection::Instance()[npc.Name]->Draw();
 	}
 	// Draw Players
-	for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	/*for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
 	{
 		i->second->DrawShadow(LightViewMatrix, mat4());
-	}
+	}*/
 
 
 }
@@ -752,39 +752,39 @@ void Scene::DrawWater()
 }
 void Scene::Outline()
 {
-	// set stencil mode to only draw those not previous drawn
-	glStencilFunc(GL_EQUAL, 0, 1);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	glStencilMask(0x00);
+	//// set stencil mode to only draw those not previous drawn
+	//glStencilFunc(GL_EQUAL, 0, 1);
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	//glStencilMask(0x00);
 
-	// Hover NPC
-	mat4 ModelMatrix = glm::scale(mat4(), vec3(1.02f));
-	mat4 WVM = ProjectionMatrix * ViewMatrix* Default::Instance().BlenderConversion * ModelMatrix;
-	for (auto o : InputToScene.Highlight)
-	{
-		ShaderBuilder::LoadShader(Shader::At("Color"))->
-			Add_mat4("WVM", WVM).
-			Add_bool("isAnimated", false).
-			Add_vec3("Color", vec3(0, 0.8, 0.9));
-		ModelsCollection::Instance()[o]->Draw();
-	}
+	//// Hover NPC
+	//mat4 ModelMatrix = glm::scale(mat4(), vec3(1.02f));
+	//mat4 WVM = ProjectionMatrix * ViewMatrix* Default::Instance().BlenderConversion * ModelMatrix;
+	//for (auto o : InputToScene.Highlight)
+	//{
+	//	ShaderBuilder::LoadShader(Shader::At("Color"))->
+	//		Add_mat4("WVM", WVM).
+	//		Add_bool("isAnimated", false).
+	//		Add_vec3("Color", vec3(0, 0.8, 0.9));
+	//	ModelsCollection::Instance()[o]->Draw();
+	//}
 
-	Core & core = Core::Instance();
-	if (core.Online)
-	{
-		// All Units get a base outline
-		for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-		{
-			i->second->DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9f));
-		}
-	}
-	else
-	{
-		OfflineDataObject& offlineData = OfflineDataObject::Instance();
-		//offlineData.player.DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
-	/*	if (InputToScene.Highlight)*/
-	}
-	glDisable(GL_STENCIL_TEST);
+	//Core & core = Core::Instance();
+	//if (core.Online)
+	//{
+	//	// All Units get a base outline
+	//	/*for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
+	//	{
+	//		i->second->DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9f));
+	//	}*/
+	//}
+	//else
+	//{
+	//	OfflineDataObject& offlineData = OfflineDataObject::Instance();
+	//	//offlineData.player.DrawOutline(ProjectionMatrix, ViewMatrix, vec3(0.9));
+	///*	if (InputToScene.Highlight)*/
+	//}
+	//glDisable(GL_STENCIL_TEST);
 }
 void Scene::DrawOutlineObjects()
 {

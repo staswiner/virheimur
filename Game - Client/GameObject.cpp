@@ -30,7 +30,7 @@ GameObject::Unit_Data& GameObject::GetUnitData()
 }
 
 // TODO : remove projection matrix and view matrix
-void GameObject::Draw(SceneData& sceneData)
+void SimpleObject::Draw(SceneData& sceneData)
 {
 	Mouse& mouse = Mouse::Instanace();
 
@@ -150,7 +150,7 @@ void GameObject::UpdateUnitData(Unit_Data uData)
 	this->unit_Data.Destination = uData.Position;
 }
 
-void GameObject::ReloadShader()
+void SimpleObject::ReloadShader()
 {
 	if (this->unit_Data.Model_Data)
 	{
@@ -158,7 +158,7 @@ void GameObject::ReloadShader()
 	}
 }
 
-void GameObject::ReloadShader(Shader::ImageType imageType)
+void SimpleObject::ReloadShader(Shader::ImageType imageType)
 {
 	if (this->unit_Data.Model_Data)
 	{
@@ -185,7 +185,6 @@ json GameObject::GetJson()
 	//JPlayer["Hp"] = this->stats.Hp;
 	//JPlayer["MaxHp"] = this->stats.MaxHp;
 	JPlayer["StartTime"] = this->unit_Data.StartPointTime.count();
-	JPlayer["IpAddress"] = this->IpAddress;
 	//JPlayer["Username"] = this->Username;
 	return JPlayer;
 }
@@ -248,56 +247,6 @@ void GameObject::UpdateCollisionBody(rp3d::CollisionWorld& world)
 	rp3d::Quaternion orientation = rp3d::Quaternion::identity();
 	rp3d::Transform transform(position, orientation);
 	this->collisionBody->setTransform(transform);
-}
-
-GameObject *& PlayerRepository::operator[](string Key)
-{
-	if (this->Players.find(Key) == this->Players.end())
-	{
-		this->Players[Key] = new GameObject();
-		return this->Players[Key];
-	}
-	else
-	{
-		return this->Players[Key];
-	}
-}
-
-GameObject * PlayerRepository::operator[](string Key) const
-{
-	if (this->Players.find(Key) == this->Players.end())
-	{
-		this->Players[Key] = new GameObject();
-		return this->Players[Key];
-	}
-	else
-	{
-		return this->Players[Key];
-	}
-}
-
-void PlayerRepository::Erase(string Key)
-{
-	this->Players.erase(Key);
-}
-
-map<string, GameObject*>::iterator PlayerRepository::begin()
-{
-	return this->Players.begin();
-}
-
-map<string, GameObject*>::iterator PlayerRepository::end()
-{
-	return this->Players.end();
-}
-
-void PlayerRepository::clear()
-{
-	for (auto p : Players)
-	{
-		delete p.second;
-	}
-	Players.clear();
 }
 
 GameObject::Unit_Data::Unit_Data()
