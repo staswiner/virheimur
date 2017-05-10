@@ -77,7 +77,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\OpenAL 1.1 SDK\include;D:\GL Files\reactphysics3d-master\src;D:\GL Files\alut\include;D:\GL Files\freetype-2.6.2\include;D:\assimp-3.1.1-win-binaries\include;D:\GL Files\freeglut\include;D:\GL Files\GL Files\include\GL;D:\GL Files\glew-1.11.0\include;D:\GL Files\glm\glm;D:\GL Files\Simple OpenGL Image Library\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4819;4455;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\GL Files\alut\include\libs;C:\Program Files %28x86%29\OpenAL 1.1 SDK\libs\Win32;D:\XML library\Debug;D:\GL Files\GL Files\lib;D:\GL Files\freeglut\lib;D:\GL Files\glew-1.11.0\lib;D:\assimp-3.1.1-win-binaries\lib32;D:\GL Files\Simple OpenGL Image Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -290,78 +291,6 @@
     <None Include="ripcode.rip" />
     <None Include="Shaders\2D Effect Fragment Shader.glsl" />
     <None Include="Shaders\2D Effect Vertex Shader.glsl" />
-    <None Include="Shaders\3D Text Vertex Shader.glsl" />
-    <None Include="Shaders\Animation Fragment Shader.glsl" />
-    <None Include="Shaders\Animation Vertex Shader.glsl" />
-    <None Include="Shaders\AnimationShadow Fragment Shader.glsl" />
-    <None Include="Shaders\Basic Fragment Shader.glsl" />
-    <None Include="Shaders\Basic Vertex Shader.glsl" />
-    <None Include="Shaders\Bright Fragment Shader.glsl" />
-    <None Include="Shaders\Champion FragmentShader.glsl" />
-    <None Include="Shaders\Champion Geometry Shader.glsl" />
-    <None Include="Shaders\Champion VertexShader.glsl" />
-    <None Include="Shaders\Color Fragment Shader.glsl" />
-    <None Include="Shaders\Color Vertex Shader.glsl" />
-    <None Include="Shaders\Combine Fragment Shader.glsl" />
-    <None Include="Shaders\Distance Fragment Shader.glsl" />
-    <None Include="Shaders\Fractal Vertex Shader.glsl" />
-    <None Include="Shaders\Gamma Correction Fragment Shader.glsl" />
-    <None Include="Shaders\Gaussic Fragment Shader.glsl" />
-    <None Include="Shaders\Gaussic Geometry Shader.glsl" />
-    <None Include="Shaders\Gaussic Vertex Shader.glsl" />
-    <None Include="Shaders\Grass Fragment Shader.glsl" />
-    <None Include="Shaders\Grass Geometry Shader.glsl" />
-    <None Include="Shaders\Grass Vertex Shader.glsl" />
-    <None Include="Shaders\Ground Fragment Shader.glsl" />
-    <None Include="Shaders\Ground FragmentShader.glsl" />
-    <None Include="Shaders\Ground Geometry Shader.glsl" />
-    <None Include="Shaders\Ground VertexShader.glsl" />
-    <None Include="Shaders\HBlur Fragment Shader.glsl" />
-    <None Include="Shaders\HBlur Vertex Shader.glsl" />
-    <None Include="Shaders\Index Fragment Shader.glsl" />
-    <None Include="Shaders\Index Geometry Shader.glsl" />
-    <None Include="Shaders\Index Vertex Shader.glsl" />
-    <None Include="Shaders\Index1 Fragment Shader.glsl" />
-    <None Include="Shaders\Index1 Geometry Shader.glsl" />
-    <None Include="Shaders\Index1 Vertex Shader.glsl" />
-    <None Include="Shaders\Instanced Fragment Shader.glsl" />
-    <None Include="Shaders\Instanced Geometry Shader.glsl" />
-    <None Include="Shaders\Instanced Vertex Shader.glsl" />
-    <None Include="Shaders\Interface Fragment Shader.glsl" />
-    <None Include="Shaders\Interface Vertex Shader.glsl" />
-    <None Include="Shaders\InterfaceCrop Vertex Shader.glsl" />
-    <None Include="Shaders\Loading_Screen Fragment Shader.glsl" />
-    <None Include="Shaders\Loading_Screen Vertex Shader.glsl" />
-    <None Include="Shaders\MathGrass Fragment Shader.glsl" />
-    <None Include="Shaders\MathGrass Geometry Shader.glsl" />
-    <None Include="Shaders\MathGrass Vertex Shader.glsl" />
-    <None Include="Shaders\PostProcessing Fragment Shader.glsl" />
-    <None Include="Shaders\PostProcessing Vertex Shader.glsl" />
-    <None Include="Shaders\PreEffect Fragment Shader.glsl" />
-    <None Include="Shaders\PreEffect Vertex Shader.glsl" />
-    <None Include="Shaders\RadialBlur Fragment Shader.glsl" />
-    <None Include="Shaders\RadialBlur Vertex Shader.glsl" />
-    <None Include="Shaders\Sea Fragment Shader.glsl" />
-    <None Include="Shaders\Sea Geometry Shader.glsl" />
-    <None Include="Shaders\Sea Vertex Shader.glsl" />
-    <None Include="Shaders\Sea-Ground reflection Fragment Shader.glsl" />
-    <None Include="Shaders\Sea-Ground reflection Vertex Shader.glsl" />
-    <None Include="Shaders\Sea-Ground refraction Fragment Shader.glsl" />
-    <None Include="Shaders\Sea-Ground refraction Vertex Shader.glsl" />
-    <None Include="Shaders\Sea-Unit Fragment Shader.glsl" />
-    <None Include="Shaders\Sea-Unit Vertex Shader.glsl" />
-    <None Include="Shaders\SeaAnimated Vertex Shader.glsl" />
-    <None Include="Shaders\SeaAnimated Geometry Shader.glsl" />
-    <None Include="Shaders\SeaAnimated Fragment Shader.glsl" />
-    <None Include="Shaders\Shadow Fragment Shader.glsl" />
-    <None Include="Shaders\Shadow Vertex Shader.glsl" />
-    <None Include="Shaders\SkyBox Fragment Shader.glsl" />
-    <None Include="Shaders\SkyBox Vertex Shader.glsl" />
-    <None Include="Shaders\Text Fragment Shader.glsl" />
-    <None Include="Shaders\Text Vertex Shader.glsl" />
-    <None Include="Shaders\VBlur Fragment Shader.glsl" />
-    <None Include="Shaders\VBlur Vertex Shader.glsl" />
-    <None Include="Shaders\Water Fragment Shader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Game - Client.rc" />

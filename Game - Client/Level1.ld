@@ -1,1 +1,15 @@
-[{"Name":"Ball","Type":"Entity","CollisionType":"Sphere","Postion":"{\"x\": 0.0,\"y\": 0.0,\"z\": 0.0}","Model":"Sphere.dae"},{"Name":"Land","Type":"Ground","CollisionType":"Ground","Postion":"{\"x\": 0.0,\"y\": 0.0,\"z\": 0.0}","Model":"TerrainUnrefined.dae"}]
+[{"Name":"Ball","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},
+{"Name":"Land","Type":"Ground","CollisionType":"Ground","Position":"{\"x\": 0.0,\"y\": 0.0,\"z\": 0.0}","Model":"TerrainUnrefined.dae"},
+{"Name":"Character","Type":"ActivePlayer","CollisionType":"Box","Position":"{\"x\": 0.0,\"y\": 0.0,\"z\": 0.0}","Model":"Sphere.dae"},
+{"Name":"Ball1","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1,\"y\": 1,\"z\": 1}","Model":"Sphere.dae"},
+{"Name":"Ball2","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 2,\"y\": 2,\"z\": 2}","Model":"Sphere.dae"},
+{"Name":"Ball3","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1,\"y\": 2,\"z\": 3}","Model":"Sphere.dae"},
+{"Name":"Ball4","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},
+{"Name":"Ball5","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},
+{"Name":"Ball6","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},
+{"Name":"Ball7","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},
+{"Name":"Ball8","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},
+{"Name":"Ball9","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},
+{"Name":"Ball10","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},
+{"Name":"Ball11","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"},{
+"Name":"Ball12","Type":"Entity","CollisionType":"Sphere","Position":"{\"x\": 1.1,\"y\": 2.1,\"z\": 3.1}","Model":"Sphere.dae"}]

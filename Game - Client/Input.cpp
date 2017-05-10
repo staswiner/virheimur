@@ -168,6 +168,7 @@ void Input::GetMouseInput()
 			ReceivedData.Path = &myPlayer->unit_Data.Path;
 		}
 		Data->Effects.push_back(Effect("Collada", milliseconds(500), Destination));
+		
 	}
 	/*Left Click would change focus of User Interface Windows*/
 
@@ -258,7 +259,6 @@ void Input::GetMouseInputOffline()
 		vec3 ClickOnMapCoord = GetMouseCoord_MapCoord();
 
 		offlineData.Effects.push_back(Effect("Collada", milliseconds(500), ClickOnMapCoord));
-
 		GameObject& myPlayer = *offlineData.level.ActivePlayers[0];
 
 		vec3 CurrentPosition = myPlayer.GetUnitData().Position;
@@ -368,15 +368,18 @@ void Input::GetKeyboardInput()
 	}
 
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	GameObject& Player = *offlineData.level.ActivePlayers[0];
-	if (Player.control == GameObject::controls::Manual)
+	if (offlineData.level.ActivePlayers.size() > 0)
 	{
-		ManualControl();
-	}
+		GameObject& Player = *offlineData.level.ActivePlayers[0];
+		if (Player.control == GameObject::controls::Manual)
+		{
+			ManualControl();
+		}
 
-	if (Player.control == GameObject::controls::Direct)
-	{
-		DirectControl();
+		if (Player.control == GameObject::controls::Direct)
+		{
+			DirectControl();
+		}
 	}
 }
 

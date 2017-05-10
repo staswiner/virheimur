@@ -16,7 +16,6 @@ public:
 	~Game();
 	void Initialize();
 	void Loop();
-	void ThreadedLoop();
 	void SetHDC(HDC& hdc) { this->scene.SetWindowHDC(hdc); this->m_hdc = hdc; }
 	
 private:

@@ -1,5 +1,5 @@
 #pragma once
-#include <time.h>
+#include "Time.h"
 #include "Text.h"
 #include "Shader.h"
 class FPS

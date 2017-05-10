@@ -276,7 +276,9 @@ void GameLogic::ProcessPlayerMovement()
 			vector<vec3> SurfacePathCollision = ModelsCollection::Instance()
 				["Land"]->meshes[0].mCollision->GetCollisionPath(ud.Position, ud.PrevPosition);
 			if (SurfaceNormal.y < 0) SurfaceNormal *= -1.0f;
-			vec3 Gravity(0, -10, 0);
+			vec3 Gravity(0, -10.0m, 0);
+			//Gravity = vec3(88_roy, -10000.0_mm, 20.0_mm);
+			//Velocity1 a = 88_roy;
 			ud.ForceVectors.push_back(Gravity); // gravity
 
 			if (ud.Position.y <= CollisionPoint.y) // collision occured
@@ -351,12 +353,6 @@ void GameLogic::ProcessPlayerMovement()
 		}
 	}
 	ProcessForces();
-}
-void GameLogic::DrawNormals()
-{
-	mat4 WVM = FrameData::Instance().ProjectionMatrix * FrameData::Instance().ViewMatrix;
-	ShaderBuilder::LoadShader(Shader::At("Normals"))->
-		Add_mat4("WVM", WVM);
 }
 void GameLogic::RegisterCollisionBodies()
 {

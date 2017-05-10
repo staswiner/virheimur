@@ -2,6 +2,7 @@
 #include "Layer.h"
 #include "File.h"
 #include "json.hpp"
+#include <memory>
 using namespace nlohmann;
 class Level
 {
@@ -10,7 +11,8 @@ public:
 		Ground,
 		ActivePlayer,
 		PassivePlayer,
-		Entity
+		Entity,
+		End
 	};
 	Level();
 	~Level();
@@ -25,10 +27,10 @@ public:
 	vector<GameObject*> PassivePlayers;
 	vector<GameObject*> Entities;
 	vector<GameObject*> GameObjects;
+	Layers layers;
 private:
 	GameObject* AddEntity(Layer* layer, string Model, EntityType, vec3 Position = vec3());
-	Layers layers;
-	void LoadJsonData(string path);
+	void LoadJsonData(string path, Layer* layer);
 	void ClearLevel();
 
 };

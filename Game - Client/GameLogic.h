@@ -30,7 +30,7 @@ public:
 	void BuildData();
 #define TODO_FUNCTION
 	TODO_FUNCTION void CalculateCollision();
-	TODO_FUNCTION void ProcessForces();
+	void ProcessForces();
 
 	// World Physics
 	rp3d::CollisionWorld world;
@@ -39,12 +39,33 @@ public:
 	void CheckCollision();
 private:
 	void ProcessPlayerMovement();
+	
 	//GameData Data;
 	GDO& Data;
 	InGameInteractions inGameInteractions;
 
-	void DrawNormals();
-	vector<vec2> Normals;
+	union MyUnion
+	{
 
+	};
 };
+struct Velocity1 {
+	int v;
+};
+#define MATH_LITERAL(name, function) \
+constexpr long double operator"" name##(long double a) { function } \
+constexpr unsigned long long int operator"" name##(unsigned long long int a) { function }
 
+MATH_LITERAL(h, return 60.0f * a;);
+MATH_LITERAL(min, return a;);
+MATH_LITERAL(sec, return a / 60.0f;);
+
+constexpr long double operator"" m(long double a) { return a; }
+constexpr long double operator"" cm(long double a) { return a / 100.0f; }
+constexpr long double operator"" ²(long double a) { return a * a; }
+constexpr unsigned long long int operator"" ²(unsigned long long int a) { return a * a; }
+constexpr long double operator"" a(long double a) { return a; }
+constexpr long double operator"" mm(long double a) { return a / 1000.0a; }
+
+
+//Velocity1 operator"" _roy(unsigned long long int a) { Velocity1 v; v.v = a; return v; }

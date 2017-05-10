@@ -42,7 +42,6 @@ public:
 	}
 	
 	void Frame();
-	void DrawThreaded();
 	void Initialize();
 	void SetProjectionMatrix(mat4&);
 	void SetWindowHDC(HDC&);
@@ -63,17 +62,13 @@ private:
 	void SetCameraView();
 	void Shadow_DrawGround(Shader&);
 	void Outline();
-	void DrawSeaAnimated();
 	void DrawColladaShadow();
 	void Draw_Skeletal();
 	void DrawUI();
 	
-	void DrawSky();
 	void DrawGround(Shader&);
-	void DrawSky(Shader&);
 	void DrawSea();
 	void DrawPreBuffer();
-	void DrawCollada();
 	void DrawWater();
 	void DrawOutlineObjects();
 	void DrawIndexColor();
@@ -87,10 +82,8 @@ private:
 	FBO* IndexFBO;
 	MultiSampleFBO mAntiAliasing;
 
-	Model Soldier;
 	Sea mSea;
 	Shadow_Mapping *shadow;
-	vec3 LightPosition = vec3(30,50,0);
 
 	//SkyBox* skyBox;
 	GLuint Channel;
@@ -98,8 +91,6 @@ private:
 	UserInterface& UI;
 	Cursor cursor;
 	ChampionChat* championChat;
-	vector<GameObject> Players[2];
-	vector<GameObject> GameObjects;
 	Minimap minimap;
 	vector<vec3> Obstacles;
 	Grass grass;

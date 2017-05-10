@@ -58,8 +58,8 @@ namespace Stas
 			struct Line {
 				Line(vec3 Start, vec3 End, bool)
 				{
-					this->Direction = End - Start;
-					this->Point = Start;
+				this->Direction = End - Start;
+				this->Point = Start;
 				}
 				Line(vec3 Direction, vec3 Point)
 				{
@@ -107,8 +107,8 @@ namespace Stas
 			static Circle IntersectionTwoSpheres(Sphere circle1, Sphere circle2);
 			static void IntersectionTwoBB(BoundryBox bb1, BoundryBox bb2);
 			static float DistanceIntersectionTwoBB(BoundryBox bb1, BoundryBox bb2);
-	/*		static void IntersectionBBSphere(Circle circle1, Circle circle2);
-			static void IntersectionTwoSpheres(Circle circle1, Circle circle2);*/
+			/*		static void IntersectionBBSphere(Circle circle1, Circle circle2);
+					static void IntersectionTwoSpheres(Circle circle1, Circle circle2);*/
 
 		};
 	public:
@@ -152,8 +152,7 @@ namespace Stas
 			& graph, vec3 source, vec3 target);
 		Maths() = delete;
 		~Maths() = delete;
-		
+
 	};
 
 }
-

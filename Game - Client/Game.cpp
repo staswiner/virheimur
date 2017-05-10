@@ -116,13 +116,6 @@ void Game::Loop()
 #undef is
 }
 
-void Game::ThreadedLoop()
-{
-	while(1)
-	scene.DrawThreaded();
-}
-
-
 void Game::LoginScreen()
 {
 	//LoginUserInput();

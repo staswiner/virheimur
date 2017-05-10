@@ -20,17 +20,17 @@ void Level::LoadLevel()
 	dynamic_cast<SkyBox*>(gameObject)->Initialize();
 	layer->AddGameObject(gameObject);
 
-//	this->LoadJsonData("Level1.ld");
+	this->LoadJsonData("Level1.ld", layer);
 	//this->AddEntity(layer, "Mine", EntityType::Entity);
-	for (int i = 0; i < 1; i++)
-	{
-		for (int j = 0; j < 1; j++)
-		{
-			this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
-		}
-	}
-	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0,0,0));
-	this->AddEntity(layer, "Land", EntityType::Ground);
+	//for (int i = 0; i < 1; i++)
+	//{
+	//	for (int j = 0; j < 1; j++)
+	//	{
+	//		this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
+	//	}
+	//}
+	//this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0,0,0));
+	//this->AddEntity(layer, "Land", EntityType::Ground);
 	gameObject = new Effect2D("Interface/3D Effects/Sun.png"); /*this->AddEntity(layer, "Mine", EntityType::Entity);*/
 	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
 	layer->AddGameObject(gameObject);
@@ -90,19 +90,36 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType, 
 
 }
 
-void Level::LoadJsonData(string path)
+void Level::LoadJsonData(string path, Layer* layer)
 {
 	string sData = Stas::File::Read(path);
-	json jData = sData;
+	json jData = json::parse(sData.c_str());
 	for (int i = 0; i < jData.size(); i++)
 	{
-		jData[i]["Name"];
-		jData[i]["Type"];
-		jData[i]["CollisionType"];
-		jData[i]["Position"]["x"];
-		jData[i]["Position"]["y"];
-		jData[i]["Position"]["z"];
-		jData[i]["Model"];
+		string Name = jData[i]["Name"];
+		string Type = jData[i]["Type"];
+		string CollisionType = jData[i]["CollisionType"];
+		string PositionStr = jData[i]["Position"];
+		json Positions = json::parse(PositionStr.c_str());
+		float x = Positions["x"];
+		float y = Positions["y"];
+		float z = Positions["z"];
+		string Model = jData[i]["Model"];
+		EntityType entityType;
+		if (Type == "Ground") entityType = EntityType::Ground;
+		if (Type == "ActivePlayer") entityType = EntityType::ActivePlayer;
+		if (Type == "PassivePlayer") entityType = EntityType::PassivePlayer;
+		if (Type == "Entity") entityType = EntityType::Entity;
+		
+//#define IntToEnum(Enum,i) static_cast<Enum>(i);
+//#define Loop(Enum) \
+//		for (int i = 0; i < static_cast<int>(Enum::End); i++) \
+//		{ \
+//			if (Type==#Enum) { entityType = IntToEnum(Enum,i); break;} \
+//		} /**/
+//		Loop(EntityType);
+
+		this->AddEntity(layer, Model, entityType, vec3(x,y,z));
 	}
 }
 

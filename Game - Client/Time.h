@@ -22,6 +22,7 @@ public:
 	}
 	static double Now();
 	void CalculateFrame();
+	/*Frame Time in Milliseconds*/
 	float Frame();
 };
 

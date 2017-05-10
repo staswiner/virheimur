@@ -91,7 +91,7 @@ void Scene::Initialize()
 	//		seaAnim.ObstaclesMat.push_back(ModelMat);
 	//	}
 	//}
-	FrameData::Instance().Light_Pos = vec3(50, 50, 50);
+	FrameData::Instance().Light_Pos = vec3(100, 50, 100);
 
 	OfflineDataObject::Instance().level.LoadLevel();
 	//music.Initialize();
@@ -351,7 +351,6 @@ void Scene::DrawScene_Refraction()
 	mSea.BindRefraction();
 
 	SetCameraView();
-	DrawSky();
 	//DrawGround(mSea.sRefraction_Ground);
 	//Draw_All_Units();
 	//DrawEntities();
@@ -367,8 +366,6 @@ void Scene::DrawScene_Reflection()
 		camera.SetCameraPosition(vec3(camera.CameraPositionCalculated.x, -camera.CameraPositionCalculated.y, camera.CameraPositionCalculated.z));
 		camera.InvertPitch();
 		SetCameraView();
-		DrawSky();
-		DrawCollada();
 		//DrawGround(mSea.sReflection_Ground);
 		//Draw_All_Units();
 		//DrawEntities();
@@ -399,12 +396,9 @@ void Scene::DrawScene_NoEffect()
 	mAntiAliasing.BindFrameBuffer();
 #pragma region 3D Elements
 	SetCameraView();
-	DrawSky();
 	//DrawGround(Shader::At("Ground"));
-	DrawCollada();
 	//DrawEntities();
 	//DrawSea();
-	DrawSeaAnimated();
 	DrawUI();
 #pragma endregion 3D Elements
 	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
@@ -419,17 +413,14 @@ void Scene::DrawScene_PostProcessing()
 	glEnable(GL_CLIP_DISTANCE0);
 
 	SetCameraView();
-	DrawSky();
 	//DrawGround(Shader::At("Ground"));
 	DrawOutlineObjects();
 	Outline();
-	DrawCollada();
 	//DrawWater();
 	DrawUI();
 
 	//DrawEntities();
 	//DrawSea();
-	DrawSeaAnimated();
 	
 #pragma endregion 3D Elements
 
@@ -471,12 +462,7 @@ void Scene::DrawScene_PostProcessing()
 }
 void Scene::Shadow_DrawGround(Shader& shader)
 {
-	Mouse& mouse = Mouse::Instanace();
 
-	mat4 l_ProjectionMatrix = glm::perspective(radians(120.0f),
-		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
-	mat4 l_ViewMatrix = glm::lookAt(LightPosition, vec3(0.0f), vec3(1.0f, 1.0f, 1.0f));
-	mat4 ModelMatrix;
 	//loaded_Models["Ground"]->DrawModel(l_ProjectionMatrix, l_ViewMatrix, ModelMatrix, shader); // TODO remove mat arguements
 }
 
@@ -672,30 +658,12 @@ void Scene::DrawUI()
 	//cursor.Draw();
 }
 
-void Scene::DrawThreaded()
-{
-	cursor.Draw();
-
-}
-
-void Scene::DrawSky()
-{
-	mat4 ModelMatrix;
-	float Counter = 0;
-	ModelMatrix = glm::rotate(ModelMatrix, radians(float(Counter) / 10.0f), vec3(0, 1, 0));
-	//skyBox->DrawModel(ProjectionMatrix, ViewMatrix, ModelMatrix, 0, mat4(), NULL, 0);
-	//loaded_Models["Sky"]->DrawModel(ProjectionMatrix, ViewMatrix, ModelMatrix, 0, mat4(), NULL, 0);
-}
-void Scene::DrawSeaAnimated()
-{
-
-}
 void Scene::DrawColladaShadow()
 {
 	Camera& camera = Camera::GetCamera("Main");
 
 	mat4 WVM;
-	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
+	vec3 NewLightPos = vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
 	// Light Source
 	mat4 LightViewMatrix = glm::lookAt(NewLightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
 	LightViewMatrix = ProjectionMatrix * LightViewMatrix;
@@ -757,110 +725,6 @@ void Scene::DrawColladaShadow()
 
 
 }
-void Scene::DrawCollada()
-{
-	Camera& camera = Camera::GetCamera("Main");
-
-	mat4 WVM;
-	// Light Source
-	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
-	mat4 LightViewMatrix = glm::lookAt(NewLightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
-	LightViewMatrix = ProjectionMatrix * LightViewMatrix;
-
-	// default unit, internet connection independent
-	vec3 position;
-	mat4 ModelMatrix;
-	ModelMatrix = glm::translate(ModelMatrix, position);
-	vec3 color;
-	ModelMatrix = glm::translate(ModelMatrix, vec3(0,-10,0));
-	WVM = ProjectionMatrix * ViewMatrix * ModelMatrix * Default::Instance().BlenderConversion;
-	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
-	//	Add_mat4("WVM", WVM).
-	//	Add_bool("isAnimated", true).
-	//	Add_textures(loaded_Models["Collada"]->Textures);
-	//loaded_Models["Collada"]->Draw();
-	//position = vec3(50, 0, 0);
-	//ModelMatrix = glm::translate(ModelMatrix, position);
-	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
-	//	Add_mat4("model", ModelMatrix);
-
-	ShaderBuilder::LoadShader(Shader::At("Animation"))->
-		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", false).
-		Add_textures(ModelsCollection::Instance()["Mine"]->Textures);
-	ModelsCollection::Instance()["Mine"]->Draw();
-
-	float SlowTime = float(Time::Now()) / 40.0f;
-	mat4 landmat;
-
-	WVM = ProjectionMatrix * ViewMatrix * landmat;
-
-	ShaderBuilder::LoadShader(Shader::At("Ground"))->
-		Add_mat4("WVM", WVM).
-		Add_mat4("Model", landmat).
-		Add_float("Texelation", 25.0f).
-		Add_vec3("lightPos", NewLightPos).
-		Add_vec3("cameraPos", -camera.GetCameraPosition()).
-		Add_textures(ModelsCollection::Instance()["Land"]->Textures).
-		Add_texture("shadowMap", shadow->depthMap).
-		Add_mat4("LightViewMatrix", LightViewMatrix).
-		Add_bool("clip", true).
-		Add_Material("Brick", Materials::GetInstance()["chrome"]).
-		Add_Material("Grass", Materials::GetInstance()["emerald"]).
-		Add_bool("isAnimated", false);
-	ModelsCollection::Instance()["Land"]->Draw();
-
-	// light source
-	mat4 LightModel = translate(mat4(), NewLightPos + vec3(0, -10, 0));
-	WVM = ProjectionMatrix * ViewMatrix * LightModel;
-	ShaderBuilder::LoadShader(Shader::At("Animation"))->
-		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", false).
-		Add_float("Texelation", 1.0f).
-		Add_textures(ModelsCollection::Instance()["Sphere"]->Textures);
-	ModelsCollection::Instance()["Sphere"]->Draw();
-	WVM = ProjectionMatrix * ViewMatrix;
-	//
-	/*uniform vec3 lightPos;
-	uniform vec3 cameraPos;
-	uniform Material Wood;*/
-	
-	
-	Core & core = Core::Instance();
-	vector<Effect>* effects;
-	if (core.Online)
-	{
-		effects = &Data.Effects;
-	}
-	else
-	{
-		effects = &OfflineDataObject::Instance().Effects;
-	}
-
-	for (auto e : *effects)
-	{
-		WVM = ProjectionMatrix * ViewMatrix * e.ModelMatrix;
-		ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("WVM", WVM).
-			Add_bool("isAnimated", true).
-			Add_float("Texelation", 1.0f).
-			Add_textures(e.EffectModel->Textures);
-		e.Draw();
-	}
-
-	for (auto npc : NPCs)
-	{
-		WVM = ProjectionMatrix * ViewMatrix * Default::Instance().BlenderConversion;
-		ShaderBuilder::LoadShader(Shader::At("Animation"))->
-			Add_mat4("WVM", WVM).
-			Add_bool("isAnimated", false).
-			Add_Material("Wood",Materials::GetInstance()["chrome"]).
-			Add_float("Texelation", 1.0f).
-			Add_textures(ModelsCollection::Instance()[npc.Name]->Textures);
-		ModelsCollection::Instance()[npc.Name]->Draw();
-	}
-
-}
 
 void Scene::DrawWater()
 {
@@ -870,7 +734,7 @@ void Scene::DrawWater()
 
 	mat4 WVM = ProjectionMatrix * ViewMatrix;
 	mat4 landmat;
-	vec3 NewLightPos = LightPosition + vec3(50.0 * sin(float(counter) / 90.0f), 0, 0);
+	vec3 NewLightPos = vec3(50.0 * sin(float(counter) / 90.0f), 0, 0);
 
 	ShaderBuilder::LoadShader(Shader::At("Water"))->
 		Add_mat4("WVM", WVM).
