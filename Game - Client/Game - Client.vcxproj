@@ -71,6 +71,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>D:\GL Files\reactphysics3d-master\src;D:\Users\stasw\Documents\virheimur\Game - Client\Physics;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -147,6 +150,7 @@
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GaussicEffect.h" />
+    <ClInclude Include="GL.h" />
     <ClInclude Include="GLM_Headers.h" />
     <ClInclude Include="GlobalDataObject.h" />
     <ClInclude Include="Graphics_Header.h" />
@@ -229,6 +233,7 @@
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GaussicEffect.cpp" />
+    <ClCompile Include="GL.cpp" />
     <ClCompile Include="GlobalDataObject.cpp" />
     <ClCompile Include="Grass.cpp" />
     <ClCompile Include="GrassObjects.cpp" />

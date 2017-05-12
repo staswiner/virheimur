@@ -1,4 +1,6 @@
-#pragma once
+﻿#pragma once
+
+
 #include <math.h>
 #include <queue>
 #include <vector>
@@ -10,7 +12,6 @@
 #include <chrono>
 #include <functional>
 #include "Defines.h"
-#include "GL\glew.h"
 #include "glm\glm\vec2.hpp"
 #include "glm\glm\vec3.hpp"
 #include "glm\glm\vec4.hpp"
@@ -58,8 +59,8 @@ namespace Stas
 			struct Line {
 				Line(vec3 Start, vec3 End, bool)
 				{
-				this->Direction = End - Start;
-				this->Point = Start;
+					this->Direction = End - Start;
+					this->Point = Start;
 				}
 				Line(vec3 Direction, vec3 Point)
 				{
@@ -108,7 +109,7 @@ namespace Stas
 			static void IntersectionTwoBB(BoundryBox bb1, BoundryBox bb2);
 			static float DistanceIntersectionTwoBB(BoundryBox bb1, BoundryBox bb2);
 			/*		static void IntersectionBBSphere(Circle circle1, Circle circle2);
-					static void IntersectionTwoSpheres(Circle circle1, Circle circle2);*/
+			static void IntersectionTwoSpheres(Circle circle1, Circle circle2);*/
 
 		};
 	public:

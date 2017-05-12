@@ -167,9 +167,6 @@
     <ClInclude Include="Inventory.h">
       <Filter>User Interface\Item Tab</Filter>
     </ClInclude>
-    <ClInclude Include="Maths.h">
-      <Filter>Maths</Filter>
-    </ClInclude>
     <ClInclude Include="Grass.h">
       <Filter>Graphics\Scene\Entities\Grass</Filter>
     </ClInclude>
@@ -374,6 +371,12 @@
     <ClInclude Include="File.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Maths.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="GL.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SkyBox_Graphics.cpp">
@@ -414,9 +417,6 @@
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
       <Filter>User Interface\Item Tab</Filter>
-    </ClCompile>
-    <ClCompile Include="Maths.cpp">
-      <Filter>Maths</Filter>
     </ClCompile>
     <ClCompile Include="Grass.cpp">
       <Filter>Graphics\Scene\Entities\Grass</Filter>
@@ -581,6 +581,10 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="File.cpp" />
+    <ClCompile Include="Maths.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="GL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cursor1.cur">

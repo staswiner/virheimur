@@ -30,21 +30,21 @@ using namespace std;
 //#define (A) isInstanceOf(B) (dynamic_cast<A*>(B))
 namespace Stas
 {
-	struct MinimapData
+	struct MATHLIBRARY_API MinimapData
 	{
 		u8vec4* Map;
 		int Width;
 		int Height;
 	};
-	class Maths
+	class __declspec(dllexport)    Maths
 	{
 	public:
-		class Vectors {
+		class __declspec(dllexport)    Vectors {
 		private:
 			Vectors() = delete;
 			~Vectors() = delete;
 		public:
-			struct Point
+			struct __declspec(dllexport)    Point
 			{
 				Point()
 				{
@@ -61,7 +61,7 @@ namespace Stas
 					return this->point;
 				}
 			};
-			struct Line {
+			struct __declspec(dllexport)    Line {
 				Line(vec3 Start, vec3 End, bool)
 				{
 					this->Direction = End - Start;
@@ -76,7 +76,7 @@ namespace Stas
 				vec3 Point;
 				bool valid;
 			};
-			struct Plane {
+			struct __declspec(dllexport)    Plane {
 				Plane(vec3 Normal, vec3 Point)
 				{
 					this->normal = Normal;

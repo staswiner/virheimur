@@ -20,17 +20,17 @@ void Level::LoadLevel()
 	dynamic_cast<SkyBox*>(gameObject)->Initialize();
 	layer->AddGameObject(gameObject);
 
-	this->LoadJsonData("Level1.ld", layer);
+	//this->LoadJsonData("Level1.ld", layer);
 	//this->AddEntity(layer, "Mine", EntityType::Entity);
-	//for (int i = 0; i < 1; i++)
-	//{
-	//	for (int j = 0; j < 1; j++)
-	//	{
-	//		this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
-	//	}
-	//}
-	//this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0,0,0));
-	//this->AddEntity(layer, "Land", EntityType::Ground);
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
+		}
+	}
+	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0,0,0));
+	this->AddEntity(layer, "Land", EntityType::Ground);
 	gameObject = new Effect2D("Interface/3D Effects/Sun.png"); /*this->AddEntity(layer, "Mine", EntityType::Entity);*/
 	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
 	layer->AddGameObject(gameObject);

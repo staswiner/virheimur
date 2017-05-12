@@ -98,7 +98,9 @@ vector<vec3> Ground_Collision::GetCollisionPath(vec3 Position, vec3 PreviousPosi
 	float unitDifference = abs(AlteredVertices.begin()->first.y - (++AlteredVertices.begin())->first.y);
 	vec3 Direction = Position - PreviousPosition; // Direction towards Position
 	vector<vec3> CollisionPath;
-	for (vec3 pos = PreviousPosition; dot(pos-Position,pos-PreviousPosition) > 0; pos+=(unitDifference * normalize(Direction)))
+	vec3 pos;
+	float result;
+	for (pos = PreviousPosition; (result=dot(pos-Position,pos-PreviousPosition)) >= 0; pos+=(unitDifference * normalize(Direction)))
 	{
 		CollisionPath.push_back(OnCollision(pos));
 	}

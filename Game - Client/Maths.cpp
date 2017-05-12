@@ -1,5 +1,4 @@
-#include "Maths.h"
-
+ï»¿#include "Maths.h"
 
 
 namespace Stas
@@ -27,7 +26,7 @@ namespace Stas
 	//{
 	//	//vector<float> Distances;
 	//	//// DHCP algorithm simulation
-	//	//// Current implementation O(v²) = (v²+v)
+	//	//// Current implementation O(vÂ²) = (vÂ²+v)
 	//	//list<vec3> Path;
 	//	//// Initialize
 	//	//for (auto it = Nodes.begin(); it != Nodes.end(); it++)
@@ -59,8 +58,8 @@ namespace Stas
 		}
 		return lhs.x < rhs.x;
 		// Distance factor
-		/*return lhs.x*lhs.x+lhs.y*lhs.y +lhs.z*lhs.z < 
-			rhs.x*rhs.x + rhs.y*rhs.y + rhs.z*rhs.z;*/
+		/*return lhs.x*lhs.x+lhs.y*lhs.y +lhs.z*lhs.z <
+		rhs.x*rhs.x + rhs.y*rhs.y + rhs.z*rhs.z;*/
 	}
 	bool Maths::IsIn(vec2 TopLeft, vec2 BotRight, vec2 TestSample)
 	{
@@ -74,12 +73,12 @@ namespace Stas
 			return false;
 		return true;
 	}
-	vector<vec3> Maths::Dijkstra(const map<vec3,map<vec3,float, bool(*)(const vec3&, const vec3&)>
-	, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target)
+	vector<vec3> Maths::Dijkstra(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
+		, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target)
 	{
 		map<vec3, map<vec3, int>> a;
 #pragma region Initialization
-		map<vec3, int, bool(*)(const vec3&,const vec3&)> minDistance(vec3Compare);
+		map<vec3, int, bool(*)(const vec3&, const vec3&)> minDistance(vec3Compare);
 		map<vec3, vec3, bool(*)(const vec3&, const vec3&)> BackTracking(Stas::Maths::vec3Compare);
 
 		vector<vec3> returnPath;
@@ -131,63 +130,63 @@ namespace Stas
 
 		//return INT_MAX;
 	}
-//	vector<vec3> Maths::DijkstraB(std::map<vec3, vector<vec3>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
-//		&graph, vec3 source, vec3 target)
-//	{
-//		map<vec3, map<vec3, int>> a;
-//#pragma region Initialization
-//		map<vec3, int, bool(*)(const vec3&, const vec3&)> minDistance(vec3Compare);
-//		map<vec3, vec3, bool(*)(const vec3&, const vec3&)> BackTracking(Stas::Maths::vec3Compare);
-//
-//		vector<vec3> returnPath;
-//		for (auto i : graph)
-//		{
-//			for each (auto j in i.second)
-//			{
-//				minDistance[j.first] = INT_MAX;
-//			}
-//			//for (auto &j : i)
-//		}
-//		minDistance[source] = 0;
-//
-//		map<vec3, int, bool(*)(const vec3&, const vec3&)> activeVertices(Stas::Maths::vec3Compare);
-//		activeVertices[source] = 0;
-//#pragma endregion Initialization
-//		while (!activeVertices.empty())
-//		{
-//			vec3 Where = activeVertices.begin()->first;
-//			if (Where == target)
-//			{
-//				vec3 backtrackingNode = target;
-//				while (backtrackingNode != source)
-//				{
-//					returnPath.push_back(backtrackingNode);
-//					backtrackingNode = BackTracking[backtrackingNode];
-//				}
-//				if (returnPath.size() > 1)
-//				{
-//					int i = 0;
-//				}
-//				returnPath.push_back(backtrackingNode);
-//				return returnPath;
-//				//return minDistance[where];
-//			}
-//			activeVertices.erase(activeVertices.begin());
-//			for (auto ed : graph.at(Where))
-//			{
-//				if (minDistance[ed.first] > minDistance[Where] + ed.second)
-//				{
-//					activeVertices.erase(ed.first);
-//					minDistance[ed.first] = minDistance[Where] + ed.second;
-//					activeVertices[ed.first] = minDistance[ed.first];
-//					BackTracking[ed.first] = Where;
-//				}
-//			}
-//		}
-//		return vector<vec3>();
-//
-//		//return INT_MAX;
-//	}
+	//	vector<vec3> Maths::DijkstraB(std::map<vec3, vector<vec3>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
+	//		&graph, vec3 source, vec3 target)
+	//	{
+	//		map<vec3, map<vec3, int>> a;
+	//#pragma region Initialization
+	//		map<vec3, int, bool(*)(const vec3&, const vec3&)> minDistance(vec3Compare);
+	//		map<vec3, vec3, bool(*)(const vec3&, const vec3&)> BackTracking(Stas::Maths::vec3Compare);
+	//
+	//		vector<vec3> returnPath;
+	//		for (auto i : graph)
+	//		{
+	//			for each (auto j in i.second)
+	//			{
+	//				minDistance[j.first] = INT_MAX;
+	//			}
+	//			//for (auto &j : i)
+	//		}
+	//		minDistance[source] = 0;
+	//
+	//		map<vec3, int, bool(*)(const vec3&, const vec3&)> activeVertices(Stas::Maths::vec3Compare);
+	//		activeVertices[source] = 0;
+	//#pragma endregion Initialization
+	//		while (!activeVertices.empty())
+	//		{
+	//			vec3 Where = activeVertices.begin()->first;
+	//			if (Where == target)
+	//			{
+	//				vec3 backtrackingNode = target;
+	//				while (backtrackingNode != source)
+	//				{
+	//					returnPath.push_back(backtrackingNode);
+	//					backtrackingNode = BackTracking[backtrackingNode];
+	//				}
+	//				if (returnPath.size() > 1)
+	//				{
+	//					int i = 0;
+	//				}
+	//				returnPath.push_back(backtrackingNode);
+	//				return returnPath;
+	//				//return minDistance[where];
+	//			}
+	//			activeVertices.erase(activeVertices.begin());
+	//			for (auto ed : graph.at(Where))
+	//			{
+	//				if (minDistance[ed.first] > minDistance[Where] + ed.second)
+	//				{
+	//					activeVertices.erase(ed.first);
+	//					minDistance[ed.first] = minDistance[Where] + ed.second;
+	//					activeVertices[ed.first] = minDistance[ed.first];
+	//					BackTracking[ed.first] = Where;
+	//				}
+	//			}
+	//		}
+	//		return vector<vec3>();
+	//
+	//		//return INT_MAX;
+	//	}
 	vector<vec3> Maths::Astar(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>,
 		bool(*)(const vec3&, const vec3&)>& graph, vec3 source, vec3 target)
 	{
@@ -202,11 +201,11 @@ namespace Stas
 		};
 		auto functype = std::function<bool(const vec3&, const vec3&)>(compare);
 		// used to store unique nodes to be references by in the graph
-		map<vec3,node,decltype(functype)> Nodes(functype);
+		map<vec3, node, decltype(functype)> Nodes(functype);
 		std::map<vec3, pair<node*, vector<node*>>, decltype(functype)> Graph(functype);
 		for (auto n : graph)
 		{
-			Nodes.insert(make_pair(n.first,node(n.first)));
+			Nodes.insert(make_pair(n.first, node(n.first)));
 		}
 		for (auto n : graph)
 		{
@@ -215,10 +214,10 @@ namespace Stas
 			{
 				vNeighbors.push_back(&Nodes[neighbor.first]);
 			}
-			Graph[n.first] = make_pair(&Nodes[n.first],vNeighbors);
+			Graph[n.first] = make_pair(&Nodes[n.first], vNeighbors);
 		}
 
-		return Maths::AstarB(Graph,source,target);
+		return Maths::AstarB(Graph, source, target);
 		//return vector<vec3>();
 	}
 #define OPENLIST 1
@@ -280,7 +279,7 @@ namespace Stas
 				float h = distance(target, (*v).pos);
 				float f = g + h;
 				if ((*n).f > f)
-				{	
+				{
 					(*n).parent = BestNode;
 					(*n).f = f;
 				}
@@ -305,7 +304,7 @@ namespace Stas
 		milliseconds TotalTime = EndTime - StartTime;
 		return returnPath;
 	}
-	int ConvertToArray(int WorldWidth, int WorldHeight,int Width, int Height, int x, int z)
+	int ConvertToArray(int WorldWidth, int WorldHeight, int Width, int Height, int x, int z)
 	{
 		int newx = float(float(x + WorldWidth / 2) / float(WorldWidth)) * Width;
 		int newz = float(float(z + WorldHeight / 2) / float(WorldHeight)) * Height;
@@ -313,7 +312,7 @@ namespace Stas
 	}
 	vec3 ConvertToWorldCoords(int WorldWidth, int WorldHeight, int Width, int Height, vec3 pos)
 	{
-		vec3 newpos = ((pos - vec3(Width/2)) / float(Width)) * float(WorldWidth);
+		vec3 newpos = ((pos - vec3(Width / 2)) / float(Width)) * float(WorldWidth);
 		return newpos;
 	}
 	vec3 ConvertToMapCoords(int WorldWidth, int WorldHeight, int Width, int Height, vec3 pos)
@@ -448,7 +447,7 @@ namespace Stas
 		}
 		// path found
 		do {
-			returnPath.push_back(ConvertToWorldCoords(200,200,300,300,currentNode.pos));
+			returnPath.push_back(ConvertToWorldCoords(200, 200, 300, 300, currentNode.pos));
 			currentNode = *currentNode.parent;
 		} while (currentNode.parent != nullptr);
 		returnPath.push_back(ConvertToWorldCoords(200, 200, 300, 300, currentNode.pos));
@@ -474,7 +473,7 @@ namespace Stas
 	{
 		float D = (glm::dot(plane.Point - line.Point, plane.normal) / (glm::dot(line.Direction, plane.normal)));
 		vec3 Intersection = D*line.Direction + line.Point;
-		Point ReturnPoint(Intersection,true);
+		Point ReturnPoint(Intersection, true);
 		return ReturnPoint;
 	}
 	void Maths::Vectors::IntersectionTwoPlanes(Plane plane1, Plane plane2)
@@ -485,10 +484,10 @@ namespace Stas
 	}
 	float Maths::Vectors::DistanceIntersectionTwoBB(BoundryBox bb1, BoundryBox bb2)
 	{
-	/*
-	find nearest vertex to the nearest plane;
-	calculate vertex from that plane distance in the direction of the velocity vector
-	*/
+		/*
+		find nearest vertex to the nearest plane;
+		calculate vertex from that plane distance in the direction of the velocity vector
+		*/
 		return 0.0f;
 	}
 	void Maths::Vectors::IntersectionSpherePlane(Sphere sphere1, Plane plane2)
@@ -525,7 +524,7 @@ struct Node
 void function()
 {
 	priority_queue<float> hi;
-	map<vec3, vector<pair<vec3,float>>> graph; // each node has his siblings with the distance to them
+	map<vec3, vector<pair<vec3, float>>> graph; // each node has his siblings with the distance to them
 	vector<vec3> backTrack; // sorted from End to Start
 	map<float, vec3> ActiveNodes; // sorted by distance, all untouched nodes
 
