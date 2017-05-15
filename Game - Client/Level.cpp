@@ -22,14 +22,15 @@ void Level::LoadLevel()
 
 	//this->LoadJsonData("Level1.ld", layer);
 	//this->AddEntity(layer, "Mine", EntityType::Entity);
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
-		}
-	}
-	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0,0,0));
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	for (int j = 0; j < 10; j++)
+	//	{
+	//		this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(2*i, 10, 2*j));
+	//	}
+	//}
+	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0, 0, 0));
+	this->AddEntity(layer, "Mine", EntityType::Entity, vec3(50,0,0));
 	this->AddEntity(layer, "Land", EntityType::Ground);
 	gameObject = new Effect2D("Interface/3D Effects/Sun.png"); /*this->AddEntity(layer, "Mine", EntityType::Entity);*/
 	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
@@ -68,6 +69,7 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType, 
 {
 	GameObject* gameObject = new SimpleObject();
 	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()[Model];
+	gameObject->Name = Model;
 	layer->AddGameObject(gameObject);
 	switch (entityType)
 	{
@@ -84,6 +86,7 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType, 
 		break;
 	case Level::EntityType::Entity:
 		gameObject->unit_Data.HasPhysics = true;
+		gameObject->unit_Data.Position = Position;
 		Entities.push_back(gameObject);
 		break;
 	default:

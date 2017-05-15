@@ -60,6 +60,7 @@ MATH_LITERAL(min, return a;);
 MATH_LITERAL(sec, return a / 60.0f;);
 
 constexpr long double operator"" m(long double a) { return a; }
+constexpr long double operator"" mps(long double a) { return a; }
 constexpr long double operator"" cm(long double a) { return a / 100.0f; }
 constexpr long double operator"" ²(long double a) { return a * a; }
 constexpr unsigned long long int operator"" ²(unsigned long long int a) { return a * a; }

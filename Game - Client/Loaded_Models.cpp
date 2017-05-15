@@ -21,8 +21,8 @@ ModelsCollection::ModelsCollection()
 	//Models["Land"]->AddTexture("Texture7", "Map/Grass/grass01_n_converted.jpg");
 	//Models["Land"]->AddTexture("Texture8", "Map/Grass/grass01_h_converted.jpg");
 
-	//Models["Land"] = new Model("Collada/FlatGround.dae","Ground");
-	Models["TerrainUnrefined.dae"] = Models["Land"] = new Model("Collada/TerrainUnrefined.dae", "Ground");
+	Models["TerrainUnrefined.dae"] = Models["Land"] = new Model("Collada/FlatGround.dae","Ground");
+	//Models["TerrainUnrefined.dae"] = Models["Land"] = new Model("Collada/TerrainUnrefined.dae", "Ground");
 
 	//Models["Water"] = new Model("Map/Sea.dae", "");
 	//Models["Water"]->AddTexture("Texture0", "Map/Water/waterDUDV.jpg");
@@ -58,7 +58,9 @@ ModelsCollection::ModelsCollection()
 	//Models["Grass"]->AddTexture("Texture[0]", "Map/3DGrass.png");
 	//Models["Grass"]->AddTexture("NormalMap[0]", "Textures/basicNormal.jpg");
 
-	Models["Sphere.dae"] = Models["MineSweaper"] = new Model("Collada/Sphere.dae", "");
+	Models["MineSweaper.dae"] = Models["MineSweaper"] = new Model("Collada/MineSweaperUp.dae", "");
+
+	Models["Sphere.dae"] = Models["Sphere"] = new Model("Collada/Sphere.dae", "");
 
 	Models["Mine.dae"] = Models["Mine"] = new Model("Collada/Mine.dae", "");
 	//Models["Mine"]->AddTexture("Texture[0]", "Katarina/Katarina Glowing.bmp");

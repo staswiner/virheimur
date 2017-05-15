@@ -52,6 +52,7 @@ public:
 		vec3 FrictionVector;
 		vec3 MomentumVelocity;
 		vector<vec3> ForceVectors;
+		vector<vec3> InputForceVectors;
 		float bounceFactor = 0.9f;
 		vector<vec3> Path;
 		vec3 Destination;
@@ -95,6 +96,7 @@ public:
 	void UpdateUnitData(Unit_Data uData);
 	json GetJson();
 	json GetStructureJson();
+	string Name;
 	Stats stats;
 	milliseconds TimeDelta;
 	Unit_Data unit_Data; 

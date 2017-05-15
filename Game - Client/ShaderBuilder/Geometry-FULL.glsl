@@ -1,6 +1,7 @@
 #version 400 compatibility
 layout(triangles) in;
-layout(triangle_strip, max_vertices = 3) out;
+layout(line_strip, max_vertices = 6) out;
+
 
 
 in VS_OUT{

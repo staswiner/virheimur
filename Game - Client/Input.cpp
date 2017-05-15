@@ -663,18 +663,20 @@ void Input::ManualControl()
 	float angle = -Player.unit_Data.Rotation.y;
 #define anglex(x) cos(x)
 #define angley(x) sin(x)
-
+	Player.unit_Data.InputForceVectors.clear();
 	if (keyboard.isKeyPressed(Key::Up)) // ↑
 	{
-		Player.unit_Data.Destination = Player.unit_Data.StartPoint =
-			Player.unit_Data.Position = Player.unit_Data.Position + vec3(anglex(angle),0, angley(angle)) *
+		Player.unit_Data.Destination = Player.unit_Data.StartPoint = Player.unit_Data.Position + vec3(anglex(angle),0, angley(angle)) *
 			MovementSpeed;
+		Player.unit_Data.InputForceVectors.push_back(vec3(anglex(angle), 0, angley(angle)) *
+			10.0f);
 	}
 	if (keyboard.isKeyPressed(Key::Down)) // ↓
 	{
-		Player.unit_Data.Destination = Player.unit_Data.StartPoint =
-			Player.unit_Data.Position = Player.unit_Data.Position - vec3(anglex(angle), 0, angley(angle)) *
+		Player.unit_Data.Destination = Player.unit_Data.StartPoint = Player.unit_Data.Position - vec3(anglex(angle), 0, angley(angle)) *
 			MovementSpeed;
+		Player.unit_Data.InputForceVectors.push_back(-vec3(anglex(angle), 0, angley(angle)) *
+			10.0f);
 	}
 	if (keyboard.isKeyPressed(Key::Right)) // →
 	{

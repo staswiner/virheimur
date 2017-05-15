@@ -471,10 +471,43 @@ namespace Stas
 	}
 	Maths::Vectors::Point Maths::Vectors::IntersectionPlaneLine(Plane plane, Line line)
 	{
-		float D = (glm::dot(plane.Point - line.Point, plane.normal) / (glm::dot(line.Direction, plane.normal)));
-		vec3 Intersection = D*line.Direction + line.Point;
+		if (line.direction == vec3(0))
+		{
+			return Maths::Vectors::IntersectionPlanePoint(plane, Point(line.point, line.valid));
+		}
+		if (glm::dot(line.direction, plane.normal) == 0)
+		{
+			return Maths::Vectors::IntersectionPlanePoint(plane, Point(line.point, line.valid));
+		}
+		float D = (glm::dot(plane.point - line.point, plane.normal) / (glm::dot(line.direction, plane.normal)));
+		if (D == NAN);
+		vec3 Intersection = D*line.direction + line.point;
 		Point ReturnPoint(Intersection, true);
 		return ReturnPoint;
+	}
+	Maths::Vectors::Point Maths::Vectors::IntersectionPlanePoint(Plane plane, Point point)
+	{
+		if (plane.point == point.point)
+		{
+			point.valid = true;
+			return point;
+		}
+		Line testLine(plane.point, point.point - plane.point);
+		if (plane.normal.x * point.point.x +
+			plane.normal.y * point.point.y +
+			plane.normal.z * point.point.z ==
+			plane.normal.x * plane.point.x +
+			plane.normal.y * plane.point.y +
+			plane.normal.z * plane.point.z)
+		{
+			point.valid = true;
+			return point;
+		}
+		else
+		{
+			point.valid = false;
+			return point;
+		}
 	}
 	void Maths::Vectors::IntersectionTwoPlanes(Plane plane1, Plane plane2)
 	{

@@ -59,31 +59,31 @@ namespace Stas
 			struct Line {
 				Line(vec3 Start, vec3 End, bool)
 				{
-					this->Direction = End - Start;
-					this->Point = Start;
+					this->direction = End - Start;
+					this->point = Start;
 				}
 				Line(vec3 Direction, vec3 Point)
 				{
-					this->Direction = Direction;
-					this->Point = Point;
+					this->direction = Direction;
+					this->point = Point;
 				}
-				vec3 Direction;
-				vec3 Point;
+				vec3 direction;
+				vec3 point;
 				bool valid;
 			};
 			struct Plane {
 				Plane(vec3 Normal, vec3 Point)
 				{
 					this->normal = Normal;
-					this->Point = Point;
+					this->point = Point;
 				}
 				Plane(vec3 v1, vec3 v2, vec3 Point)
 				{
 					this->normal = cross(v1, v2);
-					this->Point = Point;
+					this->point = Point;
 				}
 				vec3 normal;
-				vec3 Point;
+				vec3 point;
 				bool valid;
 			};
 			struct Circle {
@@ -102,6 +102,7 @@ namespace Stas
 			};
 			static Point IntersectionTwoLines(Line line1, Line line2);
 			static Maths::Vectors::Point IntersectionPlaneLine(Plane plane1, Line line2);
+			static Maths::Vectors::Point IntersectionPlanePoint(Plane plane, Point point);
 			static void IntersectionTwoPlanes(Plane plane1, Plane plane2);
 			static void IntersectionSpherePlane(Sphere circle1, Plane plane2);
 			static void IntersectionSphereLine(Sphere circle1, Line line2);
