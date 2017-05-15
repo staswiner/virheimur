@@ -136,6 +136,8 @@ void GameLogic::ProcessDataOffline()
 	ProcessPlayerMovement();
 	///<Important Function/>
 
+	ProcessMineDetection();
+
 	// Effect lifetimes
 	for (auto e = OfflineData.Effects.begin(); e != OfflineData.Effects.end();)
 	{
@@ -287,8 +289,14 @@ void GameLogic::ProcessPlayerMovement()
 		}
 
 		if (p.movement == GameObject::movements::Ground) {
-			vec3 CollisionPoint = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(ud.Position);
-			vec3 SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormal(ud.Position);
+			vec3 CollisionPoint;
+			vec3 SurfaceNormal;
+			int i = -1;
+			do {
+				i++;
+				CollisionPoint = ModelsCollection::Instance()["Land"]->meshes[i].mCollision->OnCollision(ud.Position);
+			} while (std::isnan(CollisionPoint.y));
+			SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[i].mCollision->GetNormal(ud.Position);
 		/*	vector<vec3> SurfacePathCollision = ModelsCollection::Instance()
 				["Land"]->meshes[0].mCollision->GetCollisionPath(ud.Position, ud.PrevPosition);*/
 			if (SurfaceNormal.y < 0) SurfaceNormal *= -1.0f;
@@ -372,6 +380,33 @@ void GameLogic::ProcessPlayerMovement()
 		}
 	}
 	ProcessForces();
+}
+void GameLogic::ProcessMineDetection()
+{
+	auto& level = OfflineDataObject::Instance().level;
+	if (level.ActivePlayers.size() < 1)
+	{
+		return;
+	}
+	for (auto& m : level.Entities)
+	{
+		if (m->Name == "Mine")
+		{
+			if (distance(m->unit_Data.Position, 
+				level.ActivePlayers.front()->unit_Data.Position) < 10.0f)
+			{
+				if (m->unit_Data.MainShader->shaderInfo.imageType != 
+					Shader::ImageType::AllRed)
+				m->ReloadShader(Shader::ImageType::AllRed);
+			}
+			else
+			{
+				if (m->unit_Data.MainShader->shaderInfo.imageType == 
+					Shader::ImageType::AllRed)
+					m->ReloadShader(Shader::ImageType::Triangle);
+			}
+		}
+	}
 }
 void GameLogic::RegisterCollisionBodies()
 {

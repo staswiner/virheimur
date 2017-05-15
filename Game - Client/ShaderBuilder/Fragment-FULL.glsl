@@ -59,7 +59,8 @@ void main()
 {
 	vec3 LightColor = vec3(1.0, 0.9, 0.7);
 	vec3 lightDir = normalize(lightPos - fs_in.FragPos);
-vec3 TotalColor = AddLight(material, LightColor, lightDir
+	vec4 color0 = texture2D(Texture[0], fs_in.UVs);
+	vec3 TotalColor = vec3(color0) * AddLight(material, LightColor, lightDir
 );
 	float near = 10.0f;
 	float far = 200.0f;
@@ -76,6 +77,6 @@ vec3 TotalColor = AddLight(material, LightColor, lightDir
 	float gamma = 1.0;
 	color.rgb = pow(color.rgb, vec3(1.0/gamma));
 
-	color.rgb = vec3(Distance) * color.rgb + vec3(1.0-Distance) * vec3(0.7, 0.7, 1.0) ;
+	color.rgb = vec3(1,0.1,0.1);
 	//color.rgb = CalcNormal(NormalMap[0]);
 }

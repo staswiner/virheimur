@@ -42,6 +42,7 @@ public:
 
 	};
 	ShaderParams shaderParams;
+	Shader* CreateShader(Shader::ImageType);
 
 private:
 	/*  Model Data  */
@@ -52,7 +53,6 @@ private:
 	void processNode(aiNode* node, const aiScene* scene);
 	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
 	void CreateShader();
-	void CreateShader(Shader::ImageType);
 	void loadModel(Mesh& mesh);
 	vector<Mesh::Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 	Assimp::Importer import;

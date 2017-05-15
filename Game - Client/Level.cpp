@@ -30,7 +30,13 @@ void Level::LoadLevel()
 	//	}
 	//}
 	this->AddEntity(layer, "MineSweaper", EntityType::ActivePlayer, vec3(0, 0, 0));
-	this->AddEntity(layer, "Mine", EntityType::Entity, vec3(50,0,0));
+	for (size_t i = 0; i < 3; i++)
+	{
+		for (size_t j = 0; j < 3; j++)
+		{
+			this->AddEntity(layer, "Mine", EntityType::Entity, vec3(20*i, 0, 20*j));
+		}
+	}
 	this->AddEntity(layer, "Land", EntityType::Ground);
 	gameObject = new Effect2D("Interface/3D Effects/Sun.png"); /*this->AddEntity(layer, "Mine", EntityType::Entity);*/
 	gameObject->unit_Data.Position = FrameData::Instance().Light_Pos;
@@ -69,6 +75,7 @@ GameObject* Level::AddEntity(Layer* layer, string Model, EntityType entityType, 
 {
 	GameObject* gameObject = new SimpleObject();
 	gameObject->unit_Data.Model_Data = ModelsCollection::Instance()[Model];
+	gameObject->CreateShader(Shader::ImageType::Triangle);
 	gameObject->Name = Model;
 	layer->AddGameObject(gameObject);
 	switch (entityType)

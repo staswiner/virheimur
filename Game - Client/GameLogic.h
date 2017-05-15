@@ -39,7 +39,7 @@ public:
 	void CheckCollision();
 private:
 	void ProcessPlayerMovement();
-	
+	void ProcessMineDetection();
 	//GameData Data;
 	InGameInteractions inGameInteractions;
 

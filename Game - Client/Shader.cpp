@@ -630,7 +630,9 @@ string Shader::ConstructFragmentShader()
 	
 	string mainfunc2 = FileToText("ShaderBuilder/Fragment-mainfunc2.glsl");
 	
+	string mainfunc2AllRed = FileToText("ShaderBuilder/Fragment-mainfunc2AllRed.glsl");
 	
+
 	string FragmentShader = header;
 	FragmentShader += (this->shaderInfo.NumNormalMap) ? NormalMapfunc : Normalfunc;
 
@@ -643,7 +645,8 @@ string Shader::ConstructFragmentShader()
 	FragmentShader += mainfunc1;
 	FragmentShader += (this->shaderInfo.NumDiffuse) ? mainfunc1Diffuse : mainfunc1NoDiffuse;
 	FragmentShader += (this->shaderInfo.NumNormalMap) ? mainfunc1NormalMap : mainfunc1NoNormalMap;
-	FragmentShader += mainfunc2;
+
+	FragmentShader += (shaderInfo.imageType == Shader::ImageType::AllRed)?mainfunc2AllRed:mainfunc2;
 
 	OutputFinalShader(FragmentShader,"ShaderBuilder/Fragment-FULL.glsl");
 

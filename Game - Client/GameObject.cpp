@@ -7,6 +7,7 @@ GameObject::GameObject()
 	this->stats.Hp = 500;
 	this->stats.MaxHp = 1000;
 	LoadInterface(); 
+
 }
 
 GameObject::GameObject(Unit_Data unit_Data,string Username)
@@ -41,7 +42,7 @@ void SimpleObject::Draw(SceneData& sceneData)
 	mat4 BlenderModelMatrix = ModelMatrix * Default::Instance().BlenderConversion;
 	mat4 WVM = sceneData.ProjectionMatrix * sceneData.ViewMatrix * BlenderModelMatrix;
 	
-	ShaderBuilder::LoadShader(*this->unit_Data.Model_Data->shaderParams.MainShader)->
+	ShaderBuilder::LoadShader(*this->unit_Data.MainShader)->
 		Add_mat4("WVM", WVM).
 		Add_bool("isAnimated", this->unit_Data.Model_Data->shaderParams.isAnimated).
 		Add_mat4("Model", BlenderModelMatrix).
@@ -149,7 +150,10 @@ void GameObject::UpdateUnitData(Unit_Data uData)
 {
 	this->unit_Data.Destination = uData.Position;
 }
-
+void GameObject::CreateShader(Shader::ImageType imageType)
+{
+	this->unit_Data.MainShader = this->unit_Data.Model_Data->CreateShader(imageType);
+}
 void SimpleObject::ReloadShader()
 {
 	if (this->unit_Data.Model_Data)
@@ -162,7 +166,12 @@ void SimpleObject::ReloadShader(Shader::ImageType imageType)
 {
 	if (this->unit_Data.Model_Data)
 	{
-		this->unit_Data.Model_Data->ReloadShader(imageType);
+		if (this->unit_Data.MainShader)
+		{
+			delete this->unit_Data.MainShader;
+			this->CreateShader(imageType);
+		}
+		//this->unit_Data.Model_Data->ReloadShader(imageType);
 	}
 }
 

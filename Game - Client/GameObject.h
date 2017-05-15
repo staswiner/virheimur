@@ -59,6 +59,7 @@ public:
 		bool PathChanged = false;
 		milliseconds StartPointTime;
 		Model* Model_Data;
+		Shader* MainShader;
 		unsigned int action;
 	};
 	struct SceneData {
@@ -94,6 +95,7 @@ public:
 	void DrawUI(mat4& Projection, mat4& View);
 	void LoadInterface();
 	void UpdateUnitData(Unit_Data uData);
+	void CreateShader(Shader::ImageType imageType);
 	json GetJson();
 	json GetStructureJson();
 	string Name;

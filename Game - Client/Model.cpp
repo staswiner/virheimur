@@ -205,7 +205,7 @@ void Model::CreateShader() // TODO : should be moved to mesh
 	//}
 	this->shaderParams.MainShader = Shader::ConstructShader(shaderInfo);
 }
-void Model::CreateShader(Shader::ImageType imageType)
+Shader* Model::CreateShader(Shader::ImageType imageType)
 {
 	Shader::ShaderInfo shaderInfo;
 	shaderInfo.HasMaterial = this->scene->HasMaterials();
@@ -220,7 +220,7 @@ void Model::CreateShader(Shader::ImageType imageType)
 	//	LoadTexture(this->scene->mMaterials[0]->GetTexture(aiTextureType::aiTextureType_DIFFUSE,i,))
 	//	shaderInfo.DiffuseTextures.push_back(Load)
 	//}
-	this->shaderParams.MainShader = Shader::ConstructShader(shaderInfo);
+	return Shader::ConstructShader(shaderInfo);
 }
 void Model::ReloadShader()
 {

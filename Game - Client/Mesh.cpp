@@ -351,7 +351,7 @@ void Mesh::DrawModel()
 		{
 			shader->Add_texture("Texture[" + to_string(i) + "]", material.DiffuseTextures[i]);
 		}
-		for (int i = 0; i < material.NumDiffuse; i++)
+		for (int i = 0; i < material.NumNormalMap; i++)
 		{
 			shader->Add_texture("NormalMap[" + to_string(i) + "]", material.NormalMaps[i]);
 		}

@@ -23,7 +23,8 @@ public:
 	Shader(string vertexShader, string geometryShader, string fragmentShader, bool);
 	enum class ImageType {
 		Wire,
-		Triangle
+		Triangle,
+		AllRed
 	};
 	struct ShaderInfo {
 		int NumDiffuse = 0;
@@ -36,6 +37,7 @@ public:
 		vector<GLuint> DiffuseTextures;
 		vector<GLuint> NormalMaps;
 	};
+	ShaderInfo shaderInfo;
 
 	static Shader* ConstructShader(ShaderInfo shaderInfo);
 	// Use the program
@@ -57,7 +59,6 @@ private:
 	string FileToText(string Path);
 	void TextToFile(string Text,string Path);
 	void OutputFinalShader(string Text, string Path);
-	ShaderInfo shaderInfo;
 	void InitializeShaderProgram(string Path, GLuint shaderID);
 	static map<string, Shader*> mapShader;
 	string VertexShaderPath, GeometryShaderPath, FragmentShaderPath;
