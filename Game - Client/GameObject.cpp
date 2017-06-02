@@ -7,6 +7,12 @@ GameObject::GameObject()
 	this->stats.Hp = 500;
 	this->stats.MaxHp = 1000;
 	LoadInterface(); 
+	
+	//TODO: set in file
+	Soundtracks["MoveF"] = new Music("Soundtracks/Turn.wav");
+	Soundtracks["MoveB"] = new Music("Soundtracks/Turn.wav");
+	Soundtracks["TurnR"] = new Music("Soundtracks/Turn.wav");
+	Soundtracks["TurnL"] = new Music("Soundtracks/Turn.wav");
 
 }
 

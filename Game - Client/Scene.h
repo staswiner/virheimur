@@ -43,6 +43,8 @@ public:
 	void Initialize();
 	void SetProjectionMatrix(mat4&);
 	void SetWindowHDC(HDC&);
+	Music* music;
+
 private:
 	void GenerateForm();
 
@@ -95,7 +97,6 @@ private:
 	SeaAnimated seaAnim;
 	vector<NPC> NPCs;
 	vector<string> OutlineObjects;
-	Music music;
 	int counter = 0;
 	//static GlobalDataObject Data;
 	// develop this please

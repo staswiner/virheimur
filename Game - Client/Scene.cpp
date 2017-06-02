@@ -94,7 +94,8 @@ void Scene::Initialize()
 	FrameData::Instance().Light_Pos = vec3(100, 50, 100);
 
 	OfflineDataObject::Instance().level.LoadLevel();
-	//music.Initialize();
+	music = new Music("Soundtracks/Perion.wav");
+	//music->PlayLoop();
 	
 }
 
@@ -227,6 +228,45 @@ void Scene::GenerateForm()
 			}
 			Element->innerText.clear();
 		}
+	});
+	UI.root->AppendChild(Element);
+
+	// sound buttons
+	Element = new UIElement("Sound+", "Interface/Textbox.png");
+	Position = vec2(500, 20);
+	Element->writable = false;
+	Element->innerText = "+";
+	Element->TopLeft = Position;
+	Element->BotRight = Position + vec2(20, 20);
+	Element->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	Element->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddClickEvent([&]
+	(UIElement* Element)mutable-> void { 
+		Element->ChangePicture("Interface/TextboxSelected.png");
+		this->music->AddVolume(0.1f);
+	});
+	UI.root->AppendChild(Element);
+
+	Element = new UIElement("Sound-", "Interface/Textbox.png");
+	Position = vec2(500, 40);
+	Element->writable = false;
+	Element->innerText = "-";
+	Element->TopLeft = Position;
+	Element->BotRight = Position + vec2(20,20);
+	Element->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	Element->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddClickEvent([&]
+	(UIElement* Element)mutable-> void { 
+		Element->ChangePicture("Interface/TextboxSelected.png"); 
+		this->music->AddVolume(-0.1f);
 	});
 	UI.root->AppendChild(Element);
 

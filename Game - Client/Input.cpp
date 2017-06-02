@@ -604,39 +604,94 @@ void Input::SetCircleScriptIterative()
 
 	GameObject& Player = *offlineData.level.ActivePlayers[0];
 	Unit_Data& ud = Player.unit_Data;
-	Player.script = [&](GameObject& p) mutable-> void {
-		
-		float Angle = 0.0f;
-		if (p.GetMemoryData("Angle") != nullptr)
+	auto& level = OfflineDataObject::Instance().level;
+	vector<vec3> UnorderedList;
+	for (auto& m : level.Entities)
+	{
+		if (m->Name == "Mine")
 		{
-			Angle = ToType(float)(p.GetMemoryData("Angle"));
-			if (degrees(Angle) >= 360.0f)
-			{
-				Angle = radians(0.0f);
-			}
-			Angle += radians(3.0f);
-			p.SetMemoryData("Angle", &Angle, sizeof(Angle));
+			UnorderedList.push_back(m->unit_Data.Position);
 		}
-		// Set Angle Data
-		else
-		{
-			Angle = 0.0f;
-			p.SetMemoryData("Angle", &Angle, sizeof(Angle));
-		}
-		float speed= 0.5f;
-		ud.Position += vec3(sin(Angle),0,cos(Angle)) * speed;
-		ud.Rotation.y = Angle - radians(90.0f);
-		ud.Rotation.xz;
-	};
-	Player.script = [&](GameObject& p) mutable-> void {
-		// find first mine
-		// find second mine
-		// find 3rd mine
-		// form potential pattern
-		// test pattern, if does not follow pattern, construct new pattern
+	}
+	UnorderedList.push_back(Player.unit_Data.Position);
 
-		// when a pattern is matched, calculate many possible mines ahead, create TSP algorithm between them
+	Player.script = [&, UnorderedList](GameObject& p) mutable-> void {
+		Player.unit_Data.InputForceVectors.clear();
+
+		// Move to Math.cpp
+		auto CalculateTSP = [](vector<vec3> UnorderedList) -> vector<vec3> {
+			vector<vec3> OrderedList;
+			vec3 shortest = UnorderedList[0];
+			UnorderedList.erase(UnorderedList.begin()+0);
+			OrderedList.push_back(shortest);
+			while (true)
+			{
+				// end condition
+				if (UnorderedList.size() == 0) break;
+				//
+				double minDistance = 1000000.0f;
+				size_t bestIndex = 0;
+				for(size_t i = 0; i < UnorderedList.size(); i++)
+				{
+					// check if best distance achieved
+					int currentDistance;
+					if ((currentDistance = glm::distance(
+						shortest,
+						UnorderedList[i])) < minDistance)
+					{
+						minDistance = currentDistance;
+						bestIndex = i;
+					}
+				}
+				OrderedList.push_back(UnorderedList[bestIndex]);
+				UnorderedList.erase(UnorderedList.begin()+bestIndex);
+			}
+			return OrderedList;
+		};
+		auto OrderedList = CalculateTSP(UnorderedList);
+
+		p.SetMemoryData("OrderedList",&OrderedList,sizeof(OrderedList[0])*OrderedList.size());
+
+		//vector<GameObject*> OrderedList = Stas::Algorithms::Approximate::TSPgreedy<GameObject*>(UnorderedList);
+
+		vec3 movementVector = vec3(0);
+		if (OrderedList.front() != p.unit_Data.Position)
+			movementVector = normalize(OrderedList.front() - p.unit_Data.Position);
+		
+
+		//float Angle = 0.0f;
+		//if (p.GetMemoryData("Angle") != nullptr)
+		//{
+		//	Angle = ToType(float)(p.GetMemoryData("Angle"));
+		//	if (degrees(Angle) >= 360.0f)
+		//	{
+		//		Angle = radians(0.0f);
+		//	}
+		//	Angle += radians(3.0f);
+		//	p.SetMemoryData("Angle", &Angle, sizeof(Angle));
+		//}
+		//// Set Angle Data
+		//else
+		//{
+		//	Angle = 0.0f;
+		//	p.SetMemoryData("Angle", &Angle, sizeof(Angle));
+		//}
+		float speed= 40.0f;
+		//Player.unit_Data.InputForceVectors.push_back(vec3(sin(Angle), 0, cos(Angle)) * speed);
+		Player.unit_Data.InputForceVectors.push_back(movementVector * speed);
+		//ud.Rotation.y = Angle - radians(90.0f);
+		/*ud.Position += vec3(sin(Angle),0,cos(Angle)) * speed;
+		ud.Rotation.xz;*/
 	};
+	//Player.script = [&](GameObject& p) mutable-> void {
+	//	// find first mine
+	//	// find second mine
+	//	// find 3rd mine
+	//	// form potential pattern
+	//	// test pattern, if does not follow pattern, construct new pattern
+
+	//	// when a pattern is matched, calculate many possible mines ahead, create TSP algorithm between them
+	//};
 }
 
 void Input::SetPlayerControl(GameObject::controls control)
@@ -658,7 +713,7 @@ void Input::ManualControl()
 	
 	float frameTime = Time::Instance().Frame();
 	float scale = 1.0f;
-	float MovementSpeed = 15.0f * frameTime / 1000.0f * scale;
+	float MovementSpeed = 600.0f * frameTime / 1000.0f * scale;
 	float RotationSpeed = 5.0f * frameTime / 1000.0f;
 	float angle = -Player.unit_Data.Rotation.y;
 #define anglex(x) cos(x)
@@ -669,23 +724,31 @@ void Input::ManualControl()
 		Player.unit_Data.Destination = Player.unit_Data.StartPoint = Player.unit_Data.Position + vec3(anglex(angle),0, angley(angle)) *
 			MovementSpeed;
 		Player.unit_Data.InputForceVectors.push_back(vec3(anglex(angle), 0, angley(angle)) *
-			10.0f);
-	}
+			MovementSpeed);
+		Player.Soundtracks["MoveF"]->PlayLoop();
+	} 
+	else Player.Soundtracks["MoveF"]->Stop();
 	if (keyboard.isKeyPressed(Key::Down)) // ↓
 	{
 		Player.unit_Data.Destination = Player.unit_Data.StartPoint = Player.unit_Data.Position - vec3(anglex(angle), 0, angley(angle)) *
 			MovementSpeed;
 		Player.unit_Data.InputForceVectors.push_back(-vec3(anglex(angle), 0, angley(angle)) *
-			10.0f);
+			MovementSpeed);
+		Player.Soundtracks["MoveB"]->PlayLoop();
 	}
+	else Player.Soundtracks["MoveB"]->Stop();
 	if (keyboard.isKeyPressed(Key::Right)) // →
 	{
 		Player.unit_Data.Rotation.y -= RotationSpeed;
+		Player.Soundtracks["TurnR"]->PlayLoop();
 	}
+	else Player.Soundtracks["TurnR"]->Stop();
 	if (keyboard.isKeyPressed(Key::Left)) // ←
 	{
 		Player.unit_Data.Rotation.y += RotationSpeed;
+		Player.Soundtracks["TurnL"]->PlayLoop();
 	}
+	else Player.Soundtracks["TurnL"]->Stop();
 	// fix values
 	if (Player.unit_Data.Rotation.y > radians(360.0f))
 	{

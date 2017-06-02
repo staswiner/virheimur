@@ -258,6 +258,10 @@ void GameLogic::ProcessPlayerMovement()
 		if (p.control == GameObject::controls::Script) // even arguements
 		{
 			p.script(p);
+			for (auto f : p.unit_Data.InputForceVectors)
+			{
+				p.unit_Data.ForceVectors.push_back(f);
+			}
 		}
 		else if (p.control == GameObject::controls::Manual)
 		{
@@ -295,7 +299,7 @@ void GameLogic::ProcessPlayerMovement()
 			do {
 				i++;
 				CollisionPoint = ModelsCollection::Instance()["Land"]->meshes[i].mCollision->OnCollision(ud.Position);
-			} while (std::isnan(CollisionPoint.y));
+			} while (std::isnan(CollisionPoint.y) && i < ModelsCollection::Instance()["Land"]->meshes.size());
 			SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[i].mCollision->GetNormal(ud.Position);
 		/*	vector<vec3> SurfacePathCollision = ModelsCollection::Instance()
 				["Land"]->meshes[0].mCollision->GetCollisionPath(ud.Position, ud.PrevPosition);*/
@@ -378,8 +382,16 @@ void GameLogic::ProcessPlayerMovement()
 
 			//ud.RotateByNormal(rotation);
 		}
+		// Music
+		Camera& camera = Camera::GetCamera("Main");
+		Music::SetListener(camera.GetCameraPosition(), vec3(0), vec3(0));
+		/*for (auto soundTrack : p.Soundtracks)
+		{
+			soundTrack.second->SetPositions(p.unit_Data.Position, p.unit_Data.Velocity);
+		}*/
 	}
 	ProcessForces();
+
 }
 void GameLogic::ProcessMineDetection()
 {

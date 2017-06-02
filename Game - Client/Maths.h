@@ -123,6 +123,8 @@ namespace Stas
 		//	&graph, vec3 source, vec3 target) = delete;
 		static vector<vec3> Astar(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
+		template<typename T>
+		static vector<T> TSP(vector<T> UnorderedList);
 		static unsigned long long llrand();
 		static bool vec3Compare(const vec3&, const vec3&);
 		static bool IsIn(vec2 TopLeft, vec2 BotRight, vec2 TestSample);
@@ -157,4 +159,15 @@ namespace Stas
 
 	};
 
+	//namespace Algorithms
+	//{
+	//	class Approximate
+	//	{
+	//	public:
+	//		// returns ordered TSP list O(n²)
+	//		template<typename T>
+	//		static vector<T> TSPgreedy(vector<T> UnorderedList);
+	//		
+	//	};
+	//}
 }

@@ -132,7 +132,6 @@
     <ClInclude Include="ChampionChat.h" />
     <ClInclude Include="CharacterCreationState.h" />
     <ClInclude Include="CharacterData.h" />
-    <ClInclude Include="Client.h" />
     <ClInclude Include="Client_Header.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Cookies.h" />
@@ -191,7 +190,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sea.h" />
-    <ClInclude Include="SeaAnimated.h" />
     <ClInclude Include="SelectionState.h" />
     <ClInclude Include="Session.h" />
     <ClInclude Include="Shader.h" />
@@ -217,7 +215,6 @@
     <ClCompile Include="ChampionChat.cpp" />
     <ClCompile Include="CharacterCreationState.cpp" />
     <ClCompile Include="CharacterData.cpp" />
-    <ClCompile Include="Client.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Cookies.cpp" />
     <ClCompile Include="Cursor.cpp" />
@@ -271,7 +268,6 @@
     <ClCompile Include="RayCast.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sea.cpp" />
-    <ClCompile Include="SeaAnimated.cpp" />
     <ClCompile Include="SelectionState.cpp" />
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="Shader.cpp" />

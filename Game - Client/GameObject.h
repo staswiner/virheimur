@@ -10,6 +10,7 @@
 #include "Default.h"
 #include "glm/glm/gtc/quaternion.hpp"
 #include "Camera.h"
+#include "Music.h"
 #include "reactphysics3d.h"
 using namespace nlohmann;
 using namespace chrono;
@@ -53,7 +54,7 @@ public:
 		vec3 MomentumVelocity;
 		vector<vec3> ForceVectors;
 		vector<vec3> InputForceVectors;
-		float bounceFactor = 0.9f;
+		float bounceFactor = 0.0f;
 		vector<vec3> Path;
 		vec3 Destination;
 		bool PathChanged = false;
@@ -119,6 +120,7 @@ public:
 	rp3d::CollisionBody* collisionBody;
 	void CreateCollisionBody(rp3d::CollisionWorld& world);
 	void UpdateCollisionBody(rp3d::CollisionWorld& world);
+	map<string, Music*> Soundtracks;
 
 private:
 	map<string, void*> MemoryBlock;

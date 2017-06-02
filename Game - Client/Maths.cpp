@@ -546,6 +546,63 @@ namespace Stas
 			return circle;
 		}
 	}
+	template<typename T>
+	inline vector<T> Maths::TSP(vector<T> UnorderedList)
+	{
+		/*vector<T> OrderedList;
+		T shortest;
+		size_t minDistance;
+		auto currentNode = OrderedList.begin();
+		while (true)
+		{
+			for (auto nextNode = UnorderedList.begin(); nextNode != UnorderedList.end(); nextNode++); 
+			{
+				int currentDistance;
+				if ((currentDistance = glm::distance((*currentNode)->unit_Data.Position,
+					nextNode->unit_Data.Position)) < minDistance)
+				{
+					minDistance = currentDistance;
+					shortest = Mines[j];
+					OrderedList.push_back(shortest);
+				}
+			}
+		}
+		return OrderedList;*/
+	}
+	//namespace Algorithms
+	//{
+		//template<typename T>
+		//vector<int>/* Algorithms::*/ Approximate::TSPgreedy(vector<int> UnorderedList)
+		//{
+		//	vector<int> OrderedList;
+		//	int shortest = UnorderedList[0];
+		//	UnorderedList.erase(UnorderedList.begin() + 0);
+		//	OrderedList.push_back(shortest);
+		//	while (true)
+		//	{
+		//		// end condition
+		//		if (UnorderedList.size() == 0) break;
+		//		//
+		//		double minDistance = 1000000.0f;
+		//		size_t bestIndex = 0;
+		//		for (size_t i = 0; i < UnorderedList.size(); i++)
+		//		{
+		//			// check if best distance achieved
+		//			int currentDistance;
+		//			if ((currentDistance = glm::distance(
+		//				shortest->unit_Data.Position,
+		//				UnorderedList[i]->unit_Data.Position)) < minDistance)
+		//			{
+		//				minDistance = currentDistance;
+		//				bestIndex = i;
+		//			}
+		//		}
+		//		OrderedList.push_back(UnorderedList[bestIndex]);
+		//		UnorderedList.erase(UnorderedList.begin() + bestIndex);
+		//	}
+		//	return OrderedList;
+		//}
+//	}
 }
 struct Node
 {
