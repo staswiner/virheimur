@@ -62,11 +62,14 @@ public:
 	void SetByTrueSize();
 	UIElement* GetUIElement(string Name);
 	void ChangePicture(string Filename);
-	vec2 TopLeft;
-	vec2 BotRight;
+	int Top;
+	int Bottom;
+	int Left;
+	int Right;
+	int TrueWidth;
+	int TrueHeight;
 	vec2 TextPosition;
 	string innerText;
-	vec2 TrueSize;
 	Style style;
 	UIElement* Parent;
 	bool visible = true;
@@ -79,7 +82,7 @@ private:
 	std::function<void(UIElement*)> click;
 	std::function<void(UIElement*)> press;
 	std::function<void(UIElement*)> textchanged;
-	void UpdateParentSize(vec2 TopLeft, vec2 BotRight);
+	void UpdateParentSize(int Top, int Left, int Bottom, int Right);
 	void LoadPicture(string Filename);
 	Element Name;
 	int Width, Height;

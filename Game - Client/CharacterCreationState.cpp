@@ -106,7 +106,8 @@ UIElement * CharacterCreationState::GenerateForm()
 	UIElement* Element;
 	UIElement* CreateButton = new UIElement("CreateCharacterButton", "Interface/Button1.png");
 	Position = vec2(200, 200);
-	CreateButton->TopLeft = Position;
+	CreateButton->Top = Position.y;
+	CreateButton->Left = Position.x;
 	CreateButton->SetByTrueSize(Position);
 	CreateButton->innerText = "Create";
 	CreateButton->AddHoverEvent([]
@@ -123,7 +124,8 @@ UIElement * CharacterCreationState::GenerateForm()
 
 	Element = new UIElement("Back", "Interface/Button1.png");
 	Position = vec2(310, 200);
-	Element->TopLeft = Position;
+	Element->Top = Position.y;
+	Element->Left = Position.x;
 	Element->SetByTrueSize(Position);
 	Element->innerText = "Back";
 	Element->AddHoverEvent([]
@@ -141,7 +143,8 @@ UIElement * CharacterCreationState::GenerateForm()
 	Element = new UIElement("CharacterName", "Interface/Textbox.png");
 	Position = vec2(10, 80);
 	Element->innerText = "Came2fame";
-	Element->TopLeft = Position;
+	Element->Top = Position.y;
+	Element->Left = Position.x;
 	Element->SetByTrueSize(Position);
 	Element->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });

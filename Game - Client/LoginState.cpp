@@ -98,7 +98,8 @@ UIElement* LoginState::GenerateForm()
 	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
 	Position = vec2(10, 80);
 	UsernameElement->innerText = "";
-	UsernameElement->TopLeft = Position;
+	UsernameElement->Top = Position.y;
+	UsernameElement->Left = Position.x;
 	UsernameElement->SetByTrueSize(Position);
 	UsernameElement->writable = true;
 	UsernameElement->AddHoverEvent([]
@@ -113,8 +114,10 @@ UIElement* LoginState::GenerateForm()
 
 	UIElement* Element = new UIElement("UsernameSaveCheckbox", "Interface/Textbox.png");
 	Position = vec2(210, 80);
-	Element->TopLeft = Position;
-	Element->BotRight = Position + vec2(50,50);
+	Element->Top = Position.y;
+	Element->Left = Position.x;
+	Element->Bottom = Position.y + 50;
+	Element->Right = Position.x + 50;
 	Element->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
 	Element->AddHoverDoneEvent([]
@@ -128,7 +131,8 @@ UIElement* LoginState::GenerateForm()
 	UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
 	Position = vec2(10, 180);
 	PasswordElement->innerText = "ilovemyreann<3";
-	PasswordElement->TopLeft = Position;
+	PasswordElement->Top = Position.y;
+	PasswordElement->Left = Position.x;
 	PasswordElement->style.MaskedText = true;
 	PasswordElement->writable = true;
 	PasswordElement->SetByTrueSize(Position);
@@ -144,7 +148,8 @@ UIElement* LoginState::GenerateForm()
 
 	UIElement* LogInElement = new UIElement("LoginButton", "Interface/Button1.png");
 	Position = vec2(230, 180);
-	LogInElement->TopLeft = Position;
+	LogInElement->Top = Position.y;
+	LogInElement->Left = Position.x;
 	LogInElement->SetByTrueSize(Position);
 	LogInElement->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
@@ -160,8 +165,10 @@ UIElement* LoginState::GenerateForm()
 
 	LogInElement = new UIElement("Invalid", "Interface/Button1.png");
 	Position = vec2(30, 30);
-	LogInElement->TopLeft = Position;
-	LogInElement->BotRight = vec2(300,50);
+	LogInElement->Top = Position.y;
+	LogInElement->Left = Position.x;
+	LogInElement->Bottom = 50;
+	LogInElement->Right = 300;
 	LogInElement->Hide();
 	LogInElement->style.font.size = 15.0f;
 	LogInElement->style.font.color = vec3(1,0.2,0.2);

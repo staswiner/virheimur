@@ -121,12 +121,14 @@ void GameObject::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 	vec2 TextCoords = vec2(TextPosition.x * x + x, -TextPosition.y * y + y);
 	UIElement* EmptyHPBar = UIroot->GetUIElement("EmptyHPBar");
 	UIElement* FullHPBar = UIroot->GetUIElement("FullHPBar");
-	EmptyHPBar->TopLeft = TextCoords + vec2(-30, -30);
+	EmptyHPBar->Top = TextCoords.y - 30;
+	EmptyHPBar->Left = TextCoords.x - 30;
 	EmptyHPBar->SetByTrueSize();
 
-	FullHPBar->TopLeft = TextCoords + vec2(-29, -29);
-	FullHPBar->BotRight = vec2(FullHPBar->TopLeft.x + (this->stats.Hp)/float(this->stats.MaxHp)*FullHPBar->TrueSize.x
-		,FullHPBar->TopLeft.y+FullHPBar->TrueSize.y);
+	FullHPBar->Top = TextCoords.y - 29;
+	FullHPBar->Left = TextCoords.x - 29;
+	FullHPBar->Bottom = FullHPBar->Top + FullHPBar->TrueHeight;
+	FullHPBar->Right = FullHPBar->Left + (this->stats.Hp) / float(this->stats.MaxHp)*FullHPBar->TrueWidth;
 
 	UIroot->Draw();
 
@@ -139,13 +141,15 @@ void GameObject::LoadInterface()
 
 	UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
 	Position = vec2(10, 80);
-	EmptyHPBar->TopLeft = Position;
+	EmptyHPBar->Top = Position.y;
+	EmptyHPBar->Left = Position.x;
 	EmptyHPBar->SetByTrueSize(Position);
 	UIroot->AppendChild(EmptyHPBar);
 
 	UIElement* FullHPBar = new UIElement("FullHPBar", "Interface/FullHPBar.png");
 	Position = vec2(10, 80);
-	FullHPBar->TopLeft = Position;
+	FullHPBar->Top = Position.y;
+	FullHPBar->Left = Position.x;
 	FullHPBar->SetByTrueSize(Position);
 	UIroot->AppendChild(FullHPBar);
 
@@ -209,39 +213,7 @@ json GameObject::GetJson()
 //
 //map<string, void*> MemoryBlock;
 //map<string, string> MemoryTypeTable;
-#define StringToType(string) ()
-void * GameObject::GetMemoryData(string VarName)
-{
-	// TODO:
-	if (MemoryBlock.find(VarName) == MemoryBlock.end())
-	{
-		return nullptr;
-	}
-	else
-	{
-		float number = *reinterpret_cast<float*>(MemoryBlock[VarName]);
-		return MemoryBlock[VarName];
-	}
-}
-
-void GameObject::SetMemoryData(string VarName, void * data, size_t s)
-{
-	//TODO:	
-	
-	float number = *reinterpret_cast<float*>(data);
-	void * AllocationData = malloc(sizeof(s));
-	memcpy(AllocationData, data, s);
-	number = *reinterpret_cast<float*>(AllocationData);
-	void * ptr = MemoryBlock[VarName];
-	if (MemoryBlock.find(VarName) != MemoryBlock.end())
-	{
-
-		//float number = *reinterpret_cast<float*>(MemoryBlock[VarName]);
-		MemoryBlock.erase(VarName);
-	}
-	MemoryBlock[VarName] = AllocationData;
-}
-
+//#define StringToType(string) ()
 void GameObject::CreateCollisionBody(rp3d::CollisionWorld& world)
 {
 	rp3d::Vector3 position;

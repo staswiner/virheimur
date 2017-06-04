@@ -145,7 +145,8 @@ void UserInterface::OpenStatWindow()
 		vec2 Position;
 		UIElement* StatsWindow = new UIElement("StatsWindow", "Interface/StatsWindow.png");
 		Position = vec2(710, 300);
-		StatsWindow->TopLeft = Position;
+		StatsWindow->Top = Position.y;
+		StatsWindow->Left = Position.x;
 		StatsWindow->SetByTrueSize(Position);
 		root->AppendChild(StatsWindow);
 
@@ -153,7 +154,8 @@ void UserInterface::OpenStatWindow()
 		{
 			UIElement* StatsField = new UIElement("StatsField" + i, "Interface/StatsField.png");
 			Position = vec2(710, 300 + (i * 50));
-			StatsField->TopLeft = Position;
+			StatsField->Top = Position.y;
+			StatsField->Left = Position.x;
 			StatsField->SetByTrueSize(Position);
 			StatsField->AddHoverEvent([]
 			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldHovered.png"); });

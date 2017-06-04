@@ -257,7 +257,11 @@ void GameLogic::ProcessPlayerMovement()
 		// Calculate moving position
 		if (p.control == GameObject::controls::Script) // even arguements
 		{
-			p.script(p);
+			//if (p.script.script(p));
+			if (p.script(p) == ScriptState::Done) {
+				p.script.Clear();
+				p.control = GameObject::controls::Manual;
+			}
 			for (auto f : p.unit_Data.InputForceVectors)
 			{
 				p.unit_Data.ForceVectors.push_back(f);

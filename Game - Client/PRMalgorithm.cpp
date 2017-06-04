@@ -11,16 +11,6 @@ PRMalgorithm::~PRMalgorithm()
 {
 }
 
-bool SortByX(const vec3& lhs, const vec3& rhs)
-{
-	return lhs.x < rhs.x;
-}
-bool SortByZ(const vec3& lhs, const vec3& rhs)
-{
-	return lhs.z < rhs.z;
-}
-
-
 map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)>* PRMalgorithm::
 	GeneratePoints(Stas::MinimapData Map,vec3& Source, vec3& Destination)
@@ -33,8 +23,17 @@ map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 	u8vec4* MapData = Map.Map;
 	Width = Map.Width;
 	Height = Map.Height;
+	auto vec3Compare = [](const vec3& lhs, const vec3& rhs)->bool {
+		if (lhs.x == rhs.x)
+		{
+			if (lhs.y == rhs.y)
+				return lhs.z < rhs.z;
+			return lhs.y < rhs.y;
+		}
+		return lhs.x < rhs.x;
+	};
 	auto Graph = new map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
-		, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
+		, bool(*)(const vec3&, const vec3&)>(vec3Compare);
 	
 	vector<vec3> Points;
 	Points.push_back(Source);
@@ -64,7 +63,7 @@ map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 	}
 	for (auto i = Points.begin(); i != Points.end(); i++)
 	{
-		(*Graph)[*i] = map<vec3, float, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
+		(*Graph)[*i] = map<vec3, float, bool(*)(const vec3&, const vec3&)>(vec3Compare);
 	}
 	/*******************/
 	//std::sort(Points.begin(), Points.end(), SortByX);
@@ -146,8 +145,17 @@ map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 	u8vec4* MapData = Map.Map;
 	Width = Map.Width;
 	Height = Map.Height;
+	auto vec3Compare = [](const vec3& lhs, const vec3& rhs)->bool {
+		if (lhs.x == rhs.x)
+		{
+			if (lhs.y == rhs.y)
+				return lhs.z < rhs.z;
+			return lhs.y < rhs.y;
+		}
+		return lhs.x < rhs.x;
+	};
 	auto Graph = new map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
-		, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
+		, bool(*)(const vec3&, const vec3&)>(vec3Compare);
 
 	vector<vec3> Points;
 	Points.push_back(Source);
@@ -177,7 +185,7 @@ map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 	}
 	for (auto i = Points.begin(); i != Points.end(); i++)
 	{
-		(*Graph)[*i] = map<vec3, float, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
+		(*Graph)[*i] = map<vec3, float, bool(*)(const vec3&, const vec3&)>(vec3Compare);
 	}
 	vector<map<vec3, float, bool(*)(const vec3&, const vec3&)>*> Paths(Points.size());
 
@@ -252,7 +260,7 @@ map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 					// Initialize Path with Graph node
 					if ((*Graph).find(FixingPoint) == (*Graph).end())
 					{
-						(*Graph)[FixingPoint] = map<vec3, float, bool(*)(const vec3&, const vec3&)>(Stas::Maths::vec3Compare);
+						(*Graph)[FixingPoint] = map<vec3, float, bool(*)(const vec3&, const vec3&)>(vec3Compare);
 					}
 					(*Graph)[g.first][FixingPoint] = glm::distance(g.first, FixingPoint);
 					(*Graph)[FixingPoint][g.first] = glm::distance(g.first, FixingPoint);
@@ -318,7 +326,7 @@ map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 vector<vec3> PRMalgorithm::FoundPath(map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
 	, bool(*)(const vec3&, const vec3&)>* Map, vec3& Source, vec3& Destination)
 {
-	vector<vec3> Backtrack = Stas::Maths::Dijkstra(*Map, Source, Destination);
+	vector<vec3> Backtrack = Stas::Algorithms::Approximate::PathFinding::Dijkstra(*Map, Source, Destination);
 	return Backtrack;
 }
 

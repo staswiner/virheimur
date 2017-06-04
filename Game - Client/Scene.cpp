@@ -142,6 +142,7 @@ void Scene::SetWindowHDC(HDC & hdc)
 
 void Scene::GenerateForm()
 {
+	
 	vec2 Position;
 	UI.root = new UIElement("Root", "");
 
@@ -154,7 +155,8 @@ void Scene::GenerateForm()
 
 	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
 	Position = vec2(10, 80);
-	UsernameElement->TopLeft = Position;
+	UsernameElement->Top = Position.y;
+	UsernameElement->Left = Position.x;
 	UsernameElement->SetByTrueSize(Position);
 	UsernameElement->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
@@ -175,14 +177,16 @@ void Scene::GenerateForm()
 
 	UIElement* Element = new UIElement("Shop", "Interface/InventoryRow.png");
 	Position = vec2(300, 160);
-	Element->TopLeft = Position;
+	Element->Top = Position.y;
+	Element->Left = Position.x;
 	Element->SetByTrueSize(Position);
 	Element->Hide();
 	UI.root->AppendChild(Element);
 
 	Element = new UIElement("Shop-X", "Interface/X.png");
 	Position = vec2(485, 165); // 5 padding
-	Element->TopLeft = Position;
+	Element->Top = Position.y;
+	Element->Left = Position.x;
 	Element->Hide();
 	Element->SetByTrueSize(Position);
 	Element->AddClickEvent([]
@@ -191,7 +195,8 @@ void Scene::GenerateForm()
 
 	Element = new UIElement("Shop-Gold", "Interface/Textbox.png");
 	Position = vec2(300, 110); // 5 padding
-	Element->TopLeft = Position;
+	Element->Top = Position.y;
+	Element->Left = Position.x;
 	Element->Hide();
 	Element->SetByTrueSize(Position);
 	UI.root->GetUIElement("Shop")->AppendChild(Element);
@@ -199,7 +204,8 @@ void Scene::GenerateForm()
 	Element = new UIElement("Command Line", "Interface/Textbox.png");
 	Position = vec2(210, 480);
 	Element->writable = true;
-	Element->TopLeft = Position;
+	Element->Top = Position.y;
+	Element->Left = Position.x;
 	Element->SetByTrueSize(Position);
 	Element->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
@@ -236,8 +242,10 @@ void Scene::GenerateForm()
 	Position = vec2(500, 20);
 	Element->writable = false;
 	Element->innerText = "+";
-	Element->TopLeft = Position;
-	Element->BotRight = Position + vec2(20, 20);
+	Element->Top = Position.y;
+	Element->Left = Position.x;
+	Element->Bottom = Position.y + 20;
+	Element->Right = Position.x + 20;
 	Element->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
 	Element->AddHoverDoneEvent([]
@@ -255,8 +263,10 @@ void Scene::GenerateForm()
 	Position = vec2(500, 40);
 	Element->writable = false;
 	Element->innerText = "-";
-	Element->TopLeft = Position;
-	Element->BotRight = Position + vec2(20,20);
+	Element->Top = Position.y;
+	Element->Left = Position.x;
+	Element->Bottom = Position.y + 20;
+	Element->Right = Position.x + 20;
 	Element->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
 	Element->AddHoverDoneEvent([]
@@ -295,6 +305,26 @@ void Scene::GenerateForm()
 	// load up for later use
 	UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
 	UIElement* FullHPBar = new UIElement("FullHPBar", "Interface/FullHPBar.png");
+}
+
+void Scene::LoadForm(UIElement * Element)
+{
+	Xaml xaml;
+	for (auto c : xaml.Root.Children)
+	{
+		UIElement* Element = new UIElement(c.GetAttribute("Name"),"");
+		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
+	/*	if (c.GetAttribute("Font") != "") Element->style.maskColor = UIElement::Font();
+		if (c.GetAttribute("Font") != "") Element->style.MaskedText = UIElement::Font();
+		if (c.GetAttribute("Font") != "") Element->style.opacity = UIElement::Font();
+		if (c.GetAttribute("Font") != "") Element->visible = UIElement::Font();
+		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
+		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
+		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
+		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
+		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();*/
+
+	}
 }
 
 void Scene::Draw_Units()

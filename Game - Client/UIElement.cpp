@@ -22,7 +22,8 @@ UIElement::UIElement(string Name,string Filename,int z_index)
 	{
 		this->IsRoot = false;
 		this->LoadPicture(Filename);
-		this->TrueSize = UIImage->GetTrueSize();
+		this->TrueWidth = UIImage->GetTrueSize().x;
+		this->TrueHeight = UIImage->GetTrueSize().y;
 	}
 
 	this->Name = Element(Name,z_index);
@@ -56,7 +57,6 @@ void UIElement::AddClickEvent(std::function<void(UIElement*)> onclick)
 void UIElement::AddPressEvent(std::function<void(UIElement*)> onpress)
 {
 	this->press = onpress;
-
 }
 
 void UIElement::AddTextChangedEvent(std::function<void(UIElement*)> ontextchanged)
@@ -74,7 +74,7 @@ UIElement* UIElement::GetHover(vec2 MouseCoords)
 			return focus;
 		}
 	}
-	if (Stas::Maths::IsIn(this->TopLeft, this->BotRight, MouseCoords))
+	if (Stas::Maths::IsIn(vec2(this->Top,this->Left), vec2(this->Bottom,this->Right), MouseCoords))
 	{
 		return this;
 	}
@@ -91,7 +91,7 @@ UIElement* UIElement::GetClick(vec2 MouseCoords)
 			return focus;
 		}
 	}
-	if (Stas::Maths::IsIn(this->TopLeft, this->BotRight, MouseCoords))
+	if (Stas::Maths::IsIn(vec2(this->Top, this->Left), vec2(this->Bottom, this->Right), MouseCoords))
 	{
 		return this;
 	}
@@ -194,7 +194,6 @@ UIElement* UIElement::FocusNext()
 	{
 		return Parent;
 	}
-
 }
 
 void UIElement::AppendChild(UIElement * child)
@@ -243,9 +242,9 @@ void UIElement::Draw()
 	if (this->IsRoot == false)
 	{
 		float FontSize = (float)this->style.font.size;
-		vec2 margin(20.0f,((BotRight.y-TopLeft.y) + FontSize/2.0f)/2.0f);
-		TextPosition = TopLeft + margin;
-		this->UIImage->Draw(this->TopLeft, this->BotRight);
+		vec2 margin(20.0f,((Bottom - Top) + FontSize/2.0f)/2.0f);
+		TextPosition = vec2(this->Left,this->Top) + margin;
+		this->UIImage->Draw(vec2(this->Left,this->Top), vec2(this->Right,this->Bottom));
 
 
 		Text::LoadTextShader(vec3(0, 0, 0));
@@ -261,7 +260,7 @@ void UIElement::Draw()
 			NewInnerText = this->innerText;
 		}
 		text.RenderText(NewInnerText, this->TextPosition.x, this->TextPosition.y,
-			(this->BotRight.x-this->TopLeft.x) - margin.x*2, FontSize, style.font.color);
+			(this->Right - this->Left) - margin.x*2, FontSize, style.font.color);
 	}
 	// proceeds to drawing children
 	for (auto uie : Children)
@@ -272,12 +271,14 @@ void UIElement::Draw()
 
 void UIElement::SetByTrueSize(vec2 TopLeft)
 {
-	this->BotRight = TopLeft + TrueSize;
+	this->Bottom = TopLeft.y + TrueHeight;
+	this->Right = TopLeft.x + TrueWidth;
 }
 
 void UIElement::SetByTrueSize()
 {
-	this->BotRight = this->TopLeft + TrueSize;
+	this->Bottom = Top + TrueHeight;
+	this->Right = Left + TrueWidth;
 }
 
 UIElement* UIElement::GetUIElement(string Name)
@@ -298,25 +299,26 @@ UIElement* UIElement::GetUIElement(string Name)
 void UIElement::ChangePicture(string Filename)
 {
 	this->LoadPicture(Filename);
-	this->TrueSize = UIImage->GetTrueSize();
+	this->TrueWidth = UIImage->GetTrueSize().x;
+	this->TrueHeight = UIImage->GetTrueSize().y;
 }
 // this function only increases size, might be bad if sizes need to get back to normal
-void UIElement::UpdateParentSize(vec2 TopLeft, vec2 BotRight)
+void UIElement::UpdateParentSize(int Top, int Left, int Bottom, int Right)
 {
 	if (this->Parent != nullptr)
-		this->Parent->UpdateParentSize(TopLeft, BotRight);
+		this->Parent->UpdateParentSize(Top,Left,Bottom,Right);
 	// Left
-	if (this->TopLeft.x > TopLeft.x)
-		this->TopLeft.x = TopLeft.x;
+	if (this->Left > Left)
+		this->Left = Left;
 	// Top
-	if (this->TopLeft.y > TopLeft.y)
-		this->TopLeft.y = TopLeft.y;	
+	if (this->Top > Top)
+		this->Top = Top;	
 	// Right
-	if (this->BotRight.x < BotRight.x)
-		this->BotRight.x = BotRight.x;
+	if (this->Right < Right)
+		this->Right = Right;
 	// Bot
-	if (this->BotRight.y < BotRight.y)
-		this->BotRight.y = BotRight.y;
+	if (this->Bottom < Bottom)
+		this->Bottom = Bottom;
 }
 
 void UIElement::LoadPicture(string Filename)

@@ -48,19 +48,7 @@ namespace Stas
 	//	//Nodes[Start].second = glm::distance(Start, Nodes[Start].first);
 	//	return vector<vec3>();
 	//}
-	bool Maths::vec3Compare(const vec3& lhs, const vec3& rhs)
-	{
-		if (lhs.x == rhs.x)
-		{
-			if (lhs.y == rhs.y)
-				return lhs.z < rhs.z;
-			return lhs.y < rhs.y;
-		}
-		return lhs.x < rhs.x;
-		// Distance factor
-		/*return lhs.x*lhs.x+lhs.y*lhs.y +lhs.z*lhs.z <
-		rhs.x*rhs.x + rhs.y*rhs.y + rhs.z*rhs.z;*/
-	}
+	
 	bool Maths::IsIn(vec2 TopLeft, vec2 BotRight, vec2 TestSample)
 	{
 		if (TopLeft.x > TestSample.x)
@@ -73,63 +61,7 @@ namespace Stas
 			return false;
 		return true;
 	}
-	vector<vec3> Maths::Dijkstra(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
-		, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target)
-	{
-		map<vec3, map<vec3, int>> a;
-#pragma region Initialization
-		map<vec3, int, bool(*)(const vec3&, const vec3&)> minDistance(vec3Compare);
-		map<vec3, vec3, bool(*)(const vec3&, const vec3&)> BackTracking(Stas::Maths::vec3Compare);
-
-		vector<vec3> returnPath;
-		for (auto i : graph)
-		{
-			for each (auto j in i.second)
-			{
-				minDistance[j.first] = INT_MAX;
-			}
-			//for (auto &j : i)
-		}
-		minDistance[source] = 0;
-
-		map<vec3, int, bool(*)(const vec3&, const vec3&)> activeVertices(Stas::Maths::vec3Compare);
-		activeVertices[source] = 0;
-#pragma endregion Initialization
-		while (!activeVertices.empty())
-		{
-			vec3 Where = activeVertices.begin()->first;
-			if (Where == target)
-			{
-				vec3 backtrackingNode = target;
-				while (backtrackingNode != source)
-				{
-					returnPath.push_back(backtrackingNode);
-					backtrackingNode = BackTracking[backtrackingNode];
-				}
-				if (returnPath.size() > 1)
-				{
-					int i = 0;
-				}
-				returnPath.push_back(backtrackingNode);
-				return returnPath;
-				//return minDistance[where];
-			}
-			activeVertices.erase(activeVertices.begin());
-			for (auto ed : graph.at(Where))
-			{
-				if (minDistance[ed.first] > minDistance[Where] + ed.second)
-				{
-					activeVertices.erase(ed.first);
-					minDistance[ed.first] = minDistance[Where] + ed.second;
-					activeVertices[ed.first] = minDistance[ed.first];
-					BackTracking[ed.first] = Where;
-				}
-			}
-		}
-		return vector<vec3>();
-
-		//return INT_MAX;
-	}
+	
 	//	vector<vec3> Maths::DijkstraB(std::map<vec3, vector<vec3>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
 	//		&graph, vec3 source, vec3 target)
 	//	{
@@ -187,123 +119,9 @@ namespace Stas
 	//
 	//		//return INT_MAX;
 	//	}
-	vector<vec3> Maths::Astar(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>,
-		bool(*)(const vec3&, const vec3&)>& graph, vec3 source, vec3 target)
-	{
-		auto compare = [](const vec3& lhs, const vec3& rhs)->bool {
-			if (lhs.x == rhs.x)
-			{
-				if (lhs.y == rhs.y)
-					return lhs.z < rhs.z;
-				return lhs.y < rhs.y;
-			}
-			return lhs.x < rhs.x;
-		};
-		auto functype = std::function<bool(const vec3&, const vec3&)>(compare);
-		// used to store unique nodes to be references by in the graph
-		map<vec3, node, decltype(functype)> Nodes(functype);
-		std::map<vec3, pair<node*, vector<node*>>, decltype(functype)> Graph(functype);
-		for (auto n : graph)
-		{
-			Nodes.insert(make_pair(n.first, node(n.first)));
-		}
-		for (auto n : graph)
-		{
-			vector<node*> vNeighbors;
-			for (auto neighbor : n.second)
-			{
-				vNeighbors.push_back(&Nodes[neighbor.first]);
-			}
-			Graph[n.first] = make_pair(&Nodes[n.first], vNeighbors);
-		}
+	
 
-		return Maths::AstarB(Graph, source, target);
-		//return vector<vec3>();
-	}
-#define OPENLIST 1
-#define CLOSEDLIST 2
-	vector<vec3> Maths::AstarB(
-		std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
-		& graph, vec3 source, vec3 target)
-	{
-		using namespace std::chrono;
-		milliseconds StartTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-		list<node*> openList;
-		list<node*> closedList;
-		node* StartNode = graph.at(source).first;
-		(*StartNode).g = 0; // sets values for the starting node
-		(*StartNode).h = glm::distance(source, target);
-		(*StartNode).f = (*StartNode).g + (*StartNode).h;
-		openList.push_back(StartNode); // adds to the open list
-		while (openList.size() > 0)
-		{
-			// sort the open list to find the smallest element
-			openList.sort([](const node* lhs, const node* rhs)->bool { // O(nlog(n))
-				return lhs->f < rhs->f;
-			});
-			node* BestNode = graph.at((*openList.front()).pos).first;
-			if ((*BestNode).pos == target)
-			{
-				break;
-			}
-			openList.pop_front();
-
-			if ((*BestNode).parent)
-			{
-				closedList.push_back(BestNode);
-				(*BestNode).List = CLOSEDLIST;
-				(*BestNode).g = (*BestNode).parent->g + distance((*BestNode).parent->pos, (*BestNode).pos);
-			}
-			else
-			{
-				closedList.push_back(BestNode);
-				(*BestNode).List = CLOSEDLIST;
-			}
-
-			for (auto v : graph.at((*BestNode).pos).second)
-			{
-				node* n = graph.at((*v).pos).first;
-				if ((*n).List == CLOSEDLIST)
-					continue;
-				if ((*n).List != OPENLIST)
-				{
-					(*n).List = OPENLIST;
-					openList.push_back(n);
-				}
-				if ((*v).pos == target)
-				{
-					(*v).parent = BestNode;
-					break;
-				}
-				float g = (*BestNode).g + distance((*BestNode).pos, (*v).pos);
-				float h = distance(target, (*v).pos);
-				float f = g + h;
-				if ((*n).f > f)
-				{
-					(*n).parent = BestNode;
-					(*n).f = f;
-				}
-				int i = 0;
-			}
-		}
-		vector<vec3> returnPath;
-		node currentNode = *graph.at(target).first;
-		// if no path found
-		if (currentNode.parent == nullptr)
-		{
-			return returnPath;
-		}
-		// path found
-		do {
-			returnPath.push_back(currentNode.pos);
-			currentNode = *currentNode.parent;
-		} while (currentNode.parent != nullptr);
-		returnPath.push_back(currentNode.pos);
-
-		milliseconds EndTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-		milliseconds TotalTime = EndTime - StartTime;
-		return returnPath;
-	}
+	
 	int ConvertToArray(int WorldWidth, int WorldHeight, int Width, int Height, int x, int z)
 	{
 		int newx = float(float(x + WorldWidth / 2) / float(WorldWidth)) * Width;
@@ -320,142 +138,7 @@ namespace Stas
 		vec3 newpos = (pos + (vec3(WorldWidth) / 2.0f)) / float(WorldWidth) * (float)Width;
 		return newpos;
 	}
-	vector<vec3> Maths::AstarGridB(MinimapData& minimapData,
-		vec3 source, vec3 target)
-	{
-		// Create grid graph
-		vector<node> NewGraphNodes;
-		int Height = minimapData.Height, Width = minimapData.Width;
-		NewGraphNodes.resize(minimapData.Height*minimapData.Width);
-		vector<vec3> Neighbors =
-		{ vec3(1,0,0), vec3(-1,0,0),
-			vec3(0,0,1), vec3(0,0,-1),
-			vec3(1,0,1), vec3(-1,0,1),
-			vec3(-1,0,1), vec3(-1,0,-1)
-		};
-		for (auto& n : Neighbors)
-		{
-			n *= 1;
-		}
-		vec3 Position = vec3(ConvertToArray(200, 200, 300, 300, source.x, source.z) % Width
-			, 0, ConvertToArray(200, 200, 300, 300, source.x, source.z) / Width);
-		vec3 targetPos = vec3(ConvertToArray(200, 200, 300, 300, target.x, target.z) % Width
-			, 0, ConvertToArray(200, 200, 300, 300, target.x, target.z) / Width);
-		// stuck in a fucking wall
-		if (minimapData.Map[(int)targetPos.x + (int)targetPos.z * Width] == u8vec4(115, 77, 38, 255))
-			return vector<vec3>();
-		// algorithm
-		//auto cmp = [](node* lhs, node* rhs)->bool { // O(nlog(n))
-		//	return lhs->f > rhs->f; // reversed due to priority queue specification
-		//};
-		//priority_queue<node*,std::vector<node*>,decltype(cmp)> openList(cmp);
-		//priority_queue<node*> openList;
-		list<node*> openList;
-
-		list<node*> closedList;
-
-		node* StartNode = &NewGraphNodes[Position.x + Position.z * Width];
-		(*StartNode).g = 0; // sets values for the starting node
-		(*StartNode).h = glm::distance(Position, targetPos);
-		(*StartNode).f = (*StartNode).g + (*StartNode).h;
-		(*StartNode).pos = Position;
-		openList.push_back(StartNode); // adds to the open list
-		bool PathFound = false;
-		while ((openList.size() > 0) && !PathFound)
-		{
-			///// sort the open list to find the smallest element
-			///openList.sort([](const node* lhs, const node* rhs)->bool { // O(nlog(n)) * log n << n
-			///	return lhs->f < rhs->f;
-			///});
-			auto min = openList.begin();
-			for (auto it = openList.begin(); it != openList.end(); it++)
-			{
-				if ((*it)->f < (*min)->f)
-				{
-					min = it;
-				}
-			}
-			///vec3 BestPosition = openList.front()->pos;
-			vec3 BestPosition = (*min)->pos;
-			//int Position = ConvertToArray(200, 200, 300, 300, BestNodePos.x, BestNodePos.z);
-			node* BestNode = &NewGraphNodes[BestPosition.x + (int)BestPosition.z * minimapData.Width];
-			if (BestPosition == targetPos)
-			{
-				break;
-			}
-			///openList.pop_front();
-			openList.erase(min);
-
-			if ((*BestNode).parent)
-			{
-				closedList.push_back(BestNode);
-				(*BestNode).List = CLOSEDLIST;
-				(*BestNode).g = (*BestNode).parent->g + distance((*BestNode).parent->pos, (*BestNode).pos);
-			}
-			else
-			{
-				closedList.push_back(BestNode);
-				(*BestNode).List = CLOSEDLIST;
-			}
-
-			for (auto offset : Neighbors)
-			{
-				//int Position = ConvertToArray(200, 200, 300, 300, BestNodePos.x + offset.x, BestNodePos.z + offset.z);
-				vec3 OffsetPosition = BestPosition + offset;
-				// obstacle
-				if (minimapData.Map[(int)OffsetPosition.x + (int)(OffsetPosition.z) * Width] == u8vec4(115, 77, 38, 255))
-				{
-					continue;
-				}
-				node* n = &NewGraphNodes[OffsetPosition.x + (int)OffsetPosition.z * minimapData.Width];
-				if (n->List == 0) // new node
-					*n = node(OffsetPosition);
-				if ((*n).List == CLOSEDLIST)
-					continue;
-				if ((*n).List != OPENLIST)
-				{
-					(*n).List = OPENLIST;
-					openList.push_back(n);
-				}
-				else
-				{
-					int i = 0;
-				}
-				if (OffsetPosition == targetPos)
-				{
-					(*n).parent = BestNode;
-					PathFound = true;
-					break;
-				}
-				float g = (*BestNode).g + distance(BestPosition, OffsetPosition);
-				float h = distance(targetPos, OffsetPosition);
-				float f = g + h;
-				if ((*n).f > f)
-				{
-					(*n).parent = BestNode;
-					(*n).f = f;
-				}
-				int i = 0;
-			}
-		}
-		vector<vec3> returnPath;
-		node currentNode = NewGraphNodes[ConvertToArray(200, 200, 300, 300, target.x, target.z)];
-		// if no path found
-		if (currentNode.parent == nullptr)
-		{
-			return returnPath;
-		}
-		// path found
-		do {
-			returnPath.push_back(ConvertToWorldCoords(200, 200, 300, 300, currentNode.pos));
-			currentNode = *currentNode.parent;
-		} while (currentNode.parent != nullptr);
-		returnPath.push_back(ConvertToWorldCoords(200, 200, 300, 300, currentNode.pos));
-
-		return returnPath;
-	}
-#undef OPENLIST 
-#undef CLOSEDLIST 
+	
 	unsigned long long Maths::llrand() {
 		unsigned long long r = 0;
 
@@ -546,63 +229,415 @@ namespace Stas
 			return circle;
 		}
 	}
-	template<typename T>
-	inline vector<T> Maths::TSP(vector<T> UnorderedList)
+
+	namespace Algorithms
 	{
-		/*vector<T> OrderedList;
-		T shortest;
-		size_t minDistance;
-		auto currentNode = OrderedList.begin();
-		while (true)
+		namespace Approximate
 		{
-			for (auto nextNode = UnorderedList.begin(); nextNode != UnorderedList.end(); nextNode++); 
+#pragma region PathFinding
+#define OPENLIST 1
+#define CLOSEDLIST 2
+			vector<vec3> PathFinding::Dijkstra(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
+				, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target)
 			{
-				int currentDistance;
-				if ((currentDistance = glm::distance((*currentNode)->unit_Data.Position,
-					nextNode->unit_Data.Position)) < minDistance)
+				map<vec3, map<vec3, int>> a;
+				auto vec3Compare = [](const vec3& lhs, const vec3& rhs) -> bool {
+					if (lhs.x == rhs.x)
+					{
+						if (lhs.y == rhs.y)
+							return lhs.z < rhs.z;
+						return lhs.y < rhs.y;
+					}
+					return lhs.x < rhs.x;
+				};
+#pragma region Initialization
+				map<vec3, int, bool(*)(const vec3&, const vec3&)> minDistance(vec3Compare);
+				map<vec3, vec3, bool(*)(const vec3&, const vec3&)> BackTracking(vec3Compare);
+
+				vector<vec3> returnPath;
+				for (auto i : graph)
 				{
-					minDistance = currentDistance;
-					shortest = Mines[j];
-					OrderedList.push_back(shortest);
+					for each (auto j in i.second)
+					{
+						minDistance[j.first] = INT_MAX;
+					}
 				}
+				minDistance[source] = 0;
+
+				map<vec3, int, bool(*)(const vec3&, const vec3&)> activeVertices(vec3Compare);
+				activeVertices[source] = 0;
+#pragma endregion Initialization
+				while (!activeVertices.empty())
+				{
+					vec3 Where = activeVertices.begin()->first;
+					if (Where == target)
+					{
+						vec3 backtrackingNode = target;
+						while (backtrackingNode != source)
+						{
+							returnPath.push_back(backtrackingNode);
+							backtrackingNode = BackTracking[backtrackingNode];
+						}
+						if (returnPath.size() > 1)
+						{
+							int i = 0;
+						}
+						returnPath.push_back(backtrackingNode);
+						return returnPath;
+						//return minDistance[where];
+					}
+					activeVertices.erase(activeVertices.begin());
+					for (auto ed : graph.at(Where))
+					{
+						if (minDistance[ed.first] > minDistance[Where] + ed.second)
+						{
+							activeVertices.erase(ed.first);
+							minDistance[ed.first] = minDistance[Where] + ed.second;
+							activeVertices[ed.first] = minDistance[ed.first];
+							BackTracking[ed.first] = Where;
+						}
+					}
+				}
+				return vector<vec3>();
+
+				//return INT_MAX;
 			}
+			vector<vec3> PathFinding::A_Star(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>,
+				bool(*)(const vec3&, const vec3&)>& graph, vec3 source, vec3 target)
+			{
+				auto functype = std::function<bool(const vec3&, const vec3&)>(
+					[](const vec3& lhs, const vec3& rhs)->bool {
+					if (lhs.x == rhs.x)
+					{
+						if (lhs.y == rhs.y)
+							return lhs.z < rhs.z;
+						return lhs.y < rhs.y;
+					}
+					return lhs.x < rhs.x;
+				});
+				// used to store unique nodes to be references by in the graph
+				map<vec3, node, decltype(functype)> Nodes(functype);
+				std::map<vec3, pair<node*, vector<node*>>, decltype(functype)> Graph(functype);
+				for (auto n : graph)
+				{
+					Nodes.insert(make_pair(n.first, node(n.first)));
+				}
+				for (auto n : graph)
+				{
+					vector<node*> vNeighbors;
+					for (auto neighbor : n.second)
+					{
+						vNeighbors.push_back(&Nodes[neighbor.first]);
+					}
+					Graph[n.first] = make_pair(&Nodes[n.first], vNeighbors);
+				}
+
+				return PathFinding::A_Star_Algorithm(Graph, source, target);
+			}
+			vector<vec3> PathFinding::A_Star_Algorithm(std::map<vec3, pair<node*, vector<node*>>,
+				std::function<bool(const vec3& lhs, const vec3& rhs)>>
+				& graph, vec3 source, vec3 target)
+			{
+				list<node*> openList;
+				list<node*> closedList;
+				node* StartNode = graph.at(source).first;
+				(*StartNode).g = 0; // sets values for the starting node
+				(*StartNode).h = glm::distance(source, target);
+				(*StartNode).f = (*StartNode).g + (*StartNode).h;
+				openList.push_back(StartNode); // adds to the open list
+				while (openList.size() > 0)
+				{
+					// sort the open list to find the smallest element
+					openList.sort([](const node* lhs, const node* rhs)->bool { // O(nlog(n))
+						return lhs->f < rhs->f;
+					});
+					node* BestNode = graph.at((*openList.front()).pos).first;
+					if ((*BestNode).pos == target)
+					{
+						break;
+					}
+					openList.pop_front();
+
+					if ((*BestNode).parent)
+					{
+						closedList.push_back(BestNode);
+						(*BestNode).List = CLOSEDLIST;
+						(*BestNode).g = (*BestNode).parent->g + distance((*BestNode).parent->pos, (*BestNode).pos);
+					}
+					else
+					{
+						closedList.push_back(BestNode);
+						(*BestNode).List = CLOSEDLIST;
+					}
+
+					for (auto v : graph.at((*BestNode).pos).second)
+					{
+						node* n = graph.at((*v).pos).first;
+						if ((*n).List == CLOSEDLIST)
+							continue;
+						if ((*n).List != OPENLIST)
+						{
+							(*n).List = OPENLIST;
+							openList.push_back(n);
+						}
+						if ((*v).pos == target)
+						{
+							(*v).parent = BestNode;
+							break;
+						}
+						float g = (*BestNode).g + distance((*BestNode).pos, (*v).pos);
+						float h = distance(target, (*v).pos);
+						float f = g + h;
+						if ((*n).f > f)
+						{
+							(*n).parent = BestNode;
+							(*n).f = f;
+						}
+						int i = 0;
+					}
+				}
+				vector<vec3> returnPath;
+				node currentNode = *graph.at(target).first;
+				// if no path found
+				if (currentNode.parent == nullptr)
+				{
+					return returnPath;
+				}
+				// path found
+				do {
+					returnPath.push_back(currentNode.pos);
+					currentNode = *currentNode.parent;
+				} while (currentNode.parent != nullptr);
+				returnPath.push_back(currentNode.pos);
+				return returnPath;
+			}
+			vector<vec3> PathFinding::A_Star_Grid(MinimapData& minimapData,
+				vec3 source, vec3 target)
+			{
+				// Create grid graph
+				vector<node> NewGraphNodes;
+				int Height = minimapData.Height, Width = minimapData.Width;
+				NewGraphNodes.resize(minimapData.Height*minimapData.Width);
+				vector<vec3> Neighbors =
+				{	vec3(1,0,0), vec3(-1,0,0),
+					vec3(0,0,1), vec3(0,0,-1),
+					vec3(1,0,1), vec3(-1,0,1),
+					vec3(-1,0,1), vec3(-1,0,-1)
+				};
+				for (auto& n : Neighbors)
+				{
+					n *= 1;
+				}
+				vec3 Position = vec3(ConvertToArray(200, 200, 300, 300, source.x, source.z) % Width
+					, 0, ConvertToArray(200, 200, 300, 300, source.x, source.z) / Width);
+				vec3 targetPos = vec3(ConvertToArray(200, 200, 300, 300, target.x, target.z) % Width
+					, 0, ConvertToArray(200, 200, 300, 300, target.x, target.z) / Width);
+				// stuck in a fucking wall
+				if (minimapData.Map[(int)targetPos.x + (int)targetPos.z * Width] == u8vec4(115, 77, 38, 255))
+					return vector<vec3>();
+				// algorithm
+				//auto cmp = [](node* lhs, node* rhs)->bool { // O(nlog(n))
+				//	return lhs->f > rhs->f; // reversed due to priority queue specification
+				//};
+				//priority_queue<node*,std::vector<node*>,decltype(cmp)> openList(cmp);
+				//priority_queue<node*> openList;
+				list<node*> openList;
+
+				list<node*> closedList;
+
+				node* StartNode = &NewGraphNodes[Position.x + Position.z * Width];
+				(*StartNode).g = 0; // sets values for the starting node
+				(*StartNode).h = glm::distance(Position, targetPos);
+				(*StartNode).f = (*StartNode).g + (*StartNode).h;
+				(*StartNode).pos = Position;
+				openList.push_back(StartNode); // adds to the open list
+				bool PathFound = false;
+				while ((openList.size() > 0) && !PathFound)
+				{
+					///// sort the open list to find the smallest element
+					///openList.sort([](const node* lhs, const node* rhs)->bool { // O(nlog(n)) * log n << n
+					///	return lhs->f < rhs->f;
+					///});
+					auto min = openList.begin();
+					for (auto it = openList.begin(); it != openList.end(); it++)
+					{
+						if ((*it)->f < (*min)->f)
+						{
+							min = it;
+						}
+					}
+					///vec3 BestPosition = openList.front()->pos;
+					vec3 BestPosition = (*min)->pos;
+					//int Position = ConvertToArray(200, 200, 300, 300, BestNodePos.x, BestNodePos.z);
+					node* BestNode = &NewGraphNodes[BestPosition.x + (int)BestPosition.z * minimapData.Width];
+					if (BestPosition == targetPos)
+					{
+						break;
+					}
+					///openList.pop_front();
+					openList.erase(min);
+
+					if ((*BestNode).parent)
+					{
+						closedList.push_back(BestNode);
+						(*BestNode).List = CLOSEDLIST;
+						(*BestNode).g = (*BestNode).parent->g + distance((*BestNode).parent->pos, (*BestNode).pos);
+					}
+					else
+					{
+						closedList.push_back(BestNode);
+						(*BestNode).List = CLOSEDLIST;
+					}
+
+					for (auto offset : Neighbors)
+					{
+						//int Position = ConvertToArray(200, 200, 300, 300, BestNodePos.x + offset.x, BestNodePos.z + offset.z);
+						vec3 OffsetPosition = BestPosition + offset;
+						// obstacle
+						if (minimapData.Map[(int)OffsetPosition.x + (int)(OffsetPosition.z) * Width] == u8vec4(115, 77, 38, 255))
+						{
+							continue;
+						}
+						node* n = &NewGraphNodes[OffsetPosition.x + (int)OffsetPosition.z * minimapData.Width];
+						if (n->List == 0) // new node
+							*n = node(OffsetPosition);
+						if ((*n).List == CLOSEDLIST)
+							continue;
+						if ((*n).List != OPENLIST)
+						{
+							(*n).List = OPENLIST;
+							openList.push_back(n);
+						}
+						else
+						{
+							int i = 0;
+						}
+						if (OffsetPosition == targetPos)
+						{
+							(*n).parent = BestNode;
+							PathFound = true;
+							break;
+						}
+						float g = (*BestNode).g + distance(BestPosition, OffsetPosition);
+						float h = distance(targetPos, OffsetPosition);
+						float f = g + h;
+						if ((*n).f > f)
+						{
+							(*n).parent = BestNode;
+							(*n).f = f;
+						}
+						int i = 0;
+					}
+				}
+				vector<vec3> returnPath;
+				node currentNode = NewGraphNodes[ConvertToArray(200, 200, 300, 300, target.x, target.z)];
+				// if no path found
+				if (currentNode.parent == nullptr)
+				{
+					return returnPath;
+				}
+				// path found
+				do {
+					returnPath.push_back(ConvertToWorldCoords(200, 200, 300, 300, currentNode.pos));
+					currentNode = *currentNode.parent;
+				} while (currentNode.parent != nullptr);
+				returnPath.push_back(ConvertToWorldCoords(200, 200, 300, 300, currentNode.pos));
+
+				return returnPath;
+			}
+#undef OPENLIST 
+#undef CLOSEDLIST 
+#pragma endregion PathFinding
+#pragma region TSP
+			list<vec3> TSP::Greedy(vector<vec3> UnorderedList)
+			{
+				list<vec3> OrderedList;
+				vec3 shortest = UnorderedList[0];
+				UnorderedList.erase(UnorderedList.begin() + 0);
+				OrderedList.push_back(shortest);
+				while (true)
+				{
+					// end condition
+					if (UnorderedList.size() == 0) break;
+					//
+					double minDistance = 1000000.0f;
+					size_t bestIndex = 0;
+					for (size_t i = 0; i < UnorderedList.size(); i++)
+					{
+						// check if best distance achieved
+						int currentDistance;
+						if ((currentDistance = glm::distance(
+							shortest,
+							UnorderedList[i])) < minDistance)
+						{
+							minDistance = currentDistance;
+							bestIndex = i;
+						}
+					}
+					shortest = UnorderedList[bestIndex];
+					OrderedList.push_back(UnorderedList[bestIndex]);
+					UnorderedList.erase(UnorderedList.begin() + bestIndex);
+				}
+				return OrderedList;
+			}
+			list<vec3> TSP::Christofides(vector<vec3> UnorderedList)
+			{
+				using node = pair<float, pair<vec3, vec3>>;
+				vector<vector<pair<float, pair<vec3,vec3>>>> Connections;
+				Connections.resize(UnorderedList.size());
+				for (auto col : Connections) {
+					col.resize(UnorderedList.size(), 
+					{
+						make_pair(numeric_limits<float>::infinity(),
+						make_pair(vec3(),vec3()))
+					});
+				}
+				// O(n²)
+				for (int i = 0; i < UnorderedList.size(); i++)
+				{
+					for (int j = i+1; j < UnorderedList.size(); j++)
+					{
+						Connections[i][j] = 
+						{
+							make_pair(glm::distance(UnorderedList[i], UnorderedList[j]),
+							make_pair(UnorderedList[i], UnorderedList[j]))
+						};
+					}
+					std::sort(Connections[i].begin(), Connections[i].end(), [](const node& n1, const node& n2) -> bool
+					{
+						return n1.first < n2.first;
+					});
+				}
+				vector<pair<vec3,vec3>> SpanningTree;
+
+
+				return list<vec3>();
+			}
+			list<vec3> TSP::DynamicProgramming(vector<vec3> UnorderedList)
+			{
+				vector<vector<float>> DPMatrix;
+				DPMatrix.resize(UnorderedList.size());
+				for (auto col : DPMatrix) {
+					col.resize(UnorderedList.size(), numeric_limits<float>::infinity());
+				}
+				for (int i = 0; i < UnorderedList.size(); i++)
+				{
+					for (int j = 0; j < UnorderedList.size(); j++)
+					{
+						if ( i == j ) continue;
+						float Distance;
+						if ((Distance = glm::distance(UnorderedList[i],UnorderedList[j])) < DPMatrix[i][j])
+						{
+							DPMatrix[i][j] = Distance;
+						}
+					}
+				}
+				return list<vec3>();
+			}
+#pragma endregion TSP
 		}
-		return OrderedList;*/
+		
 	}
-	//namespace Algorithms
-	//{
-		//template<typename T>
-		//vector<int>/* Algorithms::*/ Approximate::TSPgreedy(vector<int> UnorderedList)
-		//{
-		//	vector<int> OrderedList;
-		//	int shortest = UnorderedList[0];
-		//	UnorderedList.erase(UnorderedList.begin() + 0);
-		//	OrderedList.push_back(shortest);
-		//	while (true)
-		//	{
-		//		// end condition
-		//		if (UnorderedList.size() == 0) break;
-		//		//
-		//		double minDistance = 1000000.0f;
-		//		size_t bestIndex = 0;
-		//		for (size_t i = 0; i < UnorderedList.size(); i++)
-		//		{
-		//			// check if best distance achieved
-		//			int currentDistance;
-		//			if ((currentDistance = glm::distance(
-		//				shortest->unit_Data.Position,
-		//				UnorderedList[i]->unit_Data.Position)) < minDistance)
-		//			{
-		//				minDistance = currentDistance;
-		//				bestIndex = i;
-		//			}
-		//		}
-		//		OrderedList.push_back(UnorderedList[bestIndex]);
-		//		UnorderedList.erase(UnorderedList.begin() + bestIndex);
-		//	}
-		//	return OrderedList;
-		//}
-//	}
 }
 struct Node
 {

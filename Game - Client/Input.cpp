@@ -504,7 +504,6 @@ void Input::RunScript()
 	GameObject& Player = *offlineData.level.ActivePlayers[0];
 
 	Player.control = GameObject::controls::Script;
-	Player.LongPath = false;
 	STARTUPINFO siStartInfo;
 	PROCESS_INFORMATION piProcessInfo;
 	ZeroMemory(&siStartInfo, sizeof(siStartInfo));
@@ -595,17 +594,14 @@ void Input::OpenProfileUI()
 void Input::SetCircleScriptIterative()
 {
 	OfflineDataObject& offlineData = OfflineDataObject::Instance();
-	//offlineData.player.LongPath = false;
-	//STARTUPINFO siStartInfo;
-	//PROCESS_INFORMATION piProcessInfo;
-	//auto Handle = CreateProcess(NULL, "", NULL, NULL, TRUE, 0, NULL, NULL, NULL,&piProcessInfo);
-	//WaitForSingleObject(piProcessInfo.hProcess, INFINITE);
-
 
 	GameObject& Player = *offlineData.level.ActivePlayers[0];
 	Unit_Data& ud = Player.unit_Data;
 	auto& level = OfflineDataObject::Instance().level;
 	vector<vec3> UnorderedList;
+	// Player
+	UnorderedList.push_back(Player.unit_Data.Position);
+	// Mines
 	for (auto& m : level.Entities)
 	{
 		if (m->Name == "Mine")
@@ -613,76 +609,48 @@ void Input::SetCircleScriptIterative()
 			UnorderedList.push_back(m->unit_Data.Position);
 		}
 	}
-	UnorderedList.push_back(Player.unit_Data.Position);
-
-	Player.script = [&, UnorderedList](GameObject& p) mutable-> void {
+	Player.script.Create([&, UnorderedList](GameObject& p) mutable-> ScriptState {
 		Player.unit_Data.InputForceVectors.clear();
 
-		// Move to Math.cpp
-		auto CalculateTSP = [](vector<vec3> UnorderedList) -> vector<vec3> {
-			vector<vec3> OrderedList;
-			vec3 shortest = UnorderedList[0];
-			UnorderedList.erase(UnorderedList.begin()+0);
-			OrderedList.push_back(shortest);
-			while (true)
-			{
-				// end condition
-				if (UnorderedList.size() == 0) break;
-				//
-				double minDistance = 1000000.0f;
-				size_t bestIndex = 0;
-				for(size_t i = 0; i < UnorderedList.size(); i++)
-				{
-					// check if best distance achieved
-					int currentDistance;
-					if ((currentDistance = glm::distance(
-						shortest,
-						UnorderedList[i])) < minDistance)
-					{
-						minDistance = currentDistance;
-						bestIndex = i;
-					}
-				}
-				OrderedList.push_back(UnorderedList[bestIndex]);
-				UnorderedList.erase(UnorderedList.begin()+bestIndex);
-			}
-			return OrderedList;
-		};
-		auto OrderedList = CalculateTSP(UnorderedList);
+		list<vec3>* pOrderedList;
+		if (p.script.GetMemoryData("OrderedList") == nullptr)
+		{
+			pOrderedList = new list<vec3>(Stas::Algorithms::Approximate::TSP::Greedy(UnorderedList));
+			p.script.SetMemoryData("OrderedList", &pOrderedList, sizeof(pOrderedList));
+		}
+		else
+		{
+			pOrderedList = ToType(decltype(pOrderedList))(p.script.GetMemoryData("OrderedList"));
+		}
+		list<vec3>& OrderedList = *pOrderedList;
+		// done
+		if (OrderedList.size() == 0)
+		{
+			return ScriptState::Done;
+		}
 
-		p.SetMemoryData("OrderedList",&OrderedList,sizeof(OrderedList[0])*OrderedList.size());
-
-		//vector<GameObject*> OrderedList = Stas::Algorithms::Approximate::TSPgreedy<GameObject*>(UnorderedList);
 
 		vec3 movementVector = vec3(0);
-		if (OrderedList.front() != p.unit_Data.Position)
-			movementVector = normalize(OrderedList.front() - p.unit_Data.Position);
+		if (glm::distance(OrderedList.front(), p.unit_Data.Position) < 5.0f)
+		{
+			OrderedList.pop_front();
+		}
+		if (OrderedList.size() > 0)
+		{
+			if (OrderedList.front() != p.unit_Data.Position) // prevent normalizing 0 vector
+				movementVector = normalize(OrderedList.front() - p.unit_Data.Position);
+		}
 		
 
-		//float Angle = 0.0f;
-		//if (p.GetMemoryData("Angle") != nullptr)
-		//{
-		//	Angle = ToType(float)(p.GetMemoryData("Angle"));
-		//	if (degrees(Angle) >= 360.0f)
-		//	{
-		//		Angle = radians(0.0f);
-		//	}
-		//	Angle += radians(3.0f);
-		//	p.SetMemoryData("Angle", &Angle, sizeof(Angle));
-		//}
-		//// Set Angle Data
-		//else
-		//{
-		//	Angle = 0.0f;
-		//	p.SetMemoryData("Angle", &Angle, sizeof(Angle));
-		//}
-		float speed= 40.0f;
+		
+		float speed= 100.0f;
 		//Player.unit_Data.InputForceVectors.push_back(vec3(sin(Angle), 0, cos(Angle)) * speed);
 		Player.unit_Data.InputForceVectors.push_back(movementVector * speed);
-		//ud.Rotation.y = Angle - radians(90.0f);
-		/*ud.Position += vec3(sin(Angle),0,cos(Angle)) * speed;
-		ud.Rotation.xz;*/
-	};
+		float Angle = -acos(dot(movementVector, vec3(1, 0, 0)));
+		if (movementVector.z < 0) Angle = radians(360.0f) - Angle;
+		ud.Rotation.y = Angle;// -radians(90.0f);
+		return ScriptState::OnGoing;
+	});
 	//Player.script = [&](GameObject& p) mutable-> void {
 	//	// find first mine
 	//	// find second mine

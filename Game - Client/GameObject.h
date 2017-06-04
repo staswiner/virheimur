@@ -16,7 +16,61 @@ using namespace nlohmann;
 using namespace chrono;
 using namespace glm;
 using namespace std;
+enum class ScriptState
+{
+	Done,
+	OnGoing,
+	Error
+};
+template<typename T> class Script;
+template<typename Ret, typename... Args>
+class Script<Ret(Args...)>
+{
+public:
+	Ret operator()(Args... args)
+	{
+		if (script == nullptr) return static_cast<Ret>(0);
+		return script(args...);
+	}
+	//bool Run(Args... args) { return script(std::forward<Args...>(args)); };
+	void* GetMemoryData(string VarName) {
+		if (MemoryBlock.find(VarName) == MemoryBlock.end())
+		{
+			return nullptr;
+		}
+		else
+		{
+			float number = *reinterpret_cast<float*>(MemoryBlock[VarName]);
+			return MemoryBlock[VarName];
+		}
+	}
+	void SetMemoryData(string VarName, void* data, size_t s) {
+		float number = *reinterpret_cast<float*>(data);
+		void * AllocationData = malloc(sizeof(s));
+		memcpy(AllocationData, data, s);
+		number = *reinterpret_cast<float*>(AllocationData);
+		void * ptr = MemoryBlock[VarName];
+		if (MemoryBlock.find(VarName) != MemoryBlock.end())
+		{
 
+			//float number = *reinterpret_cast<float*>(MemoryBlock[VarName]);
+			MemoryBlock.erase(VarName);
+		}
+		MemoryBlock[VarName] = AllocationData;
+	}
+	void ResetMemoryData() {
+		MemoryBlock.clear();
+	}
+	void Create(std::function<Ret(Args...)> script) {
+		this->Clear();
+		this->script = script;
+	}
+	void Clear() { this->script = nullptr; MemoryBlock.clear(); }
+	function<Ret(Args...)> script;
+private:
+	map<string, void*> MemoryBlock;
+	map<string, string> MemoryTypeTable;
+};
 class GameObject
 {
 public:
@@ -84,6 +138,13 @@ public:
 		Plane,
 		Aero
 	};
+	string Name;
+	Stats stats;
+	Unit_Data unit_Data;
+	bool Disabled = false;
+	movements movement = movements::Ground;
+	controls control = controls::Manual;
+
 	GameObject();
 	GameObject(Unit_Data, string Username);
 	~GameObject();
@@ -99,22 +160,10 @@ public:
 	void CreateShader(Shader::ImageType imageType);
 	json GetJson();
 	json GetStructureJson();
-	string Name;
-	Stats stats;
-	milliseconds TimeDelta;
-	Unit_Data unit_Data; 
-	bool Disabled = false;
-	movements movement = movements::Ground;
-	controls control = controls::Manual;
+
 	
 	// AI preparations
-	function<void(GameObject&)> script;
-	void* GetMemoryData(string VarName);
-	void SetMemoryData(string VarName, void* data, size_t);
-	bool disablePathing = false;
-	// TO remove variable
-	bool PathingStarted = false;
-	bool LongPath = true;
+	Script<ScriptState(GameObject&)> script;
 
 	// Collision library
 	rp3d::CollisionBody* collisionBody;
@@ -123,8 +172,6 @@ public:
 	map<string, Music*> Soundtracks;
 
 private:
-	map<string, void*> MemoryBlock;
-	map<string, string> MemoryTypeTable;
 	UIElement* UIroot;
 	int Type;
 };

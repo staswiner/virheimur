@@ -117,57 +117,66 @@ namespace Stas
 		static float barryCentric(vec3, vec3, vec3, vec2);
 		static float Mod(float, float);
 		//static vector<vec3> Dijekstra(map<vec3,pair<vec3, float>> Nodes,vec3 Start,vec3 Destination);
-		static vector<vec3> Dijkstra(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
-			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
-		//vector<vec3> DijkstraB(std::map<vec3, vector<vec3>, std::function<bool(const vec3&lhs, const vec3&rhs)>>
-		//	&graph, vec3 source, vec3 target) = delete;
-		static vector<vec3> Astar(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>
-			, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
-		template<typename T>
-		static vector<T> TSP(vector<T> UnorderedList);
 		static unsigned long long llrand();
-		static bool vec3Compare(const vec3&, const vec3&);
 		static bool IsIn(vec2 TopLeft, vec2 BotRight, vec2 TestSample);
-		struct node {
-			node(vec3 pos) {
-				this->parent = nullptr;
-				this->pos = pos;
-				this->f = numeric_limits<float>::infinity();
-				this->g = numeric_limits<float>::infinity();
-				this->h = numeric_limits<float>::infinity();
-				this->List = 0;
-			}
-			node() {
-				this->parent = nullptr;
-				this->f = numeric_limits<float>::infinity();
-				this->g = numeric_limits<float>::infinity();
-				this->h = numeric_limits<float>::infinity();
-				this->List = 0;
-			}
-			vec3 pos;
-			node *parent;
-			float f, g, h;
-			int List; // 0 none, 1 open, 2 closed
-		};
-		static vector<vec3> AstarGridB(MinimapData & minimapData, vec3 source, vec3 target);
+		
 	private:
-		static vector<vec3> AstarB(
-			std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
-			& graph, vec3 source, vec3 target);
+		
 		Maths() = delete;
 		~Maths() = delete;
 
 	};
 
-	//namespace Algorithms
-	//{
-	//	class Approximate
-	//	{
-	//	public:
-	//		// returns ordered TSP list O(n²)
-	//		template<typename T>
-	//		static vector<T> TSPgreedy(vector<T> UnorderedList);
-	//		
-	//	};
-	//}
+	namespace Algorithms
+	{
+		namespace Exact
+		{
+			// returns ordered TSP list O(n!)
+			static list<vec3> TSP(vector<vec3> UnorderedList);
+		}
+		namespace Approximate
+		{
+			class TSP {
+			public:
+				// returns ordered TSP list O(n²)
+				static list<vec3> Greedy(vector<vec3> UnorderedList);
+				static list<vec3> Christofides(vector<vec3> UnorderedList);
+				static list<vec3> DynamicProgramming(vector<vec3> UnorderedList);
+			};
+			class PathFinding {
+			public:
+				// returns path
+				static vector<vec3> Dijkstra(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
+				// returns path
+				static vector<vec3> A_Star(const map<vec3, map<vec3, float, bool(*)(const vec3&, const vec3&)>, bool(*)(const vec3&, const vec3&)> &graph, vec3 source, vec3 target);
+				// returns path
+				static vector<vec3> A_Star_Grid(MinimapData & minimapData, vec3 source, vec3 target);
+			private:
+				struct node {
+					node(vec3 pos) {
+						this->parent = nullptr;
+						this->pos = pos;
+						this->f = numeric_limits<float>::infinity();
+						this->g = numeric_limits<float>::infinity();
+						this->h = numeric_limits<float>::infinity();
+						this->List = 0;
+					}
+					node() {
+						this->parent = nullptr;
+						this->f = numeric_limits<float>::infinity();
+						this->g = numeric_limits<float>::infinity();
+						this->h = numeric_limits<float>::infinity();
+						this->List = 0;
+					}
+					vec3 pos;
+					node *parent;
+					float f, g, h;
+					int List; // 0 none, 1 open, 2 closed
+				};
+				static vector<vec3> A_Star_Algorithm(
+					std::map<vec3, pair<node*, vector<node*>>, std::function<bool(const vec3& lhs, const vec3& rhs)>>
+					& graph, vec3 source, vec3 target);
+			};
+		};
+	}
 }

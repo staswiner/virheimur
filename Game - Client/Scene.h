@@ -19,12 +19,12 @@
 #include "LoginState.h"
 #include "UIElement.h"
 #include "Cursor.h"
-#include "SeaAnimated.h"
 #include "NPC.h"
 #include "Default.h"
 #include "FrameData.h"
 #include "Level.h"
 #include "Music.h"
+#include "Xaml.h"
 using namespace glm;
 class Scene
 {
@@ -47,6 +47,7 @@ public:
 
 private:
 	void GenerateForm();
+	void LoadForm(UIElement* Element);
 
 	void Draw_Units();
 	void Draw_Scene();
@@ -94,7 +95,6 @@ private:
 	Minimap minimap;
 	vector<vec3> Obstacles;
 	Grass grass;
-	SeaAnimated seaAnim;
 	vector<NPC> NPCs;
 	vector<string> OutlineObjects;
 	int counter = 0;

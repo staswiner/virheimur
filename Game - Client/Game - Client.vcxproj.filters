@@ -126,6 +126,9 @@
     <Filter Include="Network\Network Dependent">
       <UniqueIdentifier>{9c6d5300-ecf0-41a3-899d-da9c90e89e67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ToDLL">
+      <UniqueIdentifier>{06ec7c78-525f-4809-aa25-05a41b933b09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SkyBox_Graphics.h">
@@ -231,9 +234,6 @@
       <Filter>User Interface</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>GameHeirarchy</Filter>
-    </ClInclude>
-    <ClInclude Include="GameData.h">
       <Filter>GameHeirarchy</Filter>
     </ClInclude>
     <ClInclude Include="GameLogic.h">
@@ -344,9 +344,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>GameHeirarchy</Filter>
     </ClInclude>
-    <ClInclude Include="DrawObjectCollection.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -356,12 +353,6 @@
     <ClInclude Include="Music.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="File.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Maths.h">
-      <Filter>Maths</Filter>
-    </ClInclude>
     <ClInclude Include="GL.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -370,6 +361,15 @@
     </ClInclude>
     <ClInclude Include="Session.h">
       <Filter>Network\Network Dependent</Filter>
+    </ClInclude>
+    <ClInclude Include="Maths.h">
+      <Filter>ToDLL</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>ToDLL</Filter>
+    </ClInclude>
+    <ClInclude Include="Xaml.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -469,9 +469,6 @@
     <ClCompile Include="GameLogic.cpp">
       <Filter>GameHeirarchy</Filter>
     </ClCompile>
-    <ClCompile Include="GameData.cpp">
-      <Filter>GameHeirarchy</Filter>
-    </ClCompile>
     <ClCompile Include="GlobalDataObject.cpp">
       <Filter>GameHeirarchy</Filter>
     </ClCompile>
@@ -561,13 +558,8 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>GameHeirarchy</Filter>
     </ClCompile>
-    <ClCompile Include="DrawObjectCollection.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Music.cpp" />
-    <ClCompile Include="File.cpp" />
-    <ClCompile Include="Maths.cpp">
-      <Filter>Maths</Filter>
-    </ClCompile>
     <ClCompile Include="GL.cpp" />
     <ClCompile Include="Cookies.cpp">
       <Filter>Network\Network Dependent</Filter>
@@ -575,6 +567,13 @@
     <ClCompile Include="Session.cpp">
       <Filter>Network\Network Dependent</Filter>
     </ClCompile>
+    <ClCompile Include="Maths.cpp">
+      <Filter>ToDLL</Filter>
+    </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>ToDLL</Filter>
+    </ClCompile>
+    <ClCompile Include="Xaml.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cursor1.cur">
