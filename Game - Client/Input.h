@@ -31,7 +31,6 @@ private:
 	void GetMouseInputOffline();
 	void GetKeyboardInput();
 	void ReloadShaders();
-	void OnlineRightMouseClick();
 	void OfflineRightMouseClick();
 	void SetCircleScript();
 	void RunScript();
@@ -52,7 +51,4 @@ private:
 	void ResetCameraPosition();
 
 	bool lockCamera = false;
-private:
-	// service functions
-	void RightClickPathAlgorithm(vec3 ClickOnMapCoord);
 };

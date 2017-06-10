@@ -24,7 +24,7 @@
 #include "FrameData.h"
 #include "Level.h"
 #include "Music.h"
-#include "Xaml.h"
+#include "XML.h"
 using namespace glm;
 class Scene
 {
@@ -41,13 +41,12 @@ public:
 	
 	void Frame();
 	void Initialize();
-	void SetProjectionMatrix(mat4&);
 	void SetWindowHDC(HDC&);
 	Music* music;
 
 private:
 	void GenerateForm();
-	void LoadForm(UIElement* Element);
+	void LoadForm(XML::Element & XML_Element, UIElement * uiElement);
 
 	void Draw_Units();
 	void Draw_Scene();
@@ -56,28 +55,15 @@ private:
 	void DrawScene_Refraction();
 	void DrawScene_Reflection();
 	void DrawScene_NoEffect();
-	void DrawScene_PostProcessing();
-
+	
 	/*small functions*/
-	void DrawEntities();
-	void SetCameraView();
 	void Shadow_DrawGround(Shader&);
 	void Outline();
-	void DrawColladaShadow();
-	void Draw_Skeletal();
 	void DrawUI();
-	
-	void DrawGround(Shader&);
-	void DrawSea();
-	void DrawPreBuffer();
-	void DrawWater();
+
 	void DrawOutlineObjects();
 	void DrawIndexColor();
 
-	void DrawColladaDistance();
-	
-	mat4 ProjectionMatrix;
-	mat4 ViewMatrix;
 	HDC m_HDC;
 	map<string, FBO> mFBO;
 	FBO* IndexFBO;

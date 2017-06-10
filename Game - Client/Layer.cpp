@@ -40,16 +40,16 @@ void Layer::ClearLayer()
 void Layer::Draw()
 {
 	FrameData& frameData = FrameData::Instance();
-	Camera& camera = Camera::GetCamera("Main");
+	Camera& camera = Camera::GetCamera(Camera::eCamera::Current);
 	GameObject::SceneData sceneData;
 
 	vec3 Light_Pos = frameData.Light_Pos;
 	mat4 Light_Matrix = glm::lookAt(Light_Pos+vec3(1,1,1), vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
-	Light_Matrix = frameData.ProjectionMatrix * Light_Matrix;
+	Light_Matrix = camera.ProjectionMatrix * Light_Matrix;
 
-	sceneData.ProjectionMatrix = frameData.ProjectionMatrix;
-	sceneData.ViewMatrix = frameData.ViewMatrix;
-	sceneData.CameraPos = camera.GetCameraPosition();
+	sceneData.ProjectionMatrix = camera.ProjectionMatrix;
+	sceneData.ViewMatrix = camera.ViewMatrix;
+	sceneData.CameraPos = camera.Position;
 	sceneData.Light_Matrix = Light_Matrix;
 	sceneData.Light_Pos = Light_Pos;
 	for (auto& object : Objects)

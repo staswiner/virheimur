@@ -35,6 +35,7 @@ bool Shader::LoadShaders()
 	mapShader["Color"] = new Shader("Color Vertex Shader.glsl", "Color Fragment Shader.glsl");
 	mapShader["Normals"]			= new Shader("NormalsV.glsl","NormalsF.glsl");
 	//	new Shader("Index Vertex Shader.glsl", "Index Geometry Shader.glsl", "Index Fragment Shader.glsl");
+
 	return true;
 }
 void Shader::Reload()
@@ -695,6 +696,10 @@ void Shader::Use()
 }
 Shader & Shader::At(string ID)
 {
+	if (Shader::mapShader.find(ID) == Shader::mapShader.end())
+	{
+		exit(2);
+	}
 	return *Shader::mapShader[ID];
 }
 void Shader::ReloadAll()

@@ -131,15 +131,9 @@ void Game::SelectionScreen()
 
 void Game::GameScreen()
 {
-	// Accepts input
-	try {
 
-		UserInput();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
+	UserInput();
+
 	// Sets last frame updates to transfer
 	/*try {
 
@@ -154,53 +148,28 @@ void Game::GameScreen()
 	// Creates 'Data' object as a combination of NewData and ReceivedData
 	
 	// proceeds logic of the final 'Data' object
-	try {
 
-		ApplyGameLogic();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
+	ApplyGameLogic();
+
 
 	// Draws 'Data' object
-	try {
-		DrawScene();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
+	DrawScene();
+
 }
 void Game::GameScreenOffline()
 {
 	// Accepts input
-	try {
 
-		UserInput();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
+	UserInput();
+
 	// proceeds logic of the final 'Data' object
-	try {
 
-		ApplyGameLogic();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
+	ApplyGameLogic();
 
 	// Draws 'Data' object
-	try {
-		DrawScene();
-	}
-	catch (exception ex)
-	{
-		int i = 0;
-	}
+
+	DrawScene();
+
 }
 void Game::TestGround()
 {
@@ -227,10 +196,8 @@ void Game::UserInput()
 	//NewData = ( Online? input.TranslateInput() : input.TranslateInputOffline());
 	input.TranslateInputOffline();
 	// Camera
-	Camera& camera = Camera::GetCamera("Main");
+	Camera& camera = Camera::GetCamera(Camera::eCamera::Current);
 	FrameData& frameData = FrameData::Instance();
-	frameData.ProjectionMatrix = camera.GetProjectionMatrix();
-	frameData.ViewMatrix = camera.GetCameraMatrix();
 }
 void Game::UserInputOffline()
 {

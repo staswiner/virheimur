@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<root>
+  <label name="label" text="label test" top="80" left="10"/>
+  <textbox name="textbox" text="this is a textbox" top="400" left="300" width="200"
+           height="50"/>
+  <textbox name="Command Line" left="200" top="400" right="500" bottom="450"
+           onclick="SendCommand"></textbox>
+  <drawingarea name="Other Camera" left="724" top="400" right="1024" bottom="600"></drawingarea>
+  <button name="Sound+" position="500,20,520,40" text="+" onclick="AddVolume"></button>
+  <button name="Sound-" position="520,20,540,40" text="-" onclick="ReduceVolume"></button>
+</root>

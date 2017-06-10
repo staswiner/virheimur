@@ -27,6 +27,7 @@ public:
 	ShaderBuilder& Add_textures(map<string,GLuint>& Textures);
 	ShaderBuilder& Add_vec2(string, const vec2&);
 	ShaderBuilder& Add_vec3(string, const vec3&);
+	ShaderBuilder& Add_vec4(string, const vec4&);
 	ShaderBuilder& Add_float(string, const float&);
 	ShaderBuilder& Add_bool(string name, const bool & rhs);
 	ShaderBuilder& Add_int(string, const int&);

@@ -256,8 +256,8 @@ Models2D::Models2D(GLchar * path)
 void Models2D::Draw3DFacingCamera(vec3 WorldSpace)
 {
 	mat4 WorldPos = glm::translate(mat4(), WorldSpace);
-	mat4& ViewMatrix = FrameData::Instance().ViewMatrix;
-	mat4& ProjectionMatrix = FrameData::Instance().ProjectionMatrix;
+	mat4& ViewMatrix = Camera::GetCamera(Camera::eCamera::Current).ViewMatrix;
+	mat4& ProjectionMatrix = Camera::GetCamera(Camera::eCamera::Current).ProjectionMatrix;
 	Mouse& mouse = Mouse::Instanace();
 
 	glm::mat4 projectionOrtho = glm::ortho(0.0f, mouse.GetWindowSize().x,

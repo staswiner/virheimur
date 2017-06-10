@@ -125,9 +125,9 @@ void SkyBox_Graphics::LoadVAO()
 }
 void SkyBox_Graphics::DrawModel()
 {
-	mat4 ViewMatrix = FrameData::Instance().ViewMatrix;
+	mat4 ViewMatrix = Camera::GetCamera(Camera::eCamera::Current).ViewMatrix;
 	ViewMatrix = glm::mat4(glm::mat3(ViewMatrix));	// Remove any translation component of the view matrix
-	mat4 ProjectionMatrix = FrameData::Instance().ProjectionMatrix;
+	mat4 ProjectionMatrix = Camera::GetCamera(Camera::eCamera::Current).ProjectionMatrix;
 
 	glDepthMask(GL_FALSE);// Remember to turn depth writing off
 

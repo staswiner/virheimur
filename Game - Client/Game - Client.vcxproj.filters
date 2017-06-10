@@ -368,7 +368,7 @@
     <ClInclude Include="File.h">
       <Filter>ToDLL</Filter>
     </ClInclude>
-    <ClInclude Include="Xaml.h">
+    <ClInclude Include="XML.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -573,7 +573,7 @@
     <ClCompile Include="File.cpp">
       <Filter>ToDLL</Filter>
     </ClCompile>
-    <ClCompile Include="Xaml.cpp" />
+    <ClCompile Include="XML.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cursor1.cur">

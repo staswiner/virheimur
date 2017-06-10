@@ -14,8 +14,8 @@ GameLogic::~GameLogic()
 void GameLogic::Proceed()
 {
 	FrameData& frameData = FrameData::Instance();
-	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
-	mat4 ViewMatrix = frameData.ViewMatrix;
+	mat4 ProjectionMatrix = Camera::GetCamera(Camera::eCamera::Current).ProjectionMatrix;
+	mat4 ViewMatrix = Camera::GetCamera(Camera::eCamera::Current).ViewMatrix;
 	// Calculate moving position
 #pragma region bug
 	//for (auto &p : FinalData.GetPlayerInformation())
@@ -125,8 +125,8 @@ void GameLogic::Proceed()
 void GameLogic::ProcessDataOffline()
 {
 	FrameData& frameData = FrameData::Instance();
-	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
-	mat4 ViewMatrix = frameData.ViewMatrix;
+	mat4 ProjectionMatrix = Camera::GetCamera(Camera::eCamera::Current).ProjectionMatrix;
+	mat4 ViewMatrix = Camera::GetCamera(Camera::eCamera::Current).ViewMatrix;
 	// Calculate moving position
 	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
 	GameObject& p = *OfflineData.level.ActivePlayers[0];
@@ -245,8 +245,8 @@ void GameLogic::ProcessPlayerMovement()
 {
 	// Declarations
 	FrameData& frameData = FrameData::Instance();
-	mat4 ProjectionMatrix = frameData.ProjectionMatrix;
-	mat4 ViewMatrix = frameData.ViewMatrix;
+	mat4 ProjectionMatrix = Camera::GetCamera(Camera::eCamera::Current).ProjectionMatrix;
+	mat4 ViewMatrix = Camera::GetCamera(Camera::eCamera::Current).ViewMatrix;
 	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
 	for (auto pp : OfflineData.level.ActivePlayers)
 	{
@@ -387,8 +387,8 @@ void GameLogic::ProcessPlayerMovement()
 			//ud.RotateByNormal(rotation);
 		}
 		// Music
-		Camera& camera = Camera::GetCamera("Main");
-		Music::SetListener(camera.GetCameraPosition(), vec3(0), vec3(0));
+		Camera& camera = Camera::GetCamera(Camera::eCamera::Current);
+		Music::SetListener(camera.Position, vec3(0), vec3(0));
 		/*for (auto soundTrack : p.Soundtracks)
 		{
 			soundTrack.second->SetPositions(p.unit_Data.Position, p.unit_Data.Velocity);

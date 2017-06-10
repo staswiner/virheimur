@@ -2,8 +2,8 @@
 in vec2 TexCoords;
 out vec4 color;
 
-uniform sampler2D ourShine;
 uniform sampler2D ourTexture;
+uniform sampler2D ourShine;
 uniform sampler2D ourShadow;
 //uniform sampler2D DepthMap;
 
@@ -20,6 +20,7 @@ void main()
 	vec4 Color = texture(ourTexture, TexCoords);
 	vec4 BrightColor = texture(ourShine, TexCoords);
 //	color = BrightColor *(Distance) + Color * (1.0 - Distance);
-	color = pow(Color,vec4(1.0)) * 1.0 + pow(BrightColor,vec4(4.0))*vec4(0.0);
+//	color = pow(Color,vec4(1.0)) * 1.0 + pow(BrightColor,vec4(4.0))*vec4(0.0);
+	color = Color;
 //	color = Color;
 }

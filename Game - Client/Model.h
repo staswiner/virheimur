@@ -9,7 +9,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "FrameData.h"
-
+#include "Camera.h"
 
 
 class Model

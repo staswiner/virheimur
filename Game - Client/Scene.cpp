@@ -19,27 +19,28 @@ void Scene::Initialize()
 	GLuint Err = glewInit();
 	glLoadIdentity();
 	Shader::LoadShaders();
-	
 	mSea.Initialize();
 	//ShowCursor(false);
 	cursor.Initialize();
 
 	shadow = new Shadow_Mapping();
 
-	mFBO["Post Processing"].Initialize(1, 1, Shader::At("PostProcessing"));
-	mFBO["HBlur"].Initialize(2, 2, Shader::At("HBlur"));
-	mFBO["VBlur"].Initialize(2, 2, Shader::At("VBlur"));
-	mFBO["HBlurS"].Initialize(1, 1, Shader::At("HBlur"));
-	mFBO["VBlurS"].Initialize(1, 1, Shader::At("VBlur"));
-	mFBO["Bright"].Initialize(1, 1, Shader::At("Bright"));
-	mFBO["Combine"].Initialize(1, 1, Shader::At("Combine"));
-	mFBO["Gaussic Effect"].Initialize(1, 1, Shader::At("Combine"));
-	mFBO["RadialBlur"].Initialize(1, 1, Shader("RadialBlur Vertex Shader.glsl", "RadialBlur Fragment Shader.glsl"));
-	mFBO["Basic"].Initialize(1, 1, Shader());
-	mFBO["LakeReflectionBlur"].Initialize(1, 1, Shader());
-	mFBO["LakeReflection"].Initialize(1, 1, Shader::At("PostProcessing"));
+
+
+	mFBO["Post Processing"].Initialize(1, 1, &Shader::At("PostProcessing"));
+	mFBO["HBlur"].Initialize(2, 2, &Shader::At("HBlur"));
+	mFBO["VBlur"].Initialize(2, 2, &Shader::At("VBlur"));
+	mFBO["HBlurS"].Initialize(1, 1, &Shader::At("HBlur"));
+	mFBO["VBlurS"].Initialize(1, 1, &Shader::At("VBlur"));
+	mFBO["Bright"].Initialize(1, 1, &Shader::At("Bright"));
+	mFBO["Combine"].Initialize(1, 1, &Shader::At("Combine"));
+	mFBO["Gaussic Effect"].Initialize(1, 1, &Shader::At("Combine"));
+	mFBO["RadialBlur"].Initialize(1, 1, new Shader("RadialBlur Vertex Shader.glsl", "RadialBlur Fragment Shader.glsl"));
+	mFBO["Basic"].Initialize(1, 1, new Shader());
+	mFBO["LakeReflectionBlur"].Initialize(1, 1, &Shader());
+	mFBO["LakeReflection"].Initialize(1, 1, &Shader::At("PostProcessing"));
 	//mFBO["Index"].Initialize(1, 1, Shader::At("PostProcessing"));
-	IndexFBO->InitializeBig(1, 1, Shader::At("PostProcessing"));
+	IndexFBO->InitializeBig(1, 1, &Shader::At("PostProcessing"));
 	mAntiAliasing.InitializeMultiSample();
 	championChat = new ChampionChat(Shader::At("Champion Chat"));
 	championChat->CreateChatbox();
@@ -52,7 +53,10 @@ void Scene::Initialize()
 	NPCs.push_back(npc);
 	//OutlineObjects.push_back("House1");
 #pragma region 2D Interface
-	GenerateForm();
+	XML xml = XMLReader().Read(R"(..\UserInterface\SceneUI.xml)");
+	UI.root = new UIElement("Root", "");
+	LoadForm(xml.Root, UI.root);
+//	GenerateForm();
 
 
 #pragma endregion 2D Interface
@@ -96,7 +100,7 @@ void Scene::Initialize()
 	OfflineDataObject::Instance().level.LoadLevel();
 	music = new Music("Soundtracks/Perion.wav");
 	//music->PlayLoop();
-	
+
 }
 
 void Scene::Frame()
@@ -117,9 +121,10 @@ void Scene::Frame()
 	glEnable(GL_CLIP_DISTANCE0);
 
 	//music.Play();
-	Camera& camera = Camera::GetCamera("Main");
-	ViewMatrix = camera.GetCameraMatrix();
-	SetProjectionMatrix(camera.GetProjectionMatrix());
+	Camera::GetCamera(Camera::eCamera::Main).ProjectionMatrix =
+		glm::perspective(0.77f, Mouse::Instanace().GetWindowSize().x / Mouse::Instanace().GetWindowSize().y,
+			1.0f, 1000.0f);
+	Camera& camera = Camera::GetCamera(Camera::eCamera::Current);
 
 	//DrawIndexColor();
 	Draw_Scene();
@@ -129,11 +134,6 @@ void Scene::Frame()
 	SwapBuffers(m_HDC);
 }
 
-
-void Scene::SetProjectionMatrix(mat4 & projection)
-{
-	this->ProjectionMatrix = projection;
-}
 
 void Scene::SetWindowHDC(HDC & hdc)
 {
@@ -202,11 +202,13 @@ void Scene::GenerateForm()
 	UI.root->GetUIElement("Shop")->AppendChild(Element);
 
 	Element = new UIElement("Command Line", "Interface/Textbox.png");
-	Position = vec2(210, 480);
+	Position = vec2(200, 400);
 	Element->writable = true;
 	Element->Top = Position.y;
 	Element->Left = Position.x;
-	Element->SetByTrueSize(Position);
+	Element->Bottom = 500;
+	Element->Right = 400;
+	//Element->SetByTrueSize(Position);
 	Element->AddHoverEvent([]
 	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
 	Element->AddHoverDoneEvent([]
@@ -235,6 +237,47 @@ void Scene::GenerateForm()
 			Element->innerText.clear();
 		}
 	});
+	UI.root->AppendChild(Element);
+
+	Element = new UIElement("Other Camera", "Interface/Textbox.png");
+	Position = vec2(724, 400);
+	Element->writable = false;
+	Element->Top = Position.y;
+	Element->Left = Position.x;
+	Element->Bottom = 600;
+	Element->Right = 1024;
+	//Element->SetByTrueSize(Position);
+	Element->AddHoverEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+	Element->AddHoverDoneEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddReturnDefaultEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+	Element->AddClickEvent([]
+	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+	Element->AddTextChangedEvent([&]
+	(UIElement* Element)mutable-> void {
+		if (Element->innerText.back() == '\r')
+		{
+			Element->innerText.pop_back();
+			std::transform(Element->innerText.begin(),
+				Element->innerText.end(), Element->innerText.begin(), ::tolower);
+			if (Element->innerText == "wire")
+			{
+				OfflineDataObject& offlineData = OfflineDataObject::Instance();
+				offlineData.level.ReloadShaders(Shader::ImageType::Wire);
+			}
+			if (Element->innerText == "triangle")
+			{
+				OfflineDataObject& offlineData = OfflineDataObject::Instance();
+				offlineData.level.ReloadShaders(Shader::ImageType::Triangle);
+			}
+			Element->innerText.clear();
+		}
+	});
+	FBO fbo;
+	Element->PicturePadding = 2;
+	Element->InitFramebuffer(fbo);
 	UI.root->AppendChild(Element);
 
 	// sound buttons
@@ -305,25 +348,46 @@ void Scene::GenerateForm()
 	// load up for later use
 	UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
 	UIElement* FullHPBar = new UIElement("FullHPBar", "Interface/FullHPBar.png");
+
 }
 
-void Scene::LoadForm(UIElement * Element)
+void Scene::LoadForm(XML::Element & XML_Element, UIElement * uiElement)
 {
-	Xaml xaml;
-	for (auto c : xaml.Root.Children)
+	for (auto c : XML_Element.Children)
 	{
-		UIElement* Element = new UIElement(c.GetAttribute("Name"),"");
-		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
-	/*	if (c.GetAttribute("Font") != "") Element->style.maskColor = UIElement::Font();
-		if (c.GetAttribute("Font") != "") Element->style.MaskedText = UIElement::Font();
-		if (c.GetAttribute("Font") != "") Element->style.opacity = UIElement::Font();
-		if (c.GetAttribute("Font") != "") Element->visible = UIElement::Font();
-		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
-		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
-		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
-		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();
-		if (c.GetAttribute("Font") != "") Element->style.font = UIElement::Font();*/
-
+		UIElement* Element = nullptr;
+		if (c.Tag == "label")
+		{
+			Element = new UI::Textbox(c.GetAttribute("name"));
+		}
+		if (c.Tag == "textbox")
+		{
+			Element = new UI::Textbox(c.GetAttribute("name"));
+		}
+		if (c.Tag == "drawingarea")
+		{
+			Element = new UI::DrawingArea(c.GetAttribute("name"));
+		}
+		if (c.Tag == "button")
+		{
+			Element = new UI::Button(c.GetAttribute("name"));
+		}
+		//if (Element == nullptr) Element = new UIElement(c.GetAttribute("name"));
+		if (c.GetAttribute("text") != "") Element->innerText = c.GetAttribute("text");
+		if (c.GetAttribute("top") != "") Element->Top = stoi(c.GetAttribute("top"));
+		if (c.GetAttribute("left") != "") Element->Left = stoi(c.GetAttribute("left"));
+		if (c.GetAttribute("bottom") != "") Element->Bottom = stoi(c.GetAttribute("bottom"));
+		if (c.GetAttribute("right") != "") Element->Right = stoi(c.GetAttribute("right"));
+		//if (c.GetAttribute("position") != "") Element->style.font = UIElement::Font();
+		//if (c.GetAttribute("width") != "") Element->TrueWidth = stoi(c.GetAttribute("width"));
+		//if (c.GetAttribute("height") != "") Element->TrueHeight = stoi(c.GetAttribute("height"));
+		//if (c.GetAttribute("onclick") != "") Element->style.font = UIElement::Font();
+		if (c.Tag == "drawingarea")
+		{
+			dynamic_cast<UI::DrawingArea*>(Element)->Resize();
+		}
+		UI.root->AppendChild(Element);
+		LoadForm(c, Element);
 	}
 }
 
@@ -336,7 +400,6 @@ void Scene::Draw_Units()
 	/*DrawScene_Refraction();
 	DrawScene_Reflection();*/
 	// Draw postprocesser
-	DrawScene_PostProcessing();
 }
 void Scene::Draw_Scene()
 {
@@ -345,35 +408,18 @@ void Scene::Draw_Scene()
 	mAntiAliasing.BindFrameBuffer();
 
 	glEnable(GL_CLIP_DISTANCE0);
-
+	Camera::GetCamera(Camera::eCamera::Current) = std::move(Camera::GetCamera(Camera::eCamera::Main));
+	
 	OfflineDataObject::Instance().level.Draw();
 
-
-	Normals& normals = Normals::Instance();
-	OfflineDataObject& OfflineData = OfflineDataObject::Instance();
-	/*for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			vec3 SurfaceNormal = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->GetNormal(vec3(i, 0, j));
-			vec3 CollisionPoint = ModelsCollection::Instance()["Land"]->meshes[0].mCollision->OnCollision(vec3(i, 0, j));
-
-			if (SurfaceNormal.y < 0) SurfaceNormal *= -1.0f;
-			vector<vec3> Vertices = { CollisionPoint, CollisionPoint + SurfaceNormal };
-
-			mat4 WVM = FrameData::Instance().ProjectionMatrix * FrameData::Instance().ViewMatrix;
-			ShaderBuilder::LoadShader(Shader::At("Normals"))->
-				Add_mat4("WVM", WVM);
-
-			normals.Vertices = Vertices;
-			normals.Draw();
-		}
-	}*/
-
-	DrawUI();
-
-
-	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
+	ShaderBuilder::LoadShader(*mFBO["Post Processing"].shader)->
+		Add_vec4("ScreenCoordinates", vec4(0, 0, 400, 400)).
+		Add_vec4("FBO_Coordinates", vec4(0, 0, 400, 400));
+	ShaderBuilder::LoadShader(*mFBO["Bright"].shader)->
+		Add_vec4("ScreenCoordinates", vec4(0, 0, 400, 400)).
+		Add_vec4("FBO_Coordinates", vec4(0, 0, 400, 400));
+	
+	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].ID);
 	mFBO["HBlurS"].BindFrameBuffer();//1
 	mFBO["Post Processing"].DrawFrameBuffer();//0
 	mFBO["VBlurS"].BindFrameBuffer();//2 b
@@ -391,14 +437,35 @@ void Scene::Draw_Scene()
 
 	// uniform textures
 	FBO::UnbindFrameBuffer();
-
+	glDisable(GL_DEPTH_TEST);
 	vector<GLuint> Textures = { mFBO["Basic"].texture,mFBO["Post Processing"].texture };
 	vector<string> ShaderNames = { "ourShine","ourTexture" };
-	mFBO["Combine"].DrawDirectly(Textures, ShaderNames);
 
-	mFBO["Combine"].DrawFrameBuffer();
+	ShaderBuilder::LoadShader(*mFBO["Combine"].shader)->
+		Add_vec4("FBO_Coordinates", vec4(0, 0, 400, 400)).
+		Add_vec4("ScreenCoordinates", vec4(0, 0, 400, 400));
+	mFBO["Combine"].DrawMultipleTextures(Textures, ShaderNames);
+	glEnable(GL_DEPTH_TEST);
+	// Set Draw Target to Element
+	UIElement* element = UI.root->GetUIElement("Other Camera");
+	UIElement::SetDrawTarget(element);
+	
+	// Change to new camera
+	Camera::GetCamera(Camera::eCamera::Custom).SetCustomCameraValues(vec3(0, -100, 0), vec3(85, 65, 0));
+	Camera::GetCamera(Camera::eCamera::Custom).ProjectionMatrix = Camera::GetCamera(Camera::eCamera::Main).ProjectionMatrix;
+	Camera::GetCamera(Camera::eCamera::Current) = std::move(Camera::GetCamera(Camera::eCamera::Custom));
 
+	// Draw Scene From Different Camera
+	OfflineDataObject::Instance().level.Draw();
+	// Change Back to main camera
+	Camera::GetCamera(Camera::eCamera::Current) = std::move(Camera::GetCamera(Camera::eCamera::Main));
+
+	FBO::UnbindFrameBuffer();
+	glDisable(GL_DEPTH_TEST);
+	// Draw UI
 	DrawUI();
+	glEnable(GL_DEPTH_TEST);
+
 
 }
 void Scene::DrawScene_Depth()
@@ -408,7 +475,7 @@ void Scene::DrawScene_Depth()
 	shadow->BindFrameBuffer();
 	//Shadow_DrawGround(shadow->shader);
 	//DrawColladaDistance();
-	DrawColladaShadow();
+	//DrawColladaShadow();
 	// back to default framebuffer
 	mFBO["Post Processing"].BindFrameBuffer();
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -419,8 +486,6 @@ void Scene::DrawScene_Depth()
 void Scene::DrawScene_Refraction()
 {
 	mSea.BindRefraction();
-
-	SetCameraView();
 	//DrawGround(mSea.sRefraction_Ground);
 	//Draw_All_Units();
 	//DrawEntities();
@@ -429,20 +494,17 @@ void Scene::DrawScene_Refraction()
 }
 void Scene::DrawScene_Reflection()
 {
-	Camera& camera = Camera::GetCamera("Main");
+	Camera& camera = Camera::GetCamera(Camera::eCamera::Current);
 	mFBO["LakeReflection"].BindFrameBuffer();
 	{
-		SetCameraView();
-		camera.SetCameraPosition(vec3(camera.CameraPositionCalculated.x, -camera.CameraPositionCalculated.y, camera.CameraPositionCalculated.z));
+		camera.Position = vec3(camera.Position.x, -camera.Position.y, camera.Position.z);
 		camera.InvertPitch();
-		SetCameraView();
 		//DrawGround(mSea.sReflection_Ground);
 		//Draw_All_Units();
 		//DrawEntities();
 		//	Soldier->Draw(Shader("Basic Vertex Shader.glsl", "Basic Fragment Shader.glsl"));
-		camera.SetCameraPosition(vec3(camera.CameraPositionCalculated.x, -camera.CameraPositionCalculated.y, camera.CameraPositionCalculated.z));
+		camera.Position = vec3(camera.Position.x, -camera.Position.y, camera.Position.z);
 		camera.InvertPitch();
-		SetCameraView();
 	}
 
 	mFBO["HBlurS"].BindFrameBuffer();//1
@@ -465,107 +527,20 @@ void Scene::DrawScene_NoEffect()
 {
 	mAntiAliasing.BindFrameBuffer();
 #pragma region 3D Elements
-	SetCameraView();
 	//DrawGround(Shader::At("Ground"));
 	//DrawEntities();
 	//DrawSea();
 	DrawUI();
 #pragma endregion 3D Elements
-	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
+	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].ID);
 	FBO::UnbindFrameBuffer();
 	mFBO["Post Processing"].DrawFrameBuffer();
 
-}
-void Scene::DrawScene_PostProcessing()
-{
-	mAntiAliasing.BindFrameBuffer();
-#pragma region 3D Elements
-	glEnable(GL_CLIP_DISTANCE0);
-
-	SetCameraView();
-	//DrawGround(Shader::At("Ground"));
-	DrawOutlineObjects();
-	Outline();
-	//DrawWater();
-	DrawUI();
-
-	//DrawEntities();
-	//DrawSea();
-	
-#pragma endregion 3D Elements
-
-	mAntiAliasing.CopyBuffer(mFBO["Post Processing"].PostProcessingFBO);
-	mFBO["HBlurS"].BindFrameBuffer();//1
-	mFBO["Post Processing"].DrawFrameBuffer();//0
-	mFBO["VBlurS"].BindFrameBuffer();//2 b
-	mFBO["HBlurS"].DrawFrameBuffer();//1 d 
-	mFBO["HBlur"].BindFrameBuffer();//3 b
-	mFBO["VBlurS"].DrawFrameBuffer();//2 d
-	mFBO["VBlur"].BindFrameBuffer();//4 b 
-	mFBO["HBlur"].DrawFrameBuffer();//3 d
-	mFBO["HBlurS"].BindFrameBuffer();//1 b
-	mFBO["VBlur"].DrawFrameBuffer();//4 d
-	mFBO["VBlurS"].BindFrameBuffer();//2 b
-	mFBO["HBlurS"].DrawFrameBuffer();//1 d
-	mFBO["Basic"].BindFrameBuffer();//5 b
-	mFBO["VBlurS"].DrawFrameBuffer();//2 d
-
-
-	//mBright.BindFrameBuffer();
-	//mPostProcessing.DrawFrameBuffer();
-	// Draw Shine
-	//DrawGaussicEffect();
-
-	//LastLayer.BindFrameBuffer();
-	//mVBlurS.DrawFrameBuffer();
-	// uniform textures
-	FBO::UnbindFrameBuffer();
-
-	vector<GLuint> Textures = { mFBO["Basic"].texture,mFBO["Post Processing"].texture};
-	vector<string> ShaderNames = { "ourShine","ourTexture" };
-	mFBO["Combine"].DrawDirectly(Textures,ShaderNames);
-	
-	mFBO["Combine"].DrawFrameBuffer();
-	// draw ui after postprocessing effect
-	DrawUI();
-	//shadow->Draw();
 }
 void Scene::Shadow_DrawGround(Shader& shader)
 {
 
 	//loaded_Models["Ground"]->DrawModel(l_ProjectionMatrix, l_ViewMatrix, ModelMatrix, shader); // TODO remove mat arguements
-}
-
-void Scene::DrawGround(Shader& shader)
-{
-	Camera& camera = Camera::GetCamera("Main");
-	Mouse& mouse = Mouse::Instanace();
-
-	vec3 LightPos = vec3(0,10,10);
-	mat4 l_ProjectionMatrix = glm::perspective(radians(120.0f),
-		float(mouse.GetWindowSize().x / mouse.GetWindowSize().y), 1.0f, 1000.0f);
-	mat4 l_ViewMatrix = glm::lookAt(LightPos, vec3(0.0f), vec3(1.0f, 1.0f, 1.0f));
-	mat4 l_LightView = l_ProjectionMatrix * l_ViewMatrix;
-	mat4 ModelMatrix; // for now
-
-	float time = 0.0f;
-	float zeroval = 0;
-	mat4 WorldSpace = ProjectionMatrix * ViewMatrix * ModelMatrix;
-
-	ShaderBuilder::LoadShader(shader)->
-	/*	Add_texture("GrassTexture", dynamic_cast<Ground*>(loaded_Models["Ground"])->GrassTexture).
-		Add_texture("MountainTexture", dynamic_cast<Ground*>(loaded_Models["Ground"])->MountainTexture).*/
-		Add_texture("shadowMap", shadow->depthMap).
-		Add_mat4("projection", ProjectionMatrix).
-		Add_mat4("view", ViewMatrix).
-		Add_mat4("worldSpace", WorldSpace).
-		Add_mat4("model", ModelMatrix).
-		Add_mat4("lightSpaceMatrix", l_LightView).
-		Add_float("time", time).Add_float("AmbientStrength", zeroval).
-		Add_vec3("lightPos", vec3(0.0f, 100.0f, 0.0f)).
-		Add_vec3("cameraPos", camera.GetCameraPosition()).
-		Add_float("GravityHeight", zeroval);
-	ModelsCollection::Instance()["Ground"]->Draw();
 }
 
 void Scene::DrawIndexColor()
@@ -606,75 +581,7 @@ void Scene::DrawIndexColor()
 	//	offlineData.player.unit_Data.Model_Data->Draw();
 	//}
 }
-void Scene::DrawColladaDistance()
-{
-	mat4 WVM;
-	vec3 position;
 
-#pragma region Mathematics
-	mat4 ModelMatrix;
-	ModelMatrix = glm::translate(ModelMatrix, position);
-#pragma endregion Mathematics
-	vec3 color;
-	mat4 CharMat;
-	WVM = ProjectionMatrix * ViewMatrix * CharMat;
-	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
-	//	Add_mat4("WVM", WVM).
-	//	Add_bool("isAnimated", true).
-	//	Add_textures(loaded_Models["Collada"]->Textures);
-	//loaded_Models["Collada"]->Draw();
-	//position = vec3(50, 0, 0);
-	//ModelMatrix = glm::translate(ModelMatrix, position);
-	//ShaderBuilder::LoadShader(Shader::At("Animation"))->
-	//	Add_mat4("model", ModelMatrix);
-	float time = float(GetTickCount());
-	float SlowTime = time / 40.0f;
-	mat4 landmat;
-	WVM = ProjectionMatrix * ViewMatrix * landmat;
-	ShaderBuilder::LoadShader(Shader::At("AnimationDistance"))->
-		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", false);
-	ModelsCollection::Instance()["Land"]->Draw();
-	//loaded_Models["Collada"]->Draw();
-
-#pragma region Grass
-	/*{
-		vector<vec4> ModelMatrixs;
-		mat4 Animation;
-		ShaderBuilder shader = *ShaderBuilder::LoadShader(Shader::At("InstancedDistance"));
-		for (int i = 0; i < 25; i++)
-		{
-			Animation = glm::rotate(mat4(),
-				radians(
-					cos(
-						radians(
-							fmod(SlowTime, 360.0f) + i * 10.0f
-						)
-					)
-					*80.0f)
-				, vec3(1, 0, 1));
-			shader.Add_mat4("Animation[" + to_string(i) + "]", Animation);
-		}
-
-		mat4 WVM = ProjectionMatrix * ViewMatrix;
-		ShaderBuilder::LoadShader(Shader::At("InstancedDistance"))->
-			Add_mat4("WVM", WVM).
-			Add_float("time", time).
-			Add_vec3("cameraPos", camera.GetCameraPosition()).
-
-			Add_bool("isAnimated", false);
-		grass.Draw(grass.ObstaclesMat);
-	}*/
-#pragma endregion Grass
-
-}
-
-void Scene::SetCameraView()
-{
-	Camera& camera = Camera::GetCamera("Main");
-
-	ViewMatrix = camera.GetCameraMatrix();
-}
 void Scene::DrawUI()
 {
 	Mouse& mouse = Mouse::Instanace();
@@ -726,99 +633,6 @@ void Scene::DrawUI()
 	ShaderBuilder::LoadShader(Shader::At("2D Text"))->Add_vec3("textColor", color);
 	fps.CountFrame(Shader::At("2D Text"));
 	//cursor.Draw();
-}
-
-void Scene::DrawColladaShadow()
-{
-	Camera& camera = Camera::GetCamera("Main");
-
-	mat4 WVM;
-	vec3 NewLightPos = vec3(50.0 * sin(float(++counter) / 90.0f), 0, 0);
-	// Light Source
-	mat4 LightViewMatrix = glm::lookAt(NewLightPos, vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
-	LightViewMatrix = ProjectionMatrix * LightViewMatrix;
-	////for each (Player P in Data.GetPlayerInformation())
-	//for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-	//{
-	//	i->second->Draw(ProjectionMatrix, ViewMatrix);
-	//}
-	// default unit, internet connection independent
-	vec3 position;
-	mat4 ModelMatrix;
-	ModelMatrix = glm::translate(ModelMatrix, position);
-	vec3 color;
-	mat4 CharMat;
-	WVM = ProjectionMatrix * ViewMatrix * CharMat;
-
-	float time = float(GetTickCount());
-	float SlowTime = time / 40.0f;
-	mat4 landmat;
-	WVM = ProjectionMatrix * ViewMatrix * landmat;
-
-	// light source
-	mat4 LightModel = translate(mat4(), NewLightPos + vec3(0, -10, 0));
-	WVM = ProjectionMatrix * ViewMatrix * LightModel;
-
-	ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
-		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", true).
-		Add_float("Texelation", 1.0f).
-		Add_textures(ModelsCollection::Instance()["Collada"]->Textures);
-	ModelsCollection::Instance()["Collada"]->Draw();
-
-	WVM = ProjectionMatrix * ViewMatrix;
-	//
-	/*uniform vec3 lightPos;
-	uniform vec3 cameraPos;
-	uniform Material Wood;*/
-	// Initialize Shader
-	ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
-		Add_bool("isAnimated", false).
-		Add_float("Texelation", 10.0f).
-		Add_vec3("lightPos", NewLightPos).
-		Add_vec3("cameraPos", -camera.GetCameraPosition()).
-		Add_Material("Wood", Materials::GetInstance()["chrome"]).
-		Add_textures(ModelsCollection::Instance()["House"]->Textures);
-	// Draw NPC
-	for (auto npc : NPCs)
-	{
-		WVM = ProjectionMatrix * ViewMatrix * Default::Instance().BlenderConversion;
-		ShaderBuilder::LoadShader(Shader::At("AnimationShadow"))->
-			Add_mat4("WVM", LightViewMatrix);
-		ModelsCollection::Instance()[npc.Name]->Draw();
-	}
-	// Draw Players
-	/*for (auto i = Data.GetPlayerInformation().begin(); i != Data.GetPlayerInformation().end(); i++)
-	{
-		i->second->DrawShadow(LightViewMatrix, mat4());
-	}*/
-
-
-}
-
-void Scene::DrawWater()
-{
-	Camera& camera = Camera::GetCamera("Main");
-
-	glDisable(GL_CLIP_DISTANCE0);
-
-	mat4 WVM = ProjectionMatrix * ViewMatrix;
-	mat4 landmat;
-	vec3 NewLightPos = vec3(50.0 * sin(float(counter) / 90.0f), 0, 0);
-
-	ShaderBuilder::LoadShader(Shader::At("Water"))->
-		Add_mat4("WVM", WVM).
-		Add_bool("isAnimated", false).
-		Add_float("Texelation", 10.0f).
-		Add_vec3("lightPos", NewLightPos).
-		Add_mat4("Model", landmat).
-		Add_float("time", float(fmod(GetTickCount(), 100000000))).
-		Add_vec3("cameraPos", -camera.GetCameraPosition()).
-		Add_Material("Water", Materials::GetInstance()["water"]).
-		Add_bool("clip", false).
-		Add_texture("Texture3", mFBO["LakeReflection"].texture).
-		Add_textures(ModelsCollection::Instance()["Water"]->Textures);
-	ModelsCollection::Instance()["Water"]->Draw();
 }
 void Scene::Outline()
 {

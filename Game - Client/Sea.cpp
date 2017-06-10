@@ -14,14 +14,14 @@ Sea::~Sea()
 void Sea::Draw(mat4 & ProjectionMat, mat4 & ViewMat, mat4 & ModelMat)
 {
 	static float WaveOffset = 0.0f;
-	WaveOffset += 0.0001f * Camera::Delta;
+	WaveOffset += 0.0001f * Time::Instance().Frame();
 	if (WaveOffset > 2.0f)
 	{
 		WaveOffset -= 2.0f;
 	}
-	Camera& camera = Camera::GetCamera("Main");
+	Camera& camera = Camera::GetCamera(Camera::eCamera::Current);
 
-	vec3 CameraPosition = camera.GetCameraPosition();
+	vec3 CameraPosition = camera.Position;
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, ViewportTexture);
 	glActiveTexture(GL_TEXTURE1);

@@ -15,13 +15,13 @@ FBO::~FBO()
 
 }
 
-bool FBO::Initialize(int Height, int Width, Shader& shader)
+bool FBO::Initialize(float Width, float Height, Shader* shader)
 {
 	// todo: make the buffer size maximum or dynamic
 	Mouse& mouse = Mouse::Instanace();
 	this->Width = mouse.GetWindowSize().x / Width;
 	this->Height = mouse.GetWindowSize().y / Height;
-	glGenFramebuffers(1, &PostProcessingFBO);
+	glGenFramebuffers(1, &ID);
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -34,7 +34,7 @@ bool FBO::Initialize(int Height, int Width, Shader& shader)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, ID);
 	
 	GLuint test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
@@ -52,7 +52,7 @@ bool FBO::Initialize(int Height, int Width, Shader& shader)
 	Load_Interface(shader);
 
 
-	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, ID);
 	test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	glViewport(0, 0, this->Width,
 		this->Height);
@@ -67,13 +67,13 @@ bool FBO::Initialize(int Height, int Width, Shader& shader)
 	return false;
 
 }
-bool FBO::InitializeBig(int Height, int Width, Shader& shader)
+bool FBO::InitializeBig(int Height, int Width, Shader* shader)
 {
 	// todo: make the buffer size maximum or dynamic
 	Mouse& mouse = Mouse::Instanace();
 	this->Width = mouse.GetWindowSize().x / Width;
 	this->Height = mouse.GetWindowSize().y / Height;
-	glGenFramebuffers(1, &PostProcessingFBO);
+	glGenFramebuffers(1, &ID);
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -86,7 +86,7 @@ bool FBO::InitializeBig(int Height, int Width, Shader& shader)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, ID);
 
 	GLuint test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
@@ -104,7 +104,7 @@ bool FBO::InitializeBig(int Height, int Width, Shader& shader)
 	Load_Interface(shader);
 
 	//	 Mouse& mouse = Mouse::Instanace();
-	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, ID);
 	test = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	glViewport(0, 0, this->Width,
 		this->Height);
@@ -121,7 +121,7 @@ bool FBO::InitializeBig(int Height, int Width, Shader& shader)
 }
 void FBO::BindFrameBuffer()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, ID);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glEnable(GL_CLIP_DISTANCE0);
 
@@ -131,8 +131,6 @@ void FBO::BindFrameBuffer()
 	glClearColor(255,255,255,255);
 	glDepthMask(GL_TRUE);
 	glViewport(0, 0, this->Width,this->Height);
-
-
 }
 void FBO::UnbindFrameBuffer()
 {
@@ -145,21 +143,34 @@ void FBO::DrawFrameBuffer()
 {
 	Draw_Interface();
 }
+void FBO::DrawFrameBuffer(int Top, int Left, int Width, int Height)
+{
+	Draw_Interface();
+}
 void FBO::ChangeBuffersSize()
 {
 	Mouse& mouse = Mouse::Instanace();
 
-	if (PostProcessingFBO == 0)
+	if (ID == 0)
 		return;
-	glBindFramebuffer(GL_FRAMEBUFFER, PostProcessingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, ID);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y, 0, GL_RGB, GL_FLOAT, NULL);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (int)mouse.GetWindowSize().x, (int)mouse.GetWindowSize().y);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+void FBO::Resize(float Width, float Height)
+{
+	if (ID == 0)
+		return;
+	glBindFramebuffer(GL_FRAMEBUFFER, ID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (int)Width, (int)Height, 0, GL_RGB, GL_FLOAT, NULL);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (int)Width, (int)Height);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 vec4 FBO::GetPixel(int x, int y)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, this->PostProcessingFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, this->ID);
 	glReadBuffer(GL_COLOR_ATTACHMENT0);
 	vec4 pixel;
 	glReadPixels(x , y, 1, 1, GL_RGBA, GL_FLOAT, &pixel);
@@ -169,13 +180,15 @@ vec4 FBO::GetPixel(int x, int y)
 
 void FBO::Load_VAO()
 {
-	vertices.push_back(vec2(-1, -1));
-	vertices.push_back(vec2(1, -1));
-	vertices.push_back(vec2(-1, 1));
+	pair<float,float> xEdge = { 1,0 };
+	pair<float,float> yEdge = { 0,-1 };
+	vertices.push_back(Vertices(vec2(xEdge.second, yEdge.second), vec2(0, 0) ));//|34-|
+	vertices.push_back(Vertices(vec2(xEdge.first, yEdge.second),vec2(1, 0)	 ));	//|12-|
+	vertices.push_back(Vertices(vec2(xEdge.second, yEdge.first),vec2(0, 1)	 ));	//|---|
 
-	vertices.push_back(vec2(1, 1));
-	vertices.push_back(vec2(1, -1));
-	vertices.push_back(vec2(-1, 1));
+	vertices.push_back(Vertices(vec2(xEdge.first, yEdge.first), vec2(1, 1)	));
+	vertices.push_back(Vertices(vec2(xEdge.first, yEdge.second), vec2(1, 0) )); // 2
+	vertices.push_back(Vertices(vec2(xEdge.second, yEdge.first),vec2(0, 1)	)); // 3
 
 	// generate buffers
 	glGenVertexArrays(1, &VAO);
@@ -184,12 +197,14 @@ void FBO::Load_VAO()
 	glBindVertexArray(VAO);
 	// bind vertices
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec2), &vertices.front(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertices), &vertices.front(), GL_STATIC_DRAW);
 
 	// vertices
 	/// Position attribute
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), (char*)NULL);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertices), (char*)NULL);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertices), (const void*)(NULL+sizeof(vec2)));
+	glEnableVertexAttribArray(1);
 
 	// Unbind VAO
 	glBindVertexArray(0);
@@ -203,14 +218,13 @@ void FBO::Draw_Interface()
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	shader.Use();
-	glUniform1i(glGetUniformLocation(shader.ProgramID, "ourTexture"), 0);
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
-	glBindVertexArray(0);
+	shader->Use();
+	GLint test = glGetUniformLocation(shader->ProgramID, "ourTexture");
+	glUniform1i(test, 0);
 
+	GL::DrawTriangles(VAO, Vertices_Amount);
 }
-void FBO::DrawDirectly(vector<GLuint> textures,vector<string> ShaderNames)
+void FBO::DrawMultipleTextures(vector<GLuint> textures,vector<string> ShaderNames)
 {
 	for (size_t i = 0; i < textures.size(); i++)
 	{
@@ -218,16 +232,16 @@ void FBO::DrawDirectly(vector<GLuint> textures,vector<string> ShaderNames)
 		glBindTexture(GL_TEXTURE_2D, textures[i]);
 	}
 	glActiveTexture(GL_TEXTURE0);
-	shader.Use();
+	shader->Use();
 	for (size_t i = 0; i < textures.size(); i++)
 	{
-		glUniform1i(glGetUniformLocation(shader.ProgramID, ShaderNames[i].c_str()), i);
+		GLint test = glGetUniformLocation(shader->ProgramID, ShaderNames[i].c_str());
+		glUniform1i(test, i);
 	}
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, Vertices_Amount);
-	glBindVertexArray(0);
+	// Draw
+	GL::DrawTriangles(VAO, Vertices_Amount);
 }
-void FBO::Load_Interface(Shader& shader)
+void FBO::Load_Interface(Shader* shader)
 {
 	Load_VAO();
 	this->shader = shader;

@@ -3,6 +3,7 @@
 #include "ShaderBuilder.h"
 #include "Graphics_Header.h"
 #include "FrameData.h"
+#include "Camera.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 

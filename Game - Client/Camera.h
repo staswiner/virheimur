@@ -9,6 +9,7 @@
 #include "Keyboard.h"
 #include "Default.h"
 #include "GL\freeglut.h"
+#include "Time.h"
 #include <sstream>
 #include <string>
 #include <vector>
@@ -19,6 +20,13 @@ using namespace std;
 class CameraStates;
 __declspec(align(16)) class Camera
 {
+public:
+	enum class eCamera
+	{
+		Current,
+		Main,
+		Custom
+	};
 private:
 	Camera();
 	void WheelScroll();
@@ -27,51 +35,61 @@ private:
 	void KeyboardInput();
 	void CalculateCameraValues();
 	mat4 CameraRotationMatrix();
-	mat4 CameraRotationMatrix_z();
 	mat4 CameraTranslationMatrix();
 	/*time*/
 	
 	static unsigned int PreviousDelta;
-	/*variables*/
-	vec3 CameraPosition;
-	vec3 CameraDestination;
 
-	vec3 MouseCameraAngle;
 	static bool LeftIsPressed;
 	static vec2 MouseHoldPosition;
 	static vec2 LastSavedMouseOffset;
 
-	mat4 ProjectionMatrix;
+
 	CameraStates& cameraStates;
-	static map<string, Camera*> Cameras;
+	static map<eCamera, Camera*> Cameras;
 public:
+	
 	~Camera();
-	static Camera& GetCamera(string Name)
+	static Camera& GetCamera(eCamera Name)
 	{
-		static map<string, Camera*> Cameras;
+		static map<eCamera, Camera*> Cameras;
 		if (Cameras.find(Name) == Cameras.end())
 		{
 			Cameras[Name] = new Camera();
 		}
 		return *Cameras[Name];
 	}
+	Camera& operator=(Camera&& rhs) noexcept
+	{
+		if (this != &rhs) { // no-op on self-move-assignment (delete[]/size=0 also ok)
+			Lock = std::exchange(rhs.Lock,false);
+			scale = rhs.scale;
+			Position = rhs.Position;
+			CameraDestination = rhs.CameraDestination;
+
+			Rotation = rhs.Rotation;
+
+			ProjectionMatrix = rhs.ProjectionMatrix;
+			ViewMatrix = rhs.ViewMatrix;
+		}
+		return *this;
+	}
 	void ResetCamera();
+	void SetCustomCameraValues(vec3 CameraPos, vec3 CameraRotation);
 	mat4 GetUpdatedCamera();
 	mat4 GetLockedCamera(vec3 PlayerPos, vec3 PlayerAngle);
-	vec3 GetCameraPosition();
-	vec3 GetCameraRotation();
 	mat4 GetProjectionMatrix();
 	void SetProjectionMatrix(mat4&);
-	void SetCameraPosition(vec3);
 	void InvertPitch();
 	mat4 GetCameraMatrix();
 	void ZoomInto(vec3 CameraPos, vec3 TargetPos);
-	static void CalculateTimeDelta();
 
-	static vec3 CameraPositionCalculated;
-	static unsigned int Delta;
-	/*static mat4 CameraRotation;
-	static mat4 CameraTranslation;*/
+	/*variables*/
+	vec3 Position;
+	vec3 CameraDestination;
+	vec3 Rotation;
+	mat4 ViewMatrix;
+	mat4 ProjectionMatrix;
 
 	int Lock;
 	float scale = 1.0f;
@@ -80,8 +98,7 @@ public:
 	void* operator new(size_t size)
 	{
 		return _mm_malloc(size, 16);
-	}
-		
+	}		
 	void operator delete(void* p)
 	{
 		_mm_free(p);

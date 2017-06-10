@@ -293,7 +293,7 @@ void Effect2D::Draw(SceneData & sceneData)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	Mouse& mouse = Mouse::Instanace();
-	Camera& camera = Camera::GetCamera("Main");
+	Camera& camera = Camera::GetCamera(Camera::eCamera::Current);
 
 	// Model
 	Unit_Data& ud = this->unit_Data;
@@ -301,7 +301,7 @@ void Effect2D::Draw(SceneData & sceneData)
 	mat4 ModelMatrix = this->unit_Data.GetModelMatrix();
 	mat4 BlenderModelMatrix = ModelMatrix * inverse(mat4(mat3(sceneData.ViewMatrix)))  // disable rotation
 		* Default::Instance().BlenderConversion;
-	mat4 ViewMatScaler = translate(mat4(),-camera.GetCameraPosition()/1.10f);
+	mat4 ViewMatScaler = translate(mat4(),-Camera::GetCamera(Camera::eCamera::Current).Position/1.10f);
 	//mat4(mat3(sceneData.ViewMatrix))
 	mat4 WVM = sceneData.ProjectionMatrix * sceneData.ViewMatrix * ViewMatScaler * BlenderModelMatrix;
 //	vec4 

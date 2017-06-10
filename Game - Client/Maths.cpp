@@ -585,7 +585,7 @@ namespace Stas
 				using node = pair<float, pair<vec3, vec3>>;
 				vector<vector<pair<float, pair<vec3,vec3>>>> Connections;
 				Connections.resize(UnorderedList.size());
-				for (auto col : Connections) {
+				for (auto& col : Connections) {
 					col.resize(UnorderedList.size(), 
 					{
 						make_pair(numeric_limits<float>::infinity(),
@@ -603,15 +603,40 @@ namespace Stas
 							make_pair(UnorderedList[i], UnorderedList[j]))
 						};
 					}
-					std::sort(Connections[i].begin(), Connections[i].end(), [](const node& n1, const node& n2) -> bool
+					std::sort(Connections[i].begin(), Connections[i].end(), [](const node& n1, const node& n2) 
+						-> bool
 					{
 						return n1.first < n2.first;
 					});
 				}
-				vector<pair<vec3,vec3>> SpanningTree;
+				using Comparator = std::function<bool(const vec3&, const vec3&)>;
+				map<vec3, vec3, Comparator> SpanningTree([](const vec3& lhs,const vec3& rhs)->bool {
+					if (lhs.x == rhs.x) {
+						if (lhs.y == rhs.y) {
+							return lhs.z < rhs.z;
+						}
+						return lhs.y < rhs.y;
+					}
+					return lhs.x < rhs.x;
+				});
+				for (auto i = Connections.begin(); i != Connections.end()-1; i++)
+				{
+					SpanningTree[(*i)[0].second.first] = (*i)[0].second.second;
+				}
 
+				// missing area
+				/*
+				
+				*/
 
-				return list<vec3>();
+				list<vec3> OrderedList;
+				OrderedList.push_back(SpanningTree.begin()->first);
+				decltype(SpanningTree.begin()) next;
+				while ((next = SpanningTree.find(OrderedList.back()))!=SpanningTree.end())
+				{
+					OrderedList.push_back(next->second);
+				}
+				return OrderedList;
 			}
 			list<vec3> TSP::DynamicProgramming(vector<vec3> UnorderedList)
 			{

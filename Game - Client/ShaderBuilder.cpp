@@ -47,6 +47,13 @@ ShaderBuilder & ShaderBuilder::Add_vec3(string name, const vec3 & rhs)
 	return *this;
 }
 
+ShaderBuilder & ShaderBuilder::Add_vec4(string name, const vec4 & rhs)
+{
+	auto test = glGetUniformLocation(shaderID, name.c_str());
+	glUniform4f(glGetUniformLocation(shaderID, name.c_str()), rhs.x, rhs.y, rhs.z, rhs.w);
+	return *this;
+}
+
 ShaderBuilder & ShaderBuilder::Add_float(string name, const float & rhs)
 {
 	// TODO: insert return statement here

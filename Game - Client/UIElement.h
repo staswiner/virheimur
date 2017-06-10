@@ -4,6 +4,7 @@
 #include "Maths.h"
 #include "Text.h"
 #include "ImageLoader.h"
+#include "FBO.h"
 using namespace std;
 class UIElement
 {
@@ -34,6 +35,7 @@ public:
 	};
 public:
 	UIElement(string Name, string Filename, int z_index=1);
+	UIElement(string Name);
 	~UIElement();
 	void AddHoverEvent(std::function<void(UIElement*)> onhover);
 	void AddHoverDoneEvent(std::function<void(UIElement*)> onhoverdone);
@@ -43,13 +45,13 @@ public:
 	void AddTextChangedEvent(std::function<void(UIElement*)> ontextchanged);
 	UIElement* GetHover(vec2 MouseCoords);
 	UIElement* GetClick(vec2 MouseCoords);
-	void OnHover();
-	void OnHoverDone();
-	void OnReturnDefault();
-	void OnClick();
-	void OnPress();
-	void OnTextChanged();
-	void Hide();
+	virtual void OnHover();
+	virtual void OnHoverDone();
+	virtual void OnReturnDefault();
+	virtual void OnClick();
+	virtual void OnPress();
+	virtual void OnTextChanged();
+	virtual void Hide();
 	void Show();
 	void Destroy();
 
@@ -61,13 +63,18 @@ public:
 	void SetByTrueSize(vec2 TopLeft);
 	void SetByTrueSize();
 	UIElement* GetUIElement(string Name);
+	static void SetDrawTarget(UIElement*);
 	void ChangePicture(string Filename);
+	void InitFramebuffer(FBO& Framebuffer);
+	void InitFramebuffer();
+	void RemoveFBO();
 	int Top;
 	int Bottom;
 	int Left;
 	int Right;
 	int TrueWidth;
 	int TrueHeight;
+	int PicturePadding;
 	vec2 TextPosition;
 	string innerText;
 	Style style;
@@ -75,7 +82,8 @@ public:
 	bool visible = true;
 	bool writable = false;
 	
-private:
+	FBO* frameBufferObject;
+protected:
 	std::function<void(UIElement*)> hover;
 	std::function<void(UIElement*)> hoverdone;
 	std::function<void(UIElement*)> returndefault;
@@ -84,7 +92,11 @@ private:
 	std::function<void(UIElement*)> textchanged;
 	void UpdateParentSize(int Top, int Left, int Bottom, int Right);
 	void LoadPicture(string Filename);
+	void DrawFrameBuffer();
+	void BindFramebuffer();
+
 	Element Name;
+protected:
 	int Width, Height;
 	ImageLoader* UIImage;
 	map<Element,UIElement*> Children;
@@ -93,3 +105,19 @@ private:
 	static map <string, ImageLoader*> Repository;
 };
 
+namespace UI {
+	class Textbox : public UIElement {
+	public:
+		Textbox(string Name); 						  
+	
+	};
+	class Button : public UIElement {
+	public:
+		Button(string Name);
+	};
+	class DrawingArea : public UIElement {
+	public:
+		DrawingArea(string Name);
+		void Resize();
+	};
+}

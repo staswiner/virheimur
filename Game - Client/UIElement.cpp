@@ -24,10 +24,17 @@ UIElement::UIElement(string Name,string Filename,int z_index)
 		this->LoadPicture(Filename);
 		this->TrueWidth = UIImage->GetTrueSize().x;
 		this->TrueHeight = UIImage->GetTrueSize().y;
+		this->Width = this->TrueWidth;
+		this->Height = this->TrueHeight;
 	}
 
 	this->Name = Element(Name,z_index);
 	this->Parent = nullptr;
+}
+
+UIElement::UIElement(string Name)
+{
+
 }
 
 UIElement::~UIElement()
@@ -74,7 +81,7 @@ UIElement* UIElement::GetHover(vec2 MouseCoords)
 			return focus;
 		}
 	}
-	if (Stas::Maths::IsIn(vec2(this->Top,this->Left), vec2(this->Bottom,this->Right), MouseCoords))
+	if (Stas::Maths::IsIn(vec2(this->Left,this->Top), vec2(this->Right,this->Bottom), MouseCoords))
 	{
 		return this;
 	}
@@ -91,7 +98,7 @@ UIElement* UIElement::GetClick(vec2 MouseCoords)
 			return focus;
 		}
 	}
-	if (Stas::Maths::IsIn(vec2(this->Top, this->Left), vec2(this->Bottom, this->Right), MouseCoords))
+	if (Stas::Maths::IsIn(vec2(this->Left, this->Top), vec2(this->Right, this->Bottom), MouseCoords))
 	{
 		return this;
 	}
@@ -246,6 +253,10 @@ void UIElement::Draw()
 		TextPosition = vec2(this->Left,this->Top) + margin;
 		this->UIImage->Draw(vec2(this->Left,this->Top), vec2(this->Right,this->Bottom));
 
+		if (this->frameBufferObject)
+		{
+			DrawFrameBuffer();
+		}
 
 		Text::LoadTextShader(vec3(0, 0, 0));
 		Text& text = Text::getInstance();
@@ -296,11 +307,44 @@ UIElement* UIElement::GetUIElement(string Name)
 	// end of branch
 	return nullptr;
 }
+void UIElement::SetDrawTarget(UIElement * element)
+{
+	element->BindFramebuffer();
+}
 void UIElement::ChangePicture(string Filename)
 {
 	this->LoadPicture(Filename);
 	this->TrueWidth = UIImage->GetTrueSize().x;
 	this->TrueHeight = UIImage->GetTrueSize().y;
+}
+void UIElement::InitFramebuffer(FBO & Framebuffer)
+{
+	this->frameBufferObject = new FBO();
+	this->Width = this->Right - this->Left;
+	this->Height = this->Bottom - this->Top;
+	this->frameBufferObject->Initialize(
+		Mouse::Instanace().GetWindowSize().x / this->Width, 
+		Mouse::Instanace().GetWindowSize().y / this->Height, 
+		&Shader::At("PostProcessing"));
+	Framebuffer = *this->frameBufferObject;
+}
+void UIElement::InitFramebuffer()
+{
+	this->frameBufferObject = new FBO();
+	this->Width = this->Right - this->Left;
+	this->Height = this->Bottom - this->Top;
+	this->frameBufferObject->Initialize(
+		Mouse::Instanace().GetWindowSize().x / this->Width,
+		Mouse::Instanace().GetWindowSize().y / this->Height,
+		&Shader::At("PostProcessing"));
+}
+void UIElement::BindFramebuffer()
+{
+	this->frameBufferObject->BindFrameBuffer();
+}
+void UIElement::RemoveFBO()
+{
+	this->frameBufferObject = nullptr;
 }
 // this function only increases size, might be bad if sizes need to get back to normal
 void UIElement::UpdateParentSize(int Top, int Left, int Bottom, int Right)
@@ -329,4 +373,121 @@ void UIElement::LoadPicture(string Filename)
 		Repository[Filename]->Initialize(Filename);
 	}
 	this->UIImage = Repository[Filename];
+}
+
+void UIElement::DrawFrameBuffer()
+{
+	ShaderBuilder::LoadShader(*this->frameBufferObject->shader)->
+		Add_vec4("ScreenCoordinates", vec4(0,0,
+			Mouse::Instanace().GetWindowSize().x,Mouse::Instanace().GetWindowSize().y)).
+		Add_vec4("FBO_Coordinates", vec4(this->Left + PicturePadding, 
+			this->Top + PicturePadding, this->Right - PicturePadding, 
+			this->Bottom - PicturePadding));
+
+	this->frameBufferObject->DrawFrameBuffer();
+}
+
+
+
+
+
+
+
+void ags()
+{ // 1|1
+	{ // 2|1
+		{ 
+			// 3|1
+		}
+	}
+	{ // 2|2
+		{
+			//3|2
+		}
+	}
+	{
+		//2|3
+	}
+	// ScopeID = {depth|index}
+	// tokenID | type | ScopeID [[deprecated]]| address | value
+	//
+	//
+	//
+	//
+	//
+	//
+}
+
+UI::Textbox::Textbox(string Name) :
+	UIElement(Name, "Interface/Textbox.png") 
+{
+#define Default
+	/*this->Bottom = Default 0;
+	this->Top = Default 0;
+	this->Left = Default 0;
+	this->Right = Default 0;
+	this->TrueWidth = Default 0;
+	this->TrueHeight = Default 0;*/
+	this->innerText = Default "";
+	this->writable = Default true;
+	this->visible = Default true;
+	this->TextPosition = Default vec2(0);
+	this->style.font = Default Font();
+	this->style.maskColor = Default vec3(0);
+	this->style.MaskedText = Default false;
+	this->style.opacity = Default 100;
+	this->PicturePadding = Default 0;
+}
+
+UI::Button::Button(string Name) :
+UIElement(Name, "Interface/Textbox.png")
+{
+#define Default
+	/*this->Bottom = Default 0;
+	this->Top = Default 0;
+	this->Left = Default 0;
+	this->Right = Default 0;
+	this->TrueWidth = Default 0;
+	this->TrueHeight = Default 0;*/
+	this->innerText = Default "";
+	this->writable = Default false;
+	this->visible = Default true;
+	this->TextPosition = Default vec2(0);
+	this->style.font = Default Font();
+	this->style.maskColor = Default vec3(0);
+	this->style.MaskedText = Default false;
+	this->style.opacity = Default 100;
+	this->PicturePadding = Default 0;
+	
+}
+
+
+UI::DrawingArea::DrawingArea(string Name) :
+UIElement(Name, "Interface/Textbox.png")
+{
+#define Default
+	/*this->Bottom = Default 0;
+	this->Top = Default 0;
+	this->Left = Default 0;
+	this->Right = Default 0;
+	this->TrueWidth = Default 0;
+	this->TrueHeight = Default 0;*/
+	this->innerText = Default "";
+	this->writable = Default true;
+	this->visible = Default true;
+	this->TextPosition = Default vec2(0);
+	this->style.font = Default Font();
+	this->style.maskColor = Default vec3(0);
+	this->style.MaskedText = Default false;
+	this->style.opacity = Default 100;
+	this->PicturePadding = Default 2;
+
+}
+
+void UI::DrawingArea::Resize()
+{
+	this->Width = this->Right - this->Left;
+	this->Height = this->Bottom - this->Top;
+	//this->frameBufferObject->Resize(this->Width, this->Height);
+	this->InitFramebuffer();
 }

@@ -40,10 +40,10 @@ vec3 InGameInteractions::Collision(vec3 WorldRay)
 }
 vec3 InGameInteractions::GetCameraPosition()
 {
-	Camera& camera = Camera::GetCamera("Main");
+	Camera& camera = Camera::GetCamera(Camera::eCamera::Current);
 
-	vec3 CameraPosition = camera.GetCameraPosition();
-	vec3 CameraRotation = camera.GetCameraRotation();
+	vec3 CameraPosition = camera.Position;
+	vec3 CameraRotation = camera.Rotation;
 	/*********/
 	vec4 CameraPositionTransformed = inverse(ViewMatrix) * inverse(ProjectionMatrix) * vec4(CameraPosition, 1.0f);
 	CameraPositionTransformed /= CameraPositionTransformed.w;

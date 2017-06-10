@@ -23,7 +23,7 @@ void ImageLoader::Initialize(string Filename)
 void ImageLoader::LoadVAO()
 {
 	vertices.push_back({ vec2(-1, 0), vec2(0, 0) });//|34-|
-	vertices.push_back({ vec2(0, 0),vec2(1, 0) });		//|12-|
+	vertices.push_back({ vec2(0, 0),vec2(1, 0) });	//|12-|
 	vertices.push_back({ vec2(-1, 1),vec2(0, 1) });	//|---|
 
 	vertices.push_back({ vec2(0, 1),vec2(1, 1) });
@@ -194,16 +194,18 @@ void ImageLoader::ReloadTexture(string Filename)
 
 void ImageLoader::Draw(vec2 TopLeft, vec2 BotRight)
 {
-	 Mouse& mouse = Mouse::Instanace();
-	vec2 OpenGLCoords(((BotRight.x - TopLeft.x) / mouse.GetWindowSize().x) * 2 - 1,
-		-(((BotRight.y - TopLeft.y) / mouse.GetWindowSize().y) * 2 - 1));
-	vec2 Offset((TopLeft.x / mouse.GetWindowSize().x) * 2, -(TopLeft.y / mouse.GetWindowSize().y) * 2);
+	Mouse& mouse = Mouse::Instanace();
+	vec2 ImageSize = vec2(BotRight.x - TopLeft.x, BotRight.y - TopLeft.y);
+	vec2 WindowSize = mouse.GetWindowSize();
+	vec2 OpenGLCoords = ((ImageSize / WindowSize) * 2.0f - vec2(1.0f)) * vec2(1, -1);
+	vec2 Offset = (TopLeft / WindowSize) * 2.0f * vec2(1, -1);
 	OpenGLCoords += Offset;
-	vec3 InterfaceWindowSize((BotRight.x - TopLeft.x) / (mouse.GetWindowSize().x / 2),
-		(BotRight.y - TopLeft.y) / (mouse.GetWindowSize().y / 2), 1.0f);
+	vec3 InterfaceWindowSize(ImageSize.x / (WindowSize.x / 2),
+		ImageSize.y / (WindowSize.y / 2), 1.0f);
 	mat4 Model;
 	Model = translate(Model, vec3(OpenGLCoords, 0.0f));
 	Model = scale(Model, InterfaceWindowSize);
+
 
 	ShaderBuilder::LoadShader(Shader::At("Image"))->Add_mat4("model", Model)
 		.Add_texture("ourTexture", MyTexture);
