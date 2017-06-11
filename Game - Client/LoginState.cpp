@@ -91,96 +91,97 @@ void LoginState::PerformLogin()
 
 UIElement* LoginState::GenerateForm()
 {
-	// UI can do few things : change itself, send request to server, change some flag, activate function
-	vec2 Position;
-	UIElement* root = new UIElement("Root", "");
-
-	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
-	Position = vec2(10, 80);
-	UsernameElement->innerText = "";
-	UsernameElement->Top = Position.y;
-	UsernameElement->Left = Position.x;
-	UsernameElement->SetByTrueSize(Position);
-	UsernameElement->writable = true;
-	UsernameElement->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	UsernameElement->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	UsernameElement->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	UsernameElement->AddClickEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
-	root->AppendChild(UsernameElement);
-
-	UIElement* Element = new UIElement("UsernameSaveCheckbox", "Interface/Textbox.png");
-	Position = vec2(210, 80);
-	Element->Top = Position.y;
-	Element->Left = Position.x;
-	Element->Bottom = Position.y + 50;
-	Element->Right = Position.x + 50;
-	Element->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	Element->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddClickEvent([&]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); this->SaveUsername = true; });
-	root->AppendChild(Element);
-
-	UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
-	Position = vec2(10, 180);
-	PasswordElement->innerText = "ilovemyreann<3";
-	PasswordElement->Top = Position.y;
-	PasswordElement->Left = Position.x;
-	PasswordElement->style.MaskedText = true;
-	PasswordElement->writable = true;
-	PasswordElement->SetByTrueSize(Position);
-	PasswordElement->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	PasswordElement->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	PasswordElement->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	PasswordElement->AddClickEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
-	root->AppendChild(PasswordElement);
-
-	UIElement* LogInElement = new UIElement("LoginButton", "Interface/Button1.png");
-	Position = vec2(230, 180);
-	LogInElement->Top = Position.y;
-	LogInElement->Left = Position.x;
-	LogInElement->SetByTrueSize(Position);
-	LogInElement->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
-	LogInElement->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
-	LogInElement->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
-	LogInElement->AddClickEvent([&]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Selected.png"); this->PerformLogin(); });
-	LogInElement->AddPressEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
-	root->AppendChild(LogInElement);
-
-	LogInElement = new UIElement("Invalid", "Interface/Button1.png");
-	Position = vec2(30, 30);
-	LogInElement->Top = Position.y;
-	LogInElement->Left = Position.x;
-	LogInElement->Bottom = 50;
-	LogInElement->Right = 300;
-	LogInElement->Hide();
-	LogInElement->style.font.size = 15.0f;
-	LogInElement->style.font.color = vec3(1,0.2,0.2);
-
-	LogInElement->innerText = "Username or Password invalid";
-	LogInElement->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
-	LogInElement->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
-	LogInElement->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
-	root->AppendChild(LogInElement);
-
-	return root;
+//	// UI can do few things : change itself, send request to server, change some flag, activate function
+//	vec2 Position;
+//	UIElement* root = new UIElement("Root", "");
+//
+//	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
+//	Position = vec2(10, 80);
+//	UsernameElement->innerText = "";
+//	UsernameElement->Top = Position.y;
+//	UsernameElement->Left = Position.x;
+//	UsernameElement->SetByTrueSize(Position);
+//	UsernameElement->writable = true;
+//	UsernameElement->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	UsernameElement->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	UsernameElement->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	UsernameElement->AddClickEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+//	root->AppendChild(UsernameElement);
+//
+//	UIElement* Element = new UIElement("UsernameSaveCheckbox", "Interface/Textbox.png");
+//	Position = vec2(210, 80);
+//	Element->Top = Position.y;
+//	Element->Left = Position.x;
+//	Element->Bottom = Position.y + 50;
+//	Element->Right = Position.x + 50;
+//	Element->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	Element->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddClickEvent([&]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); this->SaveUsername = true; });
+//	root->AppendChild(Element);
+//
+//	UIElement* PasswordElement = new UIElement("Password", "Interface/Textbox.png");
+//	Position = vec2(10, 180);
+//	PasswordElement->innerText = "ilovemyreann<3";
+//	PasswordElement->Top = Position.y;
+//	PasswordElement->Left = Position.x;
+//	PasswordElement->style.MaskedText = true;
+//	PasswordElement->writable = true;
+//	PasswordElement->SetByTrueSize(Position);
+//	PasswordElement->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	PasswordElement->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	PasswordElement->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	PasswordElement->AddClickEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+//	root->AppendChild(PasswordElement);
+//
+//	UIElement* LogInElement = new UIElement("LoginButton", "Interface/Button1.png");
+//	Position = vec2(230, 180);
+//	LogInElement->Top = Position.y;
+//	LogInElement->Left = Position.x;
+//	LogInElement->SetByTrueSize(Position);
+//	LogInElement->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
+//	LogInElement->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+//	LogInElement->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+//	LogInElement->AddClickEvent([&]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Selected.png"); this->PerformLogin(); });
+//	LogInElement->AddPressEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
+//	root->AppendChild(LogInElement);
+//
+//	LogInElement = new UIElement("Invalid", "Interface/Button1.png");
+//	Position = vec2(30, 30);
+//	LogInElement->Top = Position.y;
+//	LogInElement->Left = Position.x;
+//	LogInElement->Bottom = 50;
+//	LogInElement->Right = 300;
+//	LogInElement->Hide();
+//	LogInElement->style.font.size = 15.0f;
+//	LogInElement->style.font.color = vec3(1,0.2,0.2);
+//
+//	LogInElement->innerText = "Username or Password invalid";
+//	LogInElement->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
+//	LogInElement->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+//	LogInElement->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+//	root->AppendChild(LogInElement);
+//
+//	return root;
+	return nullptr;
 }

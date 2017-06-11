@@ -181,131 +181,132 @@ void SelectionState::Reload()
 
 UIElement * SelectionState::GenerateForm()
 {
-
-	vec2 Position;
-	UIElement* root = new UIElement("Root", "");
-
-	UIElement* CharacterFrameElement = new UIElement("CharacterFrame", "Minimap/Minimap.png");
-	Position = vec2(200, 200);
-	CharacterFrameElement->Top = Position.y;
-	CharacterFrameElement->Left = Position.x;
-	CharacterFrameElement->SetByTrueSize(Position);
-	CharacterFrameElement->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	CharacterFrameElement->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	CharacterFrameElement->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Minimap/Minimap.png"); });
-	CharacterFrameElement->AddClickEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
-	root->AppendChild(CharacterFrameElement);
-
-	UIElement* SelectCharacterElement = new UIElement("SelectCharacter", "Interface/Button1.png");
-	Position = vec2(520, 200);
-	SelectCharacterElement->innerText = "Get Online";
-	SelectCharacterElement->Top = Position.y;
-	SelectCharacterElement->Left = Position.x;
-	SelectCharacterElement->Bottom = Position.y + 50;
-	SelectCharacterElement->Right = Position.x + 250;
-	SelectCharacterElement->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
-	SelectCharacterElement->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
-	SelectCharacterElement->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
-	SelectCharacterElement->AddClickEvent([&]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Selected.png"); this->PerformLogin(); });
-	SelectCharacterElement->AddPressEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
-	root->AppendChild(SelectCharacterElement);
-
-	UIElement* CreateNewCharacterElement = new UIElement("CreateNewCharacter", "Interface/Button1.png");
-	Position = vec2(520, 260);
-	CreateNewCharacterElement->innerText = "Create New Character";
-	CreateNewCharacterElement->Top = Position.y;
-	CreateNewCharacterElement->Left = Position.x;
-	CreateNewCharacterElement->Bottom = Position.y + 50;
-	CreateNewCharacterElement->Right = Position.x + 250;
-	CreateNewCharacterElement->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
-	CreateNewCharacterElement->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
-	CreateNewCharacterElement->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
-	CreateNewCharacterElement->AddClickEvent([&]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Selected.png"); this->CreateNewCharacter(); });
-	CreateNewCharacterElement->AddPressEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
-	root->AppendChild(CreateNewCharacterElement);
-
-	UIElement* button = new UIElement("Right", "Interface/RightButton.png");
-	Position = vec2(450, 300);
-	button->Top = Position.y;
-	button->Left = Position.x;
-	button->SetByTrueSize(Position);
-	button->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButtonHovered.png"); });
-	button->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButton.png"); });
-	button->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButton.png"); });
-	button->AddClickEvent([&]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButton.png"); this->ChangeCharacter(true); });
-	button->AddPressEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButtonPressed.png"); });
-	root->GetUIElement("CharacterFrame")->AppendChild(button);
-
-	button = new UIElement("Left", "Interface/LeftButton.png");
-	Position = vec2(200, 300);
-	button->Top = Position.y;
-	button->Left = Position.x;
-	button->SetByTrueSize(Position);
-	button->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButtonHovered.png"); });
-	button->AddHoverDoneEvent([]										  
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); });
-	button->AddReturnDefaultEvent([]									   
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); });
-	button->AddClickEvent([&]											   
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); this->ChangeCharacter(false); });
-	button->AddPressEvent([]											   
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButtonPressed.png"); });
-	root->GetUIElement("CharacterFrame")->AppendChild(button);
-
-	//button = new UIElement("Name", "Interface/LeftButton.png");
-	//Position = vec2(175, 300);
-	//button->TopLeft = Position;
-	//button->SetByTrueSize(Position);
-	//button->innerText = "Name";
-	//button->AddHoverEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButtonHovered.png"); });
-	//button->AddHoverDoneEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); });
-	//button->AddReturnDefaultEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); });
-	//button->AddClickEvent([&]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); this->ChangeCharacter(false); });
-	//button->AddPressEvent([]
-	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButtonPressed.png"); });
-	//root->GetUIElement("CharacterFrame")->AppendChild(button);
-	// Stats
-	UIElement* Stat = new UIElement("Exp", "Interface/Button1.png");
-	Position = vec2(550, 350);
-	Stat->Top = Position.y;
-	Stat->Left = Position.x;
-	Stat->Bottom = Position.y + 50;
-	Stat->Right = Position.x + 200;
-	//Stat->innerText = "Exp: " + to_string((*SelectedPlayer)->stats.Exp);
-	root->AppendChild(Stat);
-
-	Stat = new UIElement("Name", "Interface/Button1.png");
-	Position = vec2(250, 230);
-	Stat->Top = Position.y;
-	Stat->Left = Position.x;
-	Stat->Bottom = Position.y + 50;
-	Stat->Right = Position.x + 200;
-	//Stat->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
-	root->GetUIElement("CharacterFrame")->AppendChild(Stat);
-
-	return root;
+//
+//	vec2 Position;
+//	UIElement* root = new UIElement("Root", "");
+//
+//	UIElement* CharacterFrameElement = new UIElement("CharacterFrame", "Minimap/Minimap.png");
+//	Position = vec2(200, 200);
+//	CharacterFrameElement->Top = Position.y;
+//	CharacterFrameElement->Left = Position.x;
+//	CharacterFrameElement->SetByTrueSize(Position);
+//	CharacterFrameElement->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	CharacterFrameElement->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	CharacterFrameElement->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Minimap/Minimap.png"); });
+//	CharacterFrameElement->AddClickEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+//	root->AppendChild(CharacterFrameElement);
+//
+//	UIElement* SelectCharacterElement = new UIElement("SelectCharacter", "Interface/Button1.png");
+//	Position = vec2(520, 200);
+//	SelectCharacterElement->innerText = "Get Online";
+//	SelectCharacterElement->Top = Position.y;
+//	SelectCharacterElement->Left = Position.x;
+//	SelectCharacterElement->Bottom = Position.y + 50;
+//	SelectCharacterElement->Right = Position.x + 250;
+//	SelectCharacterElement->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
+//	SelectCharacterElement->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+//	SelectCharacterElement->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+//	SelectCharacterElement->AddClickEvent([&]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Selected.png"); this->PerformLogin(); });
+//	SelectCharacterElement->AddPressEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
+//	root->AppendChild(SelectCharacterElement);
+//
+//	UIElement* CreateNewCharacterElement = new UIElement("CreateNewCharacter", "Interface/Button1.png");
+//	Position = vec2(520, 260);
+//	CreateNewCharacterElement->innerText = "Create New Character";
+//	CreateNewCharacterElement->Top = Position.y;
+//	CreateNewCharacterElement->Left = Position.x;
+//	CreateNewCharacterElement->Bottom = Position.y + 50;
+//	CreateNewCharacterElement->Right = Position.x + 250;
+//	CreateNewCharacterElement->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Hovered.png"); });
+//	CreateNewCharacterElement->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+//	CreateNewCharacterElement->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1.png"); });
+//	CreateNewCharacterElement->AddClickEvent([&]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Selected.png"); this->CreateNewCharacter(); });
+//	CreateNewCharacterElement->AddPressEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Button1Pressed.png"); });
+//	root->AppendChild(CreateNewCharacterElement);
+//
+//	UIElement* button = new UIElement("Right", "Interface/RightButton.png");
+//	Position = vec2(450, 300);
+//	button->Top = Position.y;
+//	button->Left = Position.x;
+//	button->SetByTrueSize(Position);
+//	button->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButtonHovered.png"); });
+//	button->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButton.png"); });
+//	button->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButton.png"); });
+//	button->AddClickEvent([&]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButton.png"); this->ChangeCharacter(true); });
+//	button->AddPressEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/RightButtonPressed.png"); });
+//	root->GetUIElement("CharacterFrame")->AppendChild(button);
+//
+//	button = new UIElement("Left", "Interface/LeftButton.png");
+//	Position = vec2(200, 300);
+//	button->Top = Position.y;
+//	button->Left = Position.x;
+//	button->SetByTrueSize(Position);
+//	button->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButtonHovered.png"); });
+//	button->AddHoverDoneEvent([]										  
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); });
+//	button->AddReturnDefaultEvent([]									   
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); });
+//	button->AddClickEvent([&]											   
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); this->ChangeCharacter(false); });
+//	button->AddPressEvent([]											   
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButtonPressed.png"); });
+//	root->GetUIElement("CharacterFrame")->AppendChild(button);
+//
+//	//button = new UIElement("Name", "Interface/LeftButton.png");
+//	//Position = vec2(175, 300);
+//	//button->TopLeft = Position;
+//	//button->SetByTrueSize(Position);
+//	//button->innerText = "Name";
+//	//button->AddHoverEvent([]
+//	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButtonHovered.png"); });
+//	//button->AddHoverDoneEvent([]
+//	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); });
+//	//button->AddReturnDefaultEvent([]
+//	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); });
+//	//button->AddClickEvent([&]
+//	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButton.png"); this->ChangeCharacter(false); });
+//	//button->AddPressEvent([]
+//	//(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/LeftButtonPressed.png"); });
+//	//root->GetUIElement("CharacterFrame")->AppendChild(button);
+//	// Stats
+//	UIElement* Stat = new UIElement("Exp", "Interface/Button1.png");
+//	Position = vec2(550, 350);
+//	Stat->Top = Position.y;
+//	Stat->Left = Position.x;
+//	Stat->Bottom = Position.y + 50;
+//	Stat->Right = Position.x + 200;
+//	//Stat->innerText = "Exp: " + to_string((*SelectedPlayer)->stats.Exp);
+//	root->AppendChild(Stat);
+//
+//	Stat = new UIElement("Name", "Interface/Button1.png");
+//	Position = vec2(250, 230);
+//	Stat->Top = Position.y;
+//	Stat->Left = Position.x;
+//	Stat->Bottom = Position.y + 50;
+//	Stat->Right = Position.x + 200;
+//	//Stat->innerText = "Name: " + (*SelectedPlayer)->CharacterName;
+//	root->GetUIElement("CharacterFrame")->AppendChild(Stat);
+//
+//	return root;
+return nullptr;
 }

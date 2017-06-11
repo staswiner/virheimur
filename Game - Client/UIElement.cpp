@@ -43,32 +43,32 @@ UIElement::~UIElement()
 
 void UIElement::AddHoverEvent(std::function<void(UIElement*)> onhover)
 {
-	this->hover = onhover;
+	this->hover.push_back( onhover );
 }
 
 void UIElement::AddHoverDoneEvent(std::function<void(UIElement*)> onhoverdone)
 {
-	this->hoverdone = onhoverdone;
+	this->hoverdone.push_back( onhoverdone );
 }
 
 void UIElement::AddReturnDefaultEvent(std::function<void(UIElement*)> onreturndefault)
 {
-	this->returndefault = onreturndefault;
+	this->returndefault.push_back( onreturndefault );
 }
 
 void UIElement::AddClickEvent(std::function<void(UIElement*)> onclick)
 {
-	this->click = onclick;
+	this->click.push_back( onclick );
 }
 
 void UIElement::AddPressEvent(std::function<void(UIElement*)> onpress)
 {
-	this->press = onpress;
+	this->press.push_back( onpress );
 }
 
 void UIElement::AddTextChangedEvent(std::function<void(UIElement*)> ontextchanged)
 {
-	this->textchanged = ontextchanged;
+	this->textchanged.push_back( ontextchanged );
 }
 
 UIElement* UIElement::GetHover(vec2 MouseCoords)
@@ -110,51 +110,53 @@ UIElement* UIElement::GetClick(vec2 MouseCoords)
 void UIElement::OnHover()
 {
 	// checks if function bind to anything
-	if (hover)
+	for (auto f : hover)
 	{
-		hover(this);
+		f(this);
 	}
 }
 
 void UIElement::OnHoverDone()
 {
 	// checks if function bind to anything
-	if (hoverdone)
+	for (auto f : hoverdone)
 	{
-		hoverdone(this);
+		f(this);
 	}
 }
 
 void UIElement::OnReturnDefault()
 {
-	if (returndefault)
-		returndefault(this);
+	for (auto f : returndefault)
+	{
+		f(this);
+	}
 }
 
 void UIElement::OnClick()
 {
 	// checks if function bind to anything
-	if (click)
+	for (auto f : click)
 	{
-		click(this);
+		f(this);
 	}
 }
 
 void UIElement::OnPress()
 {
 	// checks if function bind to anything
-	if (press)
+	for (auto f : press)
 	{
-		press(this);
+		f(this);
 	}
 }
 
 void UIElement::OnTextChanged()
 {
 	// checks if function bind to anything
-	if (textchanged)
+	for (auto f : textchanged)
 	{
-		textchanged(this);
+		f(this);
 	}
 }
 
@@ -345,6 +347,63 @@ void UIElement::BindFramebuffer()
 void UIElement::RemoveFBO()
 {
 	this->frameBufferObject = nullptr;
+}
+void UIElement::Set_Top(int Top)
+{
+	this->Top = Top;
+	if (this->Bottom.assigned) this->Height = this->Bottom - this->Top;
+	else { this->Bottom = this->Top - this->TrueHeight; this->Width = this->TrueHeight; }
+}
+void UIElement::Set_Bottom(int Bottom)
+{
+	this->Bottom = Bottom;
+	if (this->Top.assigned) this->Height = this->Bottom - this->Top;
+	else { this->Top = this->Bottom + this->TrueHeight; this->Width = this->TrueHeight; }
+}
+void UIElement::Set_Left(int Left)
+{
+	this->Left = Left;
+	if (this->Right.assigned) this->Width = this->Right - this->Left;
+	else { this->Right = this->Left + this->TrueWidth; this->Width = this->TrueWidth; }
+}
+void UIElement::Set_Right(int Right)
+{
+	this->Right = Right;
+	if (this->Left.assigned) this->Width = this->Right - this->Left;
+	else { this->Left = this->Right - this->TrueWidth; this->Width = this->TrueWidth; }
+}
+void UIElement::Set_Width(int Width)
+{
+	this->Width = Width;
+	if (this->Left.assigned) this->Right = this->Left + this->Width;
+	if (this->Right.assigned) this->Left = this->Right - this->Width;
+}
+void UIElement::Set_Height(int Height)
+{
+	this->Height = Height;
+	if (this->Top.assigned) this->Bottom = this->Top + this->Height;
+	if (this->Bottom.assigned) this->Top = this->Bottom - this->Height;
+}
+void UIElement::Set_PicturePadding(int Padding)
+{
+}
+void UIElement::Set_Position(string PositionFormat)
+{
+	int Delimiters[3];
+	Delimiters[0] = PositionFormat.find(',');
+	Delimiters[1] = PositionFormat.find(',',Delimiters[0]+1);
+	Delimiters[2] = PositionFormat.find(',',Delimiters[1]+1);
+
+	// Left, Top, Right, Bot
+	string Left_str = PositionFormat.substr(0, Delimiters[0]);
+	string Top_str = PositionFormat.substr(Delimiters[0]+1, Delimiters[1] - Delimiters[0] - 1);
+	string Right_str = PositionFormat.substr(Delimiters[1]+1, Delimiters[2] - Delimiters[1] - 1);
+	string Bot_str = PositionFormat.substr(Delimiters[2]+1);
+
+	this->Set_Left(stoi(Left_str));
+	this->Set_Right(stoi(Right_str));
+	this->Set_Top(stoi(Top_str));
+	this->Set_Bottom(stoi(Bot_str));
 }
 // this function only increases size, might be bad if sizes need to get back to normal
 void UIElement::UpdateParentSize(int Top, int Left, int Bottom, int Right)

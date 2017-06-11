@@ -583,30 +583,42 @@ namespace Stas
 			list<vec3> TSP::Christofides(vector<vec3> UnorderedList)
 			{
 				using node = pair<float, pair<vec3, vec3>>;
-				vector<vector<pair<float, pair<vec3,vec3>>>> Connections;
+				struct Point {
+					vec3 point;
+					bool Visited;
+				};
+				struct Node {
+					float Distance;
+					Point* Point1;
+					Point* Point2;
+				};
+				vector<vector<Node>> Connections;
 				Connections.resize(UnorderedList.size());
 				for (auto& col : Connections) {
-					col.resize(UnorderedList.size(), 
-					{
-						make_pair(numeric_limits<float>::infinity(),
-						make_pair(vec3(),vec3()))
-					});
+					Node defaultNode;
+					defaultNode.Distance = numeric_limits<float>::infinity();
+					defaultNode.Point1 = nullptr;
+					defaultNode.Point2 = nullptr;
+					col.resize(UnorderedList.size(), defaultNode);
+				}
+				vector<Point> UnorderedList_Points;
+				for (auto p : UnorderedList)
+				{
+					UnorderedList_Points.push_back({p,false});
 				}
 				// O(n²)
 				for (int i = 0; i < UnorderedList.size(); i++)
 				{
 					for (int j = i+1; j < UnorderedList.size(); j++)
 					{
-						Connections[i][j] = 
-						{
-							make_pair(glm::distance(UnorderedList[i], UnorderedList[j]),
-							make_pair(UnorderedList[i], UnorderedList[j]))
-						};
+						Connections[i][j].Distance = glm::distance(UnorderedList[i], UnorderedList[j]);
+						Connections[i][j].Point1 = &UnorderedList_Points[i];
+						Connections[i][j].Point2 = &UnorderedList_Points[j];
 					}
-					std::sort(Connections[i].begin(), Connections[i].end(), [](const node& n1, const node& n2) 
+					std::sort(Connections[i].begin(), Connections[i].end(), [](const Node& n1, const Node& n2)
 						-> bool
 					{
-						return n1.first < n2.first;
+						return n1.Distance < n2.Distance;
 					});
 				}
 				using Comparator = std::function<bool(const vec3&, const vec3&)>;
@@ -619,23 +631,38 @@ namespace Stas
 					}
 					return lhs.x < rhs.x;
 				});
-				for (auto i = Connections.begin(); i != Connections.end()-1; i++)
+				/*for (auto i = Connections.begin(); i != Connections.end()-1; i++)
 				{
 					SpanningTree[(*i)[0].second.first] = (*i)[0].second.second;
-				}
-
-				// missing area
-				/*
-				
-				*/
-
-				list<vec3> OrderedList;
-				OrderedList.push_back(SpanningTree.begin()->first);
+				}*/
+	
 				decltype(SpanningTree.begin()) next;
-				while ((next = SpanningTree.find(OrderedList.back()))!=SpanningTree.end())
+				/*while ((next = SpanningTree.find(OrderedList.back()))!=SpanningTree.end())
 				{
 					OrderedList.push_back(next->second);
+				}*/
+				list<vec3> OrderedList;
+				OrderedList.push_back(Connections[0][0].Point1->point);
+				//next = SpanningTree.find(OrderedList.back());
+				for (int i = 0; i < UnorderedList.size() - 1; i++)
+				{
+					for (int j = 0; j < Connections.size() - 1; j++)
+					{
+						if (Connections[j][0].Point1->point == OrderedList.back())
+						{
+							for (int k = 0; k < Connections[j].size(); k++)
+							{
+								if (Connections[j][k].Point2->Visited == false)
+								{
+									OrderedList.push_back(Connections[j][k].Point2->point);
+									Connections[j][k].Point2->Visited = true;
+									break;
+								}
+							}
+						}
+					}
 				}
+
 				return OrderedList;
 			}
 			list<vec3> TSP::DynamicProgramming(vector<vec3> UnorderedList)

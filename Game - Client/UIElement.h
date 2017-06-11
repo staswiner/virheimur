@@ -33,6 +33,22 @@ public:
 		float opacity = 1.0f;
 		bool MaskedText = false;
 	};
+	template<typename T>
+	struct Property {
+		Property() {
+			this->value = static_cast<T>(0);
+			this->assigned = false;
+		}
+ 		Property& operator=(const T& rhs)
+		{
+			this->value = rhs;
+			this->assigned = true;
+			return *this;
+		}
+		operator T() const { return value; }
+		T value;
+		bool assigned;
+	};
 public:
 	UIElement(string Name, string Filename, int z_index=1);
 	UIElement(string Name);
@@ -68,13 +84,16 @@ public:
 	void InitFramebuffer(FBO& Framebuffer);
 	void InitFramebuffer();
 	void RemoveFBO();
-	int Top;
-	int Bottom;
-	int Left;
-	int Right;
-	int TrueWidth;
-	int TrueHeight;
-	int PicturePadding;
+	void Set_Top(int Top);
+	void Set_Bottom(int Bottom);
+	void Set_Left(int Left);
+	void Set_Right(int Right);
+	void Set_Width(int Width);
+	void Set_Height(int Height);
+	void Set_PicturePadding(int Padding);
+	void Set_Position(string PositionFormat);
+	/*void Set_();
+	void Set_();*/
 	vec2 TextPosition;
 	string innerText;
 	Style style;
@@ -84,12 +103,22 @@ public:
 	
 	FBO* frameBufferObject;
 protected:
-	std::function<void(UIElement*)> hover;
-	std::function<void(UIElement*)> hoverdone;
-	std::function<void(UIElement*)> returndefault;
-	std::function<void(UIElement*)> click;
-	std::function<void(UIElement*)> press;
-	std::function<void(UIElement*)> textchanged;
+	Property<int> Top;
+	Property<int> Bottom;
+	Property<int> Left;
+	Property<int> Right;
+	Property<int> Width;
+	Property<int> Height;
+	Property<int> TrueWidth;
+	Property<int> TrueHeight;
+	Property<int> PicturePadding;
+protected:
+	vector<std::function<void(UIElement*)>> hover;
+	vector<std::function<void(UIElement*)>> hoverdone;
+	vector<std::function<void(UIElement*)>> returndefault;
+	vector<std::function<void(UIElement*)>> click;
+	vector<std::function<void(UIElement*)>> press;
+	vector<std::function<void(UIElement*)>> textchanged;
 	void UpdateParentSize(int Top, int Left, int Bottom, int Right);
 	void LoadPicture(string Filename);
 	void DrawFrameBuffer();
@@ -97,7 +126,6 @@ protected:
 
 	Element Name;
 protected:
-	int Width, Height;
 	ImageLoader* UIImage;
 	map<Element,UIElement*> Children;
 	bool IsRoot;

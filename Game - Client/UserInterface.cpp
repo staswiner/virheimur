@@ -136,36 +136,36 @@ void UserInterface::FocusNext()
 }
 void UserInterface::OpenStatWindow()
 {
-	if (StatWindowOpen)
-	{
-		root->RemoveChild("StatsWindow");
-	}
-	else
-	{
-		vec2 Position;
-		UIElement* StatsWindow = new UIElement("StatsWindow", "Interface/StatsWindow.png");
-		Position = vec2(710, 300);
-		StatsWindow->Top = Position.y;
-		StatsWindow->Left = Position.x;
-		StatsWindow->SetByTrueSize(Position);
-		root->AppendChild(StatsWindow);
-
-		for (int i = 0; i < 4; i++)
-		{
-			UIElement* StatsField = new UIElement("StatsField" + i, "Interface/StatsField.png");
-			Position = vec2(710, 300 + (i * 50));
-			StatsField->Top = Position.y;
-			StatsField->Left = Position.x;
-			StatsField->SetByTrueSize(Position);
-			StatsField->AddHoverEvent([]
-			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldHovered.png"); });
-			StatsField->AddHoverDoneEvent([]
-			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
-			StatsField->AddReturnDefaultEvent([]
-			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
-			StatsField->AddClickEvent([]
-			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldSelected.png"); });
-			StatsWindow->AppendChild(StatsField);
-		}
-	}
+//	if (StatWindowOpen)
+//	{
+//		root->RemoveChild("StatsWindow");
+//	}
+//	else
+//	{
+//		vec2 Position;
+//		UIElement* StatsWindow = new UIElement("StatsWindow", "Interface/StatsWindow.png");
+//		Position = vec2(710, 300);
+//		StatsWindow->Top = Position.y;
+//		StatsWindow->Left = Position.x;
+//		StatsWindow->SetByTrueSize(Position);
+//		root->AppendChild(StatsWindow);
+//
+//		for (int i = 0; i < 4; i++)
+//		{
+//			UIElement* StatsField = new UIElement("StatsField" + i, "Interface/StatsField.png");
+//			Position = vec2(710, 300 + (i * 50));
+//			StatsField->Top = Position.y;
+//			StatsField->Left = Position.x;
+//			StatsField->SetByTrueSize(Position);
+//			StatsField->AddHoverEvent([]
+//			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldHovered.png"); });
+//			StatsField->AddHoverDoneEvent([]
+//			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
+//			StatsField->AddReturnDefaultEvent([]
+//			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
+//			StatsField->AddClickEvent([]
+//			(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldSelected.png"); });
+//			StatsWindow->AppendChild(StatsField);
+//		}
+//	}
 }

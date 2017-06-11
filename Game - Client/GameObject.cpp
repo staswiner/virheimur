@@ -103,40 +103,40 @@ void GameObject::DrawOutline(mat4& ProjectionMatrix, mat4& ViewMatrix, vec3 Colo
 
 void GameObject::DrawUI(mat4 & ProjectionMatrix, mat4 & ViewMatrix)
 {
-#pragma region Declarations
-	Mouse& mouse = Mouse::Instanace();
-
-	mat4 ModelMatrix;
-	Unit_Data& ud = this->unit_Data;
-	vec3 position = ud.Position;
-#pragma endregion Declarations
-	ModelMatrix = glm::translate(ModelMatrix, position);
-	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
-	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
-	// HP bar
-	float x = mouse.GetWindowSize().x / 2.0f;
-	float y = mouse.GetWindowSize().y / 2.0f;
-	vec4 TextPosition = WVM * vec4(0, 0, 0, 1);
-	TextPosition /= TextPosition.w;
-	vec2 TextCoords = vec2(TextPosition.x * x + x, -TextPosition.y * y + y);
-	UIElement* EmptyHPBar = UIroot->GetUIElement("EmptyHPBar");
-	UIElement* FullHPBar = UIroot->GetUIElement("FullHPBar");
-	EmptyHPBar->Top = TextCoords.y - 30;
-	EmptyHPBar->Left = TextCoords.x - 30;
-	EmptyHPBar->SetByTrueSize();
-
-	FullHPBar->Top = TextCoords.y - 29;
-	FullHPBar->Left = TextCoords.x - 29;
-	FullHPBar->Bottom = FullHPBar->Top + FullHPBar->TrueHeight;
-	FullHPBar->Right = FullHPBar->Left + (this->stats.Hp) / float(this->stats.MaxHp)*FullHPBar->TrueWidth;
-
-	UIroot->Draw();
-
+//#pragma region Declarations
+//	Mouse& mouse = Mouse::Instanace();
+//
+//	mat4 ModelMatrix;
+//	Unit_Data& ud = this->unit_Data;
+//	vec3 position = ud.Position;
+//#pragma endregion Declarations
+//	ModelMatrix = glm::translate(ModelMatrix, position);
+//	ModelMatrix = glm::rotate(ModelMatrix, ud.Rotation.y, vec3(0, 1, 0));
+//	mat4 WVM = ProjectionMatrix * ViewMatrix * ModelMatrix;
+//	// HP bar
+//	float x = mouse.GetWindowSize().x / 2.0f;
+//	float y = mouse.GetWindowSize().y / 2.0f;
+//	vec4 TextPosition = WVM * vec4(0, 0, 0, 1);
+//	TextPosition /= TextPosition.w;
+//	vec2 TextCoords = vec2(TextPosition.x * x + x, -TextPosition.y * y + y);
+//	UIElement* EmptyHPBar = UIroot->GetUIElement("EmptyHPBar");
+//	UIElement* FullHPBar = UIroot->GetUIElement("FullHPBar");
+//	EmptyHPBar->Top = TextCoords.y - 30;
+//	EmptyHPBar->Left = TextCoords.x - 30;
+//	EmptyHPBar->SetByTrueSize();
+//
+//	FullHPBar->Top = TextCoords.y - 29;
+//	FullHPBar->Left = TextCoords.x - 29;
+//	FullHPBar->Bottom = FullHPBar->Top + FullHPBar->TrueHeight;
+//	FullHPBar->Right = FullHPBar->Left + (this->stats.Hp) / float(this->stats.MaxHp)*FullHPBar->TrueWidth;
+//
+//	UIroot->Draw();
+//
 }
 
 void GameObject::LoadInterface()
 {
-	vec2 Position;
+	/*vec2 Position;
 	UIroot = new UIElement("Root", "");
 
 	UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
@@ -151,7 +151,7 @@ void GameObject::LoadInterface()
 	FullHPBar->Top = Position.y;
 	FullHPBar->Left = Position.x;
 	FullHPBar->SetByTrueSize(Position);
-	UIroot->AppendChild(FullHPBar);
+	UIroot->AppendChild(FullHPBar);*/
 
 
 }

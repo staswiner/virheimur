@@ -140,216 +140,216 @@ void Scene::SetWindowHDC(HDC & hdc)
 	this->m_HDC = hdc;
 }
 
-void Scene::GenerateForm()
-{
-	
-	vec2 Position;
-	UI.root = new UIElement("Root", "");
-
-	/*UIElement* GreyCover = new UIElement("GreyCover", "Interface/GreyCover.png",0);
-	Position = vec2(0, 0);
-	GreyCover->TopLeft = Position;
-	GreyCover->SetByTrueSize(Position);
-	GreyCover->innerText = "PAUSE";
-	root->AppendChild(GreyCover);*/
-
-	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
-	Position = vec2(10, 80);
-	UsernameElement->Top = Position.y;
-	UsernameElement->Left = Position.x;
-	UsernameElement->SetByTrueSize(Position);
-	UsernameElement->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	UsernameElement->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	UsernameElement->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	UsernameElement->AddClickEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
-	UsernameElement->AddTextChangedEvent([]
-	(UIElement* Element)mutable-> void {
-		if (Element->innerText.back() == '\r') 
-		{
-			TCP tcp; tcp.SendPacket(Element->innerText); Element->innerText.pop_back();
-		}
-	});
-	UI.root->AppendChild(UsernameElement);
-
-	UIElement* Element = new UIElement("Shop", "Interface/InventoryRow.png");
-	Position = vec2(300, 160);
-	Element->Top = Position.y;
-	Element->Left = Position.x;
-	Element->SetByTrueSize(Position);
-	Element->Hide();
-	UI.root->AppendChild(Element);
-
-	Element = new UIElement("Shop-X", "Interface/X.png");
-	Position = vec2(485, 165); // 5 padding
-	Element->Top = Position.y;
-	Element->Left = Position.x;
-	Element->Hide();
-	Element->SetByTrueSize(Position);
-	Element->AddClickEvent([]
-	(UIElement* Element)mutable-> void { Element->Parent->Hide(); });
-	UI.root->GetUIElement("Shop")->AppendChild(Element);
-
-	Element = new UIElement("Shop-Gold", "Interface/Textbox.png");
-	Position = vec2(300, 110); // 5 padding
-	Element->Top = Position.y;
-	Element->Left = Position.x;
-	Element->Hide();
-	Element->SetByTrueSize(Position);
-	UI.root->GetUIElement("Shop")->AppendChild(Element);
-
-	Element = new UIElement("Command Line", "Interface/Textbox.png");
-	Position = vec2(200, 400);
-	Element->writable = true;
-	Element->Top = Position.y;
-	Element->Left = Position.x;
-	Element->Bottom = 500;
-	Element->Right = 400;
-	//Element->SetByTrueSize(Position);
-	Element->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	Element->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddClickEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
-	Element->AddTextChangedEvent([&]
-	(UIElement* Element)mutable-> void {
-		if (Element->innerText.back() == '\r')
-		{
-			Element->innerText.pop_back();
-			std::transform(Element->innerText.begin(),
-				Element->innerText.end(), Element->innerText.begin(), ::tolower);
-			if (Element->innerText == "wire")
-			{
-				OfflineDataObject& offlineData = OfflineDataObject::Instance();
-				offlineData.level.ReloadShaders(Shader::ImageType::Wire);
-			}
-			if (Element->innerText == "triangle")
-			{
-				OfflineDataObject& offlineData = OfflineDataObject::Instance();
-				offlineData.level.ReloadShaders(Shader::ImageType::Triangle);
-			}
-			Element->innerText.clear();
-		}
-	});
-	UI.root->AppendChild(Element);
-
-	Element = new UIElement("Other Camera", "Interface/Textbox.png");
-	Position = vec2(724, 400);
-	Element->writable = false;
-	Element->Top = Position.y;
-	Element->Left = Position.x;
-	Element->Bottom = 600;
-	Element->Right = 1024;
-	//Element->SetByTrueSize(Position);
-	Element->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	Element->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddClickEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
-	Element->AddTextChangedEvent([&]
-	(UIElement* Element)mutable-> void {
-		if (Element->innerText.back() == '\r')
-		{
-			Element->innerText.pop_back();
-			std::transform(Element->innerText.begin(),
-				Element->innerText.end(), Element->innerText.begin(), ::tolower);
-			if (Element->innerText == "wire")
-			{
-				OfflineDataObject& offlineData = OfflineDataObject::Instance();
-				offlineData.level.ReloadShaders(Shader::ImageType::Wire);
-			}
-			if (Element->innerText == "triangle")
-			{
-				OfflineDataObject& offlineData = OfflineDataObject::Instance();
-				offlineData.level.ReloadShaders(Shader::ImageType::Triangle);
-			}
-			Element->innerText.clear();
-		}
-	});
-	FBO fbo;
-	Element->PicturePadding = 2;
-	Element->InitFramebuffer(fbo);
-	UI.root->AppendChild(Element);
-
-	// sound buttons
-	Element = new UIElement("Sound+", "Interface/Textbox.png");
-	Position = vec2(500, 20);
-	Element->writable = false;
-	Element->innerText = "+";
-	Element->Top = Position.y;
-	Element->Left = Position.x;
-	Element->Bottom = Position.y + 20;
-	Element->Right = Position.x + 20;
-	Element->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	Element->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddClickEvent([&]
-	(UIElement* Element)mutable-> void { 
-		Element->ChangePicture("Interface/TextboxSelected.png");
-		this->music->AddVolume(0.1f);
-	});
-	UI.root->AppendChild(Element);
-
-	Element = new UIElement("Sound-", "Interface/Textbox.png");
-	Position = vec2(500, 40);
-	Element->writable = false;
-	Element->innerText = "-";
-	Element->Top = Position.y;
-	Element->Left = Position.x;
-	Element->Bottom = Position.y + 20;
-	Element->Right = Position.x + 20;
-	Element->AddHoverEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
-	Element->AddHoverDoneEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddReturnDefaultEvent([]
-	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
-	Element->AddClickEvent([&]
-	(UIElement* Element)mutable-> void { 
-		Element->ChangePicture("Interface/TextboxSelected.png"); 
-		this->music->AddVolume(-0.1f);
-	});
-	UI.root->AppendChild(Element);
-
-	//UIElement* StatsWindow = new UIElement("StatsWindow", "Interface/StatsWindow.png");
-	//Position = vec2(710, 300);
-	//StatsWindow->TopLeft = Position;
-	//StatsWindow->SetByTrueSize(Position);
-	//root->AppendChild(StatsWindow);
-
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	UIElement* StatsField = new UIElement("StatsField"+i, "Interface/StatsField.png");
-	//	Position = vec2(710, 300 + (i * 50));
-	//	StatsField->TopLeft = Position;
-	//	StatsField->SetByTrueSize(Position);
-	//	StatsField->AddHoverEvent([]
-	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldHovered.png"); });
-	//	StatsField->AddHoverDoneEvent([]
-	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
-	//	StatsField->AddReturnDefaultEvent([]
-	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
-	//	StatsField->AddClickEvent([]
-	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldSelected.png"); });
-	//	StatsWindow->AppendChild(StatsField);
-	//}
-	// load up for later use
-	UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
-	UIElement* FullHPBar = new UIElement("FullHPBar", "Interface/FullHPBar.png");
-
-}
+//void Scene::GenerateForm()
+//{
+//	
+//	vec2 Position;
+//	UI.root = new UIElement("Root", "");
+//
+//	/*UIElement* GreyCover = new UIElement("GreyCover", "Interface/GreyCover.png",0);
+//	Position = vec2(0, 0);
+//	GreyCover->TopLeft = Position;
+//	GreyCover->SetByTrueSize(Position);
+//	GreyCover->innerText = "PAUSE";
+//	root->AppendChild(GreyCover);*/
+//
+//	UIElement* UsernameElement = new UIElement("Username", "Interface/Textbox.png");
+//	Position = vec2(10, 80);
+//	UsernameElement->Top = Position.y;
+//	UsernameElement->Left = Position.x;
+//	UsernameElement->SetByTrueSize(Position);
+//	UsernameElement->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	UsernameElement->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	UsernameElement->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	UsernameElement->AddClickEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+//	UsernameElement->AddTextChangedEvent([]
+//	(UIElement* Element)mutable-> void {
+//		if (Element->innerText.back() == '\r') 
+//		{
+//			TCP tcp; tcp.SendPacket(Element->innerText); Element->innerText.pop_back();
+//		}
+//	});
+//	UI.root->AppendChild(UsernameElement);
+//
+//	UIElement* Element = new UIElement("Shop", "Interface/InventoryRow.png");
+//	Position = vec2(300, 160);
+//	Element->Top = Position.y;
+//	Element->Left = Position.x;
+//	Element->SetByTrueSize(Position);
+//	Element->Hide();
+//	UI.root->AppendChild(Element);
+//
+//	Element = new UIElement("Shop-X", "Interface/X.png");
+//	Position = vec2(485, 165); // 5 padding
+//	Element->Top = Position.y;
+//	Element->Left = Position.x;
+//	Element->Hide();
+//	Element->SetByTrueSize(Position);
+//	Element->AddClickEvent([]
+//	(UIElement* Element)mutable-> void { Element->Parent->Hide(); });
+//	UI.root->GetUIElement("Shop")->AppendChild(Element);
+//
+//	Element = new UIElement("Shop-Gold", "Interface/Textbox.png");
+//	Position = vec2(300, 110); // 5 padding
+//	Element->Top = Position.y;
+//	Element->Left = Position.x;
+//	Element->Hide();
+//	Element->SetByTrueSize(Position);
+//	UI.root->GetUIElement("Shop")->AppendChild(Element);
+//
+//	Element = new UIElement("Command Line", "Interface/Textbox.png");
+//	Position = vec2(200, 400);
+//	Element->writable = true;
+//	Element->Top = Position.y;
+//	Element->Left = Position.x;
+//	Element->Bottom = 500;
+//	Element->Right = 400;
+//	//Element->SetByTrueSize(Position);
+//	Element->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	Element->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddClickEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+//	Element->AddTextChangedEvent([&]
+//	(UIElement* Element)mutable-> void {
+//		if (Element->innerText.back() == '\r')
+//		{
+//			Element->innerText.pop_back();
+//			std::transform(Element->innerText.begin(),
+//				Element->innerText.end(), Element->innerText.begin(), ::tolower);
+//			if (Element->innerText == "wire")
+//			{
+//				OfflineDataObject& offlineData = OfflineDataObject::Instance();
+//				offlineData.level.ReloadShaders(Shader::ImageType::Wire);
+//			}
+//			if (Element->innerText == "triangle")
+//			{
+//				OfflineDataObject& offlineData = OfflineDataObject::Instance();
+//				offlineData.level.ReloadShaders(Shader::ImageType::Triangle);
+//			}
+//			Element->innerText.clear();
+//		}
+//	});
+//	UI.root->AppendChild(Element);
+//
+//	Element = new UIElement("Other Camera", "Interface/Textbox.png");
+//	Position = vec2(724, 400);
+//	Element->writable = false;
+//	Element->Top = Position.y;
+//	Element->Left = Position.x;
+//	Element->Bottom = 600;
+//	Element->Right = 1024;
+//	//Element->SetByTrueSize(Position);
+//	Element->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	Element->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddClickEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxSelected.png"); });
+//	Element->AddTextChangedEvent([&]
+//	(UIElement* Element)mutable-> void {
+//		if (Element->innerText.back() == '\r')
+//		{
+//			Element->innerText.pop_back();
+//			std::transform(Element->innerText.begin(),
+//				Element->innerText.end(), Element->innerText.begin(), ::tolower);
+//			if (Element->innerText == "wire")
+//			{
+//				OfflineDataObject& offlineData = OfflineDataObject::Instance();
+//				offlineData.level.ReloadShaders(Shader::ImageType::Wire);
+//			}
+//			if (Element->innerText == "triangle")
+//			{
+//				OfflineDataObject& offlineData = OfflineDataObject::Instance();
+//				offlineData.level.ReloadShaders(Shader::ImageType::Triangle);
+//			}
+//			Element->innerText.clear();
+//		}
+//	});
+//	FBO fbo;
+//	Element->PicturePadding = 2;
+//	Element->InitFramebuffer(fbo);
+//	UI.root->AppendChild(Element);
+//
+//	// sound buttons
+//	Element = new UIElement("Sound+", "Interface/Textbox.png");
+//	Position = vec2(500, 20);
+//	Element->writable = false;
+//	Element->innerText = "+";
+//	Element->Top = Position.y;
+//	Element->Left = Position.x;
+//	Element->Bottom = Position.y + 20;
+//	Element->Right = Position.x + 20;
+//	Element->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	Element->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddClickEvent([&]
+//	(UIElement* Element)mutable-> void { 
+//		Element->ChangePicture("Interface/TextboxSelected.png");
+//		this->music->AddVolume(0.1f);
+//	});
+//	UI.root->AppendChild(Element);
+//
+//	Element = new UIElement("Sound-", "Interface/Textbox.png");
+//	Position = vec2(500, 40);
+//	Element->writable = false;
+//	Element->innerText = "-";
+//	Element->Top = Position.y;
+//	Element->Left = Position.x;
+//	Element->Bottom = Position.y + 20;
+//	Element->Right = Position.x + 20;
+//	Element->AddHoverEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/TextboxHovered.png"); });
+//	Element->AddHoverDoneEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddReturnDefaultEvent([]
+//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/Textbox.png"); });
+//	Element->AddClickEvent([&]
+//	(UIElement* Element)mutable-> void { 
+//		Element->ChangePicture("Interface/TextboxSelected.png"); 
+//		this->music->AddVolume(-0.1f);
+//	});
+//	UI.root->AppendChild(Element);
+//
+//	//UIElement* StatsWindow = new UIElement("StatsWindow", "Interface/StatsWindow.png");
+//	//Position = vec2(710, 300);
+//	//StatsWindow->TopLeft = Position;
+//	//StatsWindow->SetByTrueSize(Position);
+//	//root->AppendChild(StatsWindow);
+//
+//	//for (int i = 0; i < 4; i++)
+//	//{
+//	//	UIElement* StatsField = new UIElement("StatsField"+i, "Interface/StatsField.png");
+//	//	Position = vec2(710, 300 + (i * 50));
+//	//	StatsField->TopLeft = Position;
+//	//	StatsField->SetByTrueSize(Position);
+//	//	StatsField->AddHoverEvent([]
+//	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldHovered.png"); });
+//	//	StatsField->AddHoverDoneEvent([]
+//	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
+//	//	StatsField->AddReturnDefaultEvent([]
+//	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsField.png"); });
+//	//	StatsField->AddClickEvent([]
+//	//	(UIElement* Element)mutable-> void { Element->ChangePicture("Interface/StatsFieldSelected.png"); });
+//	//	StatsWindow->AppendChild(StatsField);
+//	//}
+//	// load up for later use
+//	UIElement* EmptyHPBar = new UIElement("EmptyHPBar", "Interface/EmptyHPBar.png");
+//	UIElement* FullHPBar = new UIElement("FullHPBar", "Interface/FullHPBar.png");
+//
+//}
 
 void Scene::LoadForm(XML::Element & XML_Element, UIElement * uiElement)
 {
@@ -374,13 +374,13 @@ void Scene::LoadForm(XML::Element & XML_Element, UIElement * uiElement)
 		}
 		//if (Element == nullptr) Element = new UIElement(c.GetAttribute("name"));
 		if (c.GetAttribute("text") != "") Element->innerText = c.GetAttribute("text");
-		if (c.GetAttribute("top") != "") Element->Top = stoi(c.GetAttribute("top"));
-		if (c.GetAttribute("left") != "") Element->Left = stoi(c.GetAttribute("left"));
-		if (c.GetAttribute("bottom") != "") Element->Bottom = stoi(c.GetAttribute("bottom"));
-		if (c.GetAttribute("right") != "") Element->Right = stoi(c.GetAttribute("right"));
-		//if (c.GetAttribute("position") != "") Element->style.font = UIElement::Font();
-		//if (c.GetAttribute("width") != "") Element->TrueWidth = stoi(c.GetAttribute("width"));
-		//if (c.GetAttribute("height") != "") Element->TrueHeight = stoi(c.GetAttribute("height"));
+		if (c.GetAttribute("top") != "") Element->Set_Top(stoi(c.GetAttribute("top")));
+		if (c.GetAttribute("left") != "") Element->Set_Left(stoi(c.GetAttribute("left")));
+		if (c.GetAttribute("bottom") != "") Element->Set_Bottom(stoi(c.GetAttribute("bottom")));
+		if (c.GetAttribute("right") != "") Element->Set_Right(stoi(c.GetAttribute("right")));
+		if (c.GetAttribute("position") != "") Element->Set_Position(c.GetAttribute("position"));
+		if (c.GetAttribute("width") != "") Element->Set_Width(stoi(c.GetAttribute("width")));
+		if (c.GetAttribute("height") != "") Element->Set_Height(stoi(c.GetAttribute("height")));
 		//if (c.GetAttribute("onclick") != "") Element->style.font = UIElement::Font();
 		if (c.Tag == "drawingarea")
 		{
